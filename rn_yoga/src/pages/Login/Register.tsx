@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Animated } from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import {WingBlank,WhiteSpace,InputItem} from '@ant-design/react-native';
 import { mainStyle,screenH } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
@@ -16,9 +16,9 @@ interface State {
   codeSec:number
 }
 
-class Login extends React.Component<Props,State> {
+class Register extends React.Component<Props,State> {
   static navigationOptions = {
-    headerTitle:headerTitle('登录'),
+    headerTitle:headerTitle('注册'),
     headerRight:headerRight(<Text></Text>),
   }
   timer:any;
@@ -30,7 +30,7 @@ class Login extends React.Component<Props,State> {
       code:'',
       password:'',
       clicking:false,
-      sending:false,
+      sending:false
     };
   }
 
@@ -62,9 +62,6 @@ class Login extends React.Component<Props,State> {
                 });
               }}
               placeholder="请输入手机号"
-              onFocus={()=>{
-
-              }}
             >
               手机号
             </InputItem>
@@ -82,21 +79,16 @@ class Login extends React.Component<Props,State> {
                 });
               }}
               placeholder="请输入密码"
-              extra={
-                <Text style={[mainStyle.czt,mainStyle.fs13,mainStyle.pa5_10]}>忘记密码</Text>
-              }
-              onExtraClick={()=>{this.props.navigation.navigate('Forget')}}
-              onVirtualKeyboardConfirm={()=>{}}
             >
               密码
             </InputItem>
             <WhiteSpace />
             <View style={[mainStyle.mat30]}>
-              <BxButton title="登录" disabled={clicking} onClick={()=>{this.handleLogin()}}></BxButton>
+              <BxButton title="注册" disabled={clicking} onClick={()=>{this.handleLogin()}}></BxButton>
             </View>
             <View style={[mainStyle.mat20]}>
-              <BxButton title="注册" textstyle={[mainStyle.c333]} btnstyle={[mainStyle.bgcf7]} disabled={false} onClick={()=>{
-                this.props.navigation.navigate('Register')
+              <BxButton title="返回登录" textstyle={[mainStyle.c333]} btnstyle={[mainStyle.bgcf7]} disabled={false} onClick={()=>{
+                this.props.navigation.goBack();
               }}></BxButton>
             </View>
             <View style={[mainStyle.mat20,mainStyle.row,mainStyle.jcCenter]}>
@@ -109,4 +101,4 @@ class Login extends React.Component<Props,State> {
   }
 }
 
-export default Login
+export default Register

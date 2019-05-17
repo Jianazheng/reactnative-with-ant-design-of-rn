@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { mainStyle } from '../../public/style/style';
+import { IconOutline } from "@ant-design/icons-react-native";
 
 interface Props {}
 interface State {}
@@ -8,14 +10,14 @@ class Login extends React.Component<Props,State> {
   static navigationOptions = {
     tabBarLabel: '探索',
     tabBarIcon: ({focused}) => {
-        // if (focused) {
-        //     return (
-        //         <Image style={[mainStyle.icon]} source={require('../../img/tab_icon_my_sel.png')}/>
-        //     );
-        // }
-        // return (
-        //     <Image style={[mainStyle.icon]} source={require('../../img/tab_icon_my_nor.png')}/>
-        // );
+      if (focused) {
+          return (
+            <IconOutline name="compass" size={24} color={mainStyle.czt.color}></IconOutline>
+          );
+      }
+      return (
+        <IconOutline name="compass" size={24} color={mainStyle.c666.color}></IconOutline>
+      );
     },
   }
   constructor(props:Props,state:State) {

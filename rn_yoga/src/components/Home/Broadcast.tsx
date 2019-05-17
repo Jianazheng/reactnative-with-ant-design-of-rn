@@ -49,7 +49,7 @@ class HomeSearchBar extends React.Component<Props,State> {
     let {list,fadeAnim} = this.state;
     return (
       <View>
-        <View style={[mainStyle.palr10,mainStyle.bgcf7,mainStyle.h80,mainStyle.dflex,mainStyle.row,mainStyle.aiCenter]}>
+        <View style={[mainStyle.palr15,mainStyle.bgcf7,mainStyle.h80,mainStyle.dflex,mainStyle.row,mainStyle.aiCenter]}>
           <View style={[styles.broadicon,mainStyle.row,mainStyle.aiCenter]}>
             <IconFill name="sound" size={20} color={mainStyle.czt.color}></IconFill>
           </View>

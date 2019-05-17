@@ -13,6 +13,7 @@ const mainStyle = StyleSheet.create({
     width160:{width:setSize(160)},
     width300:{width:setSize(300)},
     mal10:{ marginLeft:setSize(20),},
+    mal15:{ marginLeft:setSize(30),},
     mal20:{ marginLeft:setSize(40),},
     mar10:{ marginRight:setSize(20),},
     mat10:{ marginTop:setSize(20),},
@@ -24,13 +25,16 @@ const mainStyle = StyleSheet.create({
     mab20:{ marginBottom:setSize(40),},
     mab30:{ marginBottom:setSize(60),},
     mab40:{ marginBottom:setSize(80),},
+    pa5_10:{paddingTop:setSize(10),paddingBottom:setSize(10),paddingRight:setSize(20),paddingLeft:setSize(20)},
     par10:{paddingRight:setSize(20)},
     pal10:{paddingLeft:setSize(20)},
+    pal15:{paddingLeft:setSize(30)},
     palr10:{paddingLeft:setSize(20),paddingRight:setSize(20)},
+    palr15:{paddingLeft:setSize(30),paddingRight:setSize(30)},
     palr20:{paddingLeft:setSize(40),paddingRight:setSize(40)},
     patb20:{paddingTop:setSize(40),paddingBottom:setSize(40)},
     patb10:{paddingTop:setSize(20),paddingBottom:setSize(20)},
-    padding15:{paddingTop:setSize(30),paddingBottom:setSize(30),paddingLeft:setSize(30),paddingRight:setSize(30)},
+    pa15:{paddingTop:setSize(30),paddingBottom:setSize(30),paddingLeft:setSize(30),paddingRight:setSize(30)},
     cce2:{color:'#ce2a2a',},
     bgcce2:{backgroundColor:'#ce2a2a',},
     c333:{color:'#333333',},
@@ -38,16 +42,16 @@ const mainStyle = StyleSheet.create({
     c999:{color:'#999999',},
     ce2:{color:'#e2e2e2',},
     c597:{color:'#ce2a2a',},
-    cfff:{color:'#FFFFFF',},
+    cfff:{color:'#ffffff',},
     cc0b:{color:'#c0b529',},
     cc2:{color:'#c2c2c2',},
-    czt:{color:'#ce2a2a'},
+    czt:{color:"rgb(221, 101, 114)"},
     cyellow:{color:'#C59743'},
     cred:{color:'#CE2A2A'},
     bgcc2:{backgroundColor:'#c2c2c2'},
     bgccc:{backgroundColor:'#cccccc'},
     bgc59:{backgroundColor:'#ce2a2a'},
-    bgczt:{backgroundColor:'#ce2a2a'},
+    bgczt:{backgroundColor:"rgb(221, 101, 114)"},
     bgcfff:{backgroundColor:'#FFFFFF',},
     bgcred:{backgroundColor:'#CE2A2A'},
     bgcyellow:{backgroundColor:'#C59743'},
@@ -64,7 +68,6 @@ const mainStyle = StyleSheet.create({
     fs15:{fontSize:setSize(30),},
     fs16:{fontSize:setSize(32),},
     fs18:{fontSize:setSize(36),},
-    fs22:{fontSize:setSize(42),},
     fs24:{fontSize:setSize(48),},
     fs22:{fontSize:setSize(44)},
     fs30:{fontSize:setSize(60)},
@@ -87,7 +90,7 @@ const mainStyle = StyleSheet.create({
         marginLeft:windows.width*0.1,
         marginRight:windows.width*0.1,
     },
-    icon: {
+    icons: {
         width: setSize(48),
         height: setSize(48),
         marginTop:setSize(6)
@@ -96,6 +99,7 @@ const mainStyle = StyleSheet.create({
     h80:{height:setSize(80)},
     h100:{height:setSize(100)},
     h120:{height:setSize(120)},
+    h160:{height:setSize(160)},
     h200:{height:setSize(200)},
     h300:{height:setSize(300)},
     h400:{height:setSize(400)},
@@ -114,26 +118,28 @@ const mainStyle = StyleSheet.create({
     row:{flexDirection:'row'},
     column:{flexDirection:'column'},
     wrap:{flexWrap:'wrap'},
+    aiEnd:{alignItems:'flex-end'},
     aiCenter:{alignItems:'center'},
     jcCenter:{justifyContent:'center'},
     jcAround:{justifyContent:'space-around'},
     jcBetween:{justifyContent:'space-between'},
     brl1e2:{
-        borderLeftWidth:setSize(1),
+        borderLeftWidth:setSize(0.6),
         borderColor:'#e2e2e2'
     },
     brr1e2:{
-        borderRightWidth:setSize(1),
+        borderRightWidth:setSize(0.6),
         borderColor:'#e2e2e2'
     },
     brt1e2:{
-        borderTopWidth:setSize(1),
+        borderTopWidth:setSize(0.6),
         borderColor:'#e2e2e2'
     },
     brb1e2:{
-        borderBottomWidth:setSize(1),
+        borderBottomWidth:setSize(0.6),
         borderColor:'#e2e2e2',   
     },
+    brczt:{borderColor:'#ce2a2a'}
 });
 export {
     setSize,setText,screenH,screenW,mainStyle

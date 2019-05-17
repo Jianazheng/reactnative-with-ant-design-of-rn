@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet,Dimensions,TouchableOpacity,ScrollView } from 'react-native';
-import {Tabs} from '@ant-design/react-native';
-import { IconFill, IconOutline } from "@ant-design/icons-react-native";
+import { IconFill } from "@ant-design/icons-react-native";
 import { mainStyle,setSize } from '../../public/style/style';
 import BxTabbars from './../ScrollTabs/Tabbar';
 import BxTabView from './../ScrollTabs/TabView';
@@ -24,7 +23,7 @@ class HomeTabs extends React.Component<Props,State> {
     }
   }
 
-  handleOnChange(i){
+  handleOnChange(i:number){
     this.setState({
       tabIndex:i
     })
@@ -33,14 +32,16 @@ class HomeTabs extends React.Component<Props,State> {
   render(){
     let {tabs,tabIndex} = this.state;
     return (
-      <View style={[mainStyle.palr10,mainStyle.column]}>
-        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-          <BxTabbars tabs={tabs} ontabChange={this.handleOnChange.bind(this)}></BxTabbars>
-          <View>
-            <IconFill name="appstore" size={24} color={mainStyle.czt.color}></IconFill>
+      <View style={[mainStyle.column]}>
+        <View style={[mainStyle.brb1e2]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.palr15]}>
+            <BxTabbars tabs={tabs} ontabChange={this.handleOnChange.bind(this)}></BxTabbars>
+            <View>
+              <IconFill name="appstore" size={24} color={mainStyle.czt.color}></IconFill>
+            </View>
           </View>
         </View>
-        <View>
+        <View style={mainStyle.palr10}>
           <BxTabView height={height-setSize(300)} changeIndex={tabIndex}>
             <View>
               <Text>2333</Text>

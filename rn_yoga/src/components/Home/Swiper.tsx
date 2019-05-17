@@ -14,7 +14,7 @@ class HomeSwiper extends React.Component {
 
   render(){
     return (
-      <View style={[mainStyle.palr10,styles.swiperMain]}>
+      <View style={[styles.swiperMain]}>
         <Swiper
           width={sww}
           height={swh}

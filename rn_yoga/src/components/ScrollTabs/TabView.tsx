@@ -23,7 +23,7 @@ class BxTabView extends React.Component<Props,State> {
     }
   }
 
-  shouldComponentUpdate(np,ns){ 
+  shouldComponentUpdate(np:any,ns:any){ 
     if(np.changeIndex!=this.props.changeIndex){
       this.tabToSilde(np.changeIndex);
       return true
@@ -32,7 +32,7 @@ class BxTabView extends React.Component<Props,State> {
     }
   }
 
-  tabToSilde(changeIndex){
+  tabToSilde(changeIndex:number){
     let {tabViewSlide} = this.state;
     //this.refs.tabview.scrollTo({x: changeIndex*(width-setSize(20)), y: 0, duration: 500});
     Animated.timing(tabViewSlide, {

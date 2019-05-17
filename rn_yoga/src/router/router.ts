@@ -1,10 +1,16 @@
 
 import Login from '../pages/Login/Login';
-import {IndexTabs} from './../tabs/IndexTabs';
+import Register from '../pages/Login/Register';
+import Forget from '../pages/Login/Forget';
+import {IndexTabs} from './tabs';
+import Password from './../pages/Login/Password';
 
 
 export const navItem = {
   Login: {screen: Login},
+  Register:{screen:Register},
+  Forget:{screen:Forget},
+  Password:{screen:Password},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({
@@ -15,12 +21,8 @@ export const navItem = {
 
 export const navConfig = {
   initialRouteName: 'Tab',
-  headerMode: 'screen',
+  headerMode: 'float',
   navigationOptions:{
-    headerTitleStyle:{
-      fontSize:14,
-    },
-    tabBarVisible:false,
-    header:null,
+    gesturesEnabled:true,
   }
 }

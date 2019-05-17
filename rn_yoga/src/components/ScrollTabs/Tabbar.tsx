@@ -11,38 +11,46 @@ interface Props {
   ontabChange?:(i:number)=>void
 }
 type State = {
-  tabsSlide:number
+  tabsSlide:any
+  currentIndex:number
 }
 
 class BxTabbars extends PureComponent<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      tabsSlide:new Animated.Value(setSize(0))
+      currentIndex:0,
+      tabsSlide:new Animated.Value(setSize(5))
     }
   }
 
-  handleTabClick(i){
+  handleTabClick(i:number):void{
     let ref = this.refs['tabsItem'+i];
     let {tabsSlide} = this.state;
     let speed = 100;
+    this.setState({
+      currentIndex:i
+    })
     layout(ref).then(res=>{
-      //
-      this.refs.tab.scrollTo({x: res.pageX, y: 0, duration: speed});
       //判断进度条位移
       Animated.timing(tabsSlide, {
-        toValue: i>0?(res.pageX+(res.width-scrollbarWidth)/2-setSize(20)):setSize(10),
+        toValue: i>0?(res.pageX+(res.width-scrollbarWidth)/2-setSize(20)):setSize(5),
         easing: Easing.bezier(1,0.8,0.6,0.4),
         duration: speed
       }).start();
-      this.props.ontabChange(i);
+      if(this.props.ontabChange){
+        this.props.ontabChange(i);
+      }
+      this.refs.tab.scrollTo({x: res.pageX, y: 0, duration: speed});
+    }).catch(err=>{
+      console.log(err);
+      console.warn('Tab切换报错了')
     })
-    
   }
 
   render(){
     let {tabs} = this.props;
-    let {tabsSlide} = this.state;
+    let {tabsSlide,currentIndex} = this.state;
     return (
       <View style={[mainStyle.flex1]}>
         <ScrollView ref="tab" horizontal={true} contentContainerStyle={[mainStyle.column,mainStyle.jcBetween,mainStyle.h80]}>
@@ -51,8 +59,8 @@ class BxTabbars extends PureComponent<Props,State> {
             tabs.map((val,i)=>{
               return (
                 <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}
-                onPress={this.handleTabClick.bind(this,i)}>
-                  <Text style={[mainStyle.fs12,mainStyle.c333]}>{val.title}</Text>
+                onPressIn={this.handleTabClick.bind(this,i)}>
+                  <Text style={[mainStyle.fs12,i==currentIndex?mainStyle.czt:mainStyle.c333]}>{val.title}</Text>
                 </TouchableOpacity>
               )
             })
@@ -76,13 +84,13 @@ const styles = StyleSheet.create({
   scrollItem:{
     paddingLeft:setSize(5),
     paddingRight:setSize(5),
-    height:setSize(70),
-    paddingTop:setSize(10),
+    height:setSize(60),
+    paddingTop:setSize(20),
     marginRight:setSize(40),
   },
   scrollbar:{
     backgroundColor:mainStyle.czt.color,
-    height:setSize(8),
+    height:setSize(6),
     width:scrollbarWidth
   }
 })
