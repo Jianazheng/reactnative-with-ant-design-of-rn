@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, Alert,Keyboard } from 'react-native';
-import { Icon, SearchBar } from '@ant-design/react-native';
+import { Text, View, Alert, Keyboard, TextInput, StyleSheet } from 'react-native';
+import { mainStyle, setSize } from '../../public/style/style';
+import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 class HomeSearchBar extends React.Component {
   constructor(props) {
@@ -20,17 +21,39 @@ class HomeSearchBar extends React.Component {
   render(){
     let {value} = this.state;
     return (
-      <View>
-        <SearchBar
-          value={value}
-          placeholder="搜索"
-          onSubmit={value => Alert.alert(value)}
-          onChange={this.onChange}
-          onCancel={this.clear}
-        />
+      <View style={[mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.palr15,mainStyle.bgcfff,mainStyle.row]}>
+        <View style={[mainStyle.bgcf2,mainStyle.row,mainStyle.aiCenter,styles.searcBar,mainStyle.flex1]}>
+          <Text style={[mainStyle.icon,mainStyle.fs18]}>&#xe63f;</Text>
+          <TextInput
+          style={[styles.input,mainStyle.flex1]}
+          placeholder="搜索培训课堂"
+          ></TextInput>
+        </View>
+        <Text style={[mainStyle.icon,styles.btn,mainStyle.fs22]}>&#xe60a;</Text>
       </View>
     )
   }
 }
 
+const styles = StyleSheet.create({
+  searcBar:{
+    height:setSize(80),
+    paddingLeft:setSize(24),
+    paddingRight:setSize(24),
+    marginTop:setSize(10),
+    marginBottom:setSize(10),
+    borderRadius:setSize(40),
+  },
+  input:{
+    paddingTop:0,
+    paddingBottom:0
+  },
+  btn:{
+    paddingLeft:setSize(20),
+    paddingTop:setSize(20),
+    paddingBottom:setSize(20)
+  }
+})
+
 export default HomeSearchBar
+

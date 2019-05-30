@@ -16,6 +16,7 @@ const mainStyle = StyleSheet.create({
     mal15:{ marginLeft:setSize(30),},
     mal20:{ marginLeft:setSize(40),},
     mar10:{ marginRight:setSize(20),},
+    mar15:{ marginRight:setSize(30),},
     mat10:{ marginTop:setSize(20),},
     mat15:{ marginTop:setSize(30),},
     mat20:{ marginTop:setSize(40),},
@@ -45,7 +46,7 @@ const mainStyle = StyleSheet.create({
     cfff:{color:'#ffffff',},
     cc0b:{color:'#c0b529',},
     cc2:{color:'#c2c2c2',},
-    czt:{color:"rgb(221, 101, 114)"},
+    czt:{color:"#FF4560"},
     cyellow:{color:'#C59743'},
     cred:{color:'#CE2A2A'},
     bgcc2:{backgroundColor:'#c2c2c2'},
@@ -139,7 +140,13 @@ const mainStyle = StyleSheet.create({
         borderBottomWidth:setSize(0.6),
         borderColor:'#e2e2e2',   
     },
-    brczt:{borderColor:'#ce2a2a'}
+    brczt:{borderColor:'#ce2a2a'},
+    useravator:{
+        height:screenH*0.09,
+        width:screenH*0.09,
+        borderRadius:screenH*0.09/2,
+        backgroundColor:'#999',
+    }
 });
 export {
     setSize,setText,screenH,screenW,mainStyle

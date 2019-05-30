@@ -7,16 +7,17 @@ import {setSize, mainStyle} from '../public/style/style'
 
 export const IndexTabs = createBottomTabNavigator(
   {
-    Mine: {
-      screen: Mine,
-    },
+    
     Home: {
       screen: Home,
     },
+    
     Explore: {
       screen: Explore,
     },
-    
+    Mine: {
+      screen: Mine,
+    },
   },
   {
     tabBarOptions: {

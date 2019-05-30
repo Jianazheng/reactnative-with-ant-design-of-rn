@@ -4,7 +4,7 @@ import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import { IconOutline,IconFill } from "@ant-design/icons-react-native";
 import { List,Badge } from '@ant-design/react-native';
 const Item = List.Item;
-console.log(Badge)
+
 class Mine extends React.Component {
   static navigationOptions = {
     tabBarLabel: '个人中心',
@@ -26,13 +26,17 @@ class Mine extends React.Component {
     };
   }
 
+  goto(routeName:string,params:any){
+    this.props.navigation.navigate(routeName,params);
+  }
+
   render(){
     return (
       <ScrollView>
         <View style={[styles.userbg,mainStyle.bgczt]}>
           <View style={[styles.userinfo,mainStyle.bgcfff,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-            <TouchableOpacity style={[styles.useravator]}>
-              <Image source={{}}></Image>
+            <TouchableOpacity onPressIn={()=>{this.goto('UserInfo',{})}}>
+              <Image style={[mainStyle.useravator]} source={{}}></Image>
             </TouchableOpacity>
             <View style={[mainStyle.row,mainStyle.flex1,mainStyle.palr10,mainStyle.aiCenter]}>
               <Text style={[mainStyle.c333,mainStyle.fs16]}>binbinMax</Text>
@@ -144,12 +148,6 @@ const styles = StyleSheet.create({
     left:setSize(30),
     bottom:0,
     zIndex:1,
-  },
-  useravator:{
-    height:screenH*0.09,
-    width:screenH*0.09,
-    borderRadius:screenH*0.09/2,
-    backgroundColor:mainStyle.c999.color,
   }
 })
 
