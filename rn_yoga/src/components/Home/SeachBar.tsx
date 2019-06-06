@@ -4,6 +4,7 @@ import { mainStyle, setSize } from '../../public/style/style';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 class HomeSearchBar extends React.Component {
+  onChange:(val:string)=>void;
   constructor(props) {
     super(props);
     this.state = {
@@ -14,6 +15,7 @@ class HomeSearchBar extends React.Component {
       Keyboard.dismiss();
     };
     this.onChange = value => {
+      console.log(value)
       this.setState({ value });
     };
   }
@@ -25,8 +27,12 @@ class HomeSearchBar extends React.Component {
         <View style={[mainStyle.bgcf2,mainStyle.row,mainStyle.aiCenter,styles.searcBar,mainStyle.flex1]}>
           <Text style={[mainStyle.icon,mainStyle.fs18]}>&#xe63f;</Text>
           <TextInput
-          style={[styles.input,mainStyle.flex1]}
+          style={[styles.input,mainStyle.flex1,mainStyle.fs14]}
+          placeholderTextColor={mainStyle.c999.color}
           placeholder="搜索培训课堂"
+          onChangeText={(val)=>{
+            this.onChange(val);
+          }}
           ></TextInput>
         </View>
         <Text style={[mainStyle.icon,styles.btn,mainStyle.fs22]}>&#xe60a;</Text>
@@ -37,12 +43,12 @@ class HomeSearchBar extends React.Component {
 
 const styles = StyleSheet.create({
   searcBar:{
-    height:setSize(80),
+    height:setSize(76),
     paddingLeft:setSize(24),
     paddingRight:setSize(24),
-    marginTop:setSize(10),
-    marginBottom:setSize(10),
-    borderRadius:setSize(40),
+    marginTop:setSize(20),
+    marginBottom:setSize(20),
+    borderRadius:setSize(38),
   },
   input:{
     paddingTop:0,

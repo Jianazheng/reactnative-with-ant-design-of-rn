@@ -5,36 +5,66 @@ import { mainStyle,setSize } from '../../public/style/style';
 
 let { width, height } = Dimensions.get('window')
 let swh = width/2-setSize(20);
-let sww = width-setSize(20);
+let sww = width-setSize(60);
 
-class HomeSwiper extends React.Component {
-  constructor(props) {
+interface Props {
+  fullWidth:boolean
+}
+
+class HomeSwiper extends React.Component<Props> {
+  constructor(props:Props) {
     super(props);
   }
 
   render(){
+    let {fullWidth} = this.props;
     return (
-      <View style={[styles.swiperMain]}>
-        <Swiper
-          width={sww}
-          height={swh}
-          autoplay
-          loop
-          paginationStyle={styles.swiperPagination}
-          dot={
-            <View style={[styles.swiperDot]}></View>
-          }
-          activeDot={
-            <View style={[styles.swiperDotActive]}></View>
-          }
-        >
-          <View style={[styles.swiperItem]}>
-            
+      <View>
+        {
+          fullWidth?<Swiper
+            width={width}
+            height={width}
+            autoplay
+            loop
+            paginationStyle={styles.swiperPagination}
+            dot={
+              <View style={[styles.swiperDot]}></View>
+            }
+            activeDot={
+              <View style={[styles.swiperDotActive]}></View>
+            }
+          >
+            <View style={[styles.swiperItem2]}>
+              
+            </View>
+            <View style={[styles.swiperItem2]}>
+              
+            </View>
+          </Swiper>
+          :
+          <View style={[styles.swiperMain,mainStyle.aiCenter,mainStyle.jcCenter]}>
+            <Swiper
+              width={sww}
+              height={swh}
+              autoplay
+              loop
+              paginationStyle={styles.swiperPagination}
+              dot={
+                <View style={[styles.swiperDot]}></View>
+              }
+              activeDot={
+                <View style={[styles.swiperDotActive]}></View>
+              }
+            >
+              <View style={[styles.swiperItem]}>
+                
+              </View>
+              <View style={[styles.swiperItem]}>
+                
+              </View>
+            </Swiper>
           </View>
-          <View style={[styles.swiperItem]}>
-            
-          </View>
-        </Swiper>
+        }
       </View>
     )
   }
@@ -42,28 +72,38 @@ class HomeSwiper extends React.Component {
 
 const styles = StyleSheet.create({
   swiperMain:{
-    height:swh,
-    width:width,
-    backgroundColor:'#e2e2e2',
+    width:sww,
+    margin:setSize(30),
+    marginTop:setSize(20),
+    marginBottom:setSize(20),
+    overflow:'hidden',
+    backgroundColor:'#fff',
+    borderRadius:setSize(14)
   },
   swiperItem:{
     backgroundColor:'#e2e2e2',
-    width:sww,
-    height:swh
+    flex:1,
+    borderRadius:setSize(14)
+  },
+  swiperItem2:{
+    backgroundColor:'#e2e2e2',
+    flex:1,
   },
   swiperPagination:{
     bottom:setSize(20)
   },
   swiperDot:{
     height:setSize(10),
-    width:setSize(30),
+    width:setSize(10),
     marginLeft:setSize(10),
     marginRight:setSize(10),
+    borderRadius:setSize(10),
     backgroundColor:mainStyle.c999.color
   },
   swiperDotActive:{
     height:setSize(10),
-    width:setSize(30),
+    width:setSize(10),
+    borderRadius:setSize(10),
     backgroundColor:mainStyle.czt.color
   }
 })

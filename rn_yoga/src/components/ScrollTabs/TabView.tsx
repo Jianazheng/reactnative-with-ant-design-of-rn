@@ -1,96 +1,73 @@
 import React from 'react';
 import { Text, View, StyleSheet,Dimensions,TouchableOpacity,ScrollView,Animated,
   Easing } from 'react-native';
-import { mainStyle,setSize } from '../../public/style/style';
+import { mainStyle,setSize,contentPadding } from '../../public/style/style';
+
+import ScrollableTabView, { ScrollableTabBar, DefaultTabBar } from 'react-native-scrollable-tab-view';
+import BxTabbars from './Tabbar';
 
 const { width, height } = Dimensions.get('window');
-let scrollWidth = width-setSize(20);
+let scrollWidth = width-contentPadding*2;
 
 interface Props {
   children:any[],
-  changeIndex:number,
-  height:number
+  height:number,
+  canScroll:boolean,
+  tabs:Array<any>,
+  tabAlign:'center'|''
 }
 type State = {
-  tabViewSlide:number
+  currentIndex:number,
 }
 
 class BxTabView extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      tabViewSlide:new Animated.Value(0)
+      currentIndex:0
     }
   }
 
-  shouldComponentUpdate(np:any,ns:any){ 
-    if(np.changeIndex!=this.props.changeIndex){
-      this.tabToSilde(np.changeIndex);
-      return true
-    }else{
-      return false
-    }
-  }
-
-  tabToSilde(changeIndex:number){
-    let {tabViewSlide} = this.state;
-    //this.refs.tabview.scrollTo({x: changeIndex*(width-setSize(20)), y: 0, duration: 500});
-    Animated.timing(tabViewSlide, {
-      toValue: -scrollWidth*changeIndex,
-      easing: Easing.bezier(1,0.8,0.6,0.4),
-      duration: 100
-    }).start();
+  handleChange({i}){
+    this.setState({
+      currentIndex:i
+    })
   }
   
-
   render(){
-    let {children} = this.props;
-    let {tabViewSlide} = this.state; 
+    let {children,tabs,tabAlign,canScroll} = this.props;
+    let {currentIndex} = this.state; 
     let scrollHeight = this.props.height;
     return (
-      <View style={[
-        {
-          height:scrollHeight,
-          overflow:'hidden'
-        }
-      ]}>
-        <ScrollView 
-          ref="tabview"
-          horizontal={true}
-          scrollEnabled={false}
-          >
-          <Animated.View style={[mainStyle.row,mainStyle.jcBetween,
-          {
-            width:scrollWidth*children.length,
-            transform:[
-              {
-                translateX:tabViewSlide
-              }
-            ]
-          }
-          ]}>
+      <View style={[mainStyle.flex1]}>
+        <ScrollableTabView
+        style={[{height:scrollHeight}]}
+        locked={false}
+        onChangeTab={(e)=>{
+          this.handleChange(e)
+        }}
+        initialPage={currentIndex}
+        prerenderingSiblingsNumber={1}
+        renderTabBar={()=><BxTabbars current={currentIndex} tabAlign={tabAlign} tabNames={tabs}></BxTabbars>}
+        >
+          
           {
             React.Children.map(children,(child, i)=>{
-              return (
-                <View style={[
-                  {
-                    height:scrollHeight,
-                    width:scrollWidth
-                  }
-                ]}>
-                  <ScrollView>
-                    {child}
-                  </ScrollView>
-                </View>
-                )
+              return (    
+                <ScrollView 
+                scrollEnabled={canScroll} 
+                nestedScrollEnabled={true}>
+                  {child}
+                </ScrollView>
+              )
             })
           }
-          </Animated.View>
-        </ScrollView>
+        </ScrollableTabView>
       </View>
     )
   }
 }
+
 
 const styles = StyleSheet.create({
   

@@ -3,96 +3,240 @@ import { Text, View, StyleSheet,Dimensions,TouchableOpacity,ScrollView,Animated,
   Easing } from 'react-native';
 import { mainStyle,setSize } from '../../public/style/style';
 import {layout} from '../../public/js/dom'
+import { IconFill } from "@ant-design/icons-react-native";
 
 const scrollbarWidth = setSize(60);
+const scrollbarPadding = setSize(5);
+const scrollbarMargin = setSize(40);
 
 interface Props {
-  tabs:any[],
-  ontabChange?:(i:number)=>void
+  tabNames:Array<any>,
+  tabAlign:string,
+  current:number,
+  navigateTo:()=>void,
+  goToPage:(i:number)=>void,
 }
 type State = {
-  tabsSlide:any
-  currentIndex:number
+  tabsSlide:any,
+  barWidth:any,
+  currentIndex:number,
+  scrollLeft:number,
+  scrollWidth:number,
+  scrollInfoWidth:number
 }
 
-class BxTabbars extends PureComponent<Props,State> {
+class BxTabbars extends React.Component<Props,State> {
+
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
       currentIndex:0,
-      tabsSlide:new Animated.Value(setSize(5))
+      barWidth:new Animated.Value(scrollbarWidth),
+      tabsSlide:new Animated.Value(setSize(5)),
+      scrollLeft:0,
+      scrollWidth:0,
+      scrollInfoWidth:0
+    }
+  }
+
+  componentDidMount(){
+    
+  }
+
+  shouldComponentUpdate(np,ns){
+    if(np.current!=this.props.current||this.state.currentIndex!=np.current){
+      this.setState({
+        currentIndex:np.current
+      })
+      if(typeof this.props.navigateTo=='function'){
+        this.handleTabClick(np.current)
+      }
+      return true
+    }else{
+      return false
     }
   }
 
   handleTabClick(i:number):void{
     let ref = this.refs['tabsItem'+i];
-    let {tabsSlide} = this.state;
+    let {tabsSlide,barWidth,scrollLeft,scrollWidth,scrollInfoWidth} = this.state;
     let speed = 100;
     this.setState({
       currentIndex:i
     })
     layout(ref).then(res=>{
       //判断进度条位移
+      let offsetLeft = res.pageX+scrollbarPadding*2-scrollbarMargin;
+
       Animated.timing(tabsSlide, {
-        toValue: i>0?(res.pageX+(res.width-scrollbarWidth)/2-setSize(20)):setSize(5),
-        easing: Easing.bezier(1,0.8,0.6,0.4),
+        toValue: i>0?(offsetLeft+scrollLeft):0,
+        easing: Easing.ease,
         duration: speed
       }).start();
-      if(this.props.ontabChange){
-        this.props.ontabChange(i);
+
+      Animated.timing(barWidth, {
+        toValue: res.width,
+        easing: Easing.ease,
+        duration: speed/1.5
+      }).start();
+
+      if(this.props.goToPage){
+        this.props.goToPage(i);
       }
-      this.refs.tab.scrollTo({x: res.pageX, y: 0, duration: speed});
+
+      let scrollOffset = (offsetLeft+scrollLeft)/2;
+      if(offsetLeft/scrollWidth<0.2){
+        scrollOffset = 0;
+      }else if(offsetLeft/scrollWidth>0.8){
+        scrollOffset = scrollInfoWidth;
+      }
+      this.refs.tab.scrollTo({x: scrollOffset, y: 0, duration: speed});
+
     }).catch(err=>{
       console.log(err);
       console.warn('Tab切换报错了')
     })
   }
 
+  handleTabClick2(i:number){
+    this.setState({
+      currentIndex:i,
+    },()=>{
+      if(this.props.goToPage){
+        this.props.goToPage(i);
+      } 
+    })
+    
+  }
+
   render(){
-    let {tabs} = this.props;
-    let {tabsSlide,currentIndex} = this.state;
-    return (
-      <View style={[mainStyle.flex1]}>
-        <ScrollView ref="tab" horizontal={true} contentContainerStyle={[mainStyle.column,mainStyle.jcBetween,mainStyle.h80]}>
-          <View style={[styles.scrollmain,mainStyle.row]}>
-          {
-            tabs.map((val,i)=>{
-              return (
-                <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}
-                onPressIn={this.handleTabClick.bind(this,i)}>
-                  <Text style={[mainStyle.fs12,i==currentIndex?mainStyle.czt:mainStyle.c333]}>{val.title}</Text>
-                </TouchableOpacity>
-              )
-            })
-          }
-          </View>
-          <Animated.Text style={[styles.scrollbar,{
-            transform:[
+    let {tabNames,tabAlign,navigateTo,current} = this.props;
+    let {currentIndex} = this.state;
+    switch (tabAlign) {
+      case 'center':
+          return (
+            <View style={[styles.scrollmain,mainStyle.row,mainStyle.jcCenter]}>
               {
-                translateX:tabsSlide
+                tabNames.map((val,i)=>{
+                  return (
+                    <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
+                    onPress={this.handleTabClick2.bind(this,i)} >
+                      <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                      {
+                        i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
+                      }
+                    </TouchableOpacity>
+                  )
+                })
               }
-            ]
-          }]}></Animated.Text>
-        </ScrollView>
-      </View>
-    )
+            </View>
+          )
+        break;
+      default:
+          return (
+            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h80,mainStyle.palr15]}>
+              <View style={[mainStyle.flex1]}>
+                <ScrollView 
+                onLayout={(e)=>{
+                  this.setState({
+                    scrollWidth:e.nativeEvent.layout.width
+                  })
+                }}
+                onScroll={(e)=>{
+                  this.setState({
+                    scrollLeft:e.nativeEvent.contentOffset.x
+                  })
+                }}
+                ref="tab"
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                scrollEnabled={true}
+                nestedScrollEnabled={true}
+                style={[mainStyle.row]}
+                contentContainerStyle={[mainStyle.jcBetween,mainStyle.h80,mainStyle.flex1]}>
+                  <View style={[styles.scrollmain,mainStyle.row,mainStyle.flex1]} 
+                  onLayout={(e)=>{
+                    this.setState({
+                      scrollInfoWidth:e.nativeEvent.layout.width
+                    })
+                  }}>
+                    {
+                      tabNames.map((val,i)=>{
+                        return (
+                          <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
+                          onPress={this.handleTabClick.bind(this,i)}>
+                            <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                            {
+                              i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
+                            }
+                          </TouchableOpacity>
+                        )
+                      })
+                    }
+                    
+                  </View>
+                  {/* <Animated.Text style={[styles.scrollbar,{
+                    width:barWidth,
+                    transform:[
+                      {
+                        translateX:tabsSlide
+                      }
+                    ]
+                  }]}></Animated.Text> */}
+                </ScrollView>
+              </View>
+              {
+                typeof navigateTo!=undefined
+                ?<TouchableOpacity style={[{marginLeft:setSize(30)}]} onPressIn={()=>{
+                  if(navigateTo)navigateTo()
+                }}>
+                  <IconFill name="appstore" size={24} color={mainStyle.czt.color}></IconFill>
+                </TouchableOpacity>
+                :null
+              }
+            </View>
+          )
+        break;
+    }
   }
 }
 
 const styles = StyleSheet.create({
-  scrollmain:{},
+  scrollmain:{
+    height:setSize(80),
+  },
   scrollItem:{
-    paddingLeft:setSize(5),
-    paddingRight:setSize(5),
-    height:setSize(60),
-    paddingTop:setSize(20),
-    marginRight:setSize(40),
+    paddingLeft:scrollbarPadding,
+    paddingRight:scrollbarPadding,
+    height:setSize(80),
+    paddingTop:0,
+    marginRight:scrollbarMargin,
+  },
+  scrollItem2:{
+    paddingLeft:scrollbarPadding,
+    paddingRight:scrollbarPadding,
+    height:setSize(80),
+    marginLeft:scrollbarMargin,
+    marginRight:scrollbarMargin,
+    paddingTop:0,
   },
   scrollbar:{
     backgroundColor:mainStyle.czt.color,
     height:setSize(6),
-    width:scrollbarWidth
-  }
+    width:scrollbarWidth,
+    borderRadius:setSize(2),
+    position:'absolute',
+    left:0,
+    bottom:0
+  },
+  scrollbar2:{
+    backgroundColor:mainStyle.czt.color,
+    height:setSize(6),
+    width:scrollbarWidth,
+    borderRadius:setSize(2),
+    position:'absolute',
+    bottom:0
+  },
 })
 
 export default BxTabbars

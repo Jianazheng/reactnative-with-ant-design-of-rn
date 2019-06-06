@@ -49,7 +49,7 @@ class HomeSearchBar extends React.Component<Props,State> {
     let {list,fadeAnim} = this.state;
     return (
       <View>
-        <View style={[mainStyle.palr15,mainStyle.bgcf7,mainStyle.h80,mainStyle.dflex,mainStyle.row,mainStyle.aiCenter]}>
+        <View style={[mainStyle.palr15,mainStyle.bgcfff,mainStyle.h80,mainStyle.row,mainStyle.aiCenter]}>
           <View style={[styles.broadicon,mainStyle.row,mainStyle.aiCenter]}>
             <IconFill name="sound" size={20} color={mainStyle.czt.color}></IconFill>
           </View>
@@ -66,7 +66,7 @@ class HomeSearchBar extends React.Component<Props,State> {
                 list.map((val,i)=>{
                   return(
                     <TouchableOpacity key={i} style={[styles.broaditem,mainStyle.aiCenter,mainStyle.row,mainStyle.flex1]} onPress={this.gotoBroadcast}>
-                      <Text style={[mainStyle.c333,mainStyle.fs14,mainStyle.pal10]}>{val}</Text>
+                      <Text style={[mainStyle.c333,mainStyle.fs12,mainStyle.pal10]}>{val}</Text>
                     </TouchableOpacity>
                   )
                 })
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     width:setSize(60)
   },
   broadmain:{
-    overflow:'hidden',
     height:setSize(60),
   },
   broadinfo:{
