@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet,View } from 'react-native';
-import { mainStyle,contentPadding,setSize } from '../../public/style/style';
-import { CourseInfoItem } from '../../components/Course/CourseItem';
-import BxListView from '../../components/Pubilc/ListView';
+import { mainStyle,contentPadding,setSize } from '../../../public/style/style';
+import { CourseInfoItem } from '../../../components/Course/CourseItem';
+import BxListView from '../../../components/Pubilc/ListView';
 
 
 interface CourseInfoItemProps {

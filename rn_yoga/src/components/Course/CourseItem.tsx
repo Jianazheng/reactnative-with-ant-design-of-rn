@@ -59,6 +59,26 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
   }
 }
 
+class CourseApplyNotice extends PureComponent<CourseInfoItemProps>{
+  constructor(props:CourseInfoItemProps){
+    super(props)
+  }
+  render (){
+    let {data} = this.props;
+    return(
+      <View style={[styles.infoCourse,mainStyle.mab15]}>
+        <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.flex1]}>
+          <Image style={[styles.ApplyNoticeImage,mainStyle.imgCover]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
+          <View style={[mainStyle.flex1,mainStyle.mal15,mainStyle.column]}>
+            <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mab10,styles.ApplyNoticeTitle]}>{data.title}</Text>
+            <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.mab10]}>{data.title}</Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
+}
+
 const contentWidth = width-contentPadding*2;
 const CourseImageWidth = (contentWidth-setSize(20))/2;
 const styles = StyleSheet.create({
@@ -97,10 +117,19 @@ const styles = StyleSheet.create({
     width:CourseImageWidth*0.6,
     height:CourseImageWidth*0.6,
     borderRadius:setSize(6)
+  },
+  ApplyNoticeImage:{
+    width:CourseImageWidth*0.16,
+    height:CourseImageWidth*0.16,
+  },
+  ApplyNoticeTitle:{
+    height:CourseImageWidth*0.16,
+    lineHeight:CourseImageWidth*0.16,
   }
 })
 
 export {
   CourseInfoItem,
-  HomeCourseItem
+  HomeCourseItem,
+  CourseApplyNotice
 }

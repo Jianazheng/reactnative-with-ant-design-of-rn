@@ -25,6 +25,6 @@ export function headerLeft(){
 
 export const headerTitle =(title:string)=>(
   <View style={[mainStyle.jcCenter,mainStyle.row,mainStyle.flex1]}>
-    <Text style={[mainStyle.fs12,mainStyle.c333]}>{title}</Text>
+    <Text style={[mainStyle.fs15,mainStyle.c333]}>{title}</Text>
   </View>
 );

@@ -1,7 +1,7 @@
 import React,{PureComponent} from 'react';
 import { Text, View, StyleSheet,Dimensions,TouchableOpacity,ScrollView,Animated,
   Easing } from 'react-native';
-import { mainStyle,setSize } from '../../public/style/style';
+import { mainStyle,setSize,screenW } from '../../public/style/style';
 import {layout} from '../../public/js/dom'
 import { IconFill } from "@ant-design/icons-react-native";
 
@@ -213,11 +213,12 @@ const styles = StyleSheet.create({
     marginRight:scrollbarMargin,
   },
   scrollItem2:{
-    paddingLeft:scrollbarPadding,
-    paddingRight:scrollbarPadding,
+    // paddingLeft:scrollbarPadding,
+    // paddingRight:scrollbarPadding,
+    // marginLeft:scrollbarMargin,
+    // marginRight:scrollbarMargin,
+    width:(screenW-scrollbarMargin*2)/3,
     height:setSize(80),
-    marginLeft:scrollbarMargin,
-    marginRight:scrollbarMargin,
     paddingTop:0,
   },
   scrollbar:{

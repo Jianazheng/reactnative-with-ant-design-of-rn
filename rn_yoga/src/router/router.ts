@@ -5,7 +5,7 @@ import Register from '../pages/Login/Register';
 import Forget from '../pages/Login/Forget';
 import Password from './../pages/Login/Password';
 import UserInfo from './../pages/Mine/UserInfo';
-import CourseInfo from './../pages/Course/CourseInfo';
+import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
 
 
 export const navItem = {
