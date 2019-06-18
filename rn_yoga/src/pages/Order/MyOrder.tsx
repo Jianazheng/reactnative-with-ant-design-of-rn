@@ -1,62 +1,98 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image } from 'react-native';
-import {WingBlank,WhiteSpace,InputItem} from '@ant-design/react-native';
-import { mainStyle,screenH } from '../../public/style/style';
-import {headerTitle,headerRight} from '../../router/navigationBar';
+import { Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native';
+import { mainStyle,screenH,setSize } from '../../public/style/style';
+import NavTop from '../../router/navTop';
+import BxTabView from '../../components/ScrollTabs/TabView';
+import BxListView from '../../components/Pubilc/ListView';
+import { CourseInfoItem2 } from '../../components/Course/CourseItem';
+
 
 interface Props {}
 interface State {
-  
+  tabs:Array<object>
 }
 
-class UserInfo extends React.Component<Props,State> {
+class MyOrder extends React.Component<Props,State> {
   static navigationOptions = {
-    headerTitle:headerTitle('个人信息'),
-    headerRight:headerRight(<Text></Text>),
+    header:null
   }
-  timer:any;
-  codeRef:any;
+
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      
+      tabs:[{title:'全部'},{title:'培训课程'},{title:'在线课程'},{title:'商品'}]
     };
   }
 
   render(){
+    let {tabs} = this.state;
     return (
-      <View style={[mainStyle.column]}>
-        <View style={[mainStyle.row,mainStyle.palr15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.patb20,mainStyle.brb1e2]}>
-          <Text style={[mainStyle.fs15,mainStyle.c333]}>头像</Text>
-          <View style={[mainStyle.row,mainStyle.aiCenter]}>
-            <Image style={[mainStyle.useravator,mainStyle.mar15]}></Image>
-            <Text style={[mainStyle.c666,mainStyle.fs14]}>编辑</Text>
+      <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf2]}>
+        <NavTop
+        navType="normal"
+        title="我的订单"
+        onPress={()=>{
+          this.props.navigation.goBack();
+        }}
+        ></NavTop>
+        <BxTabView
+        height={screenH-setSize(240)}
+        canScroll={true}
+        tabAlign={'center'}
+        tabs={tabs}
+        >
+          <View style={[mainStyle.flex1]}>
+            <BxListView
+            listData={[{}]}
+            colNumber={1}
+            nomore={false}
+            onLoadmore={()=>{}}
+            listItem={({item,index})=><OrderItem data={{}}></OrderItem>}
+            ></BxListView>
           </View>
-        </View>
-        <View style={[mainStyle.row,mainStyle.palr15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.patb20,mainStyle.brb1e2]}>
-          <Text style={[mainStyle.fs15,mainStyle.c333]}>姓名</Text>
-          <View style={[mainStyle.row,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mar15]}>binbinMax</Text>
-            <Text style={[mainStyle.c666,mainStyle.fs14]}>编辑</Text>
+          <View>
+            <Text>2333</Text>
           </View>
-        </View>
-        <View style={[mainStyle.row,mainStyle.palr15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.patb20,mainStyle.brb1e2]}>
-          <Text style={[mainStyle.fs15,mainStyle.c333]}>绑定手机</Text>
-          <View style={[mainStyle.row,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mar15]}>18828838888</Text>
-            <Text style={[mainStyle.c666,mainStyle.fs14]}>编辑</Text>
+          <View>
+            <Text>2333</Text>
           </View>
-        </View>
-        <View style={[mainStyle.row,mainStyle.palr15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.patb20,mainStyle.brb1e2]}>
-          <Text style={[mainStyle.fs15,mainStyle.c333]}>会员等级</Text>
-          <View style={[mainStyle.row,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.cjin,mainStyle.fs14,mainStyle.mar15]}>白金会员</Text>
-            <Text style={[mainStyle.c666,mainStyle.fs14]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <View>
+            <Text>2333</Text>
           </View>
-        </View>
+        </BxTabView>
       </View>
     )
   }
 }
 
-export default UserInfo
+interface OrderItemState {
+
+}
+
+interface OrderItemProps {
+  data:object
+}
+
+class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
+  constructor(props:OrderItemProps,state:OrderItemState){
+    super(props)
+  }
+  render(){
+    return (
+      <View style={[mainStyle.column,mainStyle.mat15]}>
+        <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h80,mainStyle.bgcf7,mainStyle.palr15]}>
+          <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter]}>
+            <Text style={[mainStyle.icon,mainStyle.c333]}>&#xe63d;</Text>
+            <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>订单号：8230832048234</Text>
+          </View>
+        </View>
+        <View style={[mainStyle.bgcfff,mainStyle.palr15]}>
+          <CourseInfoItem2 data={{title:'高阶体式提升计划高阶体式提升计划'}}></CourseInfoItem2>
+        </View>
+        
+      </View>
+    )
+  }
+}
+
+export default MyOrder

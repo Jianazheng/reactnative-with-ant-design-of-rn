@@ -9,7 +9,9 @@ import BxListView from '../../components/Pubilc/ListView';
 let { width, height } = Dimensions.get('window');
 const contentPadding = setSize(30);
 
-interface Props {}
+interface Props {
+  navigation:any
+}
 interface State {}
 class Recommend extends React.Component<Props,State> {
   
@@ -33,6 +35,7 @@ class Recommend extends React.Component<Props,State> {
   }
 
   render(){
+    let {navigation} = this.props;
     let {news} = this.state;
     return (
       <View style={[mainStyle.flex1,mainStyle.column,mainStyle.pa15]}>
@@ -41,7 +44,7 @@ class Recommend extends React.Component<Props,State> {
             \\&nbsp;&nbsp;&nbsp;本期最新培训&nbsp;&nbsp;&nbsp;//
           </Text>
         </View>
-        <TouchableOpacity style={[mainStyle.mab10]}>
+        <TouchableOpacity style={[mainStyle.mab10]} onPress={()=>{this.goto('CourseInfo')}}>
           <View style={[styles.reMain,mainStyle.column]}>
             <Image style={[styles.reImage,mainStyle.mat15]} resizeMode="cover" source={{uri:'http://center.jkxuetang.com/wp-content/themes/jkxuetang/images/slider3.png'}}></Image>
             <Text style={[mainStyle.fs15,mainStyle.c333,mainStyle.mat10]}>第一阶：脉轮与胜王瑜伽初级（师资班）</Text>
@@ -55,28 +58,47 @@ class Recommend extends React.Component<Props,State> {
             </View>
           </View>
         </TouchableOpacity>
-        <View style={[mainStyle.flex1,mainStyle.mab10]}>
-          <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={()=>{
-            this.goto('Login')
-          }}>
-            </BxCateTitle> 
-          <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
+        <BxListView
+          listData={[{},{}]}
+          listItem={({item,index})=>
+          <View>
             {
-              news.map((item,index)=><RecommendGoods data={item} key={index.toString()}></RecommendGoods>)
+              index<1?
+              <View style={[mainStyle.flex1,mainStyle.mab10]}>
+              <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={()=>{
+                this.goto('GoodsList')
+              }}>
+                </BxCateTitle> 
+              <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
+                {
+                  news.map((item,index)=><RecommendGoods navigation={navigation} data={item} key={index.toString()}></RecommendGoods>)
+                }
+              </View>
+            </View>
+            :null
+            }
+            {
+              index>=1?
+              <View style={[mainStyle.flex1,mainStyle.mab10]}>
+                <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={()=>{
+                  this.goto('GoodsList')
+                }}>
+                </BxCateTitle>
+                <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
+                  {
+                    news.map((item,index)=><RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>)
+                  }
+                </View>
+              </View>
+              :null
             }
           </View>
-        </View>
-        <View style={[mainStyle.flex1,mainStyle.mab10]}>
-          <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={()=>{
-            this.goto('Login')
-          }}>
-          </BxCateTitle>
-          <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
-            {
-              news.map((item,index)=><RecommendCourse data={item} key={index.toString()}></RecommendCourse>)
-            }
-          </View>
-        </View>
+          }
+          nomore={true}
+          colNumber={1}
+          >
+        </BxListView>
+        
       </View>
     )
   }
@@ -84,16 +106,23 @@ class Recommend extends React.Component<Props,State> {
 
 interface GoodsProps {
   data:object,
+  navigation:any
 }
 
 class RecommendGoods extends PureComponent<GoodsProps> {
   constructor(props:GoodsProps){
     super(props)
   }
+
+  gotoInfo(route:string,params:object){
+    let {navigation} = this.props;
+    navigation.push(route,params);
+  }
+
   render (){
     let {data} = this.props;
     return(
-      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10]} onPress={()=>{}}>
+      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
           <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/sonja-langford-357.png'}}></Image>
           <View style={[mainStyle.flex1]}>
@@ -113,10 +142,16 @@ class RecommendCourse extends PureComponent<CourseProps> {
   constructor(props:CourseProps){
     super(props)
   }
+
+  gotoInfo(route:string,params:object){
+    let {navigation} = this.props;
+    navigation.push(route,params);
+  }
+
   render (){
     let {data} = this.props;
     return(
-      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{}}>
+      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
           <View style={[mainStyle.positonre,mainStyle.mab5]}>
             <Text style={[styles.times,mainStyle.cfff,mainStyle.fs11]}>12课时</Text>

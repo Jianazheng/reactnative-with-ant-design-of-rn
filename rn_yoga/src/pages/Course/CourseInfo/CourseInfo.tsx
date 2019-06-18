@@ -12,6 +12,7 @@ import CourseTeacher from './CourseTeacher';
 import CourseArtInfo from './CourseArtInfo';
 import ApplyNotice from './ApplyNotice';
 import { CartInfo, CartInfoDetails } from './CartInfo';
+import NavTop from '../../../router/navTop';
 
 
 let { width, height } = Dimensions.get('window')
@@ -20,18 +21,23 @@ interface Props {}
 interface State {
   canScroll:boolean,
   tabTop:number,
-  courseData:Array<object>
+  courseData:Array<object>,
+  showApplyNotice:boolean,
+  showCartInfoDetails:boolean
 }
 class CourseInfo extends React.Component<Props,State> {
   static navigationOptions = {
-    headerTitle:headerTitle('课程详情'),
-    headerRight:headerRight(<Text></Text>),
+    // headerTitle:headerTitle('课程详情'),
+    // headerRight:headerRight(<Text></Text>),
+    header:null
   }
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
       tabTop:667,
       canScroll:false,
+      showApplyNotice:false,
+      showCartInfoDetails:false,
       courseData:[
         {title:'高阶体式提升计划',time:'2019年6月1日-6月30日'},
         {title:'高阶体式提升计划',time:'2019年6月1日-6月30日'},
@@ -64,10 +70,34 @@ class CourseInfo extends React.Component<Props,State> {
     }
   }
 
+  handleCloseApplyNotice(isok:boolean){
+    this.setState({
+      showApplyNotice:isok
+    })
+  }
+
+  handleCloseCartInfoDetails(isok:boolean){
+    let {showCartInfoDetails} = this.state;
+    if(!showCartInfoDetails){
+      this.setState({
+        showCartInfoDetails:isok
+      })
+    }else{
+      this.props.navigation.push('Settlement',{type:'pay'});
+    }
+  }
+
   render(){
-    let {canScroll,courseData} = this.state;
+    let {canScroll,courseData,showApplyNotice,showCartInfoDetails} = this.state;
     return (
       <View style={[mainStyle.column,mainStyle.flex1]}>
+        <NavTop
+        navType="normal"
+        title="课程详情"
+        onPress={()=>{
+          this.props.navigation.goBack();
+        }}
+        ></NavTop>
         <ScrollView
         style={[mainStyle.flex1]}
         onScroll={(e)=>{
@@ -105,7 +135,7 @@ class CourseInfo extends React.Component<Props,State> {
               </Text>
             </View>
             <View style={[mainStyle.column,mainStyle.mat30]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
                 <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100]}>
                   <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.flex1]}>
                     <Text style={[mainStyle.c999,mainStyle.fs15,mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
@@ -114,7 +144,7 @@ class CourseInfo extends React.Component<Props,State> {
                   <Text style={[mainStyle.c666,mainStyle.icon,mainStyle.fs24]}>&#xe64d;</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{this.handleCloseApplyNotice(true)}}>
                 <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100]}>
                   <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.flex1]}>
                     <Text style={[mainStyle.c999,mainStyle.fs15,mainStyle.mar15]}>报名条件</Text>
@@ -127,6 +157,7 @@ class CourseInfo extends React.Component<Props,State> {
 
           <BxTabView 
           height={height-setSize(240)}
+          tabWidth={width-setSize(160)}
           canScroll={canScroll}
           tabs={[{title:'讲师'},{title:'详情'},{title:'相关课程'}]}
           tabAlign={'center'}
@@ -146,7 +177,7 @@ class CourseInfo extends React.Component<Props,State> {
 
         <View style={[mainStyle.h120,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.fixedview,mainStyle.bgcfff,mainStyle.brt1e2]}>
           <View style={[styles.fixedbtn,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
               <LinearGradient 
               colors={['#FF8604','#FF5100']} 
               start={{ x: 1, y: 1 }}
@@ -155,7 +186,7 @@ class CourseInfo extends React.Component<Props,State> {
                 <Text style={[mainStyle.cfff,mainStyle.fs15]}>加入购物车</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
               <LinearGradient 
               colors={['#FA5439','#FA3352']} 
               start={{ x: 1, y: 1 }}
@@ -166,30 +197,58 @@ class CourseInfo extends React.Component<Props,State> {
             </TouchableOpacity>
           </View>
         </View>
-        
-        {/* <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.pa15,
+
+        {showApplyNotice?
+        <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.pa15,
           {
             height:screenH*0.55
           }
         ]}>
           <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
             <Text style={[mainStyle.fs14,mainStyle.c333]}>报名条件</Text>
-            <Text style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}>&#xe651;</Text>
+            <Text 
+            style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}
+            onPress={()=>{this.handleCloseApplyNotice(false)}}
+            >&#xe651;</Text>
           </View>
           <ApplyNotice data={courseData}></ApplyNotice>
-        </View> */}
+        </View>
+        :null}
 
-        <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.pa15,
+        {showCartInfoDetails?
+        <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15,
           {
             height:screenH*0.55
           }
         ]}>
-          <View style={[mainStyle.row,mainStyle.aiStart,mainStyle.jcBetween]}>
+          <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiStart]}>
             <CartInfoDetails data={{}}></CartInfoDetails>
-            <Text style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}>&#xe651;</Text>
+            <Text 
+            style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}
+            onPress={()=>{this.handleCloseCartInfoDetails(false)}}
+            >&#xe651;</Text>
           </View>
-          <CartInfo data={courseData}></CartInfo>
+          <View style={[mainStyle.flex1]}>
+            <CartInfo data={courseData}></CartInfo>
+          </View>
         </View>
+        :null}
+
+        {
+          showCartInfoDetails||showApplyNotice?
+          <TouchableOpacity 
+          onPress={()=>{
+  
+          }}>
+            <View style={[
+              styles.fixedzz,
+              {
+                height:screenH
+              }
+            ]}></View>
+          </TouchableOpacity>
+          :null
+        }
 
       </View>
     )
@@ -205,6 +264,14 @@ class Taps extends React.PureComponent{
 }
 
 const styles = StyleSheet.create({
+  fixedzz:{
+    position:'absolute',
+    bottom:0,
+    left:0,
+    zIndex:99,
+    width:screenW,
+    backgroundColor:'rgba(0,0,0,0.5)'
+  },
   fixedinfo:{
     position:'absolute',
     bottom:0,

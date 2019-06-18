@@ -6,6 +6,12 @@ import Forget from '../pages/Login/Forget';
 import Password from './../pages/Login/Password';
 import UserInfo from './../pages/Mine/UserInfo';
 import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
+import CartList from './../pages/Cart/CartList';
+import Settlement from './../pages/Order/Settlement';
+import Payfail from './../pages/Payment/Payfail';
+import PaySuccess from './../pages/Payment/PaySuccess';
+import GoodsList from './../pages/Home/GoodsList';
+import MyOrder from '../pages/Order/MyOrder';
 
 
 export const navItem = {
@@ -15,6 +21,12 @@ export const navItem = {
   Password:{screen:Password},
   UserInfo:{screen:UserInfo},
   CourseInfo:{screen:CourseInfo},
+  CartList:{screen:CartList},
+  Settlement:{screen:Settlement},
+  Payfail:{screen:Payfail},
+  PaySuccess:{screen:PaySuccess},
+  GoodsList:{screen:GoodsList},
+  MyOrder:{screen:MyOrder},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({
@@ -24,9 +36,9 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'CourseInfo',
+  initialRouteName: 'Tab',
   headerMode: 'float',
   navigationOptions:{
-    gesturesEnabled:true,
+    header:null,
   }
 }

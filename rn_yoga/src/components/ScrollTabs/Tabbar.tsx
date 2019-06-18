@@ -14,6 +14,7 @@ interface Props {
   tabAlign:string,
   current:number,
   navigateTo:()=>void,
+  tabWidth:number,
   goToPage:(i:number)=>void,
 }
 type State = {
@@ -110,12 +111,16 @@ class BxTabbars extends React.Component<Props,State> {
   }
 
   render(){
-    let {tabNames,tabAlign,navigateTo,current} = this.props;
+    let {tabNames,tabAlign,navigateTo,current,tabWidth} = this.props;
     let {currentIndex} = this.state;
+    if(tabWidth==undefined){
+      tabWidth = screenW;
+    }
     switch (tabAlign) {
       case 'center':
           return (
-            <View style={[styles.scrollmain,mainStyle.row,mainStyle.jcCenter]}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcfff]}>
+              <View style={[styles.scrollmain,mainStyle.row,mainStyle.jcCenter,{width:tabWidth}]}>
               {
                 tabNames.map((val,i)=>{
                   return (
@@ -129,6 +134,7 @@ class BxTabbars extends React.Component<Props,State> {
                   )
                 })
               }
+              </View>
             </View>
           )
         break;
@@ -217,7 +223,8 @@ const styles = StyleSheet.create({
     // paddingRight:scrollbarPadding,
     // marginLeft:scrollbarMargin,
     // marginRight:scrollbarMargin,
-    width:(screenW-scrollbarMargin*2)/3,
+    //width:(screenW-scrollbarMargin*2)/3,
+    flex:1,
     height:setSize(80),
     paddingTop:0,
   },

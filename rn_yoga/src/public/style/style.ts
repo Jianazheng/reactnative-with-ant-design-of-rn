@@ -36,6 +36,7 @@ const mainStyle = StyleSheet.create({
     palr15:{paddingLeft:setSize(30),paddingRight:setSize(30)},
     palr20:{paddingLeft:setSize(40),paddingRight:setSize(40)},
     patb20:{paddingTop:setSize(40),paddingBottom:setSize(40)},
+    patb15:{paddingTop:setSize(30),paddingBottom:setSize(30)},
     patb10:{paddingTop:setSize(20),paddingBottom:setSize(20)},
     pa15:{paddingTop:setSize(30),paddingBottom:setSize(30),paddingLeft:setSize(30),paddingRight:setSize(30)},
     pa20:{paddingTop:setSize(40),paddingBottom:setSize(40),paddingLeft:setSize(40),paddingRight:setSize(40)},
@@ -54,6 +55,7 @@ const mainStyle = StyleSheet.create({
     cyellow:{color:'#C59743'},
     cred:{color:'#CE2A2A'},
     c8d0:{color:'#8D002F'},
+    bgcf6e:{backgroundColor:'#F6ECEE'},
     bgcc2:{backgroundColor:'#c2c2c2'},
     bgccc:{backgroundColor:'#cccccc'},
     bgc59:{backgroundColor:'#ce2a2a'},
@@ -154,6 +156,10 @@ const mainStyle = StyleSheet.create({
     brb1e2:{
         borderBottomWidth:setSize(0.6),
         borderColor:'#e2e2e2',   
+    },
+    brb1f2:{
+        borderBottomWidth:setSize(0.6),
+        borderColor:'#f2f2f2',   
     },
     brczt:{borderColor:'#ce2a2a'},
     useravator:{

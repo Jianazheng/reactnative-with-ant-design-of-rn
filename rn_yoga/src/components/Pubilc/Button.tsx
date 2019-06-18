@@ -11,7 +11,7 @@ interface Props {
   btnstyle:any,
   textstyle:any,
   title:string,
-  disabled:false
+  disabled:boolean
 }
 
 interface State {
@@ -64,7 +64,7 @@ export default class BxButton extends PureComponent<Props,State>{
       return(
         <View style={[mainStyle.bgccc,styles.btn,btnstyle]}>
           <ActivityIndicator />
-          <Text style={[mainStyle.c333,mainStyle.fs14,mainStyle.mal10,textstyle]}>{title}</Text>
+          <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.mal10,textstyle]}>{title}</Text>
         </View>
       )
     }

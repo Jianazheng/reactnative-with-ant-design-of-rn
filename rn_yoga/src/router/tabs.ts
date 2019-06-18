@@ -1,9 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation';
 import Home from '../pages/Home/Home';
-import Mine from '../pages/Mine/Mine';
 import Explore from '../pages/Explore/Explore';
 import {setSize, mainStyle} from '../public/style/style'
+import Mine from './../pages/Mine/Mine';
 
 export const IndexTabs = createBottomTabNavigator(
   {

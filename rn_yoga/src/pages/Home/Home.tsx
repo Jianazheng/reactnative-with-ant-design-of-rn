@@ -59,6 +59,7 @@ class Home extends React.Component<Props,State> {
 
   render(){
     let {canScroll} = this.state;
+    let {navigation} = this.props;
     return (
       <ScrollView
         onScroll={(e)=>{
@@ -70,7 +71,7 @@ class Home extends React.Component<Props,State> {
             tabTop:e.nativeEvent.layout.height
           })
         }}>
-          <HomeSearchBar></HomeSearchBar>
+          <HomeSearchBar navigation={navigation}></HomeSearchBar>
           <HomeSwiper></HomeSwiper>
           <HomeBroadcast></HomeBroadcast>
         </View>
@@ -79,8 +80,8 @@ class Home extends React.Component<Props,State> {
         canScroll={canScroll} 
         tabs={[{title:'推荐'},{title:'主轴课程'},{title:'非系统课程'},{title:'其他'}]} 
         navigateTo={()=>{}}>
-          <Recommend></Recommend>
-          <HomeCourse></HomeCourse>
+          <Recommend navigation={navigation}></Recommend>
+          <HomeCourse navigation={navigation}></HomeCourse>
           <View>
             <Text>265161333</Text>
           </View>

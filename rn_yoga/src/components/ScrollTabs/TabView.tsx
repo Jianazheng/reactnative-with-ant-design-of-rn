@@ -14,7 +14,8 @@ interface Props {
   height:number,
   canScroll:boolean,
   tabs:Array<any>,
-  tabAlign:'center'|''
+  tabAlign:'center'|'',
+  tabWidth:number
 }
 type State = {
   currentIndex:number,
@@ -35,7 +36,7 @@ class BxTabView extends React.Component<Props,State> {
   }
   
   render(){
-    let {children,tabs,tabAlign,canScroll} = this.props;
+    let {children,tabs,tabAlign,canScroll,tabWidth} = this.props;
     let {currentIndex} = this.state; 
     let scrollHeight = this.props.height;
     return (
@@ -48,7 +49,7 @@ class BxTabView extends React.Component<Props,State> {
         }}
         initialPage={currentIndex}
         prerenderingSiblingsNumber={1}
-        renderTabBar={()=><BxTabbars current={currentIndex} tabAlign={tabAlign} tabNames={tabs}></BxTabbars>}
+        renderTabBar={()=><BxTabbars tabWidth={tabWidth} current={currentIndex} tabAlign={tabAlign} tabNames={tabs}></BxTabbars>}
         >
           
           {

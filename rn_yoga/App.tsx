@@ -51,7 +51,6 @@ export default class App extends Component<Props> {
   };
 
   handleNavigationChange = (prevState:any, newState:any, action:any) =>{
-    console.log(prevState,newState)
     if (Platform.OS === 'android') {
       if (newState.routes.length > 1) {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);

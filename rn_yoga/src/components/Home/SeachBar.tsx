@@ -3,9 +3,13 @@ import { Text, View, Alert, Keyboard, TextInput, StyleSheet } from 'react-native
 import { mainStyle, setSize } from '../../public/style/style';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
-class HomeSearchBar extends React.Component {
+interface Props {
+
+}
+
+class HomeSearchBar extends React.Component<Props> {
   onChange:(val:string)=>void;
-  constructor(props) {
+  constructor(props:Props) {
     super(props);
     this.state = {
       value: ''
@@ -35,7 +39,12 @@ class HomeSearchBar extends React.Component {
           }}
           ></TextInput>
         </View>
-        <Text style={[mainStyle.icon,styles.btn,mainStyle.fs22]}>&#xe60a;</Text>
+        <Text 
+        style={[mainStyle.icon,styles.btn,mainStyle.fs22]} 
+        onPress={()=>{
+          this.props.navigation.push('CartList')
+        }}
+        >&#xe60a;</Text>
       </View>
     )
   }

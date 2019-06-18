@@ -1,30 +1,32 @@
 import React from 'react';
 import { Text, View,TouchableOpacity } from 'react-native';
 import { IconFill } from "@ant-design/icons-react-native";
-import { mainStyle } from '../public/style/style';
+import { mainStyle,screenW, setSize } from '../public/style/style';
+
+let headbar = setSize(120);
 
 export const headerRight =(children:any)=> (
-  <View style={[mainStyle.jcCenter,mainStyle.row,mainStyle.bgcc2]}>
+  <View style={[mainStyle.aiCenter,mainStyle.row,mainStyle.bgcfff,{width:headbar}]}>
     {children}
   </View>
 );
 
-export function headerLeft(){
+export function headerLeft(_this:any){
   return (
-    <TouchableOpacity onPressIn={
-      this.props.navigation.back()
-    } 
-      style={[mainStyle.jcCenter,mainStyle.row,mainStyle]}
-      >
-      <IconFill name="left" size={18} color={mainStyle.c333.color}></IconFill>
-      <Text style={[mainStyle.fs14,mainStyle.c333]}>返回</Text>
-    </TouchableOpacity>
+    <View style={[mainStyle.aiCenter,mainStyle.row,mainStyle.bgcfff,{width:headbar}]}>
+      <TouchableOpacity onPressIn={()=>{
+        //_this.props.navigation.goBack();
+        console.log(_this)
+      }}>
+        <Text style={[mainStyle.icon,mainStyle.c333,mainStyle.fs20]}>&#xe64c;</Text>
+      </TouchableOpacity>
+    </View>
   )
 };
 
 
 export const headerTitle =(title:string)=>(
-  <View style={[mainStyle.jcCenter,mainStyle.row,mainStyle.flex1]}>
+  <View style={[mainStyle.jcCenter,mainStyle.row]}>
     <Text style={[mainStyle.fs15,mainStyle.c333]}>{title}</Text>
   </View>
 );
