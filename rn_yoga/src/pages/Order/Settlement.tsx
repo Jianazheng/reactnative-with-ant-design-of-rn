@@ -9,7 +9,7 @@ import NavTop from '../../router/navTop';
 
 interface Props {}
 interface State {
-  
+  orderType:string
 }
 
 let imgw = setSize(180);
@@ -36,7 +36,7 @@ class Settlement extends React.Component<Props,State> {
   }
 
   render(){
-    let {orderType} = this.state
+    let {orderType} = this.state;
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -121,14 +121,19 @@ class Settlement extends React.Component<Props,State> {
         </ScrollView>
         {
           orderType=='pay'?
-          <PayBar data={{}} orderType={orderType} handlePayment={()=>{
+          <PayBar 
+          data={{}}
+          orderType={orderType} 
+          handlePayment={()=>{
             this.props.navigation.push('PaySuccess')
           }}></PayBar>
           :null
         }
         {
           orderType=='nopay'?
-          <PayBar data={{}} orderType={orderType} 
+          <PayBar 
+          data={{}} 
+          orderType={orderType} 
           handlePayment={()=>{
             this.props.navigation.push('PaySuccess')
           }}
@@ -138,7 +143,11 @@ class Settlement extends React.Component<Props,State> {
         }
         {
           orderType=='afterpay'?
-          <PayBar data={{}} orderType={orderType} handleRefund={()=>{}}></PayBar>
+          <PayBar 
+          data={{}} 
+          orderType={orderType} 
+          handleRefund={()=>{}}
+          ></PayBar>
           :null
         }
       </View>
@@ -254,10 +263,12 @@ class PayBar extends React.Component<PayBarProps>{
               </Text>
             </View>
             <View style={[mainStyle.row,mainStyle.aiCenter]}>
-              <BxButton 
+              <BxButton
+              color={mainStyle.czt.color}
+              borderRadius={setSize(40)}
               disabled={false}
               title={'支付'} 
-              btnstyle={[mainStyle.mal15,{borderRadius:setSize(40),height:setSize(80),width:setSize(220)}]} 
+              btnstyle={[mainStyle.mal15,{height:setSize(80),width:setSize(220)}]} 
               textstyle={[mainStyle.fs14]}
               onClick={()=>{handlePayment()}}>
               </BxButton>
@@ -274,16 +285,22 @@ class PayBar extends React.Component<PayBarProps>{
             </View>
             <View style={[mainStyle.row,mainStyle.aiCenter]}>
               <BxButton 
+              plain
+              color={mainStyle.czt.color}
+              borderRadius={setSize(40)}
               disabled={false}
               title={'去支付'} 
-              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{borderRadius:setSize(40),height:setSize(70),width:setSize(170),borderColor:mainStyle.czt.color,borderWidth:setSize(2)}]} 
+              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{height:setSize(70),width:setSize(170)}]} 
               textstyle={[mainStyle.fs13,mainStyle.czt]}
               onClick={()=>{handlePayment()}}>
               </BxButton>
               <BxButton 
+              plain
+              color={mainStyle.c666.color}
+              borderRadius={setSize(40)}
               disabled={false}
               title={'取消订单'} 
-              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{borderRadius:setSize(40),height:setSize(70),width:setSize(170),borderColor:mainStyle.c666.color,borderWidth:setSize(2)}]} 
+              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{height:setSize(70),width:setSize(170)}]} 
               textstyle={[mainStyle.fs13,mainStyle.c666]}
               onClick={()=>{handleCancel()}}>
               </BxButton>
@@ -298,10 +315,12 @@ class PayBar extends React.Component<PayBarProps>{
               
             </View>
             <View style={[mainStyle.row,mainStyle.aiCenter]}>
-              <BxButton 
+              <BxButton
+              color={mainStyle.czt.color}
+              borderRadius={setSize(40)}
               disabled={false}
               title={'申请退款'} 
-              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{borderRadius:setSize(40),height:setSize(80),width:setSize(200),borderColor:mainStyle.czt.color,borderWidth:setSize(2)}]} 
+              btnstyle={[mainStyle.mal10,mainStyle.bgcfff,{height:setSize(80),width:setSize(200)}]} 
               textstyle={[mainStyle.fs14,mainStyle.czt]}
               onClick={()=>{handleRefund()}}>
               </BxButton>

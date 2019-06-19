@@ -12,6 +12,11 @@ import Payfail from './../pages/Payment/Payfail';
 import PaySuccess from './../pages/Payment/PaySuccess';
 import GoodsList from './../pages/Home/GoodsList';
 import MyOrder from '../pages/Order/MyOrder';
+import MyCollect from './../pages/Mine/MyCollect';
+import RefundReason from './../pages/Order/RefundReason';
+import ApplyRefund from './../pages/Order/ApplyRefund';
+import CourseList from './../pages/Course/CourseList';
+import OnlineCourse from './../pages/Course/OnlineCourse';
 
 
 export const navItem = {
@@ -20,6 +25,8 @@ export const navItem = {
   Forget:{screen:Forget},
   Password:{screen:Password},
   UserInfo:{screen:UserInfo},
+  CourseList:{screen:CourseList},
+  OnlineCourse:{screen:OnlineCourse},
   CourseInfo:{screen:CourseInfo},
   CartList:{screen:CartList},
   Settlement:{screen:Settlement},
@@ -27,6 +34,9 @@ export const navItem = {
   PaySuccess:{screen:PaySuccess},
   GoodsList:{screen:GoodsList},
   MyOrder:{screen:MyOrder},
+  MyCollect:{screen:MyCollect},
+  RefundReason:{screen:RefundReason},
+  ApplyRefund:{screen:ApplyRefund},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({
@@ -36,7 +46,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'Tab',
+  initialRouteName: 'OnlineCourse',
   headerMode: 'float',
   navigationOptions:{
     header:null,

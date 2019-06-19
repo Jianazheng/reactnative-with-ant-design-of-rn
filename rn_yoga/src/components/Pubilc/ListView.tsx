@@ -15,7 +15,9 @@ interface Props {
   colNumber:number,
   onLoadmore:()=>void,
   nomore:boolean,
-  loading:boolean
+  loading:boolean,
+  pab:number,
+  pat:number
 }
 
 interface State {
@@ -34,24 +36,36 @@ export default class BxListView extends React.Component<Props,State>{
       onLoadmore();
     }
   }
+  _renderHeader=()=>{
+    let {pat} = this.props;
+    return (
+      <View style={[{height:pat}]}></View>
+    );
+  }
 
   _renderFooter=()=>{
-    let {loading,nomore} = this.props;
+    let {loading,nomore,pab} = this.props;
     if(nomore){
       return (
-        null
+        <View style={[{height:pab}]}></View>
       );
     }
     if(!loading){
       return (
-        <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
-          <Text style={[mainStyle.c999,mainStyle.fs14]}>更多</Text>
+        <View style={[mainStyle.column]}>
+          <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
+            <Text style={[mainStyle.c999,mainStyle.fs14]}>更多</Text>
+          </View>
+          <View style={[{height:pab}]}></View>
         </View>
       );
     }else{
       return (
-        <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
-          <Text style={[mainStyle.czt,mainStyle.fs14]}>加载中</Text>
+        <View style={[mainStyle.column]}>
+          <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
+            <Text style={[mainStyle.c999,mainStyle.fs14]}>加载中</Text>
+          </View>
+          <View style={[{height:pab}]}></View>
         </View>
       );
     }
@@ -70,6 +84,7 @@ export default class BxListView extends React.Component<Props,State>{
       refreshing={loading}
       onEndReached={this.onShowMore.bind(this)}
       onEndReachedThreshold={0.1}
+      ListHeaderComponent={this._renderHeader.bind(this)}
       ListFooterComponent={this._renderFooter.bind(this)}
       >
       </FlatList>

@@ -122,9 +122,6 @@ const styles = StyleSheet.create({
 			height:setSize(100),
 			flexDirection:'row',
 			alignItems: 'center',
-			borderColor:'#e2e2e2',
-			borderBottomWidth:setSize(1),
-			borderStyle:'solid',
 	},
 	navtoplh:{  
 			width:setSize(80),

@@ -12,6 +12,7 @@ const mainStyle = StyleSheet.create({
     width90:{width:setSize(90)},
     width160:{width:setSize(160)},
     width300:{width:setSize(300)},
+    mal5:{ marginLeft:setSize(10),},
     mal10:{ marginLeft:setSize(20),},
     mal15:{ marginLeft:setSize(30),},
     mal20:{ marginLeft:setSize(40),},
@@ -113,6 +114,7 @@ const mainStyle = StyleSheet.create({
         marginTop:setSize(6)
     },
     h60:{height:setSize(60)},
+    h70:{height:setSize(70)},
     h80:{height:setSize(80)},
     h100:{height:setSize(100)},
     h120:{height:setSize(120)},
@@ -160,6 +162,18 @@ const mainStyle = StyleSheet.create({
     brb1f2:{
         borderBottomWidth:setSize(0.6),
         borderColor:'#f2f2f2',   
+    },
+    brt1f2:{
+        borderTopWidth:setSize(0.6),
+        borderColor:'#f2f2f2',   
+    },
+    brl1f2:{
+        borderLeftWidth:setSize(0.6),
+        borderColor:'#f2f2f2'
+    },
+    brr1f2:{
+        borderRightWidth:setSize(0.6),
+        borderColor:'#f2f2f2'
     },
     brczt:{borderColor:'#ce2a2a'},
     useravator:{

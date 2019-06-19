@@ -4,6 +4,7 @@ import Home from '../pages/Home/Home';
 import Explore from '../pages/Explore/Explore';
 import {setSize, mainStyle} from '../public/style/style'
 import Mine from './../pages/Mine/Mine';
+import Course from './../pages/Course/Course';
 
 export const IndexTabs = createBottomTabNavigator(
   {
@@ -11,9 +12,11 @@ export const IndexTabs = createBottomTabNavigator(
     Home: {
       screen: Home,
     },
-    
     Explore: {
       screen: Explore,
+    },
+    Course:{
+      screen:Course
     },
     Mine: {
       screen: Mine,

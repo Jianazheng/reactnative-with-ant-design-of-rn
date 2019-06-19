@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
-import { mainStyle,contentPadding,setSize } from '../../public/style/style';
+import { mainStyle,contentPadding,setSize,screenW } from '../../public/style/style';
 
 let { width, height } = Dimensions.get('window');
 
@@ -70,7 +70,7 @@ class CourseInfoItem2 extends PureComponent<CourseInfoItemProps>{
       <TouchableOpacity style={[styles.infoCourse,mainStyle.bgcfff,mainStyle.patb15]} onPress={()=>{}}>
         <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiStart,mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage,mainStyle.imgCover]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
-          <View style={[mainStyle.flex1,mainStyle.mal15,mainStyle.bgc59]}>
+          <View style={[mainStyle.flex1,mainStyle.mal15]}>
             <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mab5]}>{data.title}</Text>
             <View style={[mainStyle.row,mainStyle.jcBetween]}>
               <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.mab5,mainStyle.bgcf2,{borderRadius:setSize(6),paddingLeft:setSize(12),paddingRight:setSize(12)}]}>6课时</Text>
@@ -99,6 +99,71 @@ class CourseApplyNotice extends PureComponent<CourseInfoItemProps>{
             <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.mab10]}>{data.title}</Text>
           </View>
         </View>
+      </View>
+    )
+  }
+}
+interface CourseListItemProps {
+  data:object,
+  type:'outline'|'online',
+  navigation:any
+}
+
+let imgw = (screenW-setSize(120))*0.28;
+
+class CourseListItem extends React.Component<CourseListItemProps>{
+  constructor(props:CourseListItemProps){
+    super(props)
+  }
+
+  goto(routeName:string,params:any){
+    this.props.navigation.navigate(routeName,params);
+  }
+
+  render(){
+    let {type} = this.props;
+    return (
+      <View style={[mainStyle.row,mainStyle.pal15,mainStyle.patb15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brb1f2,mainStyle.bgcfff]}>
+        <TouchableOpacity style={[mainStyle.flex1]} 
+        onPress={()=>{
+          this.goto('OnlineCourse',{})
+        }}>
+          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brr1f2]}>
+            <Image
+            style={[{width:imgw,height:imgw*0.7,borderRadius:setSize(6)}]}
+            mode="widthFix" 
+            source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}>
+            </Image>
+            <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15]}>
+              <Text style={[mainStyle.fs13,mainStyle.c333]}>高阶体式提升计划</Text>
+              <View style={[mainStyle.row,mainStyle.mat5,mainStyle.mab5]}>
+                <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,
+                  {
+                    borderRadius:setSize(12),
+                    paddingLeft:setSize(14),
+                    paddingRight:setSize(14),
+                    paddingTop:setSize(1),
+                    paddingBottom:setSize(1)
+                  }
+                ]}>6课时</Text>
+              </View>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>2019.06.01-06.30</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        {
+          type=='outline'
+          ?<TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,{width:imgw*0.8}]}>
+            <View>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>已报到</Text>
+            </View>
+          </TouchableOpacity>
+          :<TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,{width:imgw*0.8}]}>
+            <View>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>已学60%</Text>
+            </View>
+          </TouchableOpacity>
+        }
       </View>
     )
   }
@@ -157,5 +222,6 @@ export {
   CourseInfoItem,
   CourseInfoItem2,
   HomeCourseItem,
-  CourseApplyNotice
+  CourseApplyNotice,
+  CourseListItem
 }

@@ -5,7 +5,7 @@ import { mainStyle,setSize,screenW } from '../../public/style/style';
 import {layout} from '../../public/js/dom'
 import { IconFill } from "@ant-design/icons-react-native";
 
-const scrollbarWidth = setSize(60);
+const scrollbarWidth = setSize(48);
 const scrollbarPadding = setSize(5);
 const scrollbarMargin = setSize(40);
 
@@ -126,7 +126,7 @@ class BxTabbars extends React.Component<Props,State> {
                   return (
                     <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
                     onPress={this.handleTabClick2.bind(this,i)} >
-                      <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                      <Text style={[mainStyle.fs14,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
                       {
                         i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
                       }
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     backgroundColor:mainStyle.czt.color,
     height:setSize(6),
     width:scrollbarWidth,
-    borderRadius:setSize(2),
+    borderRadius:setSize(4),
     position:'absolute',
     left:0,
     bottom:0
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor:mainStyle.czt.color,
     height:setSize(6),
     width:scrollbarWidth,
-    borderRadius:setSize(2),
+    borderRadius:setSize(4),
     position:'absolute',
     bottom:0
   },
