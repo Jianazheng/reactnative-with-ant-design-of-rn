@@ -16,7 +16,11 @@ import MyCollect from './../pages/Mine/MyCollect';
 import RefundReason from './../pages/Order/RefundReason';
 import ApplyRefund from './../pages/Order/ApplyRefund';
 import CourseList from './../pages/Course/CourseList';
+import OutlineCourse from './../pages/Course/OutlineCourse';
+import OutlineCourseReserve from './../pages/Course/OutlineCourseReserve';
 import OnlineCourse from './../pages/Course/OnlineCourse';
+import OnlineCourseInfo from './../pages/Course/OnlineCourseInfo';
+import MyCertificate from './../pages/Mine/MyCertificate';
 
 
 export const navItem = {
@@ -26,7 +30,10 @@ export const navItem = {
   Password:{screen:Password},
   UserInfo:{screen:UserInfo},
   CourseList:{screen:CourseList},
+  OutlineCourse:{screen:OutlineCourse},
+  OutlineCourseReserve:{screen:OutlineCourseReserve},
   OnlineCourse:{screen:OnlineCourse},
+  OnlineCourseInfo:{screen:OnlineCourseInfo},
   CourseInfo:{screen:CourseInfo},
   CartList:{screen:CartList},
   Settlement:{screen:Settlement},
@@ -37,6 +44,7 @@ export const navItem = {
   MyCollect:{screen:MyCollect},
   RefundReason:{screen:RefundReason},
   ApplyRefund:{screen:ApplyRefund},
+  MyCertificate:{screen:MyCertificate},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({
@@ -46,7 +54,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'OnlineCourse',
+  initialRouteName: 'Register',
   headerMode: 'float',
   navigationOptions:{
     header:null,

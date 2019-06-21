@@ -56,6 +56,7 @@ class CartList extends React.Component<Props,State> {
             </Text>
             <BxButton 
             disabled={false}
+            colors={[mainStyle.czt.color,mainStyle.cztc.color]}
             title={'结算(0)'} 
             btnstyle={[mainStyle.palr15,mainStyle.mal15,{borderRadius:setSize(40),height:setSize(80)}]} 
             textstyle={[mainStyle.fs14]}

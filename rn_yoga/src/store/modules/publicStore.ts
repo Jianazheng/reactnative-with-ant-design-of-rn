@@ -1,9 +1,20 @@
-import {observable} from 'mobx';
+import { observable, computed, action } from 'mobx';
 
-const publicStore = observable({
-  hello:'hello',
-})
+class Public {
+  constructor() {
+    
+  }
+  @observable userData = {
+    name:'binbin'
+  }
+  @computed get username(){
+    return this.userData.name
+  }
+  @action editUsername(name:string){
+    this.userData.name = name
+  }
+}
 
-
+const publicStore = new Public()
 
 export default publicStore

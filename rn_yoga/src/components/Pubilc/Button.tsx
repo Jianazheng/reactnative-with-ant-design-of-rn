@@ -3,6 +3,7 @@ import React,{PureComponent} from 'react';
 import { TouchableOpacity, Text, StyleSheet,View } from 'react-native';
 import {ActivityIndicator} from '@ant-design/react-native';
 import { mainStyle, setSize,screenW } from '../../public/style/style';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 
@@ -14,7 +15,9 @@ interface Props {
   disabled:boolean,
   borderRadius:number,
   plain:boolean,
-  color:string
+  clear:boolean,
+  color:string,
+  colors:Array<string>
 }
 
 interface State {
@@ -51,7 +54,7 @@ export default class BxButton extends PureComponent<Props,State>{
   plainStyle(color:string){
     return {
       borderColor:color,
-      borderWidth:setSize(2)
+      borderWidth:this.props.clear?0:setSize(2)
     }
   }
 
@@ -69,7 +72,7 @@ export default class BxButton extends PureComponent<Props,State>{
 
   render(){
     let {clicked} = this.state;
-    let {title,disabled,btnstyle,textstyle,borderRadius,color,plain} = this.props;
+    let {title,disabled,btnstyle,textstyle,borderRadius,color,colors,plain} = this.props;
     if(borderRadius==undefined)borderRadius = setSize(6);
     if(!disabled&&!clicked){
       return(
@@ -78,23 +81,47 @@ export default class BxButton extends PureComponent<Props,State>{
           this.handleClick();
         }}
         >
-          <View style={[
-            styles.btn,mainStyle.bgczt,
-            {
-              borderRadius:borderRadius
-            },
-            plain?this.plainStyle(color):this.fillStyle(color),
-            btnstyle]}>
-            <Text style={[
-              mainStyle.cfff,mainStyle.fs13,
-              plain?this.plainTextStyle(color):{color:'#fff'},
-              textstyle]}>{title}</Text>
-          </View>
+          {
+            plain?
+            <View
+            style={[
+              styles.btn,mainStyle.bgcfff,
+              {
+                borderRadius:borderRadius
+              },
+              this.plainStyle(color),
+              btnstyle]}>
+              <Text style={[
+                mainStyle.czt,mainStyle.fs13,
+                this.plainTextStyle(color),
+                textstyle]}
+              >
+              {title}
+              </Text>
+            </View>
+            :
+            <LinearGradient 
+            colors={typeof colors == "object"?colors:[color,color]} 
+            start={{ x: 0.1, y: 0.2 }}
+            end={{ x: 0.9, y: 0.8 }}
+            style={[
+              styles.btn,mainStyle.bgczt,
+              {
+                borderRadius:borderRadius
+              },
+              btnstyle]}>
+              <Text style={[
+                mainStyle.cfff,mainStyle.fs13,
+                {color:'#fff'},
+                textstyle]}>{title}</Text>
+            </LinearGradient>
+          }
         </TouchableOpacity>
       )
     }else{
       return(
-        <View style={[
+        <View 
+        style={[
           mainStyle.bgccc,styles.btn,
           {
             borderRadius:borderRadius

@@ -126,7 +126,12 @@ class Mine extends React.Component<Props> {
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]}>
+                  <TouchableOpacity 
+                  style={[mainStyle.flex1,mainStyle.brb1f2]}
+                  onPress={()=>{
+                    this.goto('MyCertificate',{})
+                  }}
+                  >
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
                         <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe61c;</Text>

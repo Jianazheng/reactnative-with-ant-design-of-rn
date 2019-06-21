@@ -48,7 +48,7 @@ export default class NavTop extends Component<Props> {
 					<View style={[styles.leftright,mainStyle.row,mainStyle.aiCenter]}>
 						<TouchableHighlight
 						underlayColor={'#e2e2e2'}
-						onPress={this._onPress}
+						onPress={()=>{this._onPress()}}
 						style={[styles.navtoplh,mainStyle.aiCenter,mainStyle.row,{opacity:this.state.disable?0.6:0.9}, this.state.disable && {backgroundColor: this.props.disableColor}]}
 						disabled={this.state.disable}
 						>

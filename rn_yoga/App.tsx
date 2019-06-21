@@ -9,9 +9,10 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,BackHandler,ToastAndroid} from 'react-native';
 import {Provider} from 'mobx-react';
-import AppStore from './src/store/index';
+import store from './src/store/index';
 import {createStackNavigator,createAppContainer,NavigationEvents,NavigationState} from 'react-navigation';
 import {navItem,navConfig} from './src/router/router';
+import { Provider as AntProvider } from '@ant-design/react-native';
 
 const AppNavigator =  createStackNavigator(navItem,navConfig);
 
@@ -61,11 +62,13 @@ export default class App extends Component<Props> {
   }
   render() {
     return (
-      <Provider store={AppStore}>
+      <Provider {...store}>
+        <AntProvider>
         <Tabs 
         onNavigationStateChange={(prevState, newState, action) =>{this.handleNavigationChange(prevState, newState, action)}}
         uriPrefix="/app">
         </Tabs>
+        </AntProvider>
       </Provider>
     );
   }
