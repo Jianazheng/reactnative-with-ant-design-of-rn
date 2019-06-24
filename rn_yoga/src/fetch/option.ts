@@ -1,4 +1,4 @@
 export const OP = {
-  baseURL:'',
+  baseURL:'http://yoga.t.jkxuetang.com/api/',
   baseVersion:'v1'
 }
