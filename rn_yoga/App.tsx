@@ -8,17 +8,20 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,BackHandler,ToastAndroid} from 'react-native';
-import {Provider} from 'mobx-react';
+import {Provider, observer, inject} from 'mobx-react';
 import store from './src/store/index';
 import {createStackNavigator,createAppContainer,NavigationEvents,NavigationState} from 'react-navigation';
 import {navItem,navConfig} from './src/router/router';
 import { Provider as AntProvider } from '@ant-design/react-native';
+import { DeviceEventEmitter } from 'react-native';
+
 
 const AppNavigator =  createStackNavigator(navItem,navConfig);
 
 const Tabs = createAppContainer(AppNavigator);
 
 interface Props {};
+
 export default class App extends Component<Props> {
 
   lastBackPressed:number = new Date().getTime();
@@ -31,6 +34,11 @@ export default class App extends Component<Props> {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress',this.onBackAndroid);
     }
+
+  }
+
+  componentDidMount(){
+
   }
 
   componentWillUnmount(){
@@ -51,7 +59,7 @@ export default class App extends Component<Props> {
     }
   };
 
-  handleNavigationChange = (prevState:any, newState:any, action:any) =>{
+  handleNavigationChange = (prevState:object, newState:object, action:object) =>{
     if (Platform.OS === 'android') {
       if (newState.routes.length > 1) {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);

@@ -1,26 +1,26 @@
 import React from 'react';
 import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
-import { List,Badge } from '@ant-design/react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { IconFill,IconOutline } from '@ant-design/icons-react-native';
+import { observer, inject } from 'mobx-react';
+import { Toast } from '@ant-design/react-native';
 
-
-const Item = List.Item;
 
 interface Props {}
 
+@inject('userStore')
+@observer
 class Mine extends React.Component<Props> {
   static navigationOptions = {
     tabBarLabel: '个人中心',
     tabBarIcon: ({focused}) => {
       if (focused) {
         return (
-          <IconOutline name="user" size={24} color={mainStyle.czt.color}></IconOutline>
+          <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_user_sel.png')}></Image>
         );
       }
       return (
-        <IconOutline name="user" size={24} color={mainStyle.c666.color}></IconOutline>
+        <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_user_nor.png')}></Image>
       );
     },
   }
@@ -31,11 +31,30 @@ class Mine extends React.Component<Props> {
     };
   }
 
+  componentWillMount(){
+    let {userStore} = this.props;
+    userStore.GetUserInfo().then(res=>{});
+  }
+
   goto(routeName:string,params:any){
-    this.props.navigation.navigate(routeName,params);
+    let {userStore,navigation} = this.props;
+    if(userStore.token==''){
+      Toast.info('请登录',1.8);
+      navigation.navigate('Login',{from:'Mine'});
+    }else{
+      navigation.navigate(routeName,params);
+    }
+  }
+
+  async handleLoginout(){
+    let {userStore,navigation} = this.props;
+    let res = await userStore.Loginout();
+    navigation.navigate('Login',{from:'Mine'});
   }
 
   render(){
+    let {userStore} = this.props;
+    let userInfo = userStore.userInfo;
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1,mainStyle.positonre]}>
@@ -56,7 +75,7 @@ class Mine extends React.Component<Props> {
                 <Image style={[mainStyle.useravator]} source={{}}></Image>
               </TouchableOpacity>
               <View style={[mainStyle.column,mainStyle.flex1,mainStyle.palr10,mainStyle.aiStart]}>
-                <Text style={[mainStyle.cfff,mainStyle.fs16]}>binbinMax</Text>
+                <Text style={[mainStyle.cfff,mainStyle.fs16]}>{userInfo.username}</Text>
                 <Text style={[mainStyle.cfff,mainStyle.fs13,mainStyle.mat5,
                   {
                     borderColor:'#fff',
@@ -65,7 +84,7 @@ class Mine extends React.Component<Props> {
                     paddingRight:setSize(12),
                     borderRadius:setSize(40),
                   }
-                ]}>白金会员</Text>
+                ]}>{userInfo.level_name}</Text>
               </View>
               <View style={[mainStyle.column,mainStyle.aiEnd]}>
                 <Text style={[mainStyle.icon,mainStyle.fs24,mainStyle.cfff]}>&#xe616;</Text>
@@ -158,7 +177,10 @@ class Mine extends React.Component<Props> {
                   </View>
                 </View>
                 <View style={[mainStyle.column]}>
-                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]}>
+                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]} onPress={()=>{
+                    //this.props.navigation.navigate('Forget')
+                    this.goto('Forget',{})
+                  }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
                         <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe658;</Text>
@@ -167,7 +189,9 @@ class Mine extends React.Component<Props> {
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1]}>
+                  <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
+                    this.handleLoginout()
+                  }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
                         <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs18,{marginLeft:setSize(6)}]}>&#xe668;</Text>

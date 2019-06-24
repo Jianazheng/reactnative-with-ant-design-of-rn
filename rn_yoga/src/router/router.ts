@@ -21,6 +21,8 @@ import OutlineCourseReserve from './../pages/Course/OutlineCourseReserve';
 import OnlineCourse from './../pages/Course/OnlineCourse';
 import OnlineCourseInfo from './../pages/Course/OnlineCourseInfo';
 import MyCertificate from './../pages/Mine/MyCertificate';
+import ClassifyList from './../pages/Explore/ClassifyList';
+
 
 
 export const navItem = {
@@ -36,6 +38,7 @@ export const navItem = {
   OnlineCourseInfo:{screen:OnlineCourseInfo},
   CourseInfo:{screen:CourseInfo},
   CartList:{screen:CartList},
+  ClassifyList:{screen:ClassifyList},
   Settlement:{screen:Settlement},
   Payfail:{screen:Payfail},
   PaySuccess:{screen:PaySuccess},
@@ -54,7 +57,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'Register',
+  initialRouteName: 'Tab',
   headerMode: 'float',
   navigationOptions:{
     header:null,

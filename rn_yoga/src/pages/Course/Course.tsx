@@ -1,13 +1,9 @@
 import React from 'react';
 import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
-import { List,Badge } from '@ant-design/react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { IconFill,IconOutline } from '@ant-design/icons-react-native';
 import { CourseListItem } from '../../components/Course/CourseItem';
 
-
-const Item = List.Item;
 
 interface Props {}
 
@@ -17,11 +13,11 @@ class Course extends React.Component<Props> {
     tabBarIcon: ({focused}) => {
       if (focused) {
         return (
-          <IconOutline name="read" size={24} color={mainStyle.czt.color}></IconOutline>
+          <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_course_sel.png')}></Image>
         );
       }
       return (
-        <IconOutline name="read" size={24} color={mainStyle.c666.color}></IconOutline>
+        <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_course_nor.png')}></Image>
       );
     },
   }

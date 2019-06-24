@@ -1,12 +1,18 @@
 import { OP } from "./option";
 import { obj2str } from "../tools/function";
 import { Toast } from '@ant-design/react-native';
+import userStore from './../store/modules/userStore';
+import RNStorage from './../public/js/storage';
+import { DeviceEventEmitter } from "react-native";
 
 
 export class Fetch{
   constructor(api:string,method:string,data:object,headers:any){
+    console.log(data)
     let reqUrl = OP.baseURL+OP.baseVersion+api;
     let reqOption = {};
+
+    headers['token'] = userStore.token;
 
     switch (headers['Content-Type']) {
       case 'multipart/form-data':
@@ -23,13 +29,19 @@ export class Fetch{
           }
         break;
     }
+
     reqOption.method = method;
     reqOption.headers = headers;
     
     return new Promise((resolve,reject)=>{
       fetch(reqUrl,reqOption)
       .then(async (response) => {
-        return {data:await response.json(),status:response.status}
+        console.log(response)
+        if(response.status==200||response.status==400){
+          return {data:await response.json(),status:response.status}
+        }else{
+          return {data:await response.text(),status:response.status}
+        }
       })
       .then((response) => {
         console.log("返回",response)
@@ -39,6 +51,10 @@ export class Fetch{
             break;
           case 401:
             Toast.info('验证失败，请重新登录')
+            userStore.removeToken();
+            RNStorage.remove({key:'token'}).then(ress=>{
+              DeviceEventEmitter.emit('TOLOGIN','yes');
+            });
             reject(response.data);
             break;
           case 400:
@@ -56,7 +72,7 @@ export class Fetch{
         }
       })
       .catch((error) => {
-        Toast.info('服务器错误')
+        Toast.info('程序错误')
         console.warn(error)
         reject(error);
       });

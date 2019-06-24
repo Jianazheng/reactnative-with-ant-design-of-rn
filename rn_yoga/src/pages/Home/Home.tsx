@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView,Image,Dimensions } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -10,6 +10,9 @@ import { Button } from '@ant-design/react-native';
 import Recommend from './Recommend';
 import HomeCourse from './Course';
 import BxTabView from './../../components/ScrollTabs/TabView';
+import { observer, inject } from 'mobx-react';
+import RNStorage from './../../public/js/storage';
+
 
 let { width, height } = Dimensions.get('window')
 
@@ -18,20 +21,26 @@ interface State {
   canScroll:boolean,
   tabTop:number
 }
+
+@inject('userStore')
+@observer
 class Home extends React.Component<Props,State> {
   static navigationOptions = {
     tabBarLabel: '首页',
     tabBarIcon: ({focused}) => {
       if (focused) {
           return (
-            <IconOutline name="home" size={24} color={mainStyle.czt.color}></IconOutline>
+            <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_home_sel.png')}></Image>
           );
       }
       return (
-        <IconOutline name="home" size={24} color={mainStyle.c666.color}></IconOutline>
+        <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_home_nor.png')}></Image>
       );
     },
   }
+
+  TOLOGIN:object;
+
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
@@ -40,8 +49,23 @@ class Home extends React.Component<Props,State> {
     };
   }
 
-  componentDidMount(){
-    console.warn('点击dismiss')
+  componentWillMount(){
+    let {userStore,navigation} = this.props;
+    RNStorage.load({
+      key: 'token',
+    }).then(res=>{
+      console.log(res)
+      userStore.setToken(res);
+    }).catch(err=>{
+      console.log(err)
+    })
+    this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',(res)=>{
+      navigation.navigate('Login');
+    })
+  }
+
+  componentWillUnmount(){
+    this.TOLOGIN.remove();
   }
 
   goto(){
@@ -61,36 +85,48 @@ class Home extends React.Component<Props,State> {
     let {canScroll} = this.state;
     let {navigation} = this.props;
     return (
-      <ScrollView
+      <View style={[mainStyle.flex1]}>
+        <ScrollView
+        style={[mainStyle.flex1]}
         onScroll={(e)=>{
           this.handleScroll(e);
         }}
         >
-        <View onLayout={(e)=>{
-          this.setState({
-            tabTop:e.nativeEvent.layout.height
-          })
-        }}>
-          <HomeSearchBar navigation={navigation}></HomeSearchBar>
-          <HomeSwiper></HomeSwiper>
-          <HomeBroadcast></HomeBroadcast>
-        </View>
-        <BxTabView 
-        height={height-setSize(240)}
-        canScroll={canScroll} 
-        tabs={[{title:'推荐'},{title:'主轴课程'},{title:'非系统课程'},{title:'其他'}]} 
-        navigateTo={()=>{}}>
-          <Recommend navigation={navigation}></Recommend>
-          <HomeCourse navigation={navigation}></HomeCourse>
-          <View>
-            <Text>265161333</Text>
+          <View onLayout={(e)=>{
+            this.setState({
+              tabTop:e.nativeEvent.layout.height
+            })
+          }}>
+            <HomeSearchBar 
+            onSubmit={(e)=>{
+              console.log(e)
+            }}
+            leftBtn={(
+              <Text 
+              style={[mainStyle.icon,mainStyle.pa15,{paddingRight:0},mainStyle.fs22]} 
+              onPress={()=>{
+                navigation.push('CartList')
+              }}>&#xe60a;</Text>
+            )}></HomeSearchBar>
+            <HomeSwiper></HomeSwiper>
+            <HomeBroadcast></HomeBroadcast>
           </View>
-          <View>
-            <Text>2333</Text>
-          </View>
-        </BxTabView>
-        
-      </ScrollView>
+          <BxTabView 
+          height={height-setSize(240)}
+          canScroll={canScroll} 
+          tabs={[{title:'推荐'},{title:'主轴课程'},{title:'非系统课程'},{title:'其他'}]} 
+          navigateTo={()=>{}}>
+            <Recommend navigation={navigation}></Recommend>
+            <HomeCourse navigation={navigation}></HomeCourse>
+            <View>
+              <Text>265161333</Text>
+            </View>
+            <View>
+              <Text>2333</Text>
+            </View>
+          </BxTabView>
+        </ScrollView>
+      </View>
     )
   }
 }

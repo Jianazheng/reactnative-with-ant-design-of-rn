@@ -61,7 +61,6 @@ class Register extends React.Component<Props,State> {
   handleRegister(){
     let {userStore} = this.props;
     let {mobile,mobileCode,password,rpassword} = this.state;
-    console.log({mobile,mobileCode,password,rpassword})
     if(mobile==''||mobileCode==''||password==''||rpassword==''){
       Toast.info('请输入注册信息');
       return false
@@ -78,15 +77,6 @@ class Register extends React.Component<Props,State> {
       },100)
     })
     
-  }
-
-  async toRegiest(params:object){
-    try{
-      let response = await new Fetch('/login/mobile_reg','POST',params,{});
-
-    }catch(e){
-
-    }
   }
 
   handleChangeCode(){}

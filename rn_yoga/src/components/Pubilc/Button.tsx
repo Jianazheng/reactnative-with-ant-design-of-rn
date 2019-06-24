@@ -8,7 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 
 interface Props {
-  onClick:()=>void,
+  onClick:(func:void)=>void,
   btnstyle:any,
   textstyle:any,
   title:string,
@@ -42,12 +42,11 @@ export default class BxButton extends PureComponent<Props,State>{
       clicked:true
     },()=>{
       this.props.onClick();
-      (()=>{
-          console.log('ok')
-          this.setState({
-            clicked:false
-          })
-      })();
+      setTimeout(()=>{
+        this.setState({
+          clicked:false
+        })
+      },600)
     })
   }
 

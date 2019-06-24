@@ -1,17 +1,19 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Alert } from 'react-native';
-import {WingBlank,WhiteSpace,InputItem} from '@ant-design/react-native';
+import {WingBlank,WhiteSpace,InputItem,Toast} from '@ant-design/react-native';
 import { mainStyle,setSize } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
-import BxCodeInput from '../../components/Pubilc/CodeInput';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 interface State {
 
 }
 
+@inject('userStore')
+@observer
 class Password extends React.Component<Props,State> {
   static navigationOptions = {
     // headerTitle:headerTitle('重置密码'),
@@ -26,13 +28,34 @@ class Password extends React.Component<Props,State> {
       mobile:'',
       code:'',
       password:'',
+      rpassword:'',
       clicking:false,
       sending:false
     };
   }
 
+  componentDidMount(){
+    let {params} = this.props.navigation.state;
+    this.setState({
+      mobile:params.mobiles
+    })
+  }
+
+  async handleChangePassword(){
+    let {userStore,navigation} = this.props;
+    let {mobile,password,rpassword} = this.state;
+    if(password==''||rpassword==''){
+      Toast.info('请输入密码')
+      return false
+    }
+    let res = await userStore.ChangePassword({mobile,password,rpassword})
+    if(res!=null){
+      navigation.navigate('Login',{mobile})
+    }
+  }
+
   render(){
-    let {mobile,password,code,imgcode,clicking} = this.state;
+    let {mobile,password,rpassword,clicking} = this.state;
     return (
       <View style={[mainStyle.flex1]}>
         <NavTop
@@ -45,13 +68,37 @@ class Password extends React.Component<Props,State> {
         <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1]}>
           <View style={[mainStyle.mab30,{marginTop:setSize(120)}]}>
             <InputItem
-              placeholder="18828838888"
-              value={'18828838888'}
+              placeholder={mobile}
+              value={mobile}
               style={[mainStyle.fs14]}
             >
               <Text style={[mainStyle.c333,mainStyle.fs14]}>绑定手机</Text>
             </InputItem>
-            <WhiteSpace />
+            <InputItem
+              placeholder="请输入新的密码"
+              value={password}
+              style={[mainStyle.fs14]}
+              onChange={value=>{
+                this.setState({
+                  password:value
+                })
+              }}
+            >
+              <Text style={[mainStyle.c333,mainStyle.fs14]}>新的密码</Text>
+            </InputItem>
+            <InputItem
+              placeholder="再次输入密码"
+              value={rpassword}
+              style={[mainStyle.fs14]}
+              onChange={value=>{
+                this.setState({
+                  rpassword:value
+                })
+              }}
+            >
+              <Text style={[mainStyle.c333,mainStyle.fs14]}>确认密码</Text>
+            </InputItem>
+            {/* <WhiteSpace />
             <InputItem
               clear
               value={imgcode}
@@ -65,10 +112,7 @@ class Password extends React.Component<Props,State> {
             >
               <Text style={[mainStyle.c333,mainStyle.fs14]}>图片验证码</Text>
             </InputItem>
-            <WhiteSpace />
-            <BxCodeInput mobile={mobile} codeView={(e)=>{
-              console.log(e)
-            }}/>
+            <WhiteSpace /> */}
             <WhiteSpace />
             <View style={[mainStyle.mat30,mainStyle.palr15]}>
               <BxButton 
@@ -76,7 +120,8 @@ class Password extends React.Component<Props,State> {
               disabled={clicking}
               colors={[mainStyle.czt.color,mainStyle.cztc.color]}
               onClick={()=>{
-                this.props.navigation.pop(2)
+                //this.props.navigation.pop(2)
+                this.handleChangePassword()
               }}></BxButton>
             </View>
           </View>

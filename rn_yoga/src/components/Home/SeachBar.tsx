@@ -4,7 +4,9 @@ import { mainStyle, setSize } from '../../public/style/style';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 interface Props {
-
+  leftBtn:JSX.Element,
+  onChange:(e:string)=>void,
+  onSubmit:(e:string)=>void
 }
 
 class HomeSearchBar extends React.Component<Props> {
@@ -14,13 +16,16 @@ class HomeSearchBar extends React.Component<Props> {
     this.state = {
       value: ''
     };
+
     this.clear = () => {
       this.setState({ value: '' });
       Keyboard.dismiss();
     };
+
     this.onChange = value => {
-      console.log(value)
-      this.setState({ value });
+      this.setState({ value },()=>{
+        if(this.props.onChange)this.props.onChange(value);
+      });
     };
   }
 
@@ -37,14 +42,14 @@ class HomeSearchBar extends React.Component<Props> {
           onChangeText={(val)=>{
             this.onChange(val);
           }}
+          onSubmitEditing={(event)=>{
+            this.props.onSubmit(event.nativeEvent.text);
+          }}
           ></TextInput>
         </View>
-        <Text 
-        style={[mainStyle.icon,styles.btn,mainStyle.fs22]} 
-        onPress={()=>{
-          this.props.navigation.push('CartList')
-        }}
-        >&#xe60a;</Text>
+        <View>
+          {this.props.leftBtn}
+        </View>
       </View>
     )
   }

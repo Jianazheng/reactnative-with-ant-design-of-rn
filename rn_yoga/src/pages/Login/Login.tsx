@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, View, ScrollView, Animated } from 'react-native';
-import {WingBlank,WhiteSpace,InputItem} from '@ant-design/react-native';
+import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle,screenH,setSize, screenW } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
-import BxCodeInput from '../../components/Pubilc/CodeInput';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 
 interface Props {}
@@ -14,9 +14,12 @@ interface State {
   mobile:string,
   code:string,
   password:string,
-  codeSec:number
+  codeSec:number,
+  clicking:boolean
 }
 
+@inject('userStore')
+@observer
 class Login extends React.Component<Props,State> {
   static navigationOptions = {
     // headerTitle:headerTitle('登录'),
@@ -29,22 +32,29 @@ class Login extends React.Component<Props,State> {
     super(props);
     this.state = {
       mobile:'',
-      code:'',
       password:'',
       clicking:false,
       sending:false,
     };
   }
 
-  handleLogin(){
-    this.setState({
-      clicking:true
-    })
-    setTimeout(()=>{
-      this.setState({
-        clicking:false
-      })
-    },100)
+  componentDidMount(){
+    
+  }
+
+  async handleLogin(){
+    let {userStore,navigation} = this.props;
+    let {mobile,password} = this.state;
+    if(mobile==''||password==''){
+      Toast.info('请输入登录信息',1.8);
+      return false
+    }
+    let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
+    if(response!=null){
+      Toast.info(response.msg,2);
+      navigation.goBack();
+    }
+
   }
 
   render(){
@@ -80,9 +90,6 @@ class Login extends React.Component<Props,State> {
               >
                 <Text style={[mainStyle.c333,mainStyle.fs14]}>手机号</Text>
               </InputItem>
-              <BxCodeInput mobile={mobile} codeView={(e)=>{
-                console.log(e)
-              }}/>
               <InputItem
                 clear
                 value={password}
@@ -94,7 +101,7 @@ class Login extends React.Component<Props,State> {
                 placeholder="请输入密码"
                 style={[mainStyle.fs14]}
                 extra={
-                  <Text style={[mainStyle.czt,mainStyle.fs13,mainStyle.pa5_10]}>忘记密码</Text>
+                  <Text style={[mainStyle.czt,mainStyle.fs13,mainStyle.pa5_10]}>忘记密码?</Text>
                 }
                 onExtraClick={()=>{this.props.navigation.navigate('Forget')}}
                 onVirtualKeyboardConfirm={()=>{}}

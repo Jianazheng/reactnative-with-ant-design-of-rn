@@ -7,6 +7,7 @@ const mainStyle = StyleSheet.create({
         fontFamily:'iconfont',
         fontSize:setSize(32),
     },
+    tabImg:{width:setSize(44),height:setSize(44)},
     textright:{textAlign:"right"},
     positonre:{position:"relative"},
     width90:{width:setSize(90)},
