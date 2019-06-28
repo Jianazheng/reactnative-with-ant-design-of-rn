@@ -110,10 +110,16 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("android.keystore")
-            storePassword "120999110"
-            keyAlias "android.keystore"
-            keyPassword "120999110"
+            storeFile file("khyoga.keystore")
+            storePassword "khyoga"
+            keyAlias "khyoga.keystore"
+            keyPassword "khyoga"
+        }
+        debug {
+            storeFile file("khyoga.keystore")
+            storePassword "khyoga"
+            keyAlias "khyoga.keystore"
+            keyPassword "khyoga"
         }
     }
     splits {
@@ -147,6 +153,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-wechat')
     implementation project(':react-native-video')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-reanimated')

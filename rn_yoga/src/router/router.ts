@@ -10,7 +10,7 @@ import CartList from './../pages/Cart/CartList';
 import Settlement from './../pages/Order/Settlement';
 import Payfail from './../pages/Payment/Payfail';
 import PaySuccess from './../pages/Payment/PaySuccess';
-import GoodsList from './../pages/Home/GoodsList';
+import GoodsList from './../pages/Goods/GoodsList';
 import MyOrder from '../pages/Order/MyOrder';
 import MyCollect from './../pages/Mine/MyCollect';
 import RefundReason from './../pages/Order/RefundReason';
@@ -22,6 +22,8 @@ import OnlineCourse from './../pages/Course/OnlineCourse';
 import OnlineCourseInfo from './../pages/Course/OnlineCourseInfo';
 import MyCertificate from './../pages/Mine/MyCertificate';
 import ClassifyList from './../pages/Explore/ClassifyList';
+import OnlineCourseList from '../pages/Explore/OnlineCourseList';
+import GoodsInfo from './../pages/Goods/GoodsInfo/GoodsInfo';
 
 
 
@@ -43,6 +45,8 @@ export const navItem = {
   Payfail:{screen:Payfail},
   PaySuccess:{screen:PaySuccess},
   GoodsList:{screen:GoodsList},
+  GoodsInfo:{screen:GoodsInfo},
+  OnlineCourseList:{screen:OnlineCourseList},
   MyOrder:{screen:MyOrder},
   MyCollect:{screen:MyCollect},
   RefundReason:{screen:RefundReason},

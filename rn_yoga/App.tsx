@@ -38,7 +38,7 @@ export default class App extends Component<Props> {
   }
 
   componentDidMount(){
-
+    //console.error('点击dimiss关闭')
   }
 
   componentWillUnmount(){

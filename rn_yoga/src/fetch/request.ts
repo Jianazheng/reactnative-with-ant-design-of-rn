@@ -8,7 +8,6 @@ import { DeviceEventEmitter } from "react-native";
 
 export class Fetch{
   constructor(api:string,method:string,data:object,headers:any){
-    console.log(data)
     let reqUrl = OP.baseURL+OP.baseVersion+api;
     let reqOption = {};
 
@@ -36,7 +35,7 @@ export class Fetch{
     return new Promise((resolve,reject)=>{
       fetch(reqUrl,reqOption)
       .then(async (response) => {
-        console.log(response)
+        //console.log(response)
         if(response.status==200||response.status==400){
           return {data:await response.json(),status:response.status}
         }else{
@@ -44,7 +43,7 @@ export class Fetch{
         }
       })
       .then((response) => {
-        console.log("返回",response)
+        console.log('接口:'+api,'参数：',data,'返回数据',response)
         switch (response.status) {
           case 200:
             resolve(response.data);
@@ -62,17 +61,17 @@ export class Fetch{
             reject(response.data);
             break;      
           case 500:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl)
+            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
             reject(response.data);
             break;
           default:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl)
+            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
             reject(response.data);
             break;
         }
       })
       .catch((error) => {
-        Toast.info('程序错误')
+        Toast.info('程序错误',1.8,undefined,false)
         console.warn(error)
         reject(error);
       });

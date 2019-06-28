@@ -4,10 +4,9 @@ import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 import {mainStyle,setSize,screenW} from "../../public/style/style";
 
 interface Props {
-  
+  list:any[],
 }
 interface State {
-  list?:any[],
   fadeAnim:number
 }
 
@@ -15,7 +14,6 @@ class HomeSearchBar extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      list:['你好','谢谢'],
       fadeAnim:new Animated.Value(0)
     };
     this.sildeItem = screenW-setSize(80);
@@ -26,7 +24,8 @@ class HomeSearchBar extends React.Component<Props,State> {
   }
 
   broadshow(){
-    let {fadeAnim,list} = this.state;
+    let {fadeAnim} = this.state;
+    let {list} = this.props;
     let currentIndex = 0;
     setInterval(()=>{
       if(currentIndex>=list.length){
@@ -46,7 +45,8 @@ class HomeSearchBar extends React.Component<Props,State> {
   }
 
   render(){
-    let {list,fadeAnim} = this.state;
+    let {fadeAnim} = this.state;
+    let {list} = this.props;
     return (
       <View>
         <View style={[mainStyle.palr15,mainStyle.bgcfff,mainStyle.h80,mainStyle.row,mainStyle.aiCenter]}>
@@ -66,7 +66,7 @@ class HomeSearchBar extends React.Component<Props,State> {
                 list.map((val,i)=>{
                   return(
                     <TouchableOpacity key={i} style={[styles.broaditem,mainStyle.aiCenter,mainStyle.row,mainStyle.flex1]} onPress={this.gotoBroadcast}>
-                      <Text style={[mainStyle.c333,mainStyle.fs12,mainStyle.pal10]}>{val}</Text>
+                      <Text style={[mainStyle.c333,mainStyle.fs12,mainStyle.pal10]}>{val.title}</Text>
                     </TouchableOpacity>
                   )
                 })

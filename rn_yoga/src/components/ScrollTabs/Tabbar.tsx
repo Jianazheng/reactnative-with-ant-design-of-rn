@@ -45,7 +45,7 @@ class BxTabbars extends React.Component<Props,State> {
   }
 
   shouldComponentUpdate(np,ns){
-    if(np.current!=this.props.current||this.state.currentIndex!=np.current){
+    if(np.current!=this.props.current||this.state.currentIndex!=np.current||np.tabNames!=this.props.tabNames){
       this.setState({
         currentIndex:np.current
       })
@@ -61,7 +61,11 @@ class BxTabbars extends React.Component<Props,State> {
   handleTabClick(i:number):void{
     let ref = this.refs['tabsItem'+i];
     let {tabsSlide,barWidth,scrollLeft,scrollWidth,scrollInfoWidth} = this.state;
+    let {current} = this.props;
     let speed = 100;
+
+    if(current==i)return;//下标相同则不变，否则报错
+
     this.setState({
       currentIndex:i
     })
@@ -126,10 +130,12 @@ class BxTabbars extends React.Component<Props,State> {
                   return (
                     <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
                     onPress={this.handleTabClick2.bind(this,i)} >
-                      <Text style={[mainStyle.fs14,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
-                      {
-                        i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
-                      }
+                      <View style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                        <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                        {
+                          i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
+                        }
+                      </View>
                     </TouchableOpacity>
                   )
                 })
@@ -140,7 +146,7 @@ class BxTabbars extends React.Component<Props,State> {
         break;
       default:
           return (
-            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h80,mainStyle.palr15]}>
+            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h80,mainStyle.palr15,mainStyle.bgcfff]}>
               <View style={[mainStyle.flex1]}>
                 <ScrollView 
                 onLayout={(e)=>{
@@ -169,26 +175,19 @@ class BxTabbars extends React.Component<Props,State> {
                     {
                       tabNames.map((val,i)=>{
                         return (
-                          <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
+                          <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
                           onPress={this.handleTabClick.bind(this,i)}>
-                            <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
-                            {
-                              i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
-                            }
+                            <View style={[styles.scrollItem,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                              <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                              {
+                                i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
+                              }
+                            </View>
                           </TouchableOpacity>
                         )
                       })
                     }
-                    
                   </View>
-                  {/* <Animated.Text style={[styles.scrollbar,{
-                    width:barWidth,
-                    transform:[
-                      {
-                        translateX:tabsSlide
-                      }
-                    ]
-                  }]}></Animated.Text> */}
                 </ScrollView>
               </View>
               {

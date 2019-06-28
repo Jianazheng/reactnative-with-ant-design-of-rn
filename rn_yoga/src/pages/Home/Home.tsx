@@ -19,10 +19,11 @@ let { width, height } = Dimensions.get('window')
 interface Props {}
 interface State {
   canScroll:boolean,
-  tabTop:number
+  tabTop:number,
+  tabIndex:number
 }
 
-@inject('userStore')
+@inject('userStore','homeStore')
 @observer
 class Home extends React.Component<Props,State> {
   static navigationOptions = {
@@ -45,6 +46,7 @@ class Home extends React.Component<Props,State> {
     super(props);
     this.state = {
       tabTop:667,
+      tabIndex:0,
       canScroll:false
     };
   }
@@ -62,6 +64,13 @@ class Home extends React.Component<Props,State> {
     this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',(res)=>{
       navigation.navigate('Login');
     })
+  }
+
+  componentDidMount(){
+    let {homeStore} = this.props;
+    homeStore.getBanner();
+    homeStore.getAnnouncement();
+    homeStore.getTrainCate();
   }
 
   componentWillUnmount(){
@@ -82,10 +91,11 @@ class Home extends React.Component<Props,State> {
   }
 
   render(){
-    let {canScroll} = this.state;
-    let {navigation} = this.props;
+    let {canScroll,tabIndex} = this.state;
+    let {navigation,homeStore} = this.props;
+    //console.log(homeStore.trainCateShow)
     return (
-      <View style={[mainStyle.flex1]}>
+      <View style={[mainStyle.flex1,mainStyle.bgcf2]}>
         <ScrollView
         style={[mainStyle.flex1]}
         onScroll={(e)=>{
@@ -97,6 +107,7 @@ class Home extends React.Component<Props,State> {
               tabTop:e.nativeEvent.layout.height
             })
           }}>
+
             <HomeSearchBar 
             onSubmit={(e)=>{
               console.log(e)
@@ -108,23 +119,39 @@ class Home extends React.Component<Props,State> {
                 navigation.push('CartList')
               }}>&#xe60a;</Text>
             )}></HomeSearchBar>
-            <HomeSwiper></HomeSwiper>
-            <HomeBroadcast></HomeBroadcast>
+
+            <HomeSwiper img={homeStore.banner}></HomeSwiper>
+
+            <HomeBroadcast list={homeStore.announcement}></HomeBroadcast>
+
           </View>
-          <BxTabView 
-          height={height-setSize(240)}
-          canScroll={canScroll} 
-          tabs={[{title:'推荐'},{title:'主轴课程'},{title:'非系统课程'},{title:'其他'}]} 
-          navigateTo={()=>{}}>
-            <Recommend navigation={navigation}></Recommend>
-            <HomeCourse navigation={navigation}></HomeCourse>
-            <View>
-              <Text>265161333</Text>
-            </View>
-            <View>
-              <Text>2333</Text>
-            </View>
-          </BxTabView>
+          {
+            homeStore.trainCate.length>0
+            ?<BxTabView 
+            height={height-setSize(240)}
+            canScroll={canScroll} 
+            tabs={homeStore.trainCate}
+            tabChange={(e)=>{
+              this.setState({
+                tabIndex:e
+              })
+            }}
+            navigateTo={()=>{navigation.push('ClassifyList')}}
+            >
+              <View style={[mainStyle.flex1]}>
+                <Recommend navigation={navigation}></Recommend>
+              </View>
+              {
+                homeStore.trainCateShow.length>0?
+                homeStore.trainCateShow.map((val,i)=>
+                  <View style={[mainStyle.flex1,mainStyle.bgcf2]} key={i}>
+                    <HomeCourse currentIndex={i+1} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
+                  </View>
+                ):null
+              }
+            </BxTabView>
+            :null
+          }
         </ScrollView>
       </View>
     )

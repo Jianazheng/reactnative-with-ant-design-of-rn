@@ -31,9 +31,9 @@ class Mine extends React.Component<Props> {
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     let {userStore} = this.props;
-    userStore.GetUserInfo().then(res=>{});
+    userStore.GetUserInfo();
   }
 
   goto(routeName:string,params:any){
@@ -72,20 +72,22 @@ class Mine extends React.Component<Props> {
             </View>
             <View style={[styles.userinfo,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
               <TouchableOpacity onPressIn={()=>{this.goto('UserInfo',{})}}>
-                <Image style={[mainStyle.useravator]} source={{}}></Image>
+                <Image style={[mainStyle.useravator]} source={{uri:userInfo.avatar}}></Image>
               </TouchableOpacity>
-              <View style={[mainStyle.column,mainStyle.flex1,mainStyle.palr10,mainStyle.aiStart]}>
-                <Text style={[mainStyle.cfff,mainStyle.fs16]}>{userInfo.username}</Text>
-                <Text style={[mainStyle.cfff,mainStyle.fs13,mainStyle.mat5,
-                  {
-                    borderColor:'#fff',
-                    borderWidth:setSize(1),
-                    paddingLeft:setSize(12),
-                    paddingRight:setSize(12),
-                    borderRadius:setSize(40),
-                  }
-                ]}>{userInfo.level_name}</Text>
-              </View>
+              <TouchableOpacity style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter]} onPressIn={()=>{this.goto('UserInfo',{})}}>
+                <View style={[mainStyle.column,mainStyle.flex1,mainStyle.palr10,mainStyle.aiStart]}>
+                  <Text style={[mainStyle.cfff,mainStyle.fs16]}>{userInfo.username==''?'请登录':userInfo.username}</Text>
+                  <Text style={[mainStyle.cfff,mainStyle.fs13,mainStyle.mat5,
+                    {
+                      borderColor:'#fff',
+                      borderWidth:setSize(1),
+                      paddingLeft:setSize(12),
+                      paddingRight:setSize(12),
+                      borderRadius:setSize(40),
+                    }
+                  ]}>{userInfo.level_name!=''?userInfo.level_name:'登录后查看'}</Text>
+                </View>
+              </TouchableOpacity>
               <View style={[mainStyle.column,mainStyle.aiEnd]}>
                 <Text style={[mainStyle.icon,mainStyle.fs24,mainStyle.cfff]}>&#xe616;</Text>
                 <Text style={[mainStyle.lh44,mainStyle.mat10]}>

@@ -52,6 +52,7 @@ class Login extends React.Component<Props,State> {
     let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
     if(response!=null){
       Toast.info(response.msg,2);
+      userStore.GetUserInfo().then(res=>{});
       navigation.goBack();
     }
 
@@ -93,6 +94,7 @@ class Login extends React.Component<Props,State> {
               <InputItem
                 clear
                 value={password}
+                type="password"
                 onChange={value => {
                   this.setState({
                     password:value

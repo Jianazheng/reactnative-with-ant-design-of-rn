@@ -3,6 +3,7 @@ import { Text, View ,ScrollView,TouchableOpacity,Image,StyleSheet,Dimensions} fr
 import { mainStyle,screenW,setSize } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
+import { observer, inject } from 'mobx-react';
 
 
 let { width, height } = Dimensions.get('window');
@@ -11,7 +12,8 @@ const contentPadding = setSize(30);
 interface Props {}
 interface State {}
 
-
+@inject('goodsStore','courseStore')
+@observer
 class Explore extends React.Component<Props,State> {
   static navigationOptions = {
     tabBarLabel: '探索',
@@ -33,13 +35,25 @@ class Explore extends React.Component<Props,State> {
     };
   }
 
+  componentDidMount(){
+    let {goodsStore,courseStore} = this.props;
+    goodsStore.getGoodsClassify();
+    goodsStore.getRecommendGoods();
+    courseStore.getClassify();
+    courseStore.getRecommendCourse();
+  }
+
   goto(router:string){
     this.props.navigation.push(router);
   }
 
   render(){
-    let {navigation} = this.props;
+    let {navigation,goodsStore,courseStore} = this.props;
     let {news} = this.state;
+    let goodsClassify = goodsStore.goodsClassify;
+    let recommendGoods = goodsStore.recommendGoods;
+    let courseClassify = courseStore.classify;
+    let recommendCourses = courseStore.recommendCourse;
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1]}>
@@ -52,11 +66,12 @@ class Explore extends React.Component<Props,State> {
               style={[mainStyle.flex1,mainStyle.mab15]}
               horizontal
               nestedScrollEnabled
+              showsHorizontalScrollIndicator={false}
               >
                 <View style={[mainStyle.row]}>
-                <Classify navigation={navigation} type='all'></Classify>
+                
                 {
-                  news.map((item,index)=><Classify navigation={navigation} data={news} key={index.toString()}></Classify>) 
+                  goodsClassify.map((item,index)=><Classify navigation={navigation} data={item} itemType="goods" type={index==0?'all':'item'} key={index.toString()}></Classify>) 
                 }
                 </View>
               </ScrollView>
@@ -69,10 +84,11 @@ class Explore extends React.Component<Props,State> {
               style={[mainStyle.flex1,mainStyle.mab5]}
               horizontal
               nestedScrollEnabled
+              showsHorizontalScrollIndicator={false}
               >
                 <View style={[mainStyle.row]}>
                 {
-                  news.map((item,index)=><RecommendGoods navigation={navigation} data={news} key={index.toString()}></RecommendGoods>) 
+                  recommendGoods.map((item,index)=><RecommendGoods navigation={navigation} data={item} key={index.toString()}></RecommendGoods>) 
                 }
                 </View>
               </ScrollView>
@@ -85,22 +101,23 @@ class Explore extends React.Component<Props,State> {
               style={[mainStyle.flex1,mainStyle.mab15]}
               horizontal
               nestedScrollEnabled
+              showsHorizontalScrollIndicator={false}
               >
                 <View style={[mainStyle.row]}>
                 {
-                  news.map((item,index)=><Classify navigation={navigation} data={news} key={index.toString()}></Classify>) 
+                  courseClassify.map((item,index)=><Classify navigation={navigation} itemType="course" data={item} key={index.toString()}></Classify>) 
                 }
                 </View>
               </ScrollView>
             </View>
             <View style={[mainStyle.flex1,mainStyle.mab10,mainStyle.palr15,mainStyle.bgcfff]}>
-              <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={()=>{
-                this.goto('GoodsList')
+              <BxCateTitle title={"好课推荐"} navigateTitle={"更多"} onClick={()=>{
+                this.goto('OnlineCourseList')
               }}>
               </BxCateTitle>
               <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
                 {
-                  news.map((item,index)=><RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>)
+                  recommendCourses.map((item,index)=><RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>)
                 }
               </View>
             </View>
@@ -113,7 +130,7 @@ class Explore extends React.Component<Props,State> {
 
 interface GoodsProps {
   data:object,
-  navigation:any
+  navigation:object
 }
 
 class RecommendGoods extends React.PureComponent<GoodsProps> {
@@ -129,12 +146,12 @@ class RecommendGoods extends React.PureComponent<GoodsProps> {
   render (){
     let {data} = this.props;
     return(
-      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
+      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10]} onPress={()=>{this.gotoInfo('GoodsInfo',{id:data.id})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
           <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/sonja-langford-357.png'}}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>凝心·软木瑜伽砖</Text>
-            <Text style={[mainStyle.czt,mainStyle.fs14]}>￥59</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]} numberOfLines={1}>{data.product_name}</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs14]}>￥{data.list_price}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -159,15 +176,15 @@ class RecommendCourse extends React.PureComponent<CourseProps> {
   render (){
     let {data} = this.props;
     return(
-      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
+      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{id:data.id})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
           <View style={[mainStyle.positonre,mainStyle.mab5]}>
-            <Text style={[styles.times,mainStyle.cfff,mainStyle.fs11]}>12课时</Text>
-            <Image style={[styles.reCourseImage,mainStyle.imgCover]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
+            <Text style={[styles.times,mainStyle.cfff,mainStyle.fs11]}>{data.lesson}课时</Text>
+            <Image style={[styles.reCourseImage,mainStyle.imgCover,mainStyle.bgcf2]} mode="widthFix" source={{uri:'http://'+data.image}}></Image>
           </View>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>高阶体式提升计划</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs11]}>122人报名</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]} numberOfLines={1}>{data.course_name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs11]}>{data.reply}人报名</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -192,23 +209,43 @@ class Classify extends React.PureComponent<ClassifyProps> {
   }
 
   render (){
-    let {data,type} = this.props;
+    let {data,type,itemType} = this.props;
     if(type=='all'){
-      return(
-        <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('ClassifyList',{})}}>
-          <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>/ / 全部 / /</Text>
-          </View>
-        </TouchableOpacity>
-      )
+      if(itemType=='goods'){
+        return(
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'goods'})}}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>/ / {data.product_category_name} / /</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }else{
+        return(
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'course'})}}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>/ / {data.category_name} / /</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }
     }else{
-      return(
-        <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{})}}>
-          <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>分类</Text>
-          </View>
-        </TouchableOpacity>
-      )
+      if(itemType=='goods'){
+        return(
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'goods'})}}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.product_category_name}</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }else{
+        return(
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'course'})}}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.category_name}</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }
     }
   }
 }

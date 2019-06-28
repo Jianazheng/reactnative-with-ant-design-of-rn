@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, View, StyleSheet,Dimensions,TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { mainStyle,setSize } from '../../public/style/style';
 
 let { width, height } = Dimensions.get('window')
 interface Props {
-  handleChange:(data:any)=>void
+  tabs?:Array<object>,
+  handleChange:(data:object)=>void
 }
 interface State {
   tabs?:Array<any>,
@@ -20,34 +21,40 @@ class TabSelect extends React.Component<Props,State> {
     }
   }
 
-  handleOnChange(i:number){
+  handleOnChange(i:number,data:object){
     this.setState({
       tabIndex:i
     },()=>{
-      if(this.props.handleChange)this.props.handleChange(i)
+      if(this.props.handleChange)this.props.handleChange({i,data})
     })
-    
   }
 
   render(){
-    let {tabs,tabIndex} = this.state;
+    let {tabIndex} = this.state;
+    let {tabs} = this.props;
     return (
-      <View style={[mainStyle.row]}>
-        <View style={[mainStyle.row,mainStyle.mal10,mainStyle.mar10,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.h100]}>
+      <View style={[mainStyle.flex1,{height:setSize(100)}]}>
+        <ScrollView 
+        nestedScrollEnabled
+        horizontal
+        style={[mainStyle.row,mainStyle.flex1]}>
+          <View style={[mainStyle.row,mainStyle.mal10,mainStyle.mar10,mainStyle.aiCenter,mainStyle.h100]}>
           {
             tabs.map((val,i)=>{
               return (
                 <View style={[styles.tabItem,mainStyle.aiCenter,mainStyle.jcCenter]} key={i}>
-                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.aiCenter,mainStyle.jcCenter,styles.info,i==tabIndex?mainStyle.bgcju:null]} onPressIn={()=>{
-                    this.handleOnChange(i)
+                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.aiCenter,mainStyle.jcCenter,styles.info,i==tabIndex?mainStyle.bgcju:null]} 
+                  onPressIn={()=>{
+                    this.handleOnChange(i,val)
                   }}>
-                    <Text style={[i==tabIndex?styles.textSel:styles.textNor,mainStyle.fs14]}>{val.title}</Text>
+                    <Text style={[i==tabIndex?styles.textSel:styles.textNor,mainStyle.fs14]}>{val.category_name}</Text>
                   </TouchableOpacity>
                 </View>
               )
             })
           }
-        </View>
+          </View>
+        </ScrollView>
       </View>
     )
   }

@@ -4,6 +4,7 @@ import {mainStyle, setSize} from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
 import BxListView from '../../components/Pubilc/ListView';
+import { observer, inject } from 'mobx-react';
 
 
 let { width, height } = Dimensions.get('window');
@@ -13,6 +14,9 @@ interface Props {
   navigation:any
 }
 interface State {}
+
+@inject('homeStore')
+@observer
 class Recommend extends React.Component<Props,State> {
   
   constructor(props:Props,state:State) {
@@ -27,34 +31,42 @@ class Recommend extends React.Component<Props,State> {
   }
 
   componentDidMount(){
-    
+    let {homeStore} = this.props;
+    homeStore.getNewTrain();
+    homeStore.getRecommendGoods();
+    homeStore.getRecommendTrain();
   }
 
-  goto(router:string){
-    this.props.navigation.push(router);
+  goto(router:string,params:object){
+    this.props.navigation.navigate(router,params);
   }
 
   render(){
-    let {navigation} = this.props;
-    let {news} = this.state;
+    let {navigation,homeStore} = this.props;
+    let newItem = homeStore.newItem;
     return (
-      <View style={[mainStyle.flex1,mainStyle.column,mainStyle.pa15]}>
+      <View style={[mainStyle.flex1,mainStyle.column,mainStyle.pa15,mainStyle.bgcfff]}>
         <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter]}>
           <Text style={[mainStyle.c666,mainStyle.fs14]}>
             \\&nbsp;&nbsp;&nbsp;本期最新培训&nbsp;&nbsp;&nbsp;//
           </Text>
         </View>
-        <TouchableOpacity style={[mainStyle.mab10]} onPress={()=>{this.goto('CourseInfo')}}>
+        <TouchableOpacity style={[mainStyle.mab10]} onPress={()=>{this.goto('CourseInfo',{id:newItem.id,type:'all'})}}>
           <View style={[styles.reMain,mainStyle.column]}>
-            <Image style={[styles.reImage,mainStyle.mat15]} resizeMode="cover" source={{uri:'http://center.jkxuetang.com/wp-content/themes/jkxuetang/images/slider3.png'}}></Image>
-            <Text style={[mainStyle.fs15,mainStyle.c333,mainStyle.mat10]}>第一阶：脉轮与胜王瑜伽初级（师资班）</Text>
-            <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mat10]}>包含6天培训，活动时间2018年6月10-15日，活动截止报名：2019年06月09日</Text>
+            <Image style={[styles.reImage,mainStyle.mat15]} resizeMode="cover" source={{uri:newItem.image_url?newItem.image_url[0]:''}}></Image>
+            <Text style={[mainStyle.fs15,mainStyle.c333,mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
+            <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mat10]}>
+              {newItem.sku_intro}
+              {newItem.train_start_time?'，活动时间'+newItem.train_start_time.split(' ')[0]:''}
+              {newItem.train_end_time?'至'+newItem.train_end_time.split(' ')[0]:''}
+              {newItem.reg_end_time?'，截止报名时间'+newItem.reg_end_time.split(' ')[0]:''}
+            </Text>
             <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.mat10,mainStyle.jcBetween]}>
               <Text>
                 <Text style={[mainStyle.fs12,mainStyle.c666]}>最低特价可低至：</Text>
-                <Text style={[mainStyle.fs15,mainStyle.czt]}>￥600</Text>
+                <Text style={[mainStyle.fs15,mainStyle.czt]}>￥{newItem.dijia}</Text>
               </Text>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>已报名33人</Text>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>已报名{newItem.apply_num}人</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -66,12 +78,18 @@ class Recommend extends React.Component<Props,State> {
               index<1?
               <View style={[mainStyle.flex1,mainStyle.mab10]}>
               <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={()=>{
-                this.goto('GoodsList')
+                this.goto('GoodsList',{})
               }}>
                 </BxCateTitle> 
-              <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
+              <View style={[mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
                 {
-                  news.map((item,index)=><RecommendGoods navigation={navigation} data={item} key={index.toString()}></RecommendGoods>)
+                  homeStore.recommendGoods.length>0
+                  ?homeStore.recommendGoods.map((item,index)=>{
+                    return (
+                      <RecommendGoods index={index} navigation={navigation} data={item} key={index.toString()}></RecommendGoods>
+                    )
+                  })
+                  :null
                 }
               </View>
             </View>
@@ -81,12 +99,19 @@ class Recommend extends React.Component<Props,State> {
               index>=1?
               <View style={[mainStyle.flex1,mainStyle.mab10]}>
                 <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={()=>{
-                  this.goto('GoodsList')
+                  this.goto('GoodsList',{})
                 }}>
                 </BxCateTitle>
                 <View style={[mainStyle.jcBetween,mainStyle.wrap,mainStyle.row,mainStyle.flex1]}>
                   {
-                    news.map((item,index)=><RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>)
+                    
+                    homeStore.recommendTrain.length>0
+                    ?homeStore.recommendTrain.map((item,index)=>{
+                      return (
+                        <RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>
+                      )
+                    })
+                    :null
                   }
                 </View>
               </View>
@@ -106,7 +131,8 @@ class Recommend extends React.Component<Props,State> {
 
 interface GoodsProps {
   data:object,
-  navigation:any
+  navigation:any,
+  index:number
 }
 
 class RecommendGoods extends PureComponent<GoodsProps> {
@@ -116,18 +142,18 @@ class RecommendGoods extends PureComponent<GoodsProps> {
 
   gotoInfo(route:string,params:object){
     let {navigation} = this.props;
-    navigation.push(route,params);
+    navigation.navigate(route,params);
   }
 
   render (){
-    let {data} = this.props;
+    let {data,index} = this.props;
     return(
-      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
+      <TouchableOpacity style={[styles.reGoods,mainStyle.mab10,(index+1)%3==2?{marginLeft:setSize(10),marginRight:setSize(10)}:null]} onPress={()=>{this.gotoInfo('GoodsInfo',{id:data.id})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
-          <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/sonja-langford-357.png'}}></Image>
+          <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5,mainStyle.bgcf2]} mode="widthFix" source={{uri:data.image_url?data.image_url[0]:''}}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>{data.title}</Text>
-            <Text style={[mainStyle.czt,mainStyle.fs14]}>{data.price}</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>{data.product_name}</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs14]}>{data.list_price}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -145,21 +171,21 @@ class RecommendCourse extends PureComponent<CourseProps> {
 
   gotoInfo(route:string,params:object){
     let {navigation} = this.props;
-    navigation.push(route,params);
+    navigation.navigate(route,params);
   }
 
   render (){
     let {data} = this.props;
     return(
-      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{})}}>
+      <TouchableOpacity style={[styles.reCourse,mainStyle.mab10]} onPress={()=>{this.gotoInfo('CourseInfo',{id:data.id})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
           <View style={[mainStyle.positonre,mainStyle.mab5]}>
-            <Text style={[styles.times,mainStyle.cfff,mainStyle.fs11]}>12课时</Text>
-            <Image style={[styles.reCourseImage,mainStyle.imgCover]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
+            <Text style={[styles.times,mainStyle.cfff,mainStyle.fs11]}>{data.lesson}课时</Text>
+            <Image style={[styles.reCourseImage,mainStyle.imgCover,mainStyle.bgcf2]} mode="widthFix" source={{uri:data.image}}></Image>
           </View>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>{data.title}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs11]}>122人报名</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>{data.course_name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs11]}>{data.reply}人报名</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -168,7 +194,7 @@ class RecommendCourse extends PureComponent<CourseProps> {
 }
 
 const contentWidth = width-contentPadding*2;
-const GoodsImageWidth = (contentWidth-setSize(30))/3;
+const GoodsImageWidth = (contentWidth-setSize(50))/3;
 const CourseImageWidth = (contentWidth-setSize(20))/2;
 const styles = StyleSheet.create({
   reMain:{

@@ -2,10 +2,13 @@ import React from 'react';
 import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 
 interface Props {}
 
+@inject('courseStore')
+@observer
 class ClassifyList extends React.Component<Props> {
   static navigationOptions = {
     header:null
@@ -14,13 +17,20 @@ class ClassifyList extends React.Component<Props> {
   constructor(props:Props) {
     super(props);
     this.state = {
-      arr: [{checked:true},{checked:false},{checked:false}]
+      arr: [{checked:true},{checked:false},{checked:false}],
+      current:0
     };
+  }
+
+  componentDidMount(){
+    let {courseStore} = this.props;
+    courseStore.getClassify();
   }
 
   goto(routeName:string,params:any){
     this.props.navigation.navigate(routeName,params);
   }
+
 
   handleLeftItemSelect(index:number){
     let {arr} = this.state;
@@ -38,21 +48,21 @@ class ClassifyList extends React.Component<Props> {
   leftListItem(checked:boolean,index:number,data:object){
     if(checked){
       return (
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity key={index.toString()} onPress={()=>{
           this.handleLeftItemSelect(index)
         }}>
           <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.classItem,mainStyle.bgcf7]}>
-            <Text style={[mainStyle.flex1,mainStyle.tc,styles.classItemTextOncheck]}>瑜伽</Text>
+            <Text style={[mainStyle.flex1,mainStyle.tc,styles.classItemTextOncheck]}>{data.category_name}</Text>
           </View>
         </TouchableOpacity>
       )
     }else{
       return (
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity key={index.toString()} onPress={()=>{
           this.handleLeftItemSelect(index)
         }}>
           <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.classItem,mainStyle.bgcfff]}>
-            <Text style={[mainStyle.flex1,mainStyle.tc,styles.classItemText]}>瑜伽</Text>
+            <Text style={[mainStyle.flex1,mainStyle.tc,styles.classItemText]}>{data.category_name}</Text>
           </View>
         </TouchableOpacity>
       )
@@ -60,8 +70,9 @@ class ClassifyList extends React.Component<Props> {
   }
 
   render(){
-    let {arr} = this.state;
-    let {navigation} = this.props;
+    let {arr,current} = this.state;
+    let {navigation,courseStore} = this.props;
+    console.log(courseStore.classify)
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <NavTop
@@ -79,7 +90,9 @@ class ClassifyList extends React.Component<Props> {
             >
               <View style={[mainStyle.flex1,mainStyle.column]}>
                 {
-                  arr.map((val,i)=>this.leftListItem(val.checked,i,val))
+                  courseStore.classify.map((val,i)=>
+                    this.leftListItem(val.checked,i,val)
+                  )
                 }
               </View>
             </ScrollView>
@@ -89,10 +102,13 @@ class ClassifyList extends React.Component<Props> {
             nestedScrollEnabled
             style={[mainStyle.flex1]}
             >
-              <RightListItem navigation={navigation}></RightListItem>
-              <RightListItem navigation={navigation}></RightListItem>
-              <RightListItem navigation={navigation}></RightListItem>
-              <RightListItem navigation={navigation}></RightListItem>
+              {
+                courseStore.classify[current]?
+                courseStore.classify[current].child.map((val,i)=>
+                  <RightListItem key={i} navigation={navigation} item={val}></RightListItem>
+                )
+                :null
+              }
             </ScrollView>
           </View>
         </View>
@@ -102,7 +118,8 @@ class ClassifyList extends React.Component<Props> {
 }
 
 interface RightListItemProps {
-  navigation:any
+  navigation:object,
+  item:object
 }
 
 class RightListItem extends React.PureComponent<RightListItemProps>{
@@ -115,27 +132,26 @@ class RightListItem extends React.PureComponent<RightListItemProps>{
   }
 
   render(){
+    let {item} = this.props;
     return (
       <View style={[mainStyle.column,mainStyle.palr15]}>
         <View style={[mainStyle.h100,mainStyle.row,mainStyle.aiCenter]}>
-          <Text style={[mainStyle.fs13,mainStyle.c333]}>初级瑜伽</Text>
+          <Text style={[mainStyle.fs13,mainStyle.c333]}>{item.category_name}</Text>
         </View>
         <View style={[mainStyle.column]}>
-          <TouchableOpacity style={[mainStyle.mab10,mainStyle.bgcfff]} onPress={()=>{
-            this.goto('CourseInfo',{})
-          }}>
-            <Text style={[mainStyle.pa15,mainStyle.fs13,mainStyle.c333,mainStyle.lh36]}>第一阶：脉轮与胜王瑜伽初级</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[mainStyle.mab10,mainStyle.bgcfff]} onPress={()=>{
-            this.goto('CourseInfo',{})
-          }}>
-            <Text style={[mainStyle.pa15,mainStyle.fs13,mainStyle.c333,mainStyle.lh36]}>第二阶：瑜伽呼吸法与身印法初级</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[mainStyle.mab10,mainStyle.bgcfff]} onPress={()=>{
-            this.goto('CourseInfo',{})
-          }}>
-            <Text style={[mainStyle.pa15,mainStyle.fs13,mainStyle.c333,mainStyle.lh36]}>第三阶：五大元素与心灵转化瑜伽初级心灵转化瑜伽初级</Text>
-          </TouchableOpacity>
+          {
+            item.sub_train.length>0?
+            item.sub_train.map((val,i)=>
+              <TouchableOpacity 
+              key={i}
+              style={[mainStyle.mab10,mainStyle.bgcfff]} onPress={()=>{
+                this.goto('CourseInfo',{id:val.id})
+              }}>
+                <Text style={[mainStyle.pa15,mainStyle.fs13,mainStyle.c333,mainStyle.lh36]}>{val.train_name}</Text>
+              </TouchableOpacity>
+            )
+            :<Text style={[mainStyle.pa15,mainStyle.fs13,mainStyle.c333,mainStyle.lh36,mainStyle.bgcfff]}>暂无课程</Text>
+          }
         </View>
       </View>
     )

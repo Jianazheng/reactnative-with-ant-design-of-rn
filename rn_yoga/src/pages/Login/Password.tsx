@@ -76,6 +76,7 @@ class Password extends React.Component<Props,State> {
             </InputItem>
             <InputItem
               placeholder="请输入新的密码"
+              type="password"
               value={password}
               style={[mainStyle.fs14]}
               onChange={value=>{
@@ -88,6 +89,7 @@ class Password extends React.Component<Props,State> {
             </InputItem>
             <InputItem
               placeholder="再次输入密码"
+              type="password"
               value={rpassword}
               style={[mainStyle.fs14]}
               onChange={value=>{

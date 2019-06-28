@@ -9,7 +9,7 @@ interface Props {}
 interface State {
   
 }
-class GoodsList extends React.Component<Props,State> {
+class OnlineCourseList extends React.Component<Props,State> {
 
   constructor(props:Props,state:State) {
     super(props);
@@ -29,7 +29,7 @@ class GoodsList extends React.Component<Props,State> {
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <NavTop
         navType="normal"
-        title="商城"
+        title="在线课程"
         onPress={()=>{
           this.props.navigation.goBack();
         }}
@@ -48,16 +48,6 @@ class GoodsList extends React.Component<Props,State> {
             </Text>
           </TouchableOpacity>
         </View>
-        {/* <ScrollView
-        >
-          <View style={[mainStyle.row,mainStyle.wrap,mainStyle.jcBetween,mainStyle.pa15]}>
-            {
-              arr.map((val,i)=>(
-                <GoodsItem></GoodsItem>
-              ))
-            }
-          </View>
-        </ScrollView> */}
         <BxListView
         listData={arr}
         listItem={({item,index})=><GoodsItem navigation={this.props.navigation} key={index.toString()} index={index}></GoodsItem>}
@@ -127,4 +117,4 @@ class GoodsItem extends React.Component<GoodsItemProps,GoodsItemState> {
   }
 }
 
-export default GoodsList
+export default OnlineCourseList

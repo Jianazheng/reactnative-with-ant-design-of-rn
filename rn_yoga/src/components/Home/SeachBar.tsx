@@ -5,6 +5,8 @@ import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 interface Props {
   leftBtn:JSX.Element,
+  autoFocus:boolean,
+  placeholder:string,
   onChange:(e:string)=>void,
   onSubmit:(e:string)=>void
 }
@@ -36,9 +38,10 @@ class HomeSearchBar extends React.Component<Props> {
         <View style={[mainStyle.bgcf2,mainStyle.row,mainStyle.aiCenter,styles.searcBar,mainStyle.flex1]}>
           <Text style={[mainStyle.icon,mainStyle.fs18]}>&#xe63f;</Text>
           <TextInput
+          autoFocus={this.props.autoFocus||false}
           style={[styles.input,mainStyle.flex1,mainStyle.fs14]}
           placeholderTextColor={mainStyle.c999.color}
-          placeholder="搜索培训课堂"
+          placeholder={this.props.placeholder||'搜索培训课堂'}
           onChangeText={(val)=>{
             this.onChange(val);
           }}
@@ -60,8 +63,8 @@ const styles = StyleSheet.create({
     height:setSize(76),
     paddingLeft:setSize(24),
     paddingRight:setSize(24),
-    marginTop:setSize(20),
-    marginBottom:setSize(20),
+    marginTop:setSize(12),
+    marginBottom:setSize(12),
     borderRadius:setSize(38),
   },
   input:{

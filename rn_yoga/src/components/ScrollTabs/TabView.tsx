@@ -13,9 +13,11 @@ interface Props {
   children:any[],
   height:number,
   canScroll:boolean,
-  tabs:Array<any>,
+  tabs:Array<object>,
   tabAlign:'center'|'',
-  tabWidth:number
+  tabWidth:number,
+  navigateTo:()=>void,
+  tabChange:(index:number)=>void
 }
 type State = {
   currentIndex:number,
@@ -29,16 +31,23 @@ class BxTabView extends React.Component<Props,State> {
     }
   }
 
+  // componentDidUpdate(np,ns){
+  //   return ns.currentIndex!=this.state.currentIndex
+  // }
+
   handleChange({i}){
     this.setState({
       currentIndex:i
     })
+    if(this.props.tabChange)this.props.tabChange(i);
   }
   
   render(){
-    let {children,tabs,tabAlign,canScroll,tabWidth} = this.props;
+    let {children,tabs,tabAlign,canScroll,tabWidth,navigateTo} = this.props;
     let {currentIndex} = this.state; 
     let scrollHeight = this.props.height;
+    if(tabs==undefined)tabs = [];
+    //console.log('tab更新了')
     return (
       <View style={[mainStyle.flex1]}>
         <ScrollableTabView
@@ -47,19 +56,23 @@ class BxTabView extends React.Component<Props,State> {
         onChangeTab={(e)=>{
           this.handleChange(e)
         }}
-        initialPage={currentIndex}
+        //initialPage={0}
+        page={currentIndex}
         prerenderingSiblingsNumber={1}
-        renderTabBar={()=><BxTabbars tabWidth={tabWidth} current={currentIndex} tabAlign={tabAlign} tabNames={tabs}></BxTabbars>}
+        renderTabBar={()=><BxTabbars tabWidth={tabWidth} current={currentIndex} tabAlign={tabAlign} tabNames={tabs} navigateTo={navigateTo}></BxTabbars>}
         >
           
           {
             React.Children.map(children,(child, i)=>{
               return (    
-                <ScrollView 
-                scrollEnabled={canScroll} 
-                nestedScrollEnabled={true}>
-                  {child}
-                </ScrollView>
+                <View style={[mainStyle.flex1,{height:scrollHeight}]}>
+                  <ScrollView 
+                  style={[mainStyle.flex1]}
+                  scrollEnabled={canScroll} 
+                  nestedScrollEnabled={true}>
+                    {child}
+                  </ScrollView>
+                </View>
               )
             })
           }

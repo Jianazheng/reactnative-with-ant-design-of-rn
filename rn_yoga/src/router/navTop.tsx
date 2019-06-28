@@ -101,7 +101,7 @@ export default class NavTop extends Component<Props> {
 
 const styles = StyleSheet.create({
 	leftright:{
-		width:setSize(120)
+		width:setSize(180)
 	},
 	container: {
 			justifyContent: 'center',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 	},
 	navtopIcon:{
 			lineHeight:setSize(76),
-			fontSize:setSize(80),
+			fontSize:setSize(74),
 			borderRadius:setSize(40),
 			textAlign:'center',
 			textAlignVertical:'center',

@@ -74,20 +74,22 @@ export default class BxListView extends React.Component<Props,State>{
   render(){
     let {listData,listItem,colNumber,loading} = this.props;
     return(
-      <FlatList
-      renderItem={listItem}
-      contentContainerStyle={{justifyContent:'space-between'}}
-      keyExtractor={(item,index)=>index.toString()}
-      data={listData}
-      numColumns={colNumber}
-      initialNumToRender={10}
-      refreshing={loading}
-      onEndReached={this.onShowMore.bind(this)}
-      onEndReachedThreshold={0.1}
-      ListHeaderComponent={this._renderHeader.bind(this)}
-      ListFooterComponent={this._renderFooter.bind(this)}
-      >
-      </FlatList>
+      <View style={[mainStyle.flex1]}>
+        <FlatList
+        renderItem={listItem}
+        contentContainerStyle={{justifyContent:'space-between'}}
+        keyExtractor={(item,index)=>index.toString()}
+        data={listData}
+        numColumns={colNumber}
+        initialNumToRender={10}
+        refreshing={loading}
+        onEndReached={this.onShowMore.bind(this)}
+        onEndReachedThreshold={0.1}
+        ListHeaderComponent={this._renderHeader.bind(this)}
+        ListFooterComponent={this._renderFooter.bind(this)}
+        >
+        </FlatList>
+      </View>
     )
   }
 }
