@@ -2,8 +2,9 @@
 import { observable, computed, action } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
+import { Alert } from 'react-native'; 
 import RNStorage from './../../public/js/storage';
-
+import * as Wechat from 'react-native-wechat';
 
 class User {
   constructor() {
@@ -114,6 +115,38 @@ class User {
     } catch (error) {
       return null
     }
+  }
+
+  @action WxLogin(){
+    Wechat.registerApp('wxa66b688d8d2383df');
+    const scope = 'snsapi_userinfo';
+    const state = '';
+    Wechat.isWXAppInstalled()
+    .then((isInstalled) => {
+      if (isInstalled) {
+        Wechat.sendAuthRequest(scope, state)
+        .then(responseCode => {
+          console.log(responseCode)
+        })
+        .catch(err => {
+          console.log(err)
+          Alert.alert('登录授权发生错误：', err.message, [
+            {text: '确定'}
+          ]);
+        })
+        // Wechat.shareToSession({title:'2333'})
+        // .then(res=>{
+        //   console.log(res)
+        // })
+        // .catch(err=>{
+        //   console.log(err)
+        // })
+      } else {
+        Alert.alert('请安装微信');
+      }
+    }).catch(err=>{
+      console.log(err)
+    });
   }
 
 

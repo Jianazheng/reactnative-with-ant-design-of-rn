@@ -14,6 +14,7 @@ class Goods {
     goodsSort:[{sort:'default',str:'默认排序'},{sort:'sale',str:'销量最高'},{sort:'min_price',str:'最低价格'},{sort:'max_price',str:'最高价格'}],
     cate:{id:'',product_category_name:'全部'},
     sort:{sort:'default',str:'默认排序'},
+    page:1,
     goodslist:[]
   }
 
@@ -107,11 +108,19 @@ class Goods {
     try {
       let params = {
         cate_id:this.cate.id,
-        sort:this.sort.sort
+        sort:this.sort.sort,
+        page:this.goodsData.page
       }
       let response = await new Fetch('/product/list','GET',{size:10,...params},{});
-      let goodslist = response.data.data;
-      this.goodsData.goodslist = goodslist;
+      let goodslist = response.data;
+      
+      if(this.goodsData.goodslist.length>=goodslist.total)return response;
+
+      this.goodsData.goodslist = this.goodsData.goodslist.concat(goodslist.data);
+      if(this.goodsData.goodslist.length<goodslist.total){
+        this.goodsData.page+=1;
+      }
+      console.log(this.goodsData.goodslist)
       return response
     } catch (error) {
       return null

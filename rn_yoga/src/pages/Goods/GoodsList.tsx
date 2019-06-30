@@ -5,9 +5,7 @@ import BxListView from '../../components/Pubilc/ListView';
 import NavTop from '../../router/navTop';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import { observer, inject } from 'mobx-react';
-import * as Wechat from 'react-native-wechat';
 
-console.log(Wechat)
 
 interface Props {}
 interface State {
@@ -31,7 +29,6 @@ class GoodsList extends React.Component<Props,State> {
       type:'',
       cid:''
     };
-    Wechat.registerApp('wxa66b688d8d2383df');
   }
 
   static navigationOptions = {
@@ -98,36 +95,7 @@ class GoodsList extends React.Component<Props,State> {
     })
   }
 
-  handleWxShareTest(){
-    const scope = 'snsapi_userinfo';
-    const state = '';
-    Wechat.isWXAppInstalled()
-    .then((isInstalled) => {
-      if (isInstalled) {
-        Wechat.sendAuthRequest(scope, state)
-        .then(responseCode => {
-          console.log(responseCode)
-        })
-        .catch(err => {
-          console.log(err)
-          Alert.alert('登录授权发生错误：', err.message, [
-            {text: '确定'}
-          ]);
-        })
-        // Wechat.shareToSession({title:'2333'})
-        // .then(res=>{
-        //   console.log(res)
-        // })
-        // .catch(err=>{
-        //   console.log(err)
-        // })
-      } else {
-        Alert.alert('请安装微信');
-      }
-    }).catch(err=>{
-      console.log(err)
-    });
-  }
+  
 
   
   render(){
@@ -150,7 +118,7 @@ class GoodsList extends React.Component<Props,State> {
               <Text style={[mainStyle.c333,mainStyle.icon,mainStyle.fs22]}>&#xe63f;</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
-              this.handleWxShareTest();
+              
             }}>
               <Text style={[mainStyle.c333,mainStyle.icon,mainStyle.fs22]}>&#xe608;</Text>
             </TouchableOpacity>
@@ -283,7 +251,9 @@ class GoodsList extends React.Component<Props,State> {
             listItem={({item,index})=><GoodsItem navigation={navigation} key={index.toString()} data={item} index={index}></GoodsItem>}
             nomore={false}
             colNumber={2}
-            onLoadmore={()=>{}}
+            onLoadmore={()=>{
+              goodsStore.getGoodslist();
+            }}
             pab={setSize(20)}
             >
             </BxListView>
