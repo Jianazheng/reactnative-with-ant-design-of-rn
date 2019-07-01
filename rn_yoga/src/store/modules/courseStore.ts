@@ -9,7 +9,12 @@ class Course {
     classify:[],
     recommendCourse:[],
     courseInfo:{},
-    goodsItem:{}
+    goodsItem:{},
+    onlineCourse:{
+      data:[],
+      total:0,
+      page:0
+    },
   }
 
   @computed get classify(){
@@ -22,6 +27,10 @@ class Course {
 
   @computed get courseInfo(){
     return this.courseData.courseInfo
+  }
+
+  @computed get onlineCourse(){
+    return this.courseData.onlineCourse
   }
 
   @action async getClassify(){
@@ -52,14 +61,7 @@ class Course {
   @action async getCourseInfo(id:string|number){
     try {
       let response = await new Fetch('/online/course/detail','GET',{id},{});
-      let courseInfo = response.data;
-      // if(goodsInfo.sku.length>0){
-      //   goodsInfo.sku.map((val,i)=>{
-      //     if(val.image_url)val.image_url = 'http://'+val.image_url;
-      //   })
-      //   this.goodsData.goodsItem = goodsInfo.sku[0]
-      // }
-      
+      let courseInfo = response.data; 
       this.courseData.courseInfo = courseInfo;
       return response
     } catch (error) {
@@ -69,6 +71,26 @@ class Course {
 
   @action selectItem(item:object){
     this.courseData.goodsItem = item;
+  }
+
+  @action async getOnlineCourse(){
+    try {
+      let {onlineCourse} = this.courseData
+      let params = {page:this.onlineCourse.page}
+      let response = await new Fetch('/online/mycourse/list','GET',{size:10,...params},{})
+      let resd = response.data
+      if(onlineCourse.data.length>=resd.total)return response
+      let newdata = onlineCourse.data.concat(resd.data)
+      onlineCourse.data = newdata
+      onlineCourse.total = resd.total
+      if(onlineCourse.data.length<resd.total){
+        onlineCourse.page+=1
+      }
+      this.courseData.onlineCourse = onlineCourse
+      return response
+    } catch (error) {
+      return null
+    }
   }
 }
 

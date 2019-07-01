@@ -3,10 +3,12 @@ import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'rea
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
-
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 
+@inject('courseStore','userStore')
+@observer
 class Course extends React.Component<Props> {
   static navigationOptions = {
     tabBarLabel: '课程',
@@ -28,13 +30,19 @@ class Course extends React.Component<Props> {
     };
   }
 
+  componentDidMount(){
+    let {userStore} = this.props;
+    userStore.GetUserInfo();
+  }
+
   goto(routeName:string,params:any){
     this.props.navigation.navigate(routeName,params);
   }
 
   render(){
     let {arr} = this.state;
-    let {navigation} = this.props;
+    let {navigation,userStore} = this.props;
+    let userInfo = userStore.userInfo;
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1,mainStyle.positonre]}>
@@ -45,7 +53,7 @@ class Course extends React.Component<Props> {
                   <Image style={[mainStyle.useravator]} source={{}}></Image>
                 </TouchableOpacity>
                 <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mal15,mainStyle.aiStart]}>
-                  <Text style={[mainStyle.c333,mainStyle.fs16]}>binbinMax</Text>
+                  <Text style={[mainStyle.c333,mainStyle.fs16]}>{userInfo.username!=''?userInfo.username:'请登录'}</Text>
                   <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.mat5,
                     {
                       borderColor:mainStyle.czt.color,
@@ -54,7 +62,7 @@ class Course extends React.Component<Props> {
                       paddingRight:setSize(12),
                       borderRadius:setSize(40),
                     }
-                  ]}>白金会员</Text>
+                  ]}>{userInfo.level_name!=''?userInfo.level_name:'登录后查看'}</Text>
                 </View>
                 <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
                   <Text style={[mainStyle.icon,mainStyle.fs24,mainStyle.c666]}>&#xe616;</Text>

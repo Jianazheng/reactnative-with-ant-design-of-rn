@@ -19,10 +19,11 @@ interface Props {}
 interface State {
   canScroll:boolean,
   tabTop:number,
+  clicking:boolean,
   showCartInfoDetails:boolean
 }
 
-@inject('goodsStore','cartStore')
+@inject('goodsStore','cartStore','publicStore')
 @observer
 class GoodsInfo extends React.Component<Props,State> {
   static navigationOptions = {
@@ -35,6 +36,7 @@ class GoodsInfo extends React.Component<Props,State> {
     this.state = {
       tabTop:667,
       canScroll:false,
+      clicking:false,
       showCartInfoDetails:false,
     };
   }
@@ -60,25 +62,41 @@ class GoodsInfo extends React.Component<Props,State> {
   }
 
   handleCloseCartInfoDetails(isok:boolean,fastbuy:boolean){
-    let {showCartInfoDetails} = this.state;
+    let {showCartInfoDetails,clicking} = this.state;
     let {cartStore,navigation} = this.props;
     if(!showCartInfoDetails){
       this.setState({
         showCartInfoDetails:isok
       })
     }else{
-      if(fastbuy){
-        cartStore.createCart()
-        .then(res=>{
-          navigation.push('Settlement',{type:'pay'})
-        })
-      }else{
-        cartStore.createCart()
-        .then(res=>{
-          cartStore.addCart()
+      if(!clicking){//防止多次点击请求购物车
+        this.setState({
+          clicking:true
+        },()=>{
+          if(fastbuy){//立即购买
+            cartStore.createCart()
+            .then(res=>{
+              navigation.push('Settlement',{type:'pay'})
+            })
+          }else{//加入购物车
+            cartStore.createCart()
+            .then(res=>{
+              cartStore.addCart()
+              .then(suc=>{
+                this.setState({
+                  clicking:false
+                })
+              })
+            })
+          }
         })
       }
     }
+  }
+
+  handleCollection(common_id:string|number,type:string,isCollect:boolean){
+    let {publicStore} = this.props
+    publicStore.setCollection(common_id,type,isCollect)
   }
 
   handleCloseCart(){
@@ -186,7 +204,9 @@ class GoodsInfo extends React.Component<Props,State> {
                 <Text style={[mainStyle.c333,mainStyle.fs12]}>咨询</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{}}>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
+              this.handleCollection(goodsInfo.id,'3',false)
+            }}>
               <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
                 <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
                 <Text style={[mainStyle.c333,mainStyle.fs12]}>收藏</Text>

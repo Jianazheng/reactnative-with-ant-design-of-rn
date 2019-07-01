@@ -1,18 +1,16 @@
 import React from 'react';
 import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
-import { List,Badge } from '@ant-design/react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { IconFill,IconOutline } from '@ant-design/icons-react-native';
 import BxListView from '../../components/Pubilc/ListView';
-import { layout } from './../../public/js/dom';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
-const Item = List.Item;
 
 interface Props {}
 
+@inject('courseStore')
+@observer
 class CourseList extends React.Component<Props> {
   static navigationOptions = {
     header:null
@@ -25,13 +23,19 @@ class CourseList extends React.Component<Props> {
     };
   }
 
+  componentDidMount(){
+    let {courseStore} = this.props
+    courseStore.getOnlineCourse()
+  }
+
   goto(routeName:string,params:any){
     this.props.navigation.navigate(routeName,params);
   }
 
   render(){
-    let {arr} = this.state;
-    let {navigation} = this.props;
+    let {navigation,courseStore} = this.props
+    let onlineCourse = courseStore.onlineCourse
+    console.log(onlineCourse)
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <NavTop
@@ -47,7 +51,7 @@ class CourseList extends React.Component<Props> {
           pat={setSize(30)}
           onLoadmore={()=>{}}
           colNumber={1}
-          listData={arr}
+          listData={onlineCourse.data}
           listItem={({item,index})=>(
             <CourseListItem data={item} navigation={navigation} type='online'></CourseListItem>
           )}

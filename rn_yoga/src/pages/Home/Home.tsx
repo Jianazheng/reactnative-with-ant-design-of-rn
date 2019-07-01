@@ -57,7 +57,7 @@ class Home extends React.Component<Props,State> {
       key: 'token',
     }).then(res=>{
       console.log(res)
-      userStore.setToken(res);
+      userStore.setToken(res)
     }).catch(err=>{
       console.log(err)
     })

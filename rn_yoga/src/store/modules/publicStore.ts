@@ -1,17 +1,21 @@
 import { observable, computed, action } from 'mobx';
+import { Fetch } from './../../fetch/request';
+import { Toast } from '@ant-design/react-native';
 
 class Public {
   constructor() {
     
   }
-  @observable userData = {
-    name:'binbin'
-  }
-  @computed get username(){
-    return this.userData.name
-  }
-  @action editUsername(name:string){
-    this.userData.name = name
+  
+  @action async setCollection(common_id:string|number,type:string,isCollect:boolean){
+    try {
+      let params = {common_id,type}
+      let response = new Fetch(isCollect?'/user/collection':'/user/cancel_collection','POST',params,{})
+      Toast.info(response.msg,1.2,undefined,false)
+      return response
+    } catch (error) {
+      return null
+    }
   }
 }
 

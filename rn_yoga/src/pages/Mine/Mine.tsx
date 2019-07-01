@@ -59,9 +59,7 @@ class Mine extends React.Component<Props> {
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1,mainStyle.positonre]}>
           <View style={[mainStyle.flex1,mainStyle.positonre]}>
-            <View style={[styles.userbg]} onLayout={(e)=>{
-              console.log(e.nativeEvent.layout)
-            }}>
+            <View style={[styles.userbg]}>
               <LinearGradient 
                 colors={['#FF6243','#FF2043']} 
                 start={{ x: 1, y: 1 }}
@@ -227,7 +225,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius:setSize(10),
     borderTopRightRadius:setSize(10),
     width:screenW-setSize(60),
-    top:screenW*0.05,
+    top:setSize(30),
     position:'absolute',
     left:setSize(30),
     bottom:0,
