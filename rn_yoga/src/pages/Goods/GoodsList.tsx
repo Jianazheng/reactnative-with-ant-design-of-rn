@@ -293,7 +293,7 @@ class GoodsItem extends React.Component<GoodsItemProps,GoodsItemState> {
       <TouchableOpacity 
       style={[mainStyle.mat10,{overflow:'hidden',borderRadius:setSize(8),marginLeft:index%2!=0?setSize(20):setSize(30)}]}
       onPress={()=>{
-        navigation.push('CourseInfo')
+        navigation.push('GoodsInfo',{id:data.id})
       }}>
         <View style={[mainStyle.bgcfff,{width:imgw}]}>
           <Image

@@ -1,17 +1,21 @@
 import React from 'react';
-import { Text, View, ScrollView, Image,StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { mainStyle,setSize } from '../../public/style/style';
-import { IconOutline } from "@ant-design/icons-react-native";
+import { ActivityIndicator,Toast,Modal } from "@ant-design/react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 interface State {
-  cartArr:Array<object>
+  showLoading:boolean,
+  selectAll:boolean
 }
 
+@inject('cartStore')
+@observer
 class CartList extends React.Component<Props,State> {
   static navigationOptions = {
     header:null
@@ -19,12 +23,82 @@ class CartList extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      cartArr:[{arr:[{},{}]},{arr:[{},{}]}]
+      showLoading:true,
+      selectAll:false
     };
   }
 
+  componentDidMount(){
+    this.getCartList();
+  }
+
+  getCartList(){
+    let {cartStore} = this.props;
+    cartStore.getCartList()
+    .then(res=>{
+      this.setState({
+        showLoading:false
+      })
+    }).catch(err=>{
+      this.setState({
+        showLoading:false
+      })
+    })
+  }
+
+  handleDelectCartItem(){
+    let {cartStore} = this.props;
+    if(cartStore.ids.length<1){
+      Toast.info('请选择移除项',1.2,undefined,false)
+      return false
+    }
+    
+    Modal.alert('提示', '确认移除选中的商品吗？', [
+      {
+        text: '取消',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: '确认', onPress: () => {
+        cartStore.delectCartItem()
+        .then(res=>{
+          this.getCartList();
+        })
+      } },
+    ]);
+  }
+
+  handleDelectCartMain(typenum){
+    let {cartStore} = this.props;
+    Modal.alert('提示', '确认移除选中的商品吗？', [
+      {
+        text: '取消',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: '确认', onPress: () => {
+        cartStore.delectCartMain(typenum)
+        .then(res=>{
+          this.getCartList();
+        })
+      } },
+    ]);
+  }
+
+  handleSelectAll(){
+    let {selectAll} = this.state;
+    let {cartStore} = this.props;
+    this.setState(()=>{
+      return {selectAll:!selectAll}
+    },()=>{
+      cartStore.setSelectAll(selectAll)
+    })
+  }
+
   render(){
-    let {cartArr} = this.state;
+    let {showLoading,selectAll} = this.state;
+    let {cartStore} = this.props;
+    let cartList = cartStore.cartList;
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -33,65 +107,132 @@ class CartList extends React.Component<Props,State> {
         onPress={()=>{
           this.props.navigation.goBack();
         }}
+        children={(
+          <View style={[mainStyle.flex1,mainStyle.column,mainStyle.jcBetween,mainStyle.aiEnd,mainStyle.mar15]}>
+            <TouchableOpacity onPress={()=>{
+              this.handleDelectCartItem()
+            }}>
+              <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs20]}>&#xe642;</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         ></NavTop>
         <ScrollView style={[mainStyle.flex1,mainStyle.bgcf7]}>
           <View style={[mainStyle.column,mainStyle.flex1,mainStyle.pa15]}>
             {
-              cartArr.map((val,i)=>(
-                <CartArray data={val}></CartArray>
-              ))
+              cartList.product
+              ?<CartArray data={cartList.product} title={'商品'} type={'product'} typenum={1} num={cartList.product.length?cartList.product.length:0}
+              onDel={(e)=>{
+                this.handleDelectCartMain(e)
+              }}
+              ></CartArray>
+              :null
+            }
+            {
+              cartList.train
+              ?<CartArray data={cartList.train} title={'培训课程'} type={'train'} typenum={2} num={cartList.train.length?cartList.train.length:0}
+              onDel={(e)=>{
+                this.handleDelectCartMain(e)
+              }}
+              ></CartArray>
+              :null
+            }
+            {
+              cartList.course
+              ?<CartArray data={cartList.course} title={'在线课程'} type={'course'} typenum={3} num={cartList.course.length?cartList.course.length:0}
+              onDel={(e)=>{
+                this.handleDelectCartMain(e)
+              }}
+              ></CartArray>
+              :null
+            }
+            {
+              cartList.invalid
+              ?<CartArray data={cartList.invalid} title={'已失效'} type={'invalid'} typenum={4} num={cartList.invalid.length?cartList.invalid.length:0}
+              onDel={(e)=>{
+                this.handleDelectCartMain(e)
+              }}
+              ></CartArray>
+              :null
             }
           </View>
         </ScrollView>
         <View style={[mainStyle.h120,mainStyle.brt1e2,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.palr15]}>
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
-            <BxRadio size={14} color={mainStyle.czt.color}></BxRadio>
+            <BxRadio 
+            checked={selectAll}
+            size={18} 
+            color={mainStyle.czt.color}
+            onChange={()=>{
+              this.handleSelectAll()
+            }}></BxRadio>
             <Text style={[mainStyle.fs13,mainStyle.mal10,mainStyle.c666]}>全选</Text>
           </View>
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
             <Text style={[mainStyle.fs13,mainStyle.lh42,mainStyle.c333]}>
               合计：
               <Text style={[mainStyle.czt]}>￥</Text>
-              <Text style={[mainStyle.czt,mainStyle.fs14]}>179.00</Text>
+              <Text style={[mainStyle.czt,mainStyle.fs14]}>{cartStore.cartPrice}</Text>
             </Text>
             <BxButton 
             disabled={false}
             colors={[mainStyle.czt.color,mainStyle.cztc.color]}
-            title={'结算(0)'} 
+            title={'结算('+cartStore.cartTotal+')'} 
             btnstyle={[mainStyle.palr15,mainStyle.mal15,{borderRadius:setSize(40),height:setSize(80)}]} 
             textstyle={[mainStyle.fs14]}
             onClick={()=>{}}>
             </BxButton>
           </View>
         </View>
+        <ActivityIndicator
+          animating={showLoading}
+          toast
+          size="large"
+          text="加载中..."
+        />
       </View>
     )
   }
 }
 
 interface CartArrayProps {
-  data:Array<object>
+  data:Array<object>,
+  title:string,
+  num:string|number,
+  type:string,
+  typenum:number,
+  onDel:(typenum:number)=>void
 }
 
-
+@inject('cartStore')
+@observer
 class CartArray extends React.Component<CartArrayProps>{
   constructor(props:CartArrayProps){
     super(props)
   }
+
+  handleDelectCartMain(typenum){
+    this.props.onDel(typenum)
+  }
+
   render(){
-    
+    let {data,title,num,type,typenum} = this.props;
     return (
       <View style={[mainStyle.column,mainStyle.bgcfff,{borderRadius:setSize(10)},mainStyle.mab15]}>
         <View style={[mainStyle.brb1f2,mainStyle.patb15,mainStyle.palr15]}>
           <View style={[mainStyle.jcBetween,mainStyle.row,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.fs14,mainStyle.c333]}>有效培训课程（2）</Text>
-            <Text style={[mainStyle.fs13,mainStyle.c666]}>移除</Text>
+            <Text style={[mainStyle.fs14,mainStyle.c333]}>{title}（{num}）</Text>
+            <TouchableOpacity onPress={()=>{
+              this.handleDelectCartMain(typenum);
+            }}>
+              <Text style={[mainStyle.fs13,mainStyle.c666]}>移除</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={[mainStyle.palr15,mainStyle.mab15]}>
+        <View style={[mainStyle.palr10,mainStyle.mab15]}>
         {
-          this.props.data.arr.map((val,i)=>(
-            <CartItem></CartItem>
+          data.map((val,i)=>(
+            <CartItem data={val} index={i} type={type} key={i}></CartItem>
           ))
         }
         </View>
@@ -102,33 +243,123 @@ class CartArray extends React.Component<CartArrayProps>{
 
 let imgw = setSize(180);
 
-class CartItem extends React.Component{
+interface CartItemProps{
+  data:object,
+  type:string,
+  index:number
+}
+
+@inject('cartStore')
+@observer
+class CartItem extends React.Component<CartItemProps>{
+  constructor(props:CartItemProps){
+    super(props)
+  }
   render(){
+    let {type,data,index,cartStore} = this.props;
     return (
       <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat15]}>
-        <View style={[mainStyle.mar15]}>
+        <View style={[mainStyle.mar10]}>
           <BxRadio 
           color={mainStyle.czt.color}
           data={{}}
-          size={14}
+          size={18}
+          checked={data.checked}
           onChange={(e)=>{
-          console.log(e)
+            cartStore.setSelectItem(type,index)
           }}></BxRadio>
         </View>
         <Image 
-        style={[{width:imgw,height:imgw,borderRadius:setSize(6)}]}
+        style={[{width:imgw,height:imgw,borderRadius:setSize(6)},mainStyle.bgcf2]}
         mode="widthFix" 
-        source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}>
+        source={{uri:'http://'+(typeof data.image_url=="object"&&data.image_url!=null?data.image_url[0]:'')}}>
         </Image>
-        <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
-          <Text style={[mainStyle.c333,mainStyle.fs13]}>高阶体式提升计划</Text>
-          <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>师资班（6天，不含考证）2019年6月1日-6月30日</Text>
-          <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>1800</Text></Text>
-        </View>
+        {
+          type=='product'
+          ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal10,mainStyle.flex1]}>
+            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.sku_name}</Text>
+            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.flex1]}>
+              <View style={[mainStyle.flex1]}>
+                <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+              </View>
+              <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.numberSelect]}>
+                <TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}
+                onPress={()=>{
+                  cartStore.reduceCartItem(type,index)
+                }}
+                >
+                  <Text style={[mainStyle.icon,mainStyle.c333,mainStyle.fs20,styles.numberSelectBtn]}>&#xe649;</Text>
+                </TouchableOpacity>
+                <TextInput
+                maxLength={4}
+                value={data.count}
+                onChangeText={(e)=>{
+                  cartStore.editCartItem(type,index,e)
+                }}
+                style={[mainStyle.bgcf2,mainStyle.c666,styles.numberSelectInput]}
+                ></TextInput>
+                <TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}
+                onPress={()=>{
+                  cartStore.addCartItem(type,index)
+                }}
+                >
+                  <Text style={[mainStyle.icon,mainStyle.c333,mainStyle.fs20,styles.numberSelectBtn]}>&#xe648;</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>:null
+        }
+        {
+          type=='train'
+          ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
+            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+          </View>:null
+        }
+        {
+          type=='course'
+          ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
+            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+          </View>:null
+        }
+        {
+          type=='invalid'
+          ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
+            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+          </View>:null
+        }
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  numberSelect:{
+    height:setSize(50),
+    width:setSize(170),
+    borderRadius:setSize(2),
+    backgroundColor:mainStyle.bgcf7.backgroundColor
+  },
+  numberSelectInput:{
+    width:setSize(70),
+    height:setSize(50),
+    lineHeight:setSize(50),
+    textAlign:'center',
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  numberSelectBtn:{
+    width:setSize(50),
+    height:setSize(50),
+    lineHeight:setSize(50),
+    textAlign:'center'
+  }
+})
 
 
 export default CartList

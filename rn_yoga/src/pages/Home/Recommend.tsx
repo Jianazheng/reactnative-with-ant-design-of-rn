@@ -46,30 +46,40 @@ class Recommend extends React.Component<Props,State> {
     let newItem = homeStore.newItem;
     return (
       <View style={[mainStyle.flex1,mainStyle.column,mainStyle.pa15,mainStyle.bgcfff]}>
-        <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter]}>
-          <Text style={[mainStyle.c666,mainStyle.fs14]}>
-            \\&nbsp;&nbsp;&nbsp;本期最新培训&nbsp;&nbsp;&nbsp;//
-          </Text>
-        </View>
-        <TouchableOpacity style={[mainStyle.mab10]} onPress={()=>{this.goto('CourseInfo',{id:newItem.id,type:'all'})}}>
-          <View style={[styles.reMain,mainStyle.column]}>
-            <Image style={[styles.reImage,mainStyle.mat15]} resizeMode="cover" source={{uri:newItem.image_url?newItem.image_url[0]:''}}></Image>
-            <Text style={[mainStyle.fs15,mainStyle.c333,mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
-            <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mat10]}>
-              {newItem.sku_intro}
-              {newItem.train_start_time?'，活动时间'+newItem.train_start_time.split(' ')[0]:''}
-              {newItem.train_end_time?'至'+newItem.train_end_time.split(' ')[0]:''}
-              {newItem.reg_end_time?'，截止报名时间'+newItem.reg_end_time.split(' ')[0]:''}
-            </Text>
-            <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.mat10,mainStyle.jcBetween]}>
-              <Text>
-                <Text style={[mainStyle.fs12,mainStyle.c666]}>最低特价可低至：</Text>
-                <Text style={[mainStyle.fs15,mainStyle.czt]}>￥{newItem.dijia}</Text>
+        {
+          newItem.id?
+          <View style={[mainStyle.column]}>
+            <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c666,mainStyle.fs14]}>
+                \\&nbsp;&nbsp;&nbsp;本期最新培训&nbsp;&nbsp;&nbsp;//
               </Text>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>已报名{newItem.apply_num}人</Text>
             </View>
+            <TouchableOpacity style={[mainStyle.mab10]} onPress={()=>{this.goto('CourseInfo',{id:newItem.id,type:'all'})}}>
+              <View style={[styles.reMain,mainStyle.column]}>
+                <Image style={[styles.reImage,mainStyle.mat15]} resizeMode="cover" source={{uri:newItem.image_url?newItem.image_url[0]:''}}></Image>
+                <Text style={[mainStyle.fs15,mainStyle.c333,mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
+                <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mat10]}>
+                  {newItem.sku_intro}
+                  {newItem.train_start_time?'，活动时间'+newItem.train_start_time.split(' ')[0]:''}
+                  {newItem.train_end_time?'至'+newItem.train_end_time.split(' ')[0]:''}
+                  {newItem.reg_end_time?'，截止报名时间'+newItem.reg_end_time.split(' ')[0]:''}
+                </Text>
+                <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.mat10,mainStyle.jcBetween]}>
+                  {
+                    newItem.dijia!=''&&newItem.dijia!=undefined&&newItem.dijia!=null
+                    ?<Text>
+                      <Text style={[mainStyle.fs12,mainStyle.c666]}>最低特价可低至：</Text>
+                      <Text style={[mainStyle.fs15,mainStyle.czt]}>￥{newItem.dijia}</Text>
+                    </Text>
+                    :null
+                  }
+                  <Text style={[mainStyle.fs12,mainStyle.c999]}>已报名{newItem.apply_num}人</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+          :null
+        }
         <BxListView
           listData={[{},{}]}
           listItem={({item,index})=>

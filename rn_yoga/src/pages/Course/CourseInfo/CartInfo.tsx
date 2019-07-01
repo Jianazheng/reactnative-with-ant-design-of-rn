@@ -3,64 +3,23 @@
 import React, { PureComponent } from 'react';
 import { Text, View, Dimensions, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { mainStyle,contentPadding,setSize, screenH } from '../../../public/style/style';
+import { observer, inject } from 'mobx-react';
 
 let { width, height } = Dimensions.get('window');
 
-interface CartInfoDetailsProps {
-  data:Object,
-}
-
 let imgw = setSize(200);
-
-class CartInfoDetails extends PureComponent<CartInfoDetailsProps>{
-  constructor(props:CartInfoProps){
-    super(props)
-  }
-  render (){
-    let {data} = this.props;
-    return(
-      <View style={[mainStyle.column,mainStyle.flex1,{
-        height:imgw+setSize(80)
-      }]}>
-        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-          <Image 
-          style={[mainStyle.imgCover,
-            {
-              width:imgw,
-              height:imgw,
-              borderRadius:setSize(6)
-            }
-          ]} 
-          mode="widthFix" 
-          source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
-          <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15,
-            {
-              height:imgw
-            }
-          ]}>
-            <Text style={[mainStyle.czt,mainStyle.fs14]}>￥4500</Text>
-            <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.lh42]}>高阶体式提升计划高阶体式提升计划高阶体式提升计划高阶体式提升计划</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs12]}>2019年6月1日-6月30日</Text>
-          </View>
-        </View>
-        <View style={[mainStyle.row,mainStyle.aiEnd,mainStyle.flex1,mainStyle.mab5]}>
-          <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.lh42]}>我当前的优惠价：</Text>
-          <Text style={[mainStyle.fs12,mainStyle.czt,mainStyle.lh42]}>￥</Text>
-          <Text style={[mainStyle.fs16,mainStyle.czt,mainStyle.lh42]}>3700</Text>
-        </View>
-      </View>
-    )
-  }
-}
 
 interface CartInfoProps {
   data:Array<object>,
+  closeBtn:JSXElement
 }
 
 interface CartInfoState {
   oncheck:number
 }
 
+@inject('courseStore')
+@observer
 class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
   constructor(props:CartInfoProps,state:CartInfoState){
     super(props);
@@ -68,37 +27,76 @@ class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
       oncheck:0
     }
   }
+
   render (){
-    let {data} = this.props;
+    let {data,courseStore,closeBtn} = this.props;
     let {oncheck} = this.state;
+    let goodsItem = {};
     return(
       <View
        style={[mainStyle.flex1,mainStyle.bgcfff]}
       >
-        <ScrollView 
-        scrollEnabled 
-        nestedScrollEnabled 
-        style={[mainStyle.flex1,mainStyle.patb10]}>
-          <Text style={[mainStyle.mab10,mainStyle.fs13,mainStyle.c333]}>活动类型</Text>
-          <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mab10]}>
-          {
-            data.map((val,i)=>{
-              return ( 
-                <Text 
-                onPress={()=>{
-                  this.setState({
-                    oncheck:i
-                  })
-                }}
-                key={i}
-                style={[mainStyle.fs12,mainStyle.mab10,styles.goodsBtn,oncheck==i?styles.goodsCheck:styles.goodsNo]}>
-                {val.title}
-                </Text>
-              )
-            })
-          }
+        <View style={[mainStyle.column]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+            <Image 
+            style={[mainStyle.imgCover,
+              {
+                width:imgw,
+                height:imgw,
+                borderRadius:setSize(6)
+              }
+            ]} 
+            mode="widthFix" 
+            source={{uri:
+              goodsItem.image_url?(goodsItem.image_url):''
+            }}></Image>
+            <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15,
+              {height:imgw}
+            ]}>
+              <View style={[mainStyle.column]}>
+                <View style={[mainStyle.row,mainStyle.jcBetween]}>
+                  <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.lh42,mainStyle.mab5]}>{data.product_name}</Text>
+                  {closeBtn}
+                </View>
+                <Text style={[mainStyle.c999,mainStyle.fs12]}>{data.product_introduction}</Text>
+              </View>
+              <View style={[mainStyle.row,mainStyle.aiEnd,mainStyle.mab5]}>
+                <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.lh42]}>价格：</Text>
+                <Text style={[mainStyle.fs12,mainStyle.czt,mainStyle.lh42]}>￥</Text>
+                <Text style={[mainStyle.fs18,mainStyle.czt,mainStyle.lh42]}>{goodsItem.price}</Text>
+              </View>
+            </View>
           </View>
-        </ScrollView>
+        </View>
+        <View style={[mainStyle.flex1]}>
+          <ScrollView 
+          scrollEnabled 
+          nestedScrollEnabled 
+          style={[mainStyle.flex1,mainStyle.patb10]}>
+            <Text style={[mainStyle.mab10,mainStyle.fs13,mainStyle.c333]}>选择规格</Text>
+            <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mab10]}>
+            {
+              data.sku?data.sku.map((val,i)=>{
+                return ( 
+                  <Text 
+                  onPress={()=>{
+                    this.setState({
+                      oncheck:i
+                    },()=>{
+                      courseStore.selectItem(val);
+                    })
+                  }}
+                  key={i}
+                  style={[mainStyle.fs12,mainStyle.mab10,styles.goodsBtn,oncheck==i?styles.goodsCheck:styles.goodsNo]}>
+                    {val.sku_name}
+                  </Text>
+                )
+              })
+              :null
+            }
+            </View>
+          </ScrollView>
+        </View>
       </View>
     )
   }
@@ -127,8 +125,6 @@ const styles = StyleSheet.create({
 })
 
 export {
-  CartInfoDetails,
   CartInfo
 }
-
 

@@ -14,34 +14,31 @@ interface Props {
 }
 
 interface State {
-  onselect:false
+  
 }
 
 export default class BxRadio extends React.Component<Props,State>{
 
   constructor(props:Props,state:State){
     super(props);
-    this.state = {
-      onselect:false
+  }
+
+
+  handleOnChange(){
+    let {onChange,data,checked} = this.props;
+    if(onChange){
+      onChange({checked,data});
     }
   }
 
-  handleOnChange(selected:boolean){
-    let {onChange,data} = this.props;
-    this.setState({
-      onselect:selected
-    })
-    if(onChange){
-      onChange({selected,data});
-    }
-  }
   render(){
-    let {size,color} = this.props;
-    let {onselect} = this.state;
-    if(onselect){
+    let {size,color,checked} = this.props;
+    if(checked){
       return (
-        <TouchableOpacity onPress={()=>{
-          this.handleOnChange(!onselect)
+        <TouchableOpacity 
+        style={[styles.tapview]}
+        onPress={()=>{
+          this.handleOnChange()
         }}>
           <Text style={[
             mainStyle.icon,
@@ -55,8 +52,10 @@ export default class BxRadio extends React.Component<Props,State>{
       )
     }else{
       return (
-        <TouchableOpacity onPress={()=>{
-          this.handleOnChange(!onselect)
+        <TouchableOpacity 
+        style={[styles.tapview]}
+        onPress={()=>{
+          this.handleOnChange()
         }}>
           <Text style={[
             mainStyle.icon,
@@ -74,6 +73,9 @@ export default class BxRadio extends React.Component<Props,State>{
 }
 
 const styles = StyleSheet.create({
+  tapview:{
+    padding:setSize(10)
+  },
   selectTap:{
     borderRadius:setSize(40),
     padding:setSize(1)

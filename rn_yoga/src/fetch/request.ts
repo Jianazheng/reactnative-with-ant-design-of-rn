@@ -35,7 +35,7 @@ export class Fetch{
     return new Promise((resolve,reject)=>{
       fetch(reqUrl,reqOption)
       .then(async (response) => {
-        //console.log(response)
+        //console.log(await response.text())
         if(response.status==200||response.status==400){
           return {data:await response.json(),status:response.status}
         }else{

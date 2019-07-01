@@ -20,7 +20,7 @@ interface CartInfoState {
   oncheck:number
 }
 
-@inject('goodsStore')
+@inject('goodsStore','cartStore')
 @observer
 class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
   constructor(props:CartInfoProps,state:CartInfoState){
@@ -28,6 +28,19 @@ class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
     this.state = {
       oncheck:0
     }
+  }
+
+  componentDidMount(){
+    let {data,goodsStore,cartStore} = this.props;
+    if(data.sku&&data.sku.length>0){
+      this.handleSelectItem(data.sku[0])
+    }
+  }
+
+  handleSelectItem(val:object){
+    let {data,goodsStore,cartStore} = this.props;
+    goodsStore.selectItem(val);
+    cartStore.selectItem({type:1,good_id:data.id,sku_id:val.id});
   }
 
   render (){
@@ -85,7 +98,7 @@ class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
                     this.setState({
                       oncheck:i
                     },()=>{
-                      goodsStore.selectItem(val);
+                      this.handleSelectItem(val);
                     })
                   }}
                   key={i}
@@ -127,7 +140,6 @@ const styles = StyleSheet.create({
 })
 
 export {
-  CartInfoDetails,
   CartInfo
 }
 

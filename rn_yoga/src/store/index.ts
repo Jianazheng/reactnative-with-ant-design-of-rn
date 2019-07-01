@@ -3,6 +3,8 @@ import userStore from './modules/userStore';
 import courseStore from './modules/courseStore';
 import homeStore from './modules/homeStore';
 import goodsStore from './modules/goodsStore';
+import trainStore from './modules/trainStore';
+import cartStore from './modules/cartStore';
 
 
 export default {
@@ -10,5 +12,7 @@ export default {
   publicStore,
   courseStore,
   homeStore,
-  goodsStore
+  goodsStore,
+  trainStore,
+  cartStore
 }

@@ -22,7 +22,7 @@ interface State {
   showCartInfoDetails:boolean
 }
 
-@inject('goodsStore')
+@inject('goodsStore','cartStore')
 @observer
 class GoodsInfo extends React.Component<Props,State> {
   static navigationOptions = {
@@ -59,14 +59,25 @@ class GoodsInfo extends React.Component<Props,State> {
     }
   }
 
-  handleCloseCartInfoDetails(isok:boolean){
+  handleCloseCartInfoDetails(isok:boolean,fastbuy:boolean){
     let {showCartInfoDetails} = this.state;
+    let {cartStore,navigation} = this.props;
     if(!showCartInfoDetails){
       this.setState({
         showCartInfoDetails:isok
       })
     }else{
-      this.props.navigation.push('Settlement',{type:'pay'});
+      if(fastbuy){
+        cartStore.createCart()
+        .then(res=>{
+          navigation.push('Settlement',{type:'pay'})
+        })
+      }else{
+        cartStore.createCart()
+        .then(res=>{
+          cartStore.addCart()
+        })
+      }
     }
   }
 
@@ -78,7 +89,7 @@ class GoodsInfo extends React.Component<Props,State> {
 
   render(){
     let {canScroll,showCartInfoDetails} = this.state;
-    let {goodsStore} = this.props;
+    let {goodsStore,navigation} = this.props;
     let goodsInfo = goodsStore.goodsInfo
     return (
       <View style={[mainStyle.column,mainStyle.flex1]}>
@@ -88,6 +99,17 @@ class GoodsInfo extends React.Component<Props,State> {
         onPress={()=>{
           this.props.navigation.goBack();
         }}
+        children={(
+          <View style={[mainStyle.column,mainStyle.aiEnd,mainStyle.mar15,mainStyle.flex1]}>
+            <TouchableOpacity onPress={()=>{
+              navigation.push('CartList')
+            }}
+            >
+              <Text style={[mainStyle.icon,{paddingRight:0},mainStyle.fs22,mainStyle.c666]} 
+              >&#xe60a;</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         ></NavTop>
         <ScrollView
         style={[mainStyle.flex1]}
@@ -116,7 +138,7 @@ class GoodsInfo extends React.Component<Props,State> {
             </View>
             <View style={[mainStyle.column]}>
               <View style={[mainStyle.column]}>
-                <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+                <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true,false)}}>
                   <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100]}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.flex1]}>
                       <Text style={[mainStyle.c999,mainStyle.fs15,mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
@@ -172,7 +194,7 @@ class GoodsInfo extends React.Component<Props,State> {
             </TouchableOpacity>
           </View>
           <View style={[styles.fixedbtn,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.flex1]}>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true,false)}}>
               <LinearGradient 
               colors={['#FF8604','#FF5100']} 
               start={{ x: 1, y: 1 }}
@@ -181,7 +203,7 @@ class GoodsInfo extends React.Component<Props,State> {
                 <Text style={[mainStyle.cfff,mainStyle.fs15]}>加入购物车</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{this.handleCloseCartInfoDetails(true,true)}}>
               <LinearGradient 
               colors={['#FA5439','#FA3352']} 
               start={{ x: 1, y: 1 }}

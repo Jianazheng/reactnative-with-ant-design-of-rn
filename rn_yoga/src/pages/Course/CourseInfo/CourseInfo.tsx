@@ -13,7 +13,11 @@ import CourseArtInfo from './CourseArtInfo';
 import ApplyNotice from './ApplyNotice';
 import { CartInfo, CartInfoDetails } from './CartInfo';
 import NavTop from '../../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
+/**
+ * 培训课程详情
+ */
 
 let { width, height } = Dimensions.get('window')
 
@@ -25,6 +29,9 @@ interface State {
   showApplyNotice:boolean,
   showCartInfoDetails:boolean
 }
+
+@inject('trainStore')
+@observer
 class CourseInfo extends React.Component<Props,State> {
   static navigationOptions = {
     // headerTitle:headerTitle('课程详情'),
@@ -54,7 +61,10 @@ class CourseInfo extends React.Component<Props,State> {
   }
 
   componentDidMount(){
-    console.warn('点击dismiss')
+    let {navigation,trainStore} = this.props;
+    let {params} = navigation.state;
+    console.log(params)
+    trainStore.getTrainInfo(params.id);
   }
 
   goto(){
@@ -87,8 +97,17 @@ class CourseInfo extends React.Component<Props,State> {
     }
   }
 
+  handleCloseCart(){
+    this.setState({
+      showCartInfoDetails:false
+    })
+  }
+
   render(){
     let {canScroll,courseData,showApplyNotice,showCartInfoDetails} = this.state;
+    let {trainStore} = this.props;
+    let trainInfo = trainStore.trainInfo;
+    console.log(trainInfo)
     return (
       <View style={[mainStyle.column,mainStyle.flex1]}>
         <NavTop
@@ -104,24 +123,33 @@ class CourseInfo extends React.Component<Props,State> {
           this.handleScroll(e);
         }}
         >
-          <HomeSwiper fullWidth></HomeSwiper>
+          <HomeSwiper fullWidth img={[]}></HomeSwiper>
           <View style={[mainStyle.pa15,mainStyle.column]}>
-            <View style={[mainStyle.row,mainStyle.mab10]}>
-              <Taps>已报名</Taps>
-              <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.lh44]}>
-                <Text style={[styles.span]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-                脉轮与胜王瑜伽初级
-              </Text>
-            </View>
+            {
+              trainInfo.is_apply?
+              <View style={[mainStyle.row,mainStyle.mab10]}>
+                <Taps>已报名</Taps>
+                <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.lh44]}>
+                  <Text style={[styles.span]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+                  {trainInfo.train_introduction}
+                </Text>
+              </View>
+              :
+              <View style={[mainStyle.row,mainStyle.mab10]}>
+                <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.lh44]}>
+                  {trainInfo.train_introduction}
+                </Text>
+              </View>
+            }
             <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab10]}>
-              <Text style={[mainStyle.c999,mainStyle.fs13]}>活动时间: 2019年6月10-15日</Text>
-              <Text style={[mainStyle.c999,mainStyle.fs13]}>12人报名</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs13]}>活动时间: {trainInfo.train_start_time}至{trainInfo.train_end_time}</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
             </View>
             <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab20,mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt,mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>1000-5800</Text>
+                ￥<Text style={[mainStyle.fs22]}>{trainInfo.course_price}</Text>
               </Text>
-              <Text style={[mainStyle.c999,mainStyle.fs13]}>截止报名日期: 2019年6月10日</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs13]}>截止报名日期: {trainInfo.reg_end_time}</Text>
             </View>
             <View style={[mainStyle.column,mainStyle.mab10]}>
               <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.mab20]}>特惠活动</Text>
@@ -216,22 +244,23 @@ class CourseInfo extends React.Component<Props,State> {
         :null}
 
         {showCartInfoDetails?
-        <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15,
-          {
-            height:screenH*0.55
-          }
-        ]}>
-          <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiStart]}>
-            <CartInfoDetails data={{}}></CartInfoDetails>
-            <Text 
-            style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}
-            onPress={()=>{this.handleCloseCartInfoDetails(false)}}
-            >&#xe651;</Text>
+          <View style={[styles.fixedinfo,mainStyle.bgcfff,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15,
+            {
+              height:screenH*0.55
+            }
+          ]}>
+            <CartInfo 
+              data={courseInfo}
+              closeBtn={
+                <Text 
+                style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}
+                onPress={()=>{this.handleCloseCart()}}
+                >
+                  &#xe651;
+                </Text>
+              }
+            ></CartInfo>
           </View>
-          <View style={[mainStyle.flex1]}>
-            <CartInfo data={courseData}></CartInfo>
-          </View>
-        </View>
         :null}
 
         {
