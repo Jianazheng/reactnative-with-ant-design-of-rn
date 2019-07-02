@@ -20,6 +20,10 @@ class Course {
       chapter:[],
       teach_level:[]
     },
+    onlineCourseStudy:{
+      url:'',
+      chapter:[]
+    },
     keyword:'',
     category_id:'',
     orderby:{str:'默认排序',info:''},
@@ -45,6 +49,10 @@ class Course {
 
   @computed get onlineCourseInfo(){
     return this.courseData.onlineCourseInfo
+  }
+
+  @computed get onlineCourseStudy(){
+    return this.courseData.onlineCourseStudy
   }
 
   @computed get classify(){
@@ -190,6 +198,17 @@ class Course {
       let response = await new Fetch('/online/mycourse/detail','GET',{id},{})
       let onlineCourseInfo = response.data
       this.courseData.onlineCourseInfo = onlineCourseInfo
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getOnlineCourseStudy(id:string|number,course_id:string|number,summary_id:string|number){
+    try {
+      let response = await new Fetch('/online/mycourse/enter_study','GET',{id,course_id,summary_id},{})
+      let onlineCourseStudy = response.data
+      this.courseData.onlineCourseStudy = onlineCourseStudy
       return response
     } catch (error) {
       return null

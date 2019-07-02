@@ -1,18 +1,19 @@
 import React from 'react';
 import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image,Animated } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
-import { Checkbox } from '@ant-design/react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { ActivityIndicator } from '@ant-design/react-native';
 import { CourseListItem } from '../../components/Course/CourseItem';
-import NavTop from '../../router/navTop';
 import { CourseTeacherItem2 } from '../../components/Course/TeacherItem';
 import BxButton from '../../components/Pubilc/Button';
 import Video from 'react-native-video';
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 
 let imgw = (screenW-setSize(120))*0.28;
 
+@inject('courseStore')
+@observer
 class OnlineCourseInfo extends React.Component<Props> {
   static navigationOptions = {
     header:null
@@ -21,8 +22,10 @@ class OnlineCourseInfo extends React.Component<Props> {
   constructor(props:Props) {
     super(props);
     this.state = {
-      arr: [{},{},{},{},{},{}],
-      checkbox:[{title:'座位',checked:true},{title:'餐点',checked:false},{title:'酒店',checked:false},{title:'大巴',checked:false}],
+      id:'',
+      course_id:'',
+      summary_id:'',
+      loading:true,
       scrollTop:new Animated.Value(0),
       scrollTopNum:0,
       hidefixedTop:new Animated.Value(0),
@@ -30,17 +33,23 @@ class OnlineCourseInfo extends React.Component<Props> {
     };
   }
 
-  goto(routeName:string,params:any){
-    this.props.navigation.navigate(routeName,params);
+  componentDidMount(){
+    let {navigation,courseStore} = this.props
+    let {params} = navigation.state
+    courseStore.getOnlineCourseStudy(params.id,params.course_id,params.summary_id)
+    .then(res=>{
+      this.setState({
+        id:params.id,
+        course_id:params.course_id,
+        summary_id:params.summary_id,
+        loading:false
+      })
+    })
+    console.log(params)
   }
 
-  selectService(index:number){
-    let {checkbox} = this.state;
-    let newReason = checkbox;
-    newReason[index].checked = !newReason[index].checked;
-    this.setState({
-      checkbox:newReason,
-    })
+  goto(routeName:string,params:any){
+    this.props.navigation.navigate(routeName,params);
   }
 
   handleFixedTop(e:number,tohide:boolean){
@@ -76,9 +85,9 @@ class OnlineCourseInfo extends React.Component<Props> {
   }
 
   render(){
-    let {arr,checkbox,scrollTop,hidefixedTop,showfixedTop} = this.state;
-    let {navigation} = this.props;
-    console.log(hidefixedTop)
+    let {loading,hidefixedTop,showfixedTop,id,course_id,summary_id} = this.state
+    let {navigation,courseStore} = this.props
+    let onlineCourseStudy = courseStore.onlineCourseStudy
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <Animated.View 
@@ -114,80 +123,114 @@ class OnlineCourseInfo extends React.Component<Props> {
         }}
         >
           <View style={[mainStyle.flex1]}>
-            {/** 视频播放 */}
+            {/** 视频播放start */}
             <View style={[styles.videoVertical,mainStyle.bgc000,mainStyle.positonre]}>
-              <Video 
-              style={[styles.videoVertical]} 
-              source={{uri:'http://tb-video.bdstatic.com/tieba-smallvideo-transcode-crf/2305668_8b4f5e9b97b0df169b82ad5d7fa3b180_1.mp4'}}
-              resizeMode={'contain'}
-              ></Video>
-              
+              {
+                onlineCourseStudy.url!=''
+                ?<Video 
+                style={[styles.videoVertical]} 
+                source={{uri:onlineCourseStudy.url}}
+                resizeMode={'contain'}
+                ></Video>
+                :null
+              } 
             </View>
-            {/** 视频播放 */}
+            {/** 视频播放end */}
             <View style={[mainStyle.flex1,{marginBottom:setSize(150)}]}>
-              <View style={[mainStyle.column,mainStyle.mat15,mainStyle.bgcfff]}>
-                <View style={[mainStyle.column,mainStyle.brb1f2]}>
-                  <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
-                    <Text style={[mainStyle.fs13,mainStyle.c333]}>1、课程介绍</Text>
+              {
+                onlineCourseStudy.chapter.length>0
+                ?onlineCourseStudy.chapter.map((val,i)=>(
+                  <View key={i} style={[mainStyle.column,mainStyle.flex1,mainStyle.mat15,mainStyle.bgcfff]}>
+                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,mainStyle.brb1f2]}>
+                      <Text style={[mainStyle.fs12,mainStyle.c333]}>{i+1}、{val.chapter_name}</Text>
+                    </View>
+                    <View style={[mainStyle.column]}>
+                      {
+                        val.summary.constructor==Array?
+                        val.summary.length>0?
+                        val.summary.map((item,ci)=>(
+                          <Summary 
+                          navigation={navigation} 
+                          ids={{id,course_id}}
+                          oncheckid={summary_id}
+                          item={item} 
+                          key={ci}
+                          ></Summary>
+                        ))
+                        :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+                        :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+                      }
+                    </View>
                   </View>
-                </View>
-                <View style={[mainStyle.column,mainStyle.flex1]}>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mal30]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mal5]}>对中医的理论理解</Text>
-                        <Text style={[styles.oncloseTap]}>已学完</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28,mainStyle.mar10]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mal30]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28,mainStyle.mar10]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={[mainStyle.column,mainStyle.mat15,mainStyle.bgcfff]}>
-                <View style={[mainStyle.column,mainStyle.brb1f2]}>
-                  <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
-                    <Text style={[mainStyle.fs13,mainStyle.c333]}>2、动作教学</Text>
-                  </View>
-                </View>
-                <View style={[mainStyle.column,mainStyle.flex1]}>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,styles.oncheck]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mal30]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c8d0,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c8d0,mainStyle.fs28,mainStyle.mar10]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mal30]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28,mainStyle.mar10]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
+                ))
+                :
+                <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+              }
             </View>
           </View>
         </ScrollView>
+        <ActivityIndicator
+          animating={loading}
+          toast
+          size="large"
+          text="加载中..."
+        />
       </View>
     )
   }
 }
 
+interface SummaryProps {
+  item:object,
+  ids:object,
+  oncheckid:string,
+  navigation:object
+}
+
+class Summary extends React.PureComponent<SummaryProps>{
+
+  constructor(props:SummaryProps){
+    super(props)
+  }
+
+  goto(routeName:string,params:any){
+    this.props.navigation.replace(routeName,params);
+  }
+
+  render(){
+    let {item,ids,oncheckid} = this.props
+    return (
+      <TouchableOpacity onPress={()=>{
+        this.goto('OnlineCourseInfo',{summary_id:item.id,...ids})
+      }}>
+        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,item.id==oncheckid?styles.oncheck:mainStyle.brb1f2]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter]}>
+            <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+
+              {item.type=='pdf'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='ppt'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='video'?<Image source={require('../../../images/video.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='audio'?<Image source={require('../../../images/audio.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='doc'?<Image source={require('../../../images/doc.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='word'?<Image source={require('../../../images/word.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='pic'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+
+              <Text style={[mainStyle.fs12,item.isread!=1||item.id==oncheckid?mainStyle.c333:mainStyle.c999,mainStyle.mal5]}>{item.summary_name}</Text>
+            </View>
+            {
+              item.isread==1
+              ?<View style={[mainStyle.mal15]}>
+                <Text style={[styles.isread,mainStyle.bgcf6e,mainStyle.c8d0,mainStyle.fs10]}>已学完</Text>
+              </View>
+              :null
+            }
+          </View>
+          <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
   oncheck:{
@@ -226,6 +269,21 @@ const styles = StyleSheet.create({
     top:0,
     left:0,
     zIndex:100
+  },
+  isread:{
+    height:setSize(34),
+    lineHeight:setSize(31),
+    borderRadius:setSize(36),
+    paddingLeft:setSize(12),
+    paddingRight:setSize(12),
+    paddingTop:setSize(1),
+    paddingBottom:setSize(1),
+    borderWidth:setSize(1),
+    borderColor:mainStyle.c8d0.color
+  },
+  summaryImg:{
+    height:setSize(40),
+    width:setSize(40)
   }
 })
 

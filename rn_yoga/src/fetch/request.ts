@@ -49,7 +49,7 @@ export class Fetch{
             resolve(response.data);
             break;
           case 401:
-            Toast.info('验证失败，请重新登录')
+            Toast.info('验证失败，请重新登录',1.4,undefined,true)
             userStore.removeToken()
             RNStorage.remove({key:'token'}).then(ress=>{
               DeviceEventEmitter.emit('TOLOGIN','yes');

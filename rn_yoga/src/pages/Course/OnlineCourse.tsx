@@ -38,8 +38,6 @@ class OnlineCourse extends React.Component<Props> {
         loading:false
       })
     })
-
-    console.log(params)
   }
 
   goto(routeName:string,params:any){
@@ -94,7 +92,7 @@ class OnlineCourse extends React.Component<Props> {
                   borderRadius={setSize(60)}
                   btnstyle={[{width:screenW-setSize(120),height:setSize(70)},mainStyle.mat10]}
                   onClick={()=>{
-                    this.goto('OnlineCourseInfo',{id:onlineCourseInfo.course_id})
+                    this.goto('OnlineCourseInfo',{id:onlineCourseInfo.course_id,course_id:onlineCourseInfo.course_id,summary_id:''})
                   }}
                   ></BxButton>      
                 </View>        
@@ -117,7 +115,12 @@ class OnlineCourse extends React.Component<Props> {
                           val.summary.constructor==Array?
                           val.summary.length>0?
                           val.summary.map((item,ci)=>(
-                            <Summary navigation={navigation} item={item} key={ci}></Summary>
+                            <Summary 
+                            navigation={navigation} 
+                            ids={{id:onlineCourseInfo.id,course_id:onlineCourseInfo.course_id}} 
+                            item={item} 
+                            key={ci}
+                            ></Summary>
                           ))
                           :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
                           :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
@@ -165,28 +168,44 @@ class OnlineCourse extends React.Component<Props> {
 
 interface SummaryProps {
   item:object,
+  ids:object,
   navigation:object
 }
+
 class Summary extends React.PureComponent<SummaryProps>{
 
   constructor(props:SummaryProps){
     super(props)
   }
 
+  goto(routeName:string,params:any){
+    this.props.navigation.navigate(routeName,params);
+  }
+
   render(){
-    let {item,navigation} = this.props
+    let {item,ids} = this.props
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>{
+        this.goto('OnlineCourseInfo',{summary_id:item.id,...ids})
+      }}>
         <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
             <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-              <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-              <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>{item.summary_name}</Text>
+
+              {item.type=='pdf'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='ppt'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='video'?<Image source={require('../../../images/video.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='audio'?<Image source={require('../../../images/audio.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='doc'?<Image source={require('../../../images/doc.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='word'?<Image source={require('../../../images/word.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='pic'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+
+              <Text style={[mainStyle.fs12,item.isread==1?mainStyle.c999:mainStyle.c333,mainStyle.mal5]}>{item.summary_name}</Text>
             </View>
             {
               item.isread==1
               ?<View style={[mainStyle.mal15]}>
-                <Text style={[styles.isread,mainStyle.bgcf6e,mainStyle.c8d0,mainStyle.fs11]}>已学完</Text>
+                <Text style={[styles.isread,mainStyle.bgcf6e,mainStyle.c8d0,mainStyle.fs10]}>已学完</Text>
               </View>
               :null
             }
@@ -200,8 +219,8 @@ class Summary extends React.PureComponent<SummaryProps>{
 
 const styles = StyleSheet.create({
   isread:{
-    height:setSize(36),
-    lineHeight:setSize(34),
+    height:setSize(34),
+    lineHeight:setSize(31),
     borderRadius:setSize(36),
     paddingLeft:setSize(12),
     paddingRight:setSize(12),
@@ -209,6 +228,10 @@ const styles = StyleSheet.create({
     paddingBottom:setSize(1),
     borderWidth:setSize(1),
     borderColor:mainStyle.c8d0.color
+  },
+  summaryImg:{
+    height:setSize(40),
+    width:setSize(40)
   }
 })
 

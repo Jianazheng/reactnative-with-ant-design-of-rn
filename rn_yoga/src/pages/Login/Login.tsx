@@ -46,12 +46,12 @@ class Login extends React.Component<Props,State> {
     let {userStore,navigation} = this.props;
     let {mobile,password} = this.state;
     if(mobile==''||password==''){
-      Toast.info('请输入登录信息',1.8);
+      Toast.info('请输入登录信息',1.4);
       return false
     }
     let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
     if(response!=null){
-      Toast.info(response.msg,2);
+      Toast.info(response.message,1.4,undefined,false);
       userStore.GetUserInfo().then(res=>{});
       navigation.goBack();
     }
