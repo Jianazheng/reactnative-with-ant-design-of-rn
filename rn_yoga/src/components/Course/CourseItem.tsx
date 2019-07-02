@@ -106,7 +106,7 @@ class CourseApplyNotice extends PureComponent<CourseInfoItemProps>{
 interface CourseListItemProps {
   data:object,
   type:'outline'|'online',
-  navigation:any
+  navigation:object|undefined
 }
 
 let imgw = (screenW-setSize(120))*0.28;
@@ -121,21 +121,21 @@ class CourseListItem extends React.Component<CourseListItemProps>{
   }
 
   render(){
-    let {type} = this.props;
+    let {type,data,navigation} = this.props;
     return (
       <View style={[mainStyle.row,mainStyle.pal15,mainStyle.patb15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brb1f2,mainStyle.bgcfff]}>
         <TouchableOpacity style={[mainStyle.flex1]} 
         onPress={()=>{
-          this.goto('OnlineCourse',{})
+          if(navigation)this.goto('OnlineCourse',{id:data.id})
         }}>
           <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brr1f2]}>
             <Image
-            style={[{width:imgw,height:imgw*0.7,borderRadius:setSize(6)}]}
+            style={[{width:imgw,height:imgw*0.7,borderRadius:setSize(6)},mainStyle.bgcf2]}
             mode="widthFix" 
-            source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}>
+            source={{uri:'http://'+data.img}}>
             </Image>
             <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15]}>
-              <Text style={[mainStyle.fs13,mainStyle.c333]}>高阶体式提升计划</Text>
+              <Text style={[mainStyle.fs13,mainStyle.c333]}>{data.course_name}</Text>
               <View style={[mainStyle.row,mainStyle.mat5,mainStyle.mab5]}>
                 <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,
                   {
@@ -145,9 +145,9 @@ class CourseListItem extends React.Component<CourseListItemProps>{
                     paddingTop:setSize(1),
                     paddingBottom:setSize(1)
                   }
-                ]}>6课时</Text>
+                ]}>{data.lesson}课时</Text>
               </View>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>2019.06.01-06.30</Text>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>{data.create_time}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -160,7 +160,7 @@ class CourseListItem extends React.Component<CourseListItemProps>{
           </TouchableOpacity>
           :<TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,{width:imgw*0.8}]}>
             <View>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>已学60%</Text>
+              <Text style={[mainStyle.fs12,mainStyle.c999]}>已学{data.rate}</Text>
             </View>
           </TouchableOpacity>
         }

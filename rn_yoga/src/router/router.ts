@@ -15,14 +15,14 @@ import MyOrder from '../pages/Order/MyOrder';
 import MyCollect from './../pages/Mine/MyCollect';
 import RefundReason from './../pages/Order/RefundReason';
 import ApplyRefund from './../pages/Order/ApplyRefund';
-import CourseList from './../pages/Course/CourseList';
+import CourseList from './../pages/Course/MyCourseList';
 import OutlineCourse from './../pages/Course/OutlineCourse';
 import OutlineCourseReserve from './../pages/Course/OutlineCourseReserve';
 import OnlineCourse from './../pages/Course/OnlineCourse';
 import OnlineCourseInfo from './../pages/Course/OnlineCourseInfo';
 import MyCertificate from './../pages/Mine/MyCertificate';
-import ClassifyList from './../pages/Explore/ClassifyList';
-import OnlineCourseList from '../pages/Explore/OnlineCourseList';
+import ClassifyList from './../pages/Home/ClassifyList';
+import OnlineCourseList from '../pages/Course/OnlineCourseList';
 import GoodsInfo from './../pages/Goods/GoodsInfo/GoodsInfo';
 
 
@@ -61,7 +61,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'Tab',
+  initialRouteName: 'Login',
   headerMode: 'float',
   navigationOptions:{
     header:null,

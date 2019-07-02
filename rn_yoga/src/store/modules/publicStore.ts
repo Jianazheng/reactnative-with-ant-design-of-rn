@@ -11,7 +11,7 @@ class Public {
     try {
       let params = {common_id,type}
       let response = new Fetch(isCollect?'/user/collection':'/user/cancel_collection','POST',params,{})
-      Toast.info(response.msg,1.2,undefined,false)
+      Toast.info(response.message,1.2,undefined,false)
       return response
     } catch (error) {
       return null

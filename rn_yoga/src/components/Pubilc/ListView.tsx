@@ -2,11 +2,18 @@
 import React from 'react';
 import { StyleSheet,FlatList,View,Text } from 'react-native';
 import { mainStyle, setSize,screenW } from '../../public/style/style';
+import { ActivityIndicator } from '@ant-design/react-native';
 
 /**
  * description 列表组件
- * nomore 不触发上拉加载 
+ * nomore 不触发上拉加载 true:没有更多 false:配合loading上拉加载
+ * loading true加载中，false:没了
  * onLoadmore 上拉加载方法
+ * listData 展示的数据，数组形式
+ * listItem 数据的载体组件
+ * colNumber 一行显示组件数
+ * pab 滚动视图的下边距
+ * pat 滚动视图的上边距
  */
 
 interface Props {
@@ -17,7 +24,7 @@ interface Props {
   nomore:boolean,
   loading:boolean,
   pab:number,
-  pat:number
+  pat:number,
 }
 
 interface State {
@@ -49,25 +56,27 @@ export default class BxListView extends React.Component<Props,State>{
       return (
         <View style={[{height:pab}]}></View>
       );
-    }
-    if(!loading){
-      return (
-        <View style={[mainStyle.column]}>
-          <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.c999,mainStyle.fs14]}>更多</Text>
-          </View>
-          <View style={[{height:pab}]}></View>
-        </View>
-      );
     }else{
-      return (
-        <View style={[mainStyle.column]}>
-          <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.c999,mainStyle.fs14]}>加载中</Text>
+      if(!loading){
+        return (
+          <View style={[mainStyle.column,mainStyle.mat10]}>
+            <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c999,mainStyle.fs14]}>没有了</Text>
+            </View>
+            <View style={[{height:pab}]}></View>
           </View>
-          <View style={[{height:pab}]}></View>
-        </View>
-      );
+        );
+      }else{
+        return (
+          <View style={[mainStyle.column,mainStyle.mat10]}>
+            <View style={[mainStyle.row,mainStyle.patb10,mainStyle.jcCenter,mainStyle.aiCenter]}>
+              <ActivityIndicator color={mainStyle.c666.color}></ActivityIndicator>
+              <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.mal10]}>加载中</Text>
+            </View>
+            <View style={[{height:pab}]}></View>
+          </View>
+        );
+      }
     }
   }
 

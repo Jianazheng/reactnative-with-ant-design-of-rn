@@ -59,7 +59,8 @@ class Login extends React.Component<Props,State> {
   }
 
   render(){
-    let {mobile,password,clicking} = this.state;
+    let {mobile,password,clicking} = this.state
+    let {userStore} = this.props
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -128,6 +129,16 @@ class Login extends React.Component<Props,State> {
                 btnstyle={[mainStyle.bgcfff]}
                 onClick={()=>{
                   this.props.navigation.navigate('Register')
+                }}></BxButton>
+              </View>
+              <View style={[mainStyle.mat20,mainStyle.palr15]}>
+                <BxButton
+                color={mainStyle.cjin.color}
+                plain
+                title="微信授权登录" 
+                btnstyle={[mainStyle.bgcfff]}
+                onClick={()=>{
+                  userStore.WxLogin()
                 }}></BxButton>
               </View>
             </View>

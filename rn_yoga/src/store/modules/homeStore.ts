@@ -51,7 +51,7 @@ class Home {
 
   @action async getBanner(){
     try {
-      let response = await new Fetch('/banner/list','GET',{},{});
+      let response = await new Fetch('/banner/list','GET',{type:2},{});
       let banner = response.data;
       this.homeData.banner = banner;
       return response

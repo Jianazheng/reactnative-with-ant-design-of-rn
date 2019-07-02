@@ -79,14 +79,10 @@ class CartInfo extends React.Component<CartInfoProps,CartInfoState>{
               data.sku?data.sku.map((val,i)=>{
                 return ( 
                   <Text 
-                  onPress={()=>{
-                    this.setState({
-                      oncheck:i
-                    },()=>{
-                      courseStore.selectItem(val);
-                    })
-                  }}
                   key={i}
+                  onPress={()=>{
+                    this.setState({oncheck:i},()=>{courseStore.selectItem(val)})
+                  }}
                   style={[mainStyle.fs12,mainStyle.mab10,styles.goodsBtn,oncheck==i?styles.goodsCheck:styles.goodsNo]}>
                     {val.sku_name}
                   </Text>

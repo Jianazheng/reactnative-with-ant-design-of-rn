@@ -7,7 +7,7 @@ import { observer, inject } from 'mobx-react';
 
 interface Props {}
 
-@inject('courseStore')
+@inject('trainStore')
 @observer
 class ClassifyList extends React.Component<Props> {
   static navigationOptions = {
@@ -23,8 +23,8 @@ class ClassifyList extends React.Component<Props> {
   }
 
   componentDidMount(){
-    let {courseStore} = this.props;
-    courseStore.getClassify();
+    let {trainStore} = this.props;
+    trainStore.getClassify();
   }
 
   goto(routeName:string,params:any){
@@ -33,14 +33,11 @@ class ClassifyList extends React.Component<Props> {
 
 
   handleLeftItemSelect(index:number){
-    let {arr} = this.state;
+    let {trainStore} = this.props;
     this.setState(()=>{
-      let newarr = arr;
-      newarr.map((val,i)=>{
-        val.checked = i==index?true:false
-      })
+      trainStore.classifySelect(index)
       return {
-        arr:newarr
+        current:index
       }
     })
   }
@@ -70,9 +67,8 @@ class ClassifyList extends React.Component<Props> {
   }
 
   render(){
-    let {arr,current} = this.state;
-    let {navigation,courseStore} = this.props;
-    console.log(courseStore.classify)
+    let {current} = this.state;
+    let {navigation,trainStore} = this.props;
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <NavTop
@@ -90,7 +86,7 @@ class ClassifyList extends React.Component<Props> {
             >
               <View style={[mainStyle.flex1,mainStyle.column]}>
                 {
-                  courseStore.classify.map((val,i)=>
+                  trainStore.classify.map((val,i)=>
                     this.leftListItem(val.checked,i,val)
                   )
                 }
@@ -103,8 +99,8 @@ class ClassifyList extends React.Component<Props> {
             style={[mainStyle.flex1]}
             >
               {
-                courseStore.classify[current]?
-                courseStore.classify[current].child.map((val,i)=>
+                trainStore.classify[current]?
+                trainStore.classify[current].child.map((val,i)=>
                   <RightListItem key={i} navigation={navigation} item={val}></RightListItem>
                 )
                 :null

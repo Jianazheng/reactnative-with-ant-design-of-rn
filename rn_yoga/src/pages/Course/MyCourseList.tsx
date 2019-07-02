@@ -11,7 +11,7 @@ interface Props {}
 
 @inject('courseStore')
 @observer
-class CourseList extends React.Component<Props> {
+class MyCourseList extends React.Component<Props> {
   static navigationOptions = {
     header:null
   }
@@ -49,11 +49,14 @@ class CourseList extends React.Component<Props> {
           <BxListView
           pab={setSize(30)}
           pat={setSize(30)}
-          onLoadmore={()=>{}}
+          onLoadmore={()=>{
+            courseStore.getOnlineCourse()
+          }}
+          loading={onlineCourse.total==null||onlineCourse.total>onlineCourse.data.length}
           colNumber={1}
           listData={onlineCourse.data}
           listItem={({item,index})=>(
-            <CourseListItem data={item} navigation={navigation} type='online'></CourseListItem>
+            <CourseListItem key={index} data={item} navigation={navigation} type='online'></CourseListItem>
           )}
           ></BxListView>
         </View>
@@ -66,4 +69,4 @@ const styles = StyleSheet.create({
   
 })
 
-export default CourseList
+export default MyCourseList

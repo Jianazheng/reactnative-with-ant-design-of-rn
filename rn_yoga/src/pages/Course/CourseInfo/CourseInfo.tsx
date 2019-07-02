@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity,Animated } from 'react-native';
 import HomeSwiper from '../../../components/Home/Swiper';
 import {mainStyle, setSize,screenH, screenW} from '../../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,6 +14,7 @@ import ApplyNotice from './ApplyNotice';
 import { CartInfo, CartInfoDetails } from './CartInfo';
 import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import { splitStr } from '../../../tools/function';
 
 /**
  * 培训课程详情
@@ -27,10 +28,11 @@ interface State {
   tabTop:number,
   courseData:Array<object>,
   showApplyNotice:boolean,
-  showCartInfoDetails:boolean
+  showCartInfoDetails:boolean,
+  showPromotion:boolean
 }
 
-@inject('trainStore')
+@inject('trainStore','publicStore')
 @observer
 class CourseInfo extends React.Component<Props,State> {
   static navigationOptions = {
@@ -45,6 +47,7 @@ class CourseInfo extends React.Component<Props,State> {
       canScroll:false,
       showApplyNotice:false,
       showCartInfoDetails:false,
+      showPromotion:false,
       courseData:[
         {title:'高阶体式提升计划',time:'2019年6月1日-6月30日'},
         {title:'高阶体式提升计划',time:'2019年6月1日-6月30日'},
@@ -61,10 +64,13 @@ class CourseInfo extends React.Component<Props,State> {
   }
 
   componentDidMount(){
-    let {navigation,trainStore} = this.props;
-    let {params} = navigation.state;
+    let {navigation,trainStore} = this.props
+    let {params} = navigation.state
     console.log(params)
-    trainStore.getTrainInfo(params.id);
+    trainStore.getTrainInfo(params.id)
+    trainStore.getFrontInfo(params.id)
+    trainStore.getTrainPromotion(params.id)
+    trainStore.getTrainSelectItem(params.id)
   }
 
   goto(){
@@ -103,16 +109,36 @@ class CourseInfo extends React.Component<Props,State> {
     })
   }
 
+  handleCloseAll(){
+    this.setState({
+      showCartInfoDetails:false,
+      showApplyNotice:false
+    })
+  }
+
+  handleShowPromotion(){
+    let {showPromotion} = this.state
+    this.setState({
+      showPromotion:!showPromotion
+    })
+  }
+
+  handleCollection(common_id:string|number,type:string,isCollect:boolean){
+    let {publicStore} = this.props
+    publicStore.setCollection(common_id,type,isCollect)
+  }
+
   render(){
-    let {canScroll,courseData,showApplyNotice,showCartInfoDetails} = this.state;
-    let {trainStore} = this.props;
-    let trainInfo = trainStore.trainInfo;
-    console.log(trainInfo)
+    let {canScroll,courseData,showApplyNotice,showCartInfoDetails,showPromotion} = this.state
+    let {trainStore} = this.props
+    let trainInfo = trainStore.trainInfo
+    let promotionInfo = trainStore.promotionInfo
+    let frontInfo = trainStore.frontInfo
     return (
       <View style={[mainStyle.column,mainStyle.flex1]}>
         <NavTop
         navType="normal"
-        title="课程详情"
+        title="培训课程详情"
         onPress={()=>{
           this.props.navigation.goBack();
         }}
@@ -123,10 +149,10 @@ class CourseInfo extends React.Component<Props,State> {
           this.handleScroll(e);
         }}
         >
-          <HomeSwiper fullWidth img={[]}></HomeSwiper>
+          <HomeSwiper fullWidth img={trainInfo.image_url||[]}></HomeSwiper>
           <View style={[mainStyle.pa15,mainStyle.column]}>
             {
-              trainInfo.is_apply?
+              trainInfo.is_apply==1?
               <View style={[mainStyle.row,mainStyle.mab10]}>
                 <Taps>已报名</Taps>
                 <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.lh44]}>
@@ -142,7 +168,7 @@ class CourseInfo extends React.Component<Props,State> {
               </View>
             }
             <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab10]}>
-              <Text style={[mainStyle.c999,mainStyle.fs13]}>活动时间: {trainInfo.train_start_time}至{trainInfo.train_end_time}</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs13]}>活动时间: {splitStr(trainInfo.train_start_time,' ')}至{splitStr(trainInfo.train_end_time,' ')}</Text>
               <Text style={[mainStyle.c999,mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
             </View>
             <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab20,mainStyle.aiCenter]}>
@@ -151,17 +177,27 @@ class CourseInfo extends React.Component<Props,State> {
               </Text>
               <Text style={[mainStyle.c999,mainStyle.fs13]}>截止报名日期: {trainInfo.reg_end_time}</Text>
             </View>
-            <View style={[mainStyle.column,mainStyle.mab10]}>
+            <Animated.View style={[mainStyle.column,mainStyle.mab10,mainStyle.positonre,!showPromotion?{height:setSize(200),overflow:'hidden'}:{paddingBottom:setSize(60)}]}>
               <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.mab20]}>特惠活动</Text>
-              <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.lh42,mainStyle.mab10]}>
-              1、凡是在2019年6月10前报名者，特惠价为RMB2400元，
-              6月10日之后报名者，优惠价为RMB2700元。
-              </Text>
-              <Text style={[mainStyle.c666,mainStyle.fs14,mainStyle.lh42]}>
-              2、凡是参加过邱显峰老师举办的呼吸身印课或五大元素与
-              心灵转化瑜伽课学员，与6月10日前报名者，特惠价…
-              </Text>
-            </View>
+              {
+                promotionInfo.map((val,i)=>(
+                  <Text key={i} style={[mainStyle.c666,mainStyle.fs14,mainStyle.lh42]}>
+                    {val.content}
+                  </Text>
+                ))
+              }
+              <TouchableOpacity 
+              style={[mainStyle.flex1,mainStyle.h60,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.palr15,mainStyle.bgcfff,
+                {position:'absolute',bottom:0,width:screenW,opacity:0.8}]}
+              onPress={()=>{
+                this.handleShowPromotion()
+              }}  
+              >
+                {
+                  showPromotion?<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ed;</Text>:<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ec;</Text>
+                }
+              </TouchableOpacity>
+            </Animated.View>
             <View style={[mainStyle.column,mainStyle.mat30]}>
               <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
                 <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100]}>
@@ -203,8 +239,24 @@ class CourseInfo extends React.Component<Props,State> {
 
         </ScrollView>
 
-        <View style={[mainStyle.h120,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.fixedview,mainStyle.bgcfff,mainStyle.brt1e2]}>
-          <View style={[styles.fixedbtn,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
+        <View style={[mainStyle.h120,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.fixedview,mainStyle.bgcfff,mainStyle.brt1e2,mainStyle.palr15]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mar10,{width:screenW*0.24}]}>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{}}>
+              <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe610;</Text>
+                <Text style={[mainStyle.c333,mainStyle.fs12]}>咨询</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
+              this.handleCollection(goodsInfo.id,'3',true)
+            }}>
+              <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
+                <Text style={[mainStyle.c333,mainStyle.fs12]}>收藏</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.fixedbtn,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.flex1]}>
             <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
               <LinearGradient 
               colors={['#FF8604','#FF5100']} 
@@ -239,7 +291,7 @@ class CourseInfo extends React.Component<Props,State> {
             onPress={()=>{this.handleCloseApplyNotice(false)}}
             >&#xe651;</Text>
           </View>
-          <ApplyNotice data={courseData}></ApplyNotice>
+          <ApplyNotice data={frontInfo.detail||[]}></ApplyNotice>
         </View>
         :null}
 
@@ -250,7 +302,7 @@ class CourseInfo extends React.Component<Props,State> {
             }
           ]}>
             <CartInfo 
-              data={courseInfo}
+              data={[]}
               closeBtn={
                 <Text 
                 style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}
@@ -266,15 +318,15 @@ class CourseInfo extends React.Component<Props,State> {
         {
           showCartInfoDetails||showApplyNotice?
           <TouchableOpacity 
+          style={[
+            styles.fixedzz,
+            {
+              height:screenH
+            }
+          ]}
           onPress={()=>{
-  
+            this.handleCloseAll()
           }}>
-            <View style={[
-              styles.fixedzz,
-              {
-                height:screenH
-              }
-            ]}></View>
           </TouchableOpacity>
           :null
         }

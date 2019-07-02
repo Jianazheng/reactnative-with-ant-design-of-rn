@@ -57,3 +57,11 @@ export function randomCode(length:number) {
   }
   return num
 }
+
+export function splitStr(str:string,sp:string){
+  let newstr
+  if(typeof str == 'string'){
+    newstr = str.split(sp)[0]
+  }
+  return newstr
+}

@@ -57,7 +57,7 @@ export class Fetch{
             reject(response.data);
             break;
           case 400:
-            Toast.info(response.data.message)
+            Toast.info(response.data.message,1.8,undefined,false)
             reject(response.data);
             break;      
           case 500:

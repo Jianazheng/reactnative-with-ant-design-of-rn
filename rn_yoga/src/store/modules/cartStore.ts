@@ -110,7 +110,7 @@ class Cart {
       let {selectData} = this.cartData
       let params = {...selectData}
       let response = await new Fetch('/cart/add','POST',params,{})
-      Toast.info(response.msg,1.2,undefined,false)
+      Toast.info(response.message,1.2,undefined,false)
       return response
     } catch (error) {
       console.log(error)
@@ -124,7 +124,7 @@ class Cart {
       let params = {ids:ids}
       let response = await new Fetch('/cart/del','POST',params,{})
       ids = [];
-      Toast.info(response.msg,1.2,undefined,false)
+      Toast.info(response.message,1.2,undefined,false)
       return response
     } catch (error) {
       console.log(error)
@@ -136,7 +136,7 @@ class Cart {
     try {
       let params = {type}
       let response = await new Fetch('/cart/del_type','POST',params,{})
-      Toast.info(response.msg,1.2,undefined,false)
+      Toast.info(response.message,1.2,undefined,false)
       return response
     } catch (error) {
       console.log(error)

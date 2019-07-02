@@ -8,7 +8,7 @@ import * as Wechat from 'react-native-wechat';
 
 class User {
   constructor() {
-    
+    Wechat.registerApp('wxa66b688d8d2383df');
   }
   @observable userData = {
     token:'',
@@ -40,7 +40,7 @@ class User {
     return new Promise((resolve,reject)=>{
       let response = new Fetch('/login/mobile_reg','POST',params,{});
       response.then(res=>{
-        Toast.info(res.msg,2);
+        Toast.info(res.message,2);
         resolve(res);
       })
       .catch(err=>{
@@ -118,7 +118,7 @@ class User {
   }
 
   @action WxLogin(){
-    Wechat.registerApp('wxa66b688d8d2383df');
+    
     const scope = 'snsapi_userinfo';
     const state = '';
     Wechat.isWXAppInstalled()
@@ -127,6 +127,10 @@ class User {
         Wechat.sendAuthRequest(scope, state)
         .then(responseCode => {
           console.log(responseCode)
+          new Fetch('/login/wechat','POST',{code:responseCode.code},{})
+          .then(res=>{
+            console.log(res)
+          })
         })
         .catch(err => {
           console.log(err)
@@ -134,13 +138,6 @@ class User {
             {text: '确定'}
           ]);
         })
-        // Wechat.shareToSession({title:'2333'})
-        // .then(res=>{
-        //   console.log(res)
-        // })
-        // .catch(err=>{
-        //   console.log(err)
-        // })
       } else {
         Alert.alert('请安装微信');
       }

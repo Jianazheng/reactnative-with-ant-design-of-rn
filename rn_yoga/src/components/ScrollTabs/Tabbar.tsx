@@ -131,7 +131,7 @@ class BxTabbars extends React.Component<Props,State> {
                     <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
                     onPress={this.handleTabClick2.bind(this,i)} >
                       <View style={[styles.scrollItem2,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                        <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                        <Text style={[mainStyle.fs15,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
                         {
                           i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
                         }
@@ -178,7 +178,7 @@ class BxTabbars extends React.Component<Props,State> {
                           <TouchableOpacity ref={'tabsItem'+i}  key={i} style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}
                           onPress={this.handleTabClick.bind(this,i)}>
                             <View style={[styles.scrollItem,mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                              <Text style={[mainStyle.fs16,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
+                              <Text style={[mainStyle.fs15,i==currentIndex?mainStyle.c333:mainStyle.c999]}>{val.title}</Text>
                               {
                                 i==currentIndex?<Text style={[styles.scrollbar2]}></Text>:null
                               }

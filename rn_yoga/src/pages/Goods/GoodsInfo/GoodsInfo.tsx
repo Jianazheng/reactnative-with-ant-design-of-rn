@@ -205,7 +205,7 @@ class GoodsInfo extends React.Component<Props,State> {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
-              this.handleCollection(goodsInfo.id,'3',false)
+              this.handleCollection(goodsInfo.id,'3',true)
             }}>
               <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
                 <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>

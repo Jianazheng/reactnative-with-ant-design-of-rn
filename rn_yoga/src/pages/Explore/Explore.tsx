@@ -105,7 +105,7 @@ class Explore extends React.Component<Props,State> {
               >
                 <View style={[mainStyle.row]}>
                 {
-                  courseClassify.map((item,index)=><Classify navigation={navigation} itemType="course" data={item} key={index.toString()}></Classify>) 
+                  courseClassify.map((item,index)=><Classify navigation={navigation} itemType="course" type={index==0?'all':'item'} data={item} key={index.toString()}></Classify>) 
                 }
                 </View>
               </ScrollView>
@@ -195,16 +195,22 @@ class RecommendCourse extends React.PureComponent<CourseProps> {
 interface ClassifyProps {
   data:object,
   type:'all'|'item'
-  navigation:any
+  navigation:object,
+  itemType:string
 }
 
+@inject('courseStore')
+@observer
 class Classify extends React.PureComponent<ClassifyProps> {
   constructor(props:ClassifyProps){
     super(props)
   }
 
   gotoInfo(route:string,params:object){
-    let {navigation} = this.props;
+    let {navigation,courseStore} = this.props;
+    if(route=='OnlineCourseList'){
+      courseStore.setCondition(params.categroy_name,params.cid)
+    }
     navigation.push(route,params);
   }
 
@@ -221,9 +227,9 @@ class Classify extends React.PureComponent<ClassifyProps> {
         )
       }else{
         return(
-          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'course'})}}>
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('OnlineCourseList',{cid:'',type:'course',categroy_name:'全部'})}}>
             <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
-              <Text style={[mainStyle.c333,mainStyle.fs13]}>/ / {data.category_name} / /</Text>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>/ / 全部 / /</Text>
             </View>
           </TouchableOpacity>
         )
@@ -239,9 +245,9 @@ class Classify extends React.PureComponent<ClassifyProps> {
         )
       }else{
         return(
-          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('GoodsList',{cid:data.id,type:'course'})}}>
+          <TouchableOpacity style={[mainStyle.mar15]} onPress={()=>{this.gotoInfo('OnlineCourseList',{cid:data.id,type:'course',categroy_name:data.categroy_name})}}>
             <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.aiCenter,mainStyle.bgcf7,mainStyle.h120,mainStyle.palr15,{minWidth:setSize(160)}]}>
-              <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.category_name}</Text>
+              <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.categroy_name}</Text>
             </View>
           </TouchableOpacity>
         )

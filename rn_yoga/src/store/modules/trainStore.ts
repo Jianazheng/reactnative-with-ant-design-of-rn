@@ -7,9 +7,11 @@ class Train {
   }
   @observable trainData = {
     trainInfo:{},
-    goodsItem:{},
-    promotionInfo:{},
-    selectItem:[]
+    frontInfo:{detail:[]},
+    trainSelectItem:[],
+    promotionInfo:[],
+    selectItem:{},
+    classify:[]
   }
 
   @computed get trainInfo(){
@@ -20,8 +22,37 @@ class Train {
     return this.trainData.promotionInfo
   }
 
+  @computed get frontInfo(){
+    return this.trainData.frontInfo
+  }
+
   @computed get trainSelectItem(){
     return this.trainData.trainSelectItem
+  }
+
+  @computed get classify(){
+    return this.trainData.classify
+  }
+
+  @action async getClassify(){
+    try {
+      let response = await new Fetch('/train/list','GET',{},{});
+      let classifys = response.data;
+      if(classifys.length>0){
+        classifys[0].checked = true;
+      }
+      this.trainData.classify = classifys;
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action classifySelect(index:number|string){
+    let {classify} = this.trainData
+    classify.map((val,i)=>{
+      val.checked = i==index?true:false
+    })
   }
 
   @action async getTrainInfo(id:string|number){
@@ -29,6 +60,17 @@ class Train {
       let response = await new Fetch('/train/base_info','GET',{id},{});
       let trainInfo = response.data;
       this.trainData.trainInfo = trainInfo;
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getFrontInfo(id:string|number){
+    try {
+      let response = await new Fetch('/train/front_train_info','GET',{id},{});
+      let frontInfo = response.data;
+      this.trainData.frontInfo = frontInfo;
       return response
     } catch (error) {
       return null
@@ -58,7 +100,7 @@ class Train {
   }
 
   @action selectItem(item:object){
-    this.trainData.goodsItem = item;
+    this.trainData.selectItem = item;
   }
 }
 

@@ -7,12 +7,14 @@ import { CourseListItem } from '../../components/Course/CourseItem';
 import NavTop from '../../router/navTop';
 import { CourseTeacherItem2 } from '../../components/Course/TeacherItem';
 import BxButton from '../../components/Pubilc/Button';
+import { inject,observer } from 'mobx-react';
+import { ActivityIndicator } from '@ant-design/react-native';
 
 
 interface Props {}
 
-let imgw = (screenW-setSize(120))*0.28;
-
+@inject('courseStore')
+@observer
 class OnlineCourse extends React.Component<Props> {
   static navigationOptions = {
     header:null
@@ -22,8 +24,22 @@ class OnlineCourse extends React.Component<Props> {
     super(props);
     this.state = {
       arr: [{},{},{},{},{},{}],
-      checkbox:[{title:'座位',checked:true},{title:'餐点',checked:false},{title:'酒店',checked:false},{title:'大巴',checked:false}]
+      checkbox:[{title:'座位',checked:true},{title:'餐点',checked:false},{title:'酒店',checked:false},{title:'大巴',checked:false}],
+      loading:true
     };
+  }
+
+  componentDidMount(){
+    let {navigation,courseStore} = this.props
+    let {params} = navigation.state
+    courseStore.getOnlineCourseInfo(params.id)
+    .then(res=>{
+      this.setState({
+        loading:false
+      })
+    })
+
+    console.log(params)
   }
 
   goto(routeName:string,params:any){
@@ -40,8 +56,9 @@ class OnlineCourse extends React.Component<Props> {
   }
 
   render(){
-    let {arr,checkbox} = this.state;
-    let {navigation} = this.props;
+    let {arr,checkbox,loading} = this.state;
+    let {navigation,courseStore} = this.props;
+    let onlineCourseInfo = courseStore.onlineCourseInfo
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <NavTop
@@ -51,6 +68,12 @@ class OnlineCourse extends React.Component<Props> {
           this.props.navigation.goBack();
         }}
         ></NavTop>
+        <ActivityIndicator
+          animating={loading}
+          toast
+          size="large"
+          text="加载中..."
+        />
         <ScrollView style={[mainStyle.flex1]}>
           <View style={[mainStyle.flex1]}>
             <View style={[mainStyle.column,mainStyle.palr15,mainStyle.mat15]}>
@@ -61,17 +84,17 @@ class OnlineCourse extends React.Component<Props> {
                   </View>
                 </View>
                 <View style={[mainStyle.column]}>
-                  <CourseListItem data={{}} navigation={navigation} type='online'></CourseListItem>
+                  <CourseListItem data={onlineCourseInfo} type='online'></CourseListItem>
                 </View>
                 <View style={[mainStyle.column,mainStyle.pa15,mainStyle.aiCenter]}>
-                  <Text style={[mainStyle.fs12,mainStyle.c999]}>上次学习时间：2019.06.01-06.30</Text>
+                  <Text style={[mainStyle.fs12,mainStyle.c999]}>上次学习时间：{onlineCourseInfo.lasttime}</Text>
                   <BxButton
                   title={'继续学习'}
                   colors={[mainStyle.czt.color,mainStyle.cztc.color]}
                   borderRadius={setSize(60)}
                   btnstyle={[{width:screenW-setSize(120),height:setSize(70)},mainStyle.mat10]}
                   onClick={()=>{
-                    this.goto('OnlineCourseInfo',{})
+                    this.goto('OnlineCourseInfo',{id:onlineCourseInfo.course_id})
                   }}
                   ></BxButton>      
                 </View>        
@@ -84,48 +107,27 @@ class OnlineCourse extends React.Component<Props> {
                     <Text style={[mainStyle.fs13,mainStyle.c333]}>目录</Text>
                   </View>
                 </View>
-                <View style={[mainStyle.column,mainStyle.flex1,mainStyle.pal15,{paddingTop:setSize(30)}]}>
-                  <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.aiCenter,mainStyle.mab10]}>1、课程介绍</Text>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
+                {
+                  onlineCourseInfo.chapter.length>0
+                  ?onlineCourseInfo.chapter.map((val,i)=>(
+                    <View key={i} style={[mainStyle.column,mainStyle.flex1,mainStyle.pal15,{paddingTop:setSize(30)}]}>
+                      <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.aiCenter,mainStyle.mab10]}>{i+1}、{val.chapter_name}</Text>
+                      <View style={[mainStyle.column]}>
+                        {
+                          val.summary.constructor==Array?
+                          val.summary.length>0?
+                          val.summary.map((item,ci)=>(
+                            <Summary navigation={navigation} item={item} key={ci}></Summary>
+                          ))
+                          :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+                          :<Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+                        }
                       </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
                     </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={[mainStyle.column,mainStyle.flex1,mainStyle.pal15,{paddingTop:setSize(30)}]}>
-                  <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.aiCenter,mainStyle.mab10]}>1、课程介绍</Text>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100]}>
-                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                        <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
-                        <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>对中医的理论理解</Text>
-                      </View>
-                      <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                  ))
+                  :
+                  <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.pa15]}>暂无课程</Text>
+                }
               </View>
             </View>
             <View style={[mainStyle.column,mainStyle.palr15,mainStyle.mat15,mainStyle.mab30]}>
@@ -160,8 +162,54 @@ class OnlineCourse extends React.Component<Props> {
   }
 }
 
+
+interface SummaryProps {
+  item:object,
+  navigation:object
+}
+class Summary extends React.PureComponent<SummaryProps>{
+
+  constructor(props:SummaryProps){
+    super(props)
+  }
+
+  render(){
+    let {item,navigation} = this.props
+    return (
+      <TouchableOpacity>
+        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brb1f2]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter]}>
+            <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+              <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe63d;</Text>
+              <Text style={[mainStyle.fs12,mainStyle.c333,mainStyle.mal5]}>{item.summary_name}</Text>
+            </View>
+            {
+              item.isread==1
+              ?<View style={[mainStyle.mal15]}>
+                <Text style={[styles.isread,mainStyle.bgcf6e,mainStyle.c8d0,mainStyle.fs11]}>已学完</Text>
+              </View>
+              :null
+            }
+          </View>
+          <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs28]}>&#xe64d;</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
+
 const styles = StyleSheet.create({
-  
+  isread:{
+    height:setSize(36),
+    lineHeight:setSize(34),
+    borderRadius:setSize(36),
+    paddingLeft:setSize(12),
+    paddingRight:setSize(12),
+    paddingTop:setSize(1),
+    paddingBottom:setSize(1),
+    borderWidth:setSize(1),
+    borderColor:mainStyle.c8d0.color
+  }
 })
 
 export default OnlineCourse

@@ -27,7 +27,7 @@ export default class ApplyNotice extends PureComponent<CourseInfoItemProps>{
           {
             data.map((val,i)=>{
               return (
-                <View style={[{marginBottom:setSize(10)}]}>
+                <View key={i} style={[{marginBottom:setSize(10)}]}>
                   <Text 
                   style={[mainStyle.czt,mainStyle.icon,mainStyle.tl,
                   {fontSize:setSize(100),
@@ -45,7 +45,7 @@ export default class ApplyNotice extends PureComponent<CourseInfoItemProps>{
                       lineHeight:setSize(44),
                       marginLeft:setSize(50)
                     }
-                  ]}>{val.title}{val.title}{val.title}{val.title}</Text>
+                  ]}>{val.train_name}</Text>
                 </View>
               )
             })
