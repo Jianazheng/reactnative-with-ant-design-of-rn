@@ -7,7 +7,7 @@ import { CourseTeacherItem2 } from '../../components/Course/TeacherItem';
 import BxButton from '../../components/Pubilc/Button';
 import Video from 'react-native-video';
 import { observer, inject } from 'mobx-react';
-import FileViewer from 'react-native-file-viewer';
+import OpenFile from 'react-native-doc-viewer';
 
 
 interface Props {}
@@ -88,14 +88,17 @@ class OnlineCourseInfo extends React.Component<Props> {
   handleOpenPPT(){
     this.setState({ loading: true });
     let path = 'http://yoga.t.jkxuetang.com/upload/courseware/20190703/c88cd64a11bc9876e2602fe7a7b01f23.pdf'
-    FileViewer.open(path, { showOpenWithDialog: true })
-    .then(() => {
+    OpenFile.openDoc([
+      {
+        url:path,
+        fileName:"sample",
+        cache:true,
+        fileType:"pdf"
+      }
+    ],(err,url)=>{
       this.setState({ loading: false });
+      console.log(err,url)
     })
-    .catch(error => {
-      console.log(error)
-      this.setState({ loading: false });
-    });
   }
 
   render(){
