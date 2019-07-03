@@ -15,7 +15,11 @@ class Goods {
     cate:{id:'',product_category_name:'全部'},
     sort:{sort:'default',str:'默认排序'},
     page:1,
-    goodslist:[]
+    goodslist:{
+      data:[],
+      current_page:1,
+      total:null
+    }
   }
 
   @computed get goodsInfo(){
@@ -104,23 +108,33 @@ class Goods {
     }
   }
 
-  @action async getGoodslist(){
+  @action async getGoodslist(reload:boolean){
     try {
+      let {goodslist} = this.goodsData
       let params = {
         cate_id:this.cate.id,
         sort:this.sort.sort,
-        page:this.goodsData.page
+        page:goodslist.current_page
+      }
+      if(reload){
+        //重置列表
+        goodslist = {
+          data:[],
+          current_page:1,
+          total:null
+        }
+        this.goodsData.goodslist = goodslist
       }
       let response = await new Fetch('/product/list','GET',{size:10,...params},{});
-      let goodslist = response.data;
-      
-      if(this.goodsData.goodslist.length>=goodslist.total)return response;
-
-      this.goodsData.goodslist = this.goodsData.goodslist.concat(goodslist.data);
-      if(this.goodsData.goodslist.length<goodslist.total){
-        this.goodsData.page+=1;
+      let gl = response.data
+      if(goodslist.data.length>=gl.total&&gl.total>0)return response
+      goodslist.data = goodslist.data.concat(gl.data)
+      goodslist.current_page = gl.current_page
+      goodslist.total = gl.total
+      if(goodslist.data.length<gl.total&&goodslist.current_page>1){
+        goodslist.current_page+=1;
       }
-      console.log(this.goodsData.goodslist)
+      this.goodsData.goodslist = goodslist
       return response
     } catch (error) {
       return null
@@ -132,7 +146,7 @@ class Goods {
       val.checked = index==i?true:false;
     })
     this.goodsData.cate = this.goodsData.goodsCondition[index];
-    this.getGoodslist();
+    this.getGoodslist(true);
   }
 
   @action async selectGoodsSort(index:number){
@@ -140,7 +154,7 @@ class Goods {
       val.checked = index==i?true:false;
     })
     this.goodsData.sort = this.goodsData.goodsSort[index];
-    this.getGoodslist();
+    this.getGoodslist(true);
   }
 
 

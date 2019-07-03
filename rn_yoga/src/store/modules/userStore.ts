@@ -117,35 +117,29 @@ class User {
     }
   }
 
-  @action WxLogin(){
-    
-    const scope = 'snsapi_userinfo';
-    const state = '';
-    Wechat.isWXAppInstalled()
-    .then((isInstalled) => {
+  @action async WxLogin(){
+    try {
+      const scope = 'snsapi_userinfo'
+      const state = ''
+      let isInstalled  = await Wechat.isWXAppInstalled()
       if (isInstalled) {
-        Wechat.sendAuthRequest(scope, state)
-        .then(responseCode => {
-          console.log(responseCode)
-          new Fetch('/login/wechat','POST',{code:responseCode.code},{})
-          .then(res=>{
-            console.log(res)
-          })
-        })
-        .catch(err => {
-          console.log(err)
-          Alert.alert('登录授权发生错误：', err.message, [
-            {text: '确定'}
-          ]);
-        })
+
+        let responseCode = await Wechat.sendAuthRequest(scope, state)
+        let res = await new Fetch('/login/wechat','POST',{code:responseCode.code},{})
+        await RNStorage.save({key:'token',data:res.data})
+        this.userData.token = res.data
+        return res
+
       } else {
         Alert.alert('请安装微信');
+        return null
       }
-    }).catch(err=>{
-      console.log(err)
-    });
+    } catch (error) {
+      Alert.alert('登录授权发生错误：', error, [{text: '确定'}]);
+      console.log(error)
+      return null
+    }
   }
-
 
 }
 

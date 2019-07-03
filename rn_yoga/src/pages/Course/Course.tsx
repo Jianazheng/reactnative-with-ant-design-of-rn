@@ -4,6 +4,7 @@ import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import { observer, inject } from 'mobx-react';
+import { ActivityIndicator } from '@ant-design/react-native';
 
 interface Props {}
 
@@ -26,13 +27,27 @@ class Course extends React.Component<Props> {
   constructor(props:Props) {
     super(props);
     this.state = {
-      arr: [{},{},{}]
+      loading:true
     };
   }
 
   componentDidMount(){
-    let {userStore} = this.props;
-    userStore.GetUserInfo();
+    this.loadCourse()
+  }
+
+  async loadCourse(){
+    try {
+      let {userStore,courseStore} = this.props;
+      await userStore.GetUserInfo()
+      await courseStore.getOnlineCourseList()
+      this.setState({
+        loading:false
+      })
+    } catch (error) {
+      this.setState({
+        loading:false
+      })
+    }
   }
 
   goto(routeName:string,params:any){
@@ -40,11 +55,18 @@ class Course extends React.Component<Props> {
   }
 
   render(){
-    let {arr} = this.state;
-    let {navigation,userStore} = this.props;
+    let {loading} = this.state;
+    let {navigation,userStore,courseStore} = this.props;
     let userInfo = userStore.userInfo;
+    let onlineCourseList = courseStore.onlineCourseList
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
+        <ActivityIndicator
+        toast
+        size="large"
+        text="加载中..."
+        animating={loading}
+        ></ActivityIndicator>
         <ScrollView style={[mainStyle.flex1,mainStyle.positonre]}>
           <View style={[mainStyle.flex1]}>
             <View style={[mainStyle.column,mainStyle.bgcfff]}>
@@ -71,19 +93,19 @@ class Course extends React.Component<Props> {
               <View style={[mainStyle.palr15,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.patb15]}>
                 <TouchableOpacity style={[mainStyle.flex1]}>
                   <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>4</Text>
+                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>{onlineCourseList.train_num}</Text>
                     <Text style={[mainStyle.c999,mainStyle.fs12]}>培训课</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.flex1]}>
                   <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.brr1f2,mainStyle.brl1f2]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>2</Text>
+                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>{onlineCourseList.online_num}</Text>
                     <Text style={[mainStyle.c999,mainStyle.fs12]}>在线课程</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.flex1]}>
                   <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>19</Text>
+                    <Text style={[mainStyle.c333,mainStyle.fs18,mainStyle.mab5]}>{onlineCourseList.finish_num}</Text>
                     <Text style={[mainStyle.c999,mainStyle.fs12]}>已学完</Text>
                   </View>
                 </TouchableOpacity>
@@ -95,7 +117,7 @@ class Course extends React.Component<Props> {
                   <TouchableOpacity 
                   style={[mainStyle.flex1]}
                   onPress={()=>{
-                    this.goto('CourseList',{})
+                    this.goto('CourseList',{type:'outline'})
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <Text style={[mainStyle.fs13,mainStyle.c333]}>我的培训课</Text>
@@ -108,8 +130,8 @@ class Course extends React.Component<Props> {
                 </View>
                 <View style={[mainStyle.column]}>
                   {
-                    arr.map((val,i)=>(
-                      <CourseListItem data={val} navigation={navigation} type='outline'></CourseListItem>
+                    onlineCourseList.train.map((val,i)=>(
+                      <CourseListItem key={i} data={val} navigation={navigation} type='outline'></CourseListItem>
                     ))
                   }
                 </View>
@@ -121,7 +143,7 @@ class Course extends React.Component<Props> {
                   <TouchableOpacity 
                   style={[mainStyle.flex1]}
                   onPress={()=>{
-                    this.goto('CourseList',{})
+                    this.goto('CourseList',{type:'online'})
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <Text style={[mainStyle.fs13,mainStyle.c333]}>我的在线课程</Text>
@@ -134,8 +156,8 @@ class Course extends React.Component<Props> {
                 </View>
                 <View style={[mainStyle.column]}>
                   {
-                    arr.map((val,i)=>(
-                      <CourseListItem data={val} navigation={navigation} type='online'></CourseListItem>
+                    onlineCourseList.online.map((val,i)=>(
+                      <CourseListItem key={i} data={val} navigation={navigation} type='online'></CourseListItem>
                     ))
                   }
                 </View>

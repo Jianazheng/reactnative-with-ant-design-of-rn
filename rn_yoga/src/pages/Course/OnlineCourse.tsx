@@ -87,7 +87,7 @@ class OnlineCourse extends React.Component<Props> {
                 <View style={[mainStyle.column,mainStyle.pa15,mainStyle.aiCenter]}>
                   <Text style={[mainStyle.fs12,mainStyle.c999]}>上次学习时间：{onlineCourseInfo.lasttime}</Text>
                   <BxButton
-                  title={'继续学习'}
+                  title={onlineCourseInfo.status==2?'继续学习':'开始学习'}
                   colors={[mainStyle.czt.color,mainStyle.cztc.color]}
                   borderRadius={setSize(60)}
                   btnstyle={[{width:screenW-setSize(120),height:setSize(70)},mainStyle.mat10]}
@@ -149,7 +149,7 @@ class OnlineCourse extends React.Component<Props> {
                   >
                     <View style={[mainStyle.flex1,mainStyle.row,mainStyle.pal15]}>
                       {
-                        arr.map((val,i)=>(
+                        onlineCourseInfo.teacher.map((val,i)=>(
                           <CourseTeacherItem2 key={i} data={val}></CourseTeacherItem2>
                         ))
                       }
@@ -192,13 +192,10 @@ class Summary extends React.PureComponent<SummaryProps>{
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
             <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
 
-              {item.type=='pdf'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='pdf'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='ppt'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='video'?<Image source={require('../../../images/video.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='audio'?<Image source={require('../../../images/audio.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='doc'?<Image source={require('../../../images/doc.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='word'?<Image source={require('../../../images/word.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='pic'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
 
               <Text style={[mainStyle.fs12,item.isread==1?mainStyle.c999:mainStyle.c333,mainStyle.mal5]}>{item.summary_name}</Text>
             </View>

@@ -24,11 +24,6 @@ class HomeCourse extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      news:[
-        {title:'第一阶：脉轮与胜王瑜伽初级（师资班）',desc:'包含6天培训，活动时间2018年6月10-15日',price:'￥1279'},
-        {title:'第一阶：脉轮与胜王瑜伽初级（师资班）',desc:'包含6天培训，活动时间2018年6月10-15日',price:'￥1279'},
-        {title:'第一阶：脉轮与胜王瑜伽初级（师资班）',desc:'包含6天培训，活动时间2018年6月10-15日',price:'￥1279'},
-      ],
       cateId:0,
       updateView:true
     };
@@ -107,12 +102,13 @@ class CourseItem extends PureComponent<CourseItemProps> {
     let {data} = this.props;
     return(
       <View style={[styles.CourseItems,mainStyle.row,mainStyle.jcCenter]}>
-        <View style={[mainStyle.column,mainStyle.jcBetween,styles.CourseItemInfo,mainStyle.bgcfff]}>
-          <TouchableOpacity style={[mainStyle.flex1]} 
-          onPress={()=>{
-            this.goto('CourseInfo',{id:data.id,type:'all'})
-          }}
-          >
+        <TouchableOpacity 
+        style={[mainStyle.column,mainStyle.jcBetween,styles.CourseItemInfo,mainStyle.bgcfff]}
+        onPress={()=>{
+          this.goto('CourseInfo',{id:data.id,type:'all'})
+        }}
+        >
+          <View style={[mainStyle.flex1]}>
             <View style={[mainStyle.column]}>
               <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiStart,mainStyle.mab5]}>
                 <Text style={[mainStyle.c333,mainStyle.fs14]} numberOfLines={2}>{data.train_name}</Text>
@@ -120,7 +116,7 @@ class CourseItem extends PureComponent<CourseItemProps> {
               </View>
               <Text style={[mainStyle.c999,mainStyle.fs12]} numberOfLines={2}>{data.train_introduction}</Text>
             </View>
-          </TouchableOpacity>
+          </View>
           <View style={[mainStyle.column,mainStyle.mat10,mainStyle.mab10,mainStyle.flex1]}>
             <Text style={[mainStyle.c666,mainStyle.fs13,mainStyle.mab5]}>原价：<Text style={[mainStyle.fs15]}>￥{data.price}</Text></Text>
             <Text style={[mainStyle.mab5]}>
@@ -129,20 +125,25 @@ class CourseItem extends PureComponent<CourseItemProps> {
             </Text>
             <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.mab5]}>
               <Text style={[mainStyle.fs12,mainStyle.bgcaa4,mainStyle.c8d0,styles.lowPrice,mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
-              <TouchableOpacity 
-              onPress={()=>{
-                this.goto('CourseInfo',{id:data.id,type:'detail'})
-              }}
-              >
-                <Text style={[mainStyle.fs13,mainStyle.czt]}>查看特惠活动</Text>
-              </TouchableOpacity>
+              {
+                data.promotion.length>0
+                ?<TouchableOpacity 
+                onPress={()=>{
+                  this.goto('CourseInfo',{id:data.id,type:'detail'})
+                }}
+                >
+                  <Text style={[mainStyle.fs13,mainStyle.czt]}>查看特惠活动</Text>
+                </TouchableOpacity>
+                :
+                null
+              }
             </View>
           </View>
           <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter]}>
             <Text style={[mainStyle.fs13,mainStyle.c999]}>截止报名日期：{data.reg_end_time}</Text>
             <Text style={[mainStyle.fs13,mainStyle.c999]}>已报名{data.apply_num}人</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     )
   }

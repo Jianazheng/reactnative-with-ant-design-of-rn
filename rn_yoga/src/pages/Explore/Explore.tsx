@@ -201,7 +201,7 @@ interface ClassifyProps {
 
 @inject('courseStore')
 @observer
-class Classify extends React.PureComponent<ClassifyProps> {
+class Classify extends React.Component<ClassifyProps> {
   constructor(props:ClassifyProps){
     super(props)
   }

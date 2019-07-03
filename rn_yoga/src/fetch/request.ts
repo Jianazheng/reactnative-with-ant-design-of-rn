@@ -49,11 +49,17 @@ export class Fetch{
             resolve(response.data);
             break;
           case 401:
-            Toast.info('验证失败，请重新登录',1.4,undefined,true)
-            userStore.removeToken()
-            RNStorage.remove({key:'token'}).then(ress=>{
-              DeviceEventEmitter.emit('TOLOGIN','yes');
-            });
+            let errdata = JSON.parse(response.data)
+            if(errdata.errorCode==1056){
+              Toast.info(errdata.message,1.4,undefined,true)
+              DeviceEventEmitter.emit('TOBIND','yes');
+            }else{
+              Toast.info('验证失败，请重新登录',1.4,undefined,true)
+              userStore.removeToken()
+              RNStorage.remove({key:'token'}).then(ress=>{
+                DeviceEventEmitter.emit('TOLOGIN','yes');
+              });
+            }
             reject(response.data);
             break;
           case 400:
@@ -62,6 +68,7 @@ export class Fetch{
             break;      
           case 500:
             Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
+            console.warn(response.data)
             reject(response.data);
             break;
           default:

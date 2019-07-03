@@ -52,10 +52,26 @@ class Login extends React.Component<Props,State> {
     let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
     if(response!=null){
       Toast.info(response.message,1.4,undefined,false);
-      userStore.GetUserInfo().then(res=>{});
+      await userStore.GetUserInfo()
       navigation.goBack();
     }
+  }
 
+  async handleWxLogin(){
+    try {
+      let {userStore,navigation} = this.props;
+      let response = await userStore.WxLogin()
+      if(response!=null){
+        if(response.errorCode==1056){
+          
+        }else{
+          await userStore.GetUserInfo()
+          navigation.goBack();
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render(){
@@ -137,9 +153,8 @@ class Login extends React.Component<Props,State> {
                 plain
                 title="微信授权登录" 
                 btnstyle={[mainStyle.bgcfff]}
-                onClick={()=>{
-                  userStore.WxLogin()
-                }}></BxButton>
+                onClick={()=>{this.handleWxLogin()}}
+                ></BxButton>
               </View>
             </View>
             <View style={[mainStyle.mat20,mainStyle.row,mainStyle.jcCenter,mainStyle.h100]}>

@@ -11,16 +11,23 @@ class Course {
     classifySelect:{categroy_name:'全部',id:''},
     courseInfo:{},
     goodsItem:{},
-    onlineCourse:{
+    onlineCourseList:{//课程首页
+      online_num:'',
+      train_num:'',
+      finish_num:'',
+      train:[],
+      online:[]
+    },
+    onlineCourse:{//在线课程列表
       data:[],
       total:null,
       page:0
     },
-    onlineCourseInfo:{
+    onlineCourseInfo:{//在线课程详情
       chapter:[],
-      teach_level:[]
+      teacher:[]
     },
-    onlineCourseStudy:{
+    onlineCourseStudy:{//在线课程开始学习
       url:'',
       chapter:[]
     },
@@ -41,6 +48,10 @@ class Course {
 
   @computed get courseInfo(){
     return this.courseData.courseInfo
+  }
+
+  @computed get onlineCourseList(){
+    return this.courseData.onlineCourseList
   }
 
   @computed get onlineCourse(){
@@ -129,6 +140,7 @@ class Course {
           current_page:1,
           total:null
         }
+        this.courseData.courseList = courseList
       }
       let response = await new Fetch('/online/course/list','GET',{size:10,...params},{});
       let cl = response.data.data
@@ -145,6 +157,11 @@ class Course {
     } catch (error) {
       return null
     }
+  }
+
+  @action setKeyword(keyword:string){
+    this.courseData.keyword = keyword
+    this.getCourseList(true)
   }
 
   @action async getRecommendCourse(){
@@ -171,6 +188,17 @@ class Course {
 
   @action selectItem(item:object){
     this.courseData.goodsItem = item;
+  }
+
+  @action async getOnlineCourseList(){
+    try {
+      let response = await new Fetch('/mycourse/list','GET',{},{})
+      let onlineCourseList = response.data
+      this.courseData.onlineCourseList = onlineCourseList
+      return response
+    } catch (error) {
+      return null
+    }
   }
 
   @action async getOnlineCourse(){
@@ -208,6 +236,11 @@ class Course {
     try {
       let response = await new Fetch('/online/mycourse/enter_study','GET',{id,course_id,summary_id},{})
       let onlineCourseStudy = response.data
+      //判断是否是音频，视频，pdf，ppt
+      let reg = RegExp(/.mp3|.mp4|.flv|.avi|.rm|.rmvb|.3gp|.mpeg|.mpg|.mkv|.asf|.wmv|.mov|.ogg|.ogm|.wav|.midi|.cda|.vqf|.wma|.aac|.au|.voc|.ppt|.pptx|.pdf/)
+      if(!reg.test(onlineCourseStudy.url)){
+        onlineCourseStudy.url = ""
+      }
       this.courseData.onlineCourseStudy = onlineCourseStudy
       return response
     } catch (error) {

@@ -46,7 +46,7 @@ class GoodsList extends React.Component<Props,State> {
     })
     goodsStore.getGoodsClassify()
     .then(res=>{
-      goodsStore.getGoodslist();
+      goodsStore.getGoodslist(false);
     })
     
   }
@@ -99,8 +99,9 @@ class GoodsList extends React.Component<Props,State> {
 
   
   render(){
-    let {searchBarTranslate,searchBarOpacity,sortShow,conditionShow} = this.state;
-    let {navigation,goodsStore} = this.props;
+    let {searchBarTranslate,searchBarOpacity,sortShow,conditionShow} = this.state
+    let {navigation,goodsStore} = this.props
+    let goodslist = goodsStore.goodslist
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
 
@@ -244,21 +245,18 @@ class GoodsList extends React.Component<Props,State> {
         }
 
         <View style={[mainStyle.flex1]}>
-          {
-            goodsStore.goodslist.length>0
-            ?<BxListView
-            listData={goodsStore.goodslist.slice()}
-            listItem={({item,index})=><GoodsItem navigation={navigation} key={index.toString()} data={item} index={index}></GoodsItem>}
-            nomore={false}
-            colNumber={2}
-            onLoadmore={()=>{
-              goodsStore.getGoodslist();
-            }}
-            pab={setSize(20)}
-            >
-            </BxListView>
-            :null
-          }
+          <BxListView
+          listData={goodslist.data.slice()}
+          listItem={({item,index})=><GoodsItem navigation={navigation} key={index.toString()} data={item} index={index}></GoodsItem>}
+          nomore={false}
+          colNumber={2}
+          loading={goodslist.total==null||goodslist.total>goodslist.data.length}
+          onLoadmore={()=>{
+            goodsStore.getGoodslist(false);
+          }}
+          pab={setSize(20)}
+          >
+          </BxListView>
         </View>
 
       </View>
@@ -299,7 +297,7 @@ class GoodsItem extends React.Component<GoodsItemProps,GoodsItemState> {
           <Image
           style={[{width:imgw,height:imgw},mainStyle.bgcc2]}
           mode="widthFix" 
-          source={{uri:'http://'+(data.image_url.length>0?data.image_url[0]:'')}}
+          source={{uri:'http://'+(data.image_url?data.image_url.length>0?data.image_url[0]:'':'')}}
           >
           </Image>
           <View style={[mainStyle.column,{padding:setSize(20)}]}>

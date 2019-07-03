@@ -20,7 +20,7 @@ class OnlineCourseList extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      arr:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
+      keyword:'',
       searchBarTranslate:new Animated.Value(screenW),
       searchBarOpacity:new Animated.Value(0),
       autoFocus:false,
@@ -78,6 +78,7 @@ class OnlineCourseList extends React.Component<Props,State> {
       easing: Easing.ease,
       duration: 300
     }).start();
+    this.handleSearch('')
   }
 
   showCondition(){
@@ -96,13 +97,18 @@ class OnlineCourseList extends React.Component<Props,State> {
     })
   }
 
+  handleSearch(keyword:string){
+    let {courseStore} = this.props
+    courseStore.setKeyword(keyword)
+  }
+
   goto(routeName:string,params:any){
     this.props.navigation.navigate(routeName,params);
   }
 
   
   render(){
-    let {searchBarTranslate,searchBarOpacity,sortShow,conditionShow} = this.state;
+    let {searchBarTranslate,searchBarOpacity,sortShow,conditionShow,keyword} = this.state;
     let {navigation,courseStore} = this.props;
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
@@ -134,9 +140,19 @@ class OnlineCourseList extends React.Component<Props,State> {
           <HomeSearchBar 
           placeholder={'搜索课程'}
           autoFocus={false}
+          onChange={(e)=>{
+            this.setState({keyword:e})
+          }}
+          onSubmit={(e)=>{
+            this.handleSearch(e)
+          }}
           leftBtn={(
             <View style={[mainStyle.row,mainStyle.aiCenter]}>
-              <TouchableOpacity style={[mainStyle.mal10]}>
+              <TouchableOpacity 
+              style={[mainStyle.mal10]} 
+              onPress={()=>{
+                this.handleSearch(keyword)
+              }}>
                 <Text style={[mainStyle.c666,mainStyle.icon,mainStyle.fs13]}>搜索</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[mainStyle.mal10]} onPress={()=>{

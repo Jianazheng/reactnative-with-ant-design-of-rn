@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image,Animated } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, Animated, Platform } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -7,6 +7,8 @@ import { CourseTeacherItem2 } from '../../components/Course/TeacherItem';
 import BxButton from '../../components/Pubilc/Button';
 import Video from 'react-native-video';
 import { observer, inject } from 'mobx-react';
+import FileViewer from 'react-native-file-viewer';
+
 
 interface Props {}
 
@@ -81,7 +83,19 @@ class OnlineCourseInfo extends React.Component<Props> {
     ).start(()=>{
       
     });
-    
+  }
+
+  handleOpenPPT(){
+    this.setState({ loading: true });
+    let path = 'http://yoga.t.jkxuetang.com/upload/courseware/20190703/c88cd64a11bc9876e2602fe7a7b01f23.pdf'
+    FileViewer.open(path, { showOpenWithDialog: true })
+    .then(() => {
+      this.setState({ loading: false });
+    })
+    .catch(error => {
+      console.log(error)
+      this.setState({ loading: false });
+    });
   }
 
   render(){
@@ -125,15 +139,29 @@ class OnlineCourseInfo extends React.Component<Props> {
           <View style={[mainStyle.flex1]}>
             {/** 视频播放start */}
             <View style={[styles.videoVertical,mainStyle.bgc000,mainStyle.positonre]}>
-              {
+              {/* {
                 onlineCourseStudy.url!=''
                 ?<Video 
                 style={[styles.videoVertical]} 
                 source={{uri:onlineCourseStudy.url}}
+                onLoad={(e)=>{
+                  console.log(e)
+                }}
                 resizeMode={'contain'}
                 ></Video>
                 :null
-              } 
+              }  */}
+              <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                <BxButton 
+                color={mainStyle.cfff.color}
+                textstyle={[mainStyle.c333]}
+                btnstyle={[{width:setSize(240),borderRadius:setSize(80)}]}
+                title={'查看课程'}
+                onClick={()=>{
+                  this.handleOpenPPT()
+                }}
+                ></BxButton>
+              </View>
             </View>
             {/** 视频播放end */}
             <View style={[mainStyle.flex1,{marginBottom:setSize(150)}]}>
@@ -207,13 +235,10 @@ class Summary extends React.PureComponent<SummaryProps>{
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
             <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
 
-              {item.type=='pdf'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
+              {item.type=='pdf'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='ppt'?<Image source={require('../../../images/pdf.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='video'?<Image source={require('../../../images/video.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
               {item.type=='audio'?<Image source={require('../../../images/audio.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='doc'?<Image source={require('../../../images/doc.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='word'?<Image source={require('../../../images/word.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
-              {item.type=='pic'?<Image source={require('../../../images/picture.png')} style={[styles.summaryImg,mainStyle.imgContain]}></Image>:null}
 
               <Text style={[mainStyle.fs12,item.isread!=1||item.id==oncheckid?mainStyle.c333:mainStyle.c999,mainStyle.mal5]}>{item.summary_name}</Text>
             </View>

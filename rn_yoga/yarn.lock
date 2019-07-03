@@ -6719,6 +6719,16 @@ react-native-collapsible@^1.4.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-doc-viewer@^2.7.8:
+  version "2.7.8"
+  resolved "https://registry.npm.taobao.org/react-native-doc-viewer/download/react-native-doc-viewer-2.7.8.tgz#43d065328fb1b7ec90d321e5bd234711e807c8f6"
+  integrity sha1-Q9BlMo+xt+yQ0yHlvSNHEegHyPY=
+
+react-native-file-viewer@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.npm.taobao.org/react-native-file-viewer/download/react-native-file-viewer-1.0.15.tgz#bcc7d9da98dbe0e48fcae833d93f356da449d1e9"
+  integrity sha1-vMfZ2pjb4OSPyugz2T81baRJ0ek=
+
 react-native-gesture-handler@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.2.1.tgz#9c48fb1ab13d29cece24bbb77b1e847eebf27a2b"

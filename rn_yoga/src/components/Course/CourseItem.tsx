@@ -103,6 +103,8 @@ class CourseApplyNotice extends PureComponent<CourseInfoItemProps>{
     )
   }
 }
+
+//在线课程和培训的列表
 interface CourseListItemProps {
   data:object,
   type:'outline'|'online',
@@ -126,7 +128,7 @@ class CourseListItem extends React.Component<CourseListItemProps>{
       <View style={[mainStyle.row,mainStyle.pal15,mainStyle.patb15,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brb1f2,mainStyle.bgcfff]}>
         <TouchableOpacity style={[mainStyle.flex1]} 
         onPress={()=>{
-          if(navigation)this.goto('OnlineCourse',{id:data.id})
+          if(navigation)this.goto(type=='online'?'OnlineCourse':'OutlineCourse',{id:data.id})
         }}>
           <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.brr1f2]}>
             <Image
@@ -134,20 +136,28 @@ class CourseListItem extends React.Component<CourseListItemProps>{
             mode="widthFix" 
             source={{uri:'http://'+data.img}}>
             </Image>
-            <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15]}>
-              <Text style={[mainStyle.fs13,mainStyle.c333]}>{data.course_name}</Text>
-              <View style={[mainStyle.row,mainStyle.mat5,mainStyle.mab5]}>
-                <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,
-                  {
-                    borderRadius:setSize(12),
-                    paddingLeft:setSize(14),
-                    paddingRight:setSize(14),
-                    paddingTop:setSize(1),
-                    paddingBottom:setSize(1)
-                  }
-                ]}>{data.lesson}课时</Text>
-              </View>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>{data.create_time}</Text>
+            <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1,mainStyle.mal15,{height:imgw*0.7}]}>
+              <Text style={[mainStyle.fs13,mainStyle.c333]}>{type=='online'?data.course_name:data.train_name}</Text>
+              {
+                type=='online'
+                ?<View style={[mainStyle.row,mainStyle.mat5,mainStyle.mab5]}>
+                  <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,
+                    {
+                      borderRadius:setSize(12),
+                      paddingLeft:setSize(14),
+                      paddingRight:setSize(14),
+                      paddingTop:setSize(1),
+                      paddingBottom:setSize(1)
+                    }
+                  ]}>{data.lesson}课时</Text>
+                </View>
+                :null
+              }
+              {
+                type=='online'
+                ?<Text style={[mainStyle.fs12,mainStyle.c999]}>{data.create_time}</Text>
+                :<Text style={[mainStyle.fs12,mainStyle.c999]}>{data.train_start_time}</Text>
+              }
             </View>
           </View>
         </TouchableOpacity>
@@ -155,7 +165,11 @@ class CourseListItem extends React.Component<CourseListItemProps>{
           type=='outline'
           ?<TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,{width:imgw*0.8}]}>
             <View>
-              <Text style={[mainStyle.fs12,mainStyle.c999]}>已报到</Text>
+              {
+                data.status==1
+                ?<Text style={[mainStyle.fs12,mainStyle.c999]}>已报到</Text>
+                :<Text style={[mainStyle.fs12,mainStyle.c999]}>未报到</Text>
+              }
             </View>
           </TouchableOpacity>
           :<TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,{width:imgw*0.8}]}>
