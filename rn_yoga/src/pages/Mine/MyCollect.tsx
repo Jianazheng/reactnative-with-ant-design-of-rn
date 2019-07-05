@@ -4,6 +4,7 @@ import { mainStyle,screenH,setSize, screenW } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import BxTabView from '../../components/ScrollTabs/TabView';
 import BxListView from '../../components/Pubilc/ListView';
+import { observer, inject } from 'mobx-react';
 
 
 interface Props {}
@@ -11,6 +12,8 @@ interface State {
   tabs:Array<object>
 }
 
+@inject('publicStore')
+@observer
 class MyCollect extends React.Component<Props,State> {
   static navigationOptions = {
     header:null
@@ -23,8 +26,19 @@ class MyCollect extends React.Component<Props,State> {
     };
   }
 
+  componentDidMount(){
+    let {publicStore} = this.props
+    publicStore.getCollectData(1,true)
+    .then(res=>{
+      console.log(res)
+    })
+  }
+
   render(){
-    let {tabs} = this.state;
+    let {tabs} = this.state
+    let {publicStore} = this.props
+    let collectData = publicStore.collectData
+    console.log(collectData)
     return (
       <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf2]}>
         <NavTop
@@ -39,31 +53,44 @@ class MyCollect extends React.Component<Props,State> {
         canScroll={true}
         tabAlign={'center'}
         tabs={tabs}
+        tabChange={(e)=>{
+          publicStore.getCollectData(e,false)
+        }}
         >
           <View style={[mainStyle.patb15]}>
             <BxListView
-            listData={[{},{},{},{},{},{},{},{},{},{}]}
+            listData={collectData[0].data.slice()}
+            nomore={false}
             colNumber={1}
-            nomore={true}
-            onLoadmore={()=>{}}
+            loading={collectData[0].total==null||collectData[0].total>collectData[0].data.length}
+            onLoadmore={()=>{
+              publicStore.getCollectData(1,false)
+            }}
+            pab={setSize(20)}
             listItem={({item,index})=><CollectItem type="outline" navigation={this.props.navigation} data={{}}></CollectItem>}
             ></BxListView>
           </View>
           <View style={[mainStyle.patb15]}>
             <BxListView
-            listData={[{},{},{},{},{},{},{},{},{},{}]}
+            listData={collectData[1].data.slice()}
+            nomore={false}
             colNumber={1}
-            nomore={true}
-            onLoadmore={()=>{}}
+            loading={collectData[1].total==null||collectData[1].total>collectData[1].data.length}
+            onLoadmore={()=>{
+              publicStore.getCollectData(2,false)
+            }}
             listItem={({item,index})=><CollectItem type="online" navigation={this.props.navigation} data={{}}></CollectItem>}
             ></BxListView>
           </View>
           <View style={[mainStyle.flex1,mainStyle.mab15,{paddingLeft:setSize(10),paddingRight:setSize(10)}]}>
             <BxListView
-            listData={[{},{},{},{},{},{},{},{},{},{}]}
-            colNumber={2}
-            nomore={true}
-            onLoadmore={()=>{}}
+            listData={collectData[2].data.slice()}
+            nomore={false}
+            colNumber={1}
+            loading={collectData[2].total==null||collectData[2].total>collectData[2].data.length}
+            onLoadmore={()=>{
+              publicStore.getCollectData(3,false)
+            }}
             listItem={({item,index})=><CollectItem type="goods" navigation={this.props.navigation} data={{}}></CollectItem>}
             ></BxListView>
           </View>

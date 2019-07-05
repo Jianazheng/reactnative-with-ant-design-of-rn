@@ -5,6 +5,7 @@ import homeStore from './modules/homeStore';
 import goodsStore from './modules/goodsStore';
 import trainStore from './modules/trainStore';
 import cartStore from './modules/cartStore';
+import addressStore from './modules/addressStore';
 
 
 export default {
@@ -14,5 +15,6 @@ export default {
   homeStore,
   goodsStore,
   trainStore,
-  cartStore
+  cartStore,
+  addressStore
 }

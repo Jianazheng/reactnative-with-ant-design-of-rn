@@ -44,7 +44,6 @@ class GoodsInfo extends React.Component<Props,State> {
   componentDidMount(){
     let {navigation,goodsStore} = this.props;
     let {params} = navigation.state;
-    console.log(params);
     goodsStore.getGoodsInfo(params.id);
   }
 
@@ -94,9 +93,11 @@ class GoodsInfo extends React.Component<Props,State> {
     }
   }
 
-  handleCollection(common_id:string|number,type:string,isCollect:boolean){
-    let {publicStore} = this.props
+  handleCollection(common_id:string|number,type:string,isCollect:number|string){
+    let {publicStore,goodsStore} = this.props
     publicStore.setCollection(common_id,type,isCollect)
+    .then(res=>goodsStore.changeCollect())
+    .catch(err=>console.warn(err))
   }
 
   handleCloseCart(){
@@ -115,7 +116,7 @@ class GoodsInfo extends React.Component<Props,State> {
         navType="normal"
         title="商品详情"
         onPress={()=>{
-          this.props.navigation.goBack();
+          navigation.goBack();
         }}
         children={(
           <View style={[mainStyle.column,mainStyle.aiEnd,mainStyle.mar15,mainStyle.flex1]}>
@@ -205,11 +206,16 @@ class GoodsInfo extends React.Component<Props,State> {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
-              this.handleCollection(goodsInfo.id,'3',true)
+              this.handleCollection(goodsInfo.id,'3',goodsInfo.is_collection)
             }}>
               <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
-                <Text style={[mainStyle.c333,mainStyle.fs12]}>收藏</Text>
+                {
+                  goodsInfo.is_collection==0?
+                  <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
+                  :
+                  <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65b;</Text>
+                }
+                <Text style={[mainStyle.c333,mainStyle.fs12]}>{goodsInfo.is_collection==0?'取消':'收藏'}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -276,13 +282,6 @@ class GoodsInfo extends React.Component<Props,State> {
   }
 }
 
-class Taps extends React.PureComponent{
-  render(){
-    return(
-      <Text style={[styles.tips,mainStyle.bgczt,mainStyle.cfff,mainStyle.fs13]}>{this.props.children}</Text>
-    )
-  }
-}
 
 const styles = StyleSheet.create({
   fixedzz:{

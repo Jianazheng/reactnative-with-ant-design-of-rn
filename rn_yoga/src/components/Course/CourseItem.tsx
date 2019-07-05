@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
 import { mainStyle,contentPadding,setSize,screenW } from '../../public/style/style';
+import { splitStr } from '../../tools/function';
 
 let { width, height } = Dimensions.get('window');
 
@@ -44,13 +45,10 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
         <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage,mainStyle.imgCover]} mode="widthFix" source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}></Image>
           <View style={[mainStyle.flex1,mainStyle.mal15]}>
-            <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mab10]}>{data.title}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs14,mainStyle.mab10]}>{data.time}</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs15,mainStyle.mab10]}>{data.title||data.train_name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs14,mainStyle.mab10]}>{splitStr(data.reg_start_time,' ')}至{splitStr(data.reg_end_time,' ')}</Text>
             <View style={[mainStyle.row,mainStyle.aiCenter]}>
-              <Text style={[mainStyle.czt,mainStyle.fs12]}>
-                ￥<Text style={[mainStyle.fs18]}>1800</Text>
-              </Text>
-              <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.mal20,mainStyle.mat10]}>122人报名</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.mal20,mainStyle.mat10]}>{data.apply_num}人报名</Text>
             </View>
           </View>
         </View>

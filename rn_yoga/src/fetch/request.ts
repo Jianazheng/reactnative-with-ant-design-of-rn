@@ -51,10 +51,10 @@ export class Fetch{
           case 401:
             let errdata = JSON.parse(response.data)
             if(errdata.errorCode==1056){
-              Toast.info(errdata.message,1.4,undefined,true)
+              Toast.info(errdata.message,1.4,undefined,false)
               DeviceEventEmitter.emit('TOBIND','yes');
             }else{
-              Toast.info('验证失败，请重新登录',1.4,undefined,true)
+              Toast.info('验证失败，请重新登录',1.4,undefined,false)
               userStore.removeToken()
               RNStorage.remove({key:'token'}).then(ress=>{
                 DeviceEventEmitter.emit('TOLOGIN','yes');

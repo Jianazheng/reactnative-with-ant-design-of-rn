@@ -7,7 +7,7 @@ class Goods {
   }
   @observable goodsData = {
     goodsInfo:[],
-    goodsItem:{},
+    goodsItem:{is_collection:0},
     goodsClassify:[],
     recommendGoods:[],
     goodsCondition:[],
@@ -155,6 +155,11 @@ class Goods {
     })
     this.goodsData.sort = this.goodsData.goodsSort[index];
     this.getGoodslist(true);
+  }
+
+  @action changeCollect(){
+    let {goodsInfo} = this.goodsData
+    this.goodsData.goodsInfo.is_collection = goodsInfo.is_collection==0?1:0
   }
 
 

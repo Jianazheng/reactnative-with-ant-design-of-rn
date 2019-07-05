@@ -122,6 +122,10 @@ const mainStyle = StyleSheet.create({
         height: setSize(48),
         marginTop:setSize(6)
     },
+    userimg:{
+        width: setSize(44),
+        height: setSize(44),
+    },
     h60:{height:setSize(60)},
     h70:{height:setSize(70)},
     h80:{height:setSize(80)},

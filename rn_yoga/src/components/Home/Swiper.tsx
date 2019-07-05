@@ -23,6 +23,7 @@ class HomeSwiper extends React.Component<Props> {
       <View style={[mainStyle.bgcfff]}>
         {
           fullWidth?<Swiper
+            style={{backgroundColor:mainStyle.bgcf2.backgroundColor}}
             width={width}
             height={width}
             autoplay
@@ -46,6 +47,7 @@ class HomeSwiper extends React.Component<Props> {
           :
           <View style={[styles.swiperMain,mainStyle.aiCenter,mainStyle.jcCenter]}>
             <Swiper
+              style={{backgroundColor:mainStyle.bgcf2.backgroundColor}}
               width={sww}
               height={swh}
               autoplay

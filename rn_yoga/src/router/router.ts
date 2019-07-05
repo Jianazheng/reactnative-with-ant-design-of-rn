@@ -24,6 +24,9 @@ import MyCertificate from './../pages/Mine/MyCertificate';
 import ClassifyList from './../pages/Home/ClassifyList';
 import OnlineCourseList from '../pages/Course/OnlineCourseList';
 import GoodsInfo from './../pages/Goods/GoodsInfo/GoodsInfo';
+import ViewPdf from './../pages/Course/ViewPdf';
+import Address from './../pages/Mine/Address';
+import AddressOperate from './../pages/Mine/AddressOperate';
 
 
 
@@ -52,6 +55,9 @@ export const navItem = {
   RefundReason:{screen:RefundReason},
   ApplyRefund:{screen:ApplyRefund},
   MyCertificate:{screen:MyCertificate},
+  ViewPdf:{screen:ViewPdf},
+  Address:{screen:Address},
+  AddressOperate:{screen:AddressOperate},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({

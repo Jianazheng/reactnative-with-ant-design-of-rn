@@ -7,25 +7,39 @@ class Train {
     
   }
   @observable trainData = {
-    trainInfo:{},
+    trainInfo:{
+      is_collection:0,
+      teacher:[],
+      relate_train:[]
+    },
     frontInfo:{detail:[]},
     trainSelectItem:[],
     promotionInfo:[],
     selectItem:{},
     classify:[],
-    trainCourse:{//培训列表
+    //培训列表
+    trainCourse:{
       data:[],
       total:null,
       page:0
     },
+    //培训详情
     trainCourseInfo:{
       teacher:[],
       servers:''
     },
+    //培训服务
     trainService:{
       server:[]
     },
-    serviceIdArr:[]
+    //培训服务id集
+    serviceIdArr:[],
+    //培训购物车
+    cartItem:{price:'',type_name:''}
+  }
+
+  @computed get cartItem(){
+    return this.trainData.cartItem
   }
 
   @computed get trainInfo(){
@@ -120,9 +134,12 @@ class Train {
 
   @action async getTrainSelectItem(id:string|number){
     try {
-      let response = await new Fetch('/train/sku_info','GET',{id},{});
-      let trainSelectItem = response.data;
-      this.trainData.trainSelectItem = trainSelectItem;
+      let response = await new Fetch('/train/sku_info','GET',{id},{})
+      let trainSelectItem = response.data
+      this.trainData.trainSelectItem = trainSelectItem
+      if(trainSelectItem.length>0){
+        this.trainData.cartItem = trainSelectItem[0]
+      }
       return response
     } catch (error) {
       return null
@@ -211,6 +228,15 @@ class Train {
     } catch (error) {
       return null
     }
+  }
+
+  @action selectCartItem(item:any){
+    this.trainData.cartItem = item
+  }
+
+  @action changeCollect(){
+    let {trainInfo} = this.trainData
+    this.trainData.trainInfo.is_collection = trainInfo.is_collection==0?1:0
   }
 
 }

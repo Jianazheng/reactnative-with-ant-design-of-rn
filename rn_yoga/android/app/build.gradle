@@ -160,7 +160,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fs')
     implementation project(':react-native-doc-viewer')
+    implementation project(':react-native-webview')
     implementation project(':react-native-wechat')
     implementation project(':react-native-video')
     implementation project(':react-native-linear-gradient')

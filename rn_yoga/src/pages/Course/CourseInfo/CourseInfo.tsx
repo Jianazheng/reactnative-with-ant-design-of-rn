@@ -29,10 +29,11 @@ interface State {
   courseData:Array<object>,
   showApplyNotice:boolean,
   showCartInfoDetails:boolean,
-  showPromotion:boolean
+  showPromotion:boolean,
+  clicking:boolean
 }
 
-@inject('trainStore','publicStore')
+@inject('trainStore','publicStore','cartStore')
 @observer
 class CourseInfo extends React.Component<Props,State> {
   static navigationOptions = {
@@ -43,6 +44,7 @@ class CourseInfo extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
+      clicking:false,
       tabTop:667,
       canScroll:false,
       showApplyNotice:false,
@@ -64,9 +66,8 @@ class CourseInfo extends React.Component<Props,State> {
   }
 
   componentDidMount(){
-    let {navigation,trainStore} = this.props
+    let {navigation,trainStore,cartStore} = this.props
     let {params} = navigation.state
-    console.log(params)
     trainStore.getTrainInfo(params.id)
     trainStore.getFrontInfo(params.id)
     trainStore.getTrainPromotion(params.id)
@@ -92,14 +93,36 @@ class CourseInfo extends React.Component<Props,State> {
     })
   }
 
-  handleCloseCartInfoDetails(isok:boolean){
-    let {showCartInfoDetails} = this.state;
+  handleCloseCartInfoDetails(isok:boolean,fastbuy:boolean){
+    let {showCartInfoDetails,clicking} = this.state;
+    let {cartStore,navigation} = this.props;
     if(!showCartInfoDetails){
       this.setState({
         showCartInfoDetails:isok
       })
     }else{
-      this.props.navigation.push('Settlement',{type:'pay'});
+      if(!clicking){//防止多次点击请求购物车
+        this.setState({
+          clicking:true
+        },()=>{
+          if(fastbuy){//立即购买
+            cartStore.createCart()
+            .then(res=>{
+              navigation.push('Settlement',{type:'pay'})
+            })
+          }else{//加入购物车
+            cartStore.createCart()
+            .then(res=>{
+              cartStore.addCart()
+              .then(suc=>{
+                this.setState({
+                  clicking:false
+                })
+              })
+            })
+          }
+        })
+      }
     }
   }
 
@@ -123,14 +146,15 @@ class CourseInfo extends React.Component<Props,State> {
     })
   }
 
-  handleCollection(common_id:string|number,type:string,isCollect:boolean){
-    let {publicStore} = this.props
+  handleCollection(common_id:string|number,type:string,isCollect:string|number){
+    let {publicStore,trainStore} = this.props
     publicStore.setCollection(common_id,type,isCollect)
+    .then(res=>trainStore.changeCollect())
   }
 
   render(){
     let {canScroll,courseData,showApplyNotice,showCartInfoDetails,showPromotion} = this.state
-    let {trainStore} = this.props
+    let {trainStore,navigation} = this.props
     let trainInfo = trainStore.trainInfo
     let promotionInfo = trainStore.promotionInfo
     let frontInfo = trainStore.frontInfo
@@ -140,8 +164,19 @@ class CourseInfo extends React.Component<Props,State> {
         navType="normal"
         title="培训课程详情"
         onPress={()=>{
-          this.props.navigation.goBack();
+          navigation.goBack();
         }}
+        children={(
+          <View style={[mainStyle.column,mainStyle.aiEnd,mainStyle.mar15,mainStyle.flex1]}>
+            <TouchableOpacity onPress={()=>{
+              navigation.push('CartList')
+            }}
+            >
+              <Text style={[mainStyle.icon,{paddingRight:0},mainStyle.fs22,mainStyle.c666]} 
+              >&#xe60a;</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         ></NavTop>
         <ScrollView
         style={[mainStyle.flex1]}
@@ -171,35 +206,39 @@ class CourseInfo extends React.Component<Props,State> {
               <Text style={[mainStyle.c999,mainStyle.fs13]}>活动时间: {splitStr(trainInfo.train_start_time,' ')}至{splitStr(trainInfo.train_end_time,' ')}</Text>
               <Text style={[mainStyle.c999,mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
             </View>
-            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab20,mainStyle.aiCenter]}>
+            <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mab10,mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt,mainStyle.fs13]}>
                 ￥<Text style={[mainStyle.fs22]}>{trainInfo.course_price}</Text>
               </Text>
               <Text style={[mainStyle.c999,mainStyle.fs13]}>截止报名日期: {trainInfo.reg_end_time}</Text>
             </View>
-            <Animated.View style={[mainStyle.column,mainStyle.mab10,mainStyle.positonre,!showPromotion?{height:setSize(200),overflow:'hidden'}:{paddingBottom:setSize(60)}]}>
-              <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.mab20]}>特惠活动</Text>
-              {
-                promotionInfo.map((val,i)=>(
-                  <Text key={i} style={[mainStyle.c666,mainStyle.fs14,mainStyle.lh42]}>
-                    {val.content}
-                  </Text>
-                ))
-              }
-              <TouchableOpacity 
-              style={[mainStyle.flex1,mainStyle.h60,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.palr15,mainStyle.bgcfff,
-                {position:'absolute',bottom:0,width:screenW,opacity:0.8}]}
-              onPress={()=>{
-                this.handleShowPromotion()
-              }}  
-              >
+            {
+              promotionInfo.length>0?
+              <Animated.View style={[mainStyle.column,mainStyle.mab10,mainStyle.positonre,!showPromotion?{height:setSize(200),overflow:'hidden'}:{paddingBottom:setSize(60)}]}>
+                <Text style={[mainStyle.c333,mainStyle.fs16,mainStyle.mab20]}>特惠活动</Text>
                 {
-                  showPromotion?<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ed;</Text>:<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ec;</Text>
+                  promotionInfo.map((val,i)=>(
+                    <Text key={i} style={[mainStyle.c666,mainStyle.fs14,mainStyle.lh42]}>
+                      {val.content}
+                    </Text>
+                  ))
                 }
-              </TouchableOpacity>
-            </Animated.View>
+                <TouchableOpacity 
+                style={[mainStyle.flex1,mainStyle.h60,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.palr15,mainStyle.bgcfff,
+                  {position:'absolute',bottom:0,width:screenW,opacity:0.8}]}
+                onPress={()=>{
+                  this.handleShowPromotion()
+                }}  
+                >
+                  {
+                    showPromotion?<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ed;</Text>:<Text style={[mainStyle.icon,mainStyle.c333]}>&#xe8ec;</Text>
+                  }
+                </TouchableOpacity>
+              </Animated.View>
+              :null
+            }
             <View style={[mainStyle.column,mainStyle.mat30]}>
-              <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+              <TouchableOpacity onPress={()=>{this.handleCloseCartInfoDetails(true,false)}}>
                 <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100]}>
                   <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.flex1]}>
                     <Text style={[mainStyle.c999,mainStyle.fs15,mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
@@ -227,13 +266,13 @@ class CourseInfo extends React.Component<Props,State> {
           tabAlign={'center'}
           >
             <View style={[mainStyle.mab40]}>
-              <CourseTeacher data={courseData}></CourseTeacher>
+              <CourseTeacher></CourseTeacher>
             </View>
             <View style={[mainStyle.mab40]}>
-              <CourseArtInfo data={courseData}></CourseArtInfo>
+              <CourseArtInfo></CourseArtInfo>
             </View>
             <View style={[mainStyle.mab40]}>
-              <RelatedCourse data={courseData}></RelatedCourse>
+              <RelatedCourse></RelatedCourse>
             </View>
           </BxTabView>
 
@@ -248,16 +287,21 @@ class CourseInfo extends React.Component<Props,State> {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={()=>{
-              this.handleCollection(goodsInfo.id,'3',true)
+              this.handleCollection(trainInfo.id,'1',trainInfo.is_collection)
             }}>
               <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
-                <Text style={[mainStyle.c333,mainStyle.fs12]}>收藏</Text>
+                {
+                  trainInfo.is_collection==0?
+                  <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65a;</Text>
+                  :
+                  <Text style={[mainStyle.czt,mainStyle.icon,mainStyle.fs18,mainStyle.mab5]}>&#xe65b;</Text>
+                }
+                <Text style={[mainStyle.c333,mainStyle.fs12]}>{trainInfo.is_collection==0?'取消':'收藏'}</Text>
               </View>
             </TouchableOpacity>
           </View>
           <View style={[styles.fixedbtn,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,mainStyle.flex1]}>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgcjin]} onPress={()=>{this.handleCloseCartInfoDetails(true,false)}}>
               <LinearGradient 
               colors={['#FF8604','#FF5100']} 
               start={{ x: 1, y: 1 }}
@@ -266,7 +310,7 @@ class CourseInfo extends React.Component<Props,State> {
                 <Text style={[mainStyle.cfff,mainStyle.fs15]}>加入购物车</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{this.handleCloseCartInfoDetails(true)}}>
+            <TouchableOpacity style={[mainStyle.flex1,mainStyle.bgc59]} onPress={()=>{this.handleCloseCartInfoDetails(true,true)}}>
               <LinearGradient 
               colors={['#FA5439','#FA3352']} 
               start={{ x: 1, y: 1 }}
@@ -301,8 +345,7 @@ class CourseInfo extends React.Component<Props,State> {
               height:screenH*0.55
             }
           ]}>
-            <CartInfo 
-              data={[]}
+            <CartInfo
               closeBtn={
                 <Text 
                 style={[mainStyle.c999,mainStyle.icon,mainStyle.fs20]}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, Animated, Platform } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, Animated, Platform, WebView } from 'react-native';
 import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -8,11 +8,11 @@ import BxButton from '../../components/Pubilc/Button';
 import Video from 'react-native-video';
 import { observer, inject } from 'mobx-react';
 import OpenFile from 'react-native-doc-viewer';
-
+const RNFS = require('react-native-fs');
+const SavePath = Platform.OS === 'ios' ? RNFS.LibraryDirectoryPath : RNFS.ExternalDirectoryPath;
 
 interface Props {}
 
-let imgw = (screenW-setSize(120))*0.28;
 
 @inject('courseStore')
 @observer
@@ -85,20 +85,8 @@ class OnlineCourseInfo extends React.Component<Props> {
     });
   }
 
-  handleOpenPPT(){
-    this.setState({ loading: true });
-    let path = 'http://yoga.t.jkxuetang.com/upload/courseware/20190703/c88cd64a11bc9876e2602fe7a7b01f23.pdf'
-    OpenFile.openDoc([
-      {
-        url:path,
-        fileName:"sample",
-        cache:true,
-        fileType:"pdf"
-      }
-    ],(err,url)=>{
-      this.setState({ loading: false });
-      console.log(err,url)
-    })
+  handleOpenPPT(url:string){
+    this.goto('ViewPdf',{url})
   }
 
   render(){
@@ -142,29 +130,30 @@ class OnlineCourseInfo extends React.Component<Props> {
           <View style={[mainStyle.flex1]}>
             {/** 视频播放start */}
             <View style={[styles.videoVertical,mainStyle.bgc000,mainStyle.positonre]}>
-              {/* {
-                onlineCourseStudy.url!=''
+              {
+                onlineCourseStudy.type=='andio'||onlineCourseStudy.type=='video'
+                ?onlineCourseStudy.url!=''
                 ?<Video 
                 style={[styles.videoVertical]} 
                 source={{uri:onlineCourseStudy.url}}
                 onLoad={(e)=>{
-                  console.log(e)
+                  //console.log(e)
                 }}
                 resizeMode={'contain'}
                 ></Video>
                 :null
-              }  */}
-              <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                <BxButton 
-                color={mainStyle.cfff.color}
-                textstyle={[mainStyle.c333]}
-                btnstyle={[{width:setSize(240),borderRadius:setSize(80)}]}
-                title={'查看课程'}
-                onClick={()=>{
-                  this.handleOpenPPT()
-                }}
-                ></BxButton>
-              </View>
+                :<View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
+                  <BxButton
+                  color={mainStyle.cfff.color}
+                  textstyle={[mainStyle.c333]}
+                  btnstyle={[{width:setSize(240),borderRadius:setSize(80)}]}
+                  title={'在线预览'}
+                  onClick={()=>{
+                    this.handleOpenPPT(onlineCourseStudy.url)
+                  }}
+                  ></BxButton>
+                </View>
+              }
             </View>
             {/** 视频播放end */}
             <View style={[mainStyle.flex1,{marginBottom:setSize(150)}]}>

@@ -139,7 +139,7 @@ class Mine extends React.Component<Props> {
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
-                        <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe655;</Text>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/collect.png')}></Image>
                         <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>我的收藏</Text>
                       </View>
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
@@ -153,7 +153,7 @@ class Mine extends React.Component<Props> {
                   >
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
-                        <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe61c;</Text>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/cert.png')}></Image>
                         <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>我的证书</Text>
                       </View>
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
@@ -162,7 +162,7 @@ class Mine extends React.Component<Props> {
                   <TouchableOpacity style={[mainStyle.flex1]}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
-                        <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe62b;</Text>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/member.png')}></Image>
                         <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>我的会员</Text>
                       </View>
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
@@ -178,12 +178,23 @@ class Mine extends React.Component<Props> {
                 </View>
                 <View style={[mainStyle.column]}>
                   <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]} onPress={()=>{
+                    this.goto('Address',{})
+                  }}>
+                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
+                      <View style={[mainStyle.row,mainStyle.aiCenter]}>
+                        <Image style={[{height:setSize(48),width:setSize(48),left:-setSize(1)}]} source={require('../../../images/address.png')}></Image>
+                        <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>地址管理</Text>
+                      </View>
+                      <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]} onPress={()=>{
                     //this.props.navigation.navigate('Forget')
                     this.goto('Forget',{})
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
-                        <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs22]}>&#xe658;</Text>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/password.png')}></Image>
                         <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>密码修改</Text>
                       </View>
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
@@ -194,7 +205,7 @@ class Mine extends React.Component<Props> {
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
-                        <Text style={[mainStyle.icon,mainStyle.c999,mainStyle.fs18,{marginLeft:setSize(6)}]}>&#xe668;</Text>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/logout.png')}></Image>
                         <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>退出登录</Text>
                       </View>
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
