@@ -28,7 +28,9 @@ class Cart {
     let {ids} = this.cartData
     return ids
   }
-
+  /**
+   * 购物车价格计算 
+   * */
   @computed get cartPrice(){
     let {cartList,cartTotalPrice} = this.cartData
     if(cartList.length<1){
@@ -53,7 +55,9 @@ class Cart {
       return newPrice
     }
   }
-
+  /**
+   * 购物车数量计算 
+   * */
   @computed get cartTotal(){
     let {cartList,cartTotals} = this.cartData
     if(cartList.length<1){
@@ -117,7 +121,9 @@ class Cart {
       return null
     }
   }
-
+  /**
+   * 批量删除购物车，可多选 ids:Array<string>
+   */
   @action async delectCartItem(){
     try {
       let {ids} = this.cartData
@@ -131,7 +137,9 @@ class Cart {
       return null
     }
   }
-
+  /**
+   * 删除单个类型购物车 商品类型1-商品，2-培训，3-在线课程
+   */
   @action async delectCartMain(type:string|number){
     try {
       let params = {type}
@@ -143,7 +151,9 @@ class Cart {
       return null
     }
   }
-
+  /**
+   * 购物车多选
+   */
   @action setSelectItem(type:string,index:number){
     let {cartList} = this.cartData
     cartList[type][index].checked = cartList[type][index].checked?false:true
@@ -158,7 +168,9 @@ class Cart {
     let newids = ids
     this.cartData.ids = newids;
   }
-
+  /**
+   * 全选
+   */
   @action setSelectAll(selectAll){
     let {cartList} = this.cartData
     let newids = [];
@@ -180,22 +192,44 @@ class Cart {
     let {cartList} = this.cartData
     cartList[type][index].count = value
   }
-
-  @action addCartItem(type:string,index:number){
-    let {cartList} = this.cartData
-    let count = cartList[type][index].count;
-    count = Number(count)
-    count += 1
-    cartList[type][index].count = count.toString();
-  }
-
-  @action reduceCartItem(type:string,index:number){
-    let {cartList} = this.cartData
-    let count = cartList[type][index].count;
-    if(count>1){
-      count -= 1
+  /**
+   * 购物车添加数量
+   */
+  @action async addCartItem(type:string,index:number){
+    try {
+      let {cartList} = this.cartData
+      let count = cartList[type][index].count
+      let id = cartList[type][index].id
+      count = Number(count)
+      count += 1
+      let params = {id,num:count}
+      cartList[type][index].count = count.toString()
+      let response = await new Fetch('/cart/product_edit','POST',params,{})
+      return response
+    } catch (error) {
+      console.log(error)
+      return null
     }
-    cartList[type][index].count = count.toString();
+  }
+  /**
+   * 购物车减少数量
+   */
+  @action async reduceCartItem(type:string,index:number){
+    try {
+      let {cartList} = this.cartData
+      let count = cartList[type][index].count
+      let id = cartList[type][index].id
+      if(count>1){
+        count -= 1
+      }
+      let params = {id,num:count}
+      cartList[type][index].count = count.toString()
+      let response = await new Fetch('/cart/product_edit','POST',params,{})
+      return response
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 }
 

@@ -159,7 +159,12 @@ class Mine extends React.Component<Props> {
                       <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1]}>
+                  <TouchableOpacity 
+                  style={[mainStyle.flex1]}
+                  onPress={()=>{
+                    this.goto('MyLevel',{})
+                  }}
+                  >
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>
                         <Image style={[mainStyle.userimg]} source={require('../../../images/member.png')}></Image>

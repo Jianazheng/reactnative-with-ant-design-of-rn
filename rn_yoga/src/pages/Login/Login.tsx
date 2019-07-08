@@ -63,7 +63,7 @@ class Login extends React.Component<Props,State> {
       let response = await userStore.WxLogin()
       if(response!=null){
         if(response.errorCode==1056){
-          
+          //未绑定手机
         }else{
           await userStore.GetUserInfo()
           navigation.goBack();

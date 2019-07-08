@@ -135,7 +135,7 @@ class User {
         return null
       }
     } catch (error) {
-      Alert.alert('登录授权发生错误：', error, [{text: '确定'}]);
+      Alert.alert('登录授权发生错误：');
       console.log(error)
       return null
     }

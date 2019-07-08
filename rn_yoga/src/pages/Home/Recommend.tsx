@@ -160,7 +160,7 @@ class RecommendGoods extends PureComponent<GoodsProps> {
     return(
       <TouchableOpacity style={[styles.reGoods,mainStyle.mab10,(index+1)%3==2?{marginLeft:setSize(10),marginRight:setSize(10)}:null]} onPress={()=>{this.gotoInfo('GoodsInfo',{id:data.id})}}>
         <View style={[mainStyle.column,mainStyle.jcBetween]}>
-          <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5,mainStyle.bgcf2]} mode="widthFix" source={{uri:data.image_url?data.image_url[0]:''}}></Image>
+          <Image style={[styles.reGoodsImage,mainStyle.imgCover,mainStyle.mab5,mainStyle.bgcf2]} mode="widthFix" source={{uri:data.image_url?data.image_url.length>0?data.image_url.constructor==String?data.image_url[0]:'':'':''}}></Image>
           <View style={[mainStyle.flex1]}>
             <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mab5]}>{data.product_name}</Text>
             <Text style={[mainStyle.czt,mainStyle.fs14]}>{data.list_price}</Text>

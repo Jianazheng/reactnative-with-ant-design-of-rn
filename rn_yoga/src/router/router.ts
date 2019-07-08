@@ -27,6 +27,7 @@ import GoodsInfo from './../pages/Goods/GoodsInfo/GoodsInfo';
 import ViewPdf from './../pages/Course/ViewPdf';
 import Address from './../pages/Mine/Address';
 import AddressOperate from './../pages/Mine/AddressOperate';
+import MyLevel from './../pages/Mine/MyLevel';
 
 
 
@@ -58,6 +59,7 @@ export const navItem = {
   ViewPdf:{screen:ViewPdf},
   Address:{screen:Address},
   AddressOperate:{screen:AddressOperate},
+  MyLevel:{screen:MyLevel},
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({

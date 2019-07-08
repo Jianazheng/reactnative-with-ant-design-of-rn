@@ -79,7 +79,7 @@ export class Fetch{
       })
       .catch((error) => {
         Toast.info('程序错误',1.8,undefined,false)
-        console.warn(error)
+        //console.warn(error)
         reject(error);
       });
     })
