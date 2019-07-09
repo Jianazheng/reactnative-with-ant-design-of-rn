@@ -46,7 +46,7 @@ export default class BxButton extends PureComponent<Props,State>{
         this.setState({
           clicked:false
         })
-      },600)
+      },400)
     })
   }
 
@@ -70,9 +70,10 @@ export default class BxButton extends PureComponent<Props,State>{
   }
 
   render(){
-    let {clicked} = this.state;
-    let {title,disabled,btnstyle,textstyle,borderRadius,color,colors,plain} = this.props;
-    if(borderRadius==undefined)borderRadius = setSize(6);
+    let {clicked} = this.state
+    let {title,disabled,btnstyle,textstyle,borderRadius,color,colors,plain} = this.props
+    if(borderRadius==undefined)borderRadius = setSize(6)
+    console.log(colors,color)
     if(!disabled&&!clicked){
       return(
         <TouchableOpacity
@@ -100,7 +101,7 @@ export default class BxButton extends PureComponent<Props,State>{
             </View>
             :
             <LinearGradient 
-            colors={typeof colors == "object"?colors:[color,color]} 
+            colors={typeof colors == "object"?[...colors]:[color,color]} 
             start={{ x: 0.1, y: 0.2 }}
             end={{ x: 0.9, y: 0.8 }}
             style={[
@@ -112,7 +113,10 @@ export default class BxButton extends PureComponent<Props,State>{
               <Text style={[
                 mainStyle.cfff,mainStyle.fs13,
                 {color:'#fff'},
-                textstyle]}>{title}</Text>
+                textstyle]}
+              >
+                {title}
+              </Text>
             </LinearGradient>
           }
         </TouchableOpacity>
@@ -121,13 +125,13 @@ export default class BxButton extends PureComponent<Props,State>{
       return(
         <View 
         style={[
-          mainStyle.bgccc,styles.btn,
+          styles.btn,
           {
             borderRadius:borderRadius
           },
-          btnstyle]}>
-          <ActivityIndicator />
-          <Text style={[mainStyle.c666,mainStyle.fs13,mainStyle.mal10,textstyle]}>{title}</Text>
+          btnstyle,
+          mainStyle.bgccc]}>
+          <Text style={[mainStyle.fs13,textstyle,mainStyle.cfff]}>{title}</Text>
         </View>
       )
     }

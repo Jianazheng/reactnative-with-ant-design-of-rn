@@ -335,7 +335,7 @@ class CourseInfo extends React.Component<Props,State> {
             onPress={()=>{this.handleCloseApplyNotice(false)}}
             >&#xe651;</Text>
           </View>
-          <ApplyNotice data={frontInfo.detail||[]}></ApplyNotice>
+          <ApplyNotice data={frontInfo.apply_detail||[]}></ApplyNotice>
         </View>
         :null}
 

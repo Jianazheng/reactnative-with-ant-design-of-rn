@@ -68,7 +68,7 @@ export class Fetch{
             break;      
           case 500:
             Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
-            console.warn(response.data)
+            //console.warn(response.data)
             reject(response.data);
             break;
           default:
@@ -79,7 +79,7 @@ export class Fetch{
       })
       .catch((error) => {
         Toast.info('程序错误',1.8,undefined,false)
-        //console.warn(error)
+        console.warn(error)
         reject(error);
       });
     })

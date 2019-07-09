@@ -124,7 +124,11 @@ class CourseItem extends PureComponent<CourseItemProps> {
               <Text style={[mainStyle.czt,mainStyle.fs15]}>{data.price}</Text>
             </Text>
             <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.mab5]}>
-              <Text style={[mainStyle.fs12,mainStyle.bgcaa4,mainStyle.c8d0,styles.lowPrice,mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
+              {
+                data.dijia!=''&&data.dijia!=undefined&&data.dijia!=null
+                ?<Text style={[mainStyle.fs12,mainStyle.bgcaa4,mainStyle.c8d0,styles.lowPrice,mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
+                :null
+              }
               {
                 data.promotion.length>0
                 ?<TouchableOpacity 

@@ -5,6 +5,7 @@ import NavTop from '../../router/navTop';
 import BxTabView from '../../components/ScrollTabs/TabView';
 import BxListView from '../../components/Pubilc/ListView';
 import { observer, inject } from 'mobx-react';
+import { toJS } from 'mobx';
 
 
 interface Props {}
@@ -23,7 +24,7 @@ class MyCollect extends React.Component<Props,State> {
     super(props);
     this.state = {
       tabs:[{title:'培训课程'},{title:'在线课程'},{title:'商品'}]
-    };
+    }
   }
 
   componentDidMount(){
@@ -38,7 +39,6 @@ class MyCollect extends React.Component<Props,State> {
     let {tabs} = this.state
     let {publicStore} = this.props
     let collectData = publicStore.collectData
-    console.log(collectData)
     return (
       <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf2]}>
         <NavTop
@@ -59,7 +59,7 @@ class MyCollect extends React.Component<Props,State> {
         >
           <View style={[mainStyle.patb15]}>
             <BxListView
-            listData={collectData[0].data.slice()}
+            listData={toJS(collectData[0].data)}
             nomore={false}
             colNumber={1}
             loading={collectData[0].total==null||collectData[0].total>collectData[0].data.length}
@@ -72,7 +72,7 @@ class MyCollect extends React.Component<Props,State> {
           </View>
           <View style={[mainStyle.patb15]}>
             <BxListView
-            listData={collectData[1].data.slice()}
+            listData={toJS(collectData[1].data)}
             nomore={false}
             colNumber={1}
             loading={collectData[1].total==null||collectData[1].total>collectData[1].data.length}
@@ -84,7 +84,7 @@ class MyCollect extends React.Component<Props,State> {
           </View>
           <View style={[mainStyle.flex1,mainStyle.mab15,{paddingLeft:setSize(10),paddingRight:setSize(10)}]}>
             <BxListView
-            listData={collectData[2].data.slice()}
+            listData={toJS(collectData[2].data)}
             nomore={false}
             colNumber={2}
             loading={collectData[2].total==null||collectData[2].total>collectData[2].data.length}
@@ -121,6 +121,7 @@ class CollectItem extends React.Component<CollectItemState,CollectItemProps>{
 
   render(){
     let {type,data} = this.props;
+    console.log(data)
     switch (type) {
       case 'outline':
         return (
@@ -133,7 +134,7 @@ class CollectItem extends React.Component<CollectItemState,CollectItemProps>{
               <Image
               style={[styles.outlineImg]}
               resizeMode="cover" 
-              source={{uri:'http://'+data.image_url?data.image_url.length>0?data.image_url[0]:'':''}}
+              source={{uri:'http://'+data.train?data.train.image_url?data.train.image_url.length>0?data.train.image_url[0]:'':'':''}}
               ></Image>
             </TouchableOpacity>
             <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mal15]}>
@@ -142,13 +143,13 @@ class CollectItem extends React.Component<CollectItemState,CollectItemProps>{
               onPress={()=>{
                 this.goto('CourseInfo',{});
               }}>
-                <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.lh42,mainStyle.mab5]} numberOfLines={2}>{data.train_name}</Text>
+                <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.lh42,mainStyle.mab5]} numberOfLines={2}>{data.train.train_name}</Text>
               </TouchableOpacity>
-              <Text style={[mainStyle.c999,mainStyle.fs12]}>{data.train_start_time}</Text>
+              <Text style={[mainStyle.c999,mainStyle.fs12]}>{data.train.train_start_time}</Text>
               <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.flex1]}>
                 <View style={[mainStyle.row,mainStyle.aiEnd]}>
                   {/* <Text style={[mainStyle.fs14,mainStyle.c333]}>￥{}</Text> */}
-                  <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mal15]}>{data.apply_num}人报名</Text>
+                  <Text style={[mainStyle.fs12,mainStyle.c999,mainStyle.mal15]}>{data.train.apply_num}人报名</Text>
                 </View>
                 <View style={[mainStyle.row,mainStyle.aiCenter,{top:setSize(0)}]}>
                   <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe655;</Text>
@@ -170,7 +171,7 @@ class CollectItem extends React.Component<CollectItemState,CollectItemProps>{
               <Image
               style={[styles.outlineImg]}
               resizeMode="cover" 
-              source={{uri:'http://'+data.image_url?data.image_url.length>0?data.image_url[0]:'':''}}
+              source={{uri:'http://'}}
               ></Image>
             </TouchableOpacity>
             <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mal15]}>
@@ -217,17 +218,17 @@ class CollectItem extends React.Component<CollectItemState,CollectItemProps>{
               <Image
               style={[styles.goodsImg]}
               resizeMode="cover" 
-              source={{uri:'http://'+data.image_url?data.image_url.length>0?data.image_url[0]:'':''}}
+              source={{uri:'http://'+data.product?data.product.image_url?data.product.image_url.length>0?data.product.image_url[0]:'':'':''}}
               ></Image>
             </TouchableOpacity>
             <View style={[mainStyle.pa5_10]}>
               <View style={[mainStyle.h70,mainStyle.mab10,mainStyle.mat5]}>
-                <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.lh42,mainStyle.mab5]} numberOfLines={2}>{data.product_name}</Text>
+                <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.lh42,mainStyle.mab5]} numberOfLines={2}>{data.product.product_name}</Text>
               </View>
               <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mab5]}>
                 <View style={[mainStyle.row,mainStyle.aiCenter]}>
                   <Text style={[mainStyle.fs12,mainStyle.czt,mainStyle.lh44]}>￥</Text>
-                  <Text style={[mainStyle.fs16,mainStyle.czt,mainStyle.lh44]}>{data.list_price}</Text>
+                  <Text style={[mainStyle.fs16,mainStyle.czt,mainStyle.lh44]}>{data.product.list_price}</Text>
                 </View>
                 <View style={[mainStyle.row,mainStyle.aiCenter]}>
                   <Text style={[mainStyle.icon,mainStyle.czt]}>&#xe655;</Text>

@@ -38,7 +38,7 @@ class AddressOperate extends React.Component<Props,State> {
   componentDidMount(){
     let {addressStore,navigation} = this.props
     let {params} = navigation.state
-    if(params){
+    if(params.type=='edit'){
       addressStore.getAddressInfo(params.id)
       .then(res=>{
         console.log(res)

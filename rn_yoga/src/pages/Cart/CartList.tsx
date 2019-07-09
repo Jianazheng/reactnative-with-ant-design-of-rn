@@ -7,6 +7,7 @@ import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import { isDebuggerStatement } from '@babel/types';
 
 interface Props {}
 interface State {
@@ -95,10 +96,20 @@ class CartList extends React.Component<Props,State> {
     })
   }
 
+  handleSubmit(){
+    let {cartStore,navigation} = this.props
+    let {cartList,cartListObj2Arr,ids} = cartStore
+    if(ids.length>0){
+      navigation.navigate('Settlement',{type:'pay'})
+    }else{
+      Toast.info('请选择商品',1.4,undefined,false)
+    }
+  }
+
   render(){
-    let {showLoading,selectAll} = this.state;
-    let {cartStore} = this.props;
-    let cartList = cartStore.cartList;
+    let {showLoading,selectAll} = this.state
+    let {cartStore} = this.props
+    let {cartList,cartInvalid,cartListObj2Arr,ids} = cartStore
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -147,8 +158,8 @@ class CartList extends React.Component<Props,State> {
               :null
             }
             {
-              cartList.invalid
-              ?<CartArray data={cartList.invalid} title={'已失效'} type={'invalid'} typenum={4} num={cartList.invalid.length?cartList.invalid.length:0}
+              cartInvalid.length>0
+              ?<CartArray data={cartInvalid} title={'已失效'} type={'invalid'} typenum={4} num={cartInvalid.length?cartInvalid.length:0}
               onDel={(e)=>{
                 this.handleDelectCartMain(e)
               }}
@@ -160,7 +171,7 @@ class CartList extends React.Component<Props,State> {
         <View style={[mainStyle.h120,mainStyle.brt1e2,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.palr15]}>
           <View style={[mainStyle.row,mainStyle.aiCenter]}>
             <BxRadio 
-            checked={selectAll}
+            checked={selectAll&&cartListObj2Arr.length==ids.length}
             size={18} 
             color={mainStyle.czt.color}
             onChange={()=>{
@@ -180,7 +191,9 @@ class CartList extends React.Component<Props,State> {
             title={'结算('+cartStore.cartTotal+')'} 
             btnstyle={[mainStyle.palr15,mainStyle.mal15,{borderRadius:setSize(40),height:setSize(80)}]} 
             textstyle={[mainStyle.fs14]}
-            onClick={()=>{}}>
+            onClick={()=>{
+              this.handleSubmit()
+            }}>
             </BxButton>
           </View>
         </View>
@@ -215,6 +228,20 @@ class CartArray extends React.Component<CartArrayProps>{
     this.props.onDel(typenum)
   }
 
+  invalidItem=(val,i)=>(
+    <View key={i} style={[mainStyle.row,mainStyle.jcBetween,mainStyle.mat15,{opacity:0.8}]}>
+      <Image 
+      style={[{width:imgw*0.6,height:imgw*0.6,borderRadius:setSize(6)},mainStyle.bgcf2]}
+      mode="widthFix" 
+      source={{uri:'http://'+(typeof val.image_url=="object"&&val.image_url!=null?val.image_url[0]:'')}}>
+      </Image>
+      <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
+        <Text style={[mainStyle.c666,mainStyle.fs13,mainStyle.mab5]}>{val.name}</Text>
+        <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs13]}>{val.price}</Text></Text>
+      </View>
+    </View>
+  )
+
   render(){
     let {data,title,num,type,typenum} = this.props;
     return (
@@ -231,8 +258,12 @@ class CartArray extends React.Component<CartArrayProps>{
         </View>
         <View style={[mainStyle.palr10,mainStyle.mab15]}>
         {
-          data.map((val,i)=>(
+          type!='invalid'
+          ?data.map((val,i)=>(
             <CartItem data={val} index={i} type={type} key={i}></CartItem>
+          ))
+          :data.map((val,i)=>(
+            this.invalidItem(val,i)
           ))
         }
         </View>
@@ -262,7 +293,6 @@ class CartItem extends React.Component<CartItemProps>{
         <View style={[mainStyle.mar10]}>
           <BxRadio 
           color={mainStyle.czt.color}
-          data={{}}
           size={18}
           checked={data.checked}
           onChange={(e)=>{
@@ -277,11 +307,11 @@ class CartItem extends React.Component<CartItemProps>{
         {
           type=='product'
           ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal10,mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.sku_name}</Text>
+            <Text style={[mainStyle.c333,mainStyle.fs12]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.sku_name}</Text>
             <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.flex1]}>
               <View style={[mainStyle.flex1]}>
-                <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+                <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
               </View>
               <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter,styles.numberSelect]}>
                 <TouchableOpacity style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}
@@ -313,24 +343,17 @@ class CartItem extends React.Component<CartItemProps>{
         {
           type=='train'
           ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
-            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+            <Text style={[mainStyle.c333,mainStyle.fs12]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
           </View>:null
         }
         {
           type=='course'
           ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
-            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
-          </View>:null
-        }
-        {
-          type=='invalid'
-          ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
-            <Text style={[mainStyle.c333,mainStyle.fs13]}>{data.name}</Text>
-            <Text style={[mainStyle.czt,mainStyle.fs11,mainStyle.lh42]}>￥<Text style={[mainStyle.fs16]}>{data.price}</Text></Text>
+            <Text style={[mainStyle.c333,mainStyle.fs12]}>{data.name}</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
+            <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
           </View>:null
         }
       </View>

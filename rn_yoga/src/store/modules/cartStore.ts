@@ -8,7 +8,9 @@ class Cart {
   }
   @observable cartData = {
     selectData:{},
-    cartList:[],//购物车分类：course 课程 product 商品 train 培训 invalid 已过期
+    cartList:{},//购物车分类：course 课程 product 商品 train 培训 
+    cartListObj2Arr:[],//购物车不归类全部集合 用于对比
+    cartInvalid:[],// 已过期的
     ids:[],
     cartTotalPrice:0,
     cartTotals:0
@@ -22,6 +24,20 @@ class Cart {
       }
     }
     return this.cartData.cartList
+  }
+
+  @computed get cartListObj2Arr(){
+    let {cartListObj2Arr} = this.cartData
+    return cartListObj2Arr
+  }
+
+  @computed get cartInvalid(){
+    let {cartInvalid} = this.cartData
+    let newArr = []
+    for(let i in cartInvalid){
+      newArr.push(...cartInvalid[i])
+    }
+    return newArr
   }
 
   @computed get ids(){
@@ -96,7 +112,18 @@ class Cart {
     try {
       let response = await new Fetch('/cart/list','GET',{},{})
       let cartList = response.data
-      this.cartData.cartList = cartList
+      let newobj = {}
+      let newArr = []
+      for(let i in cartList){
+        if(i=='invalid'){
+          this.cartData.cartInvalid = cartList[i]
+        }else{
+          newobj[i] = cartList[i]
+          newArr.push(...cartList[i])
+        }
+      }
+      this.cartData.cartList = newobj
+      this.cartData.cartListObj2Arr = newArr
       return response
     } catch (error) {
       console.log(error)
@@ -181,7 +208,7 @@ class Cart {
           newids.push(cartList[i][j].id)
         }else{
           cartList[i][j].checked = false
-          newids = [];
+          newids = []
         }
       }
     }

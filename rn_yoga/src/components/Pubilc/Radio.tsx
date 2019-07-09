@@ -10,7 +10,7 @@ interface Props {
   size:number,
   data:object,
   color:string,
-  checked:boolean
+  checked:boolean|undefined
 }
 
 interface State {

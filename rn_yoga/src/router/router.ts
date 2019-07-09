@@ -69,7 +69,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'Tab',
+  initialRouteName: 'Settlement',
   headerMode: 'float',
   navigationOptions:{
     header:null,

@@ -108,8 +108,8 @@ class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
             title={'去支付'}
             plain
             color={mainStyle.czt.color}
-            borderRadius={setSize(40)}
-            btnstyle={[mainStyle.bgcfff,mainStyle.h70,mainStyle.palr15]}
+            borderRadius={setSize(30)}
+            btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15]}
             onClick={()=>{
               this.goto('Settlement',{type:'pay'});
             }}
@@ -118,8 +118,8 @@ class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
             title={'取消订单'}
             plain
             color={mainStyle.c666.color}
-            borderRadius={setSize(40)}
-            btnstyle={[mainStyle.bgcfff,mainStyle.h70,mainStyle.palr15,mainStyle.mal10]}
+            borderRadius={setSize(30)}
+            btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15,mainStyle.mal10]}
             onClick={()=>{
               this.goto('ApplyRefund',{type:'pay'});
             }}
