@@ -6,6 +6,7 @@ import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 interface State {
@@ -14,6 +15,8 @@ interface State {
 
 let imgw = setSize(180);
 
+@inject('cartStore')
+@observer
 class Settlement extends React.Component<Props,State> {
   static navigationOptions = {
     // headerTitle:headerTitle('购物车'),
@@ -34,7 +37,6 @@ class Settlement extends React.Component<Props,State> {
         type:'pay'
       }
     }
-    console.log(params)
     this.setState({
       orderType:params.type
     })
@@ -42,7 +44,8 @@ class Settlement extends React.Component<Props,State> {
 
   render(){
     let {orderType} = this.state
-    let {navigation} = this.props
+    let {navigation,cartStore,cartStore:{settlementInfo}} = this.props
+    console.log(settlementInfo)
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -82,78 +85,60 @@ class Settlement extends React.Component<Props,State> {
                   <Text style={[mainStyle.fs14,mainStyle.c333]}>商品信息</Text>
                 </View>
               </View>
-              <View style={[mainStyle.mab15]}>
-                <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.pa15,mainStyle.brb1f2]}>
-                  <Image 
-                  style={[{width:imgw,height:imgw,borderRadius:setSize(6)}]}
-                  mode="widthFix" 
-                  source={{uri:'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg'}}>
-                  </Image>
-                  <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs12]}>高阶体式提升计划</Text>
-                    <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>师资班（6天，不含考证）2019年6月1日-6月30日</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14,mainStyle.fontsilm]}>1800</Text></Text>
+              {
+                settlementInfo.pStatusArray.map((val,i)=>(
+                  <View key={i} style={[mainStyle.pab15,i<settlementInfo.pStatusArray.length-1?mainStyle.brb1f2:null]}>
+                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.pa15,mainStyle.brb1f2]}>
+                      <Image 
+                      style={[{width:imgw,height:imgw,borderRadius:setSize(6)},mainStyle.bgcf2]}
+                      mode="widthFix" 
+                      source={{uri:'http://'+val.good_img}}>
+                      </Image>
+                      <View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
+                        <Text style={[mainStyle.c333,mainStyle.fs12]}>{val.good_name}</Text>
+                        <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{val.sku_name}</Text>
+                        <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14,mainStyle.fontsilm]}>{val.original_price}</Text></Text>
+                      </View>
+                    </View>
+                    <View style={[mainStyle.column,mainStyle.palr15]}>
+                      <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
+                        <Text style={[mainStyle.c333,mainStyle.fs12]}>课程数量</Text>
+                        <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.count}</Text>
+                      </View>
+                      <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
+                        <Text style={[mainStyle.c333,mainStyle.fs12]}>优惠价格</Text>
+                        <Text style={[mainStyle.czt,mainStyle.fs14]}>￥{val.favorable_price}</Text>
+                      </View>
+                      <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
+                        <Text style={[mainStyle.c333,mainStyle.fs12]}>优惠金额</Text>
+                        <Text style={[mainStyle.czt,mainStyle.fs14]}>-￥{val.total_favorable}</Text>
+                      </View>
+                      <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
+                        <Text style={[mainStyle.c333,mainStyle.fs12]}>总金额</Text>
+                        <Text style={[mainStyle.czt,mainStyle.fs14]}>￥{val.totalPrice}</Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-                <View style={[mainStyle.column,mainStyle.palr15]}>
-                  {
-                    orderType!='pay'
-                    ?<View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat15]}>
-                      <Text style={[mainStyle.c333,mainStyle.fs12]}>订单号</Text>
-                      <Text style={[mainStyle.c333,mainStyle.fs14]}>8230832048234</Text>
-                    </View>:null
-                  }
-                  {
-                    orderType!='pay'
-                    ?<View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                      <Text style={[mainStyle.c333,mainStyle.fs12]}>下单订单</Text>
-                      <Text style={[mainStyle.c333,mainStyle.fs14]}>2019/04/05  19:03</Text>
-                    </View>:null
-                  }
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs12]}>课程数量</Text>
-                    <Text style={[mainStyle.c333,mainStyle.fs14]}>1</Text>
-                  </View>
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs12]}>总金额</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs14]}>￥59.00</Text>
-                  </View>
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs12]}>会员折扣</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs14]}>-￥0</Text>
-                  </View>
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c333,mainStyle.fs12]}>总优惠金额</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs14]}>-￥9.80</Text>
-                  </View>
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c999,mainStyle.fs12]}>会员折扣优惠</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs14]}>-￥5.40</Text>
-                  </View>
-                  <View style={[mainStyle.flex1,mainStyle.row,mainStyle.jcBetween,mainStyle.mat10]}>
-                    <Text style={[mainStyle.c999,mainStyle.fs12]}>特惠期优惠</Text>
-                    <Text style={[mainStyle.czt,mainStyle.fs14]}>-￥5.40</Text>
-                  </View>
-                </View>
-              </View>
+                ))
+              }
             </View>
-            <PayStatus data={{}} orderType={orderType}></PayStatus>
+            <PayStatus data={settlementInfo} orderType={orderType}></PayStatus>
           </View>
         </ScrollView>
         {
           orderType=='pay'?
           <PayBar 
-          data={{}}
+          data={settlementInfo}
           orderType={orderType} 
           handlePayment={()=>{
             this.props.navigation.push('WxPay')
           }}></PayBar>
           :null
         }
-        {
+        {/* {
           orderType=='nopay'?
           <PayBar 
-          data={{}} 
+          data={settlementInfo} 
           orderType={orderType} 
           handlePayment={()=>{
             this.props.navigation.push('PaySuccess')
@@ -165,12 +150,12 @@ class Settlement extends React.Component<Props,State> {
         {
           orderType=='afterpay'?
           <PayBar 
-          data={{}} 
+          data={settlementInfo} 
           orderType={orderType} 
           handleRefund={()=>{}}
           ></PayBar>
           :null
-        }
+        } */}
       </View>
     )
   }
@@ -263,7 +248,8 @@ class PayStatus extends React.Component<PayStatusProps>{
 interface PayBarProps extends PayStatusProps {
   handleCancel:()=>void,
   handlePayment:()=>void,
-  handleRefund:()=>void
+  handleRefund:()=>void,
+  data:object
 }
 
 class PayBar extends React.Component<PayBarProps>{
@@ -271,7 +257,7 @@ class PayBar extends React.Component<PayBarProps>{
     super(props)
   }
   render(){
-    let {orderType,handlePayment,handleCancel,handleRefund} = this.props;
+    let {orderType,handlePayment,handleCancel,handleRefund,data} = this.props;
     switch (orderType) {
       case 'pay':
         return (
@@ -280,7 +266,7 @@ class PayBar extends React.Component<PayBarProps>{
               <Text style={[mainStyle.fs12,mainStyle.lh42,mainStyle.c333]}>
                 合计：
                 <Text style={[mainStyle.czt]}>￥</Text>
-                <Text style={[mainStyle.czt,mainStyle.fs18]}>179.00</Text>
+                <Text style={[mainStyle.czt,mainStyle.fs18]}>{data.orderPrice}</Text>
               </Text>
             </View>
             <View style={[mainStyle.row,mainStyle.aiCenter]}>

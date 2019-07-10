@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Animated } from 'react-native';
+import { Text, View, ScrollView, DeviceEventEmitter } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle,screenH,setSize, screenW } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
@@ -51,9 +51,12 @@ class Login extends React.Component<Props,State> {
     }
     let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
     if(response!=null){
-      Toast.info(response.message,1.4,undefined,false);
-      await userStore.GetUserInfo()
-      navigation.goBack();
+      Toast.info(response.message,1.4,undefined,false)
+      let userinfo = await userStore.GetUserInfo()
+      if(userinfo){
+        DeviceEventEmitter.emit('TORELOAD','yes')//刷新需要刷新的接口
+        navigation.goBack()
+      }
     }
   }
 

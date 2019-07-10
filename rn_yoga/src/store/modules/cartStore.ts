@@ -22,6 +22,10 @@ class Cart {
     }
   }
 
+  @computed get settlementInfo(){
+    return this.cartData.settlementInfo
+  } 
+
   @computed get cartList(){
     let {cartList} = this.cartData
     for(let i in cartList){
@@ -272,8 +276,8 @@ class Cart {
       let {ids,settlementInfo} = this.cartData
       let params = {cart:ids}
       let response = await new Fetch('/order/settle_cart','POST',params,{})
-      settlementInfo = response.data
-      return settlementInfo
+      this.cartData.settlementInfo = response.data
+      return response.data
     } catch (error) {
       console.log(error)
       return null

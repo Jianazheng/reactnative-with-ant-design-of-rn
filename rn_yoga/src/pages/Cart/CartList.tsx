@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet,DeviceEventEmitter } from 'react-native';
 import { mainStyle,setSize } from '../../public/style/style';
 import { ActivityIndicator,Toast,Modal } from "@ant-design/react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
@@ -21,6 +21,9 @@ class CartList extends React.Component<Props,State> {
   static navigationOptions = {
     header:null
   }
+
+  TORELOAD:object
+
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
@@ -30,7 +33,14 @@ class CartList extends React.Component<Props,State> {
   }
 
   componentDidMount(){
-    this.getCartList();
+    this.getCartList()
+    this.TORELOAD = DeviceEventEmitter.addListener('TORELOAD',(res)=>{
+      this.getCartList()
+    })
+  }
+
+  componentWillUnmount(){
+    this.TORELOAD.remove()
   }
 
   getCartList(){
