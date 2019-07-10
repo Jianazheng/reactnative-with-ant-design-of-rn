@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.rnfs.RNFSPackage;
-//import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.theweflex.react.WeChatPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -32,7 +31,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNFSPackage(),
-            //new RNReactNativeDocViewerPackage(),
             new RNCWebViewPackage(),
             new WeChatPackage(),
             new ReactVideoPackage(),

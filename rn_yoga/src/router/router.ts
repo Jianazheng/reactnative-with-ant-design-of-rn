@@ -28,6 +28,7 @@ import ViewPdf from './../pages/Course/ViewPdf';
 import Address from './../pages/Mine/Address';
 import AddressOperate from './../pages/Mine/AddressOperate';
 import MyLevel from './../pages/Mine/MyLevel';
+import WxPay from './../pages/Payment/WxPay';
 
 
 
@@ -46,6 +47,7 @@ export const navItem = {
   CartList:{screen:CartList},
   ClassifyList:{screen:ClassifyList},
   Settlement:{screen:Settlement},
+  WxPay:{screen:WxPay},
   Payfail:{screen:Payfail},
   PaySuccess:{screen:PaySuccess},
   GoodsList:{screen:GoodsList},
@@ -69,7 +71,7 @@ export const navItem = {
 }
 
 export const navConfig = {
-  initialRouteName: 'Settlement',
+  initialRouteName: 'Tab',
   headerMode: 'float',
   navigationOptions:{
     header:null,

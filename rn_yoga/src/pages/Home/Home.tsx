@@ -52,25 +52,24 @@ class Home extends React.Component<Props,State> {
   }
 
   componentWillMount(){
-    let {userStore,navigation} = this.props;
+    
+  }
+
+  componentDidMount(){
+    let {homeStore,userStore,navigation} = this.props
+    homeStore.getBanner()
+    homeStore.getAnnouncement()
+    homeStore.getTrainCate()
     RNStorage.load({
       key: 'token',
     }).then(res=>{
-      console.log(res)
       userStore.setToken(res)
     }).catch(err=>{
       console.log(err)
     })
     this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',(res)=>{
-      navigation.navigate('Login');
+      navigation.navigate('Login')
     })
-  }
-
-  componentDidMount(){
-    let {homeStore} = this.props;
-    homeStore.getBanner();
-    homeStore.getAnnouncement();
-    homeStore.getTrainCate();
   }
 
   componentWillUnmount(){
@@ -93,7 +92,6 @@ class Home extends React.Component<Props,State> {
   render(){
     let {canScroll,tabIndex} = this.state;
     let {navigation,homeStore} = this.props;
-    //console.log(homeStore.trainCateShow)
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf2]}>
         <ScrollView
@@ -107,7 +105,6 @@ class Home extends React.Component<Props,State> {
               tabTop:e.nativeEvent.layout.height
             })
           }}>
-
             <HomeSearchBar 
             onSubmit={(e)=>{
               console.log(e)
@@ -119,11 +116,8 @@ class Home extends React.Component<Props,State> {
                 navigation.push('CartList')
               }}>&#xe60a;</Text>
             )}></HomeSearchBar>
-
             <HomeSwiper img={homeStore.banner}></HomeSwiper>
-
             <HomeBroadcast list={homeStore.announcement}></HomeBroadcast>
-
           </View>
           {
             homeStore.trainCate.length>0

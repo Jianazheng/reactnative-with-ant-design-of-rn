@@ -61,6 +61,8 @@ const mainStyle = StyleSheet.create({
     cyellow:{color:'#C59743'},
     cred:{color:'#CE2A2A'},
     c8d0:{color:'#8D002F'},
+    clv:{color:'#4EEE94'},
+    clvc:{color:'#54FF9F'},
     bgc000:{backgroundColor:'#000000'},
     bgc8d0:{backgroundColor:'#8D002F'},
     bgcf6e:{backgroundColor:'#F6ECEE'},

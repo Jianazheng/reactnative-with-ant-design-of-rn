@@ -41,7 +41,8 @@ class PaySuccess extends React.Component<Props,State> {
             <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcAround]}>
               <BxButton 
               title={'去上课'}
-              btnstyle={[mainStyle.bgczt,mainStyle.mat15,mainStyle.mar15,
+              colors={[mainStyle.czt.color,mainStyle.cztc.color]}
+              btnstyle={[mainStyle.mat15,mainStyle.mar15,
                 {
                   borderRadius:setSize(4),
                   width:setSize(260)
@@ -51,12 +52,13 @@ class PaySuccess extends React.Component<Props,State> {
               onClick={()=>{}}
               ></BxButton>
               <BxButton 
+              plain
+              color={mainStyle.czt.color}
               title={'查看订单'}
-              btnstyle={[mainStyle.bgcfff,mainStyle.mat15,
+              btnstyle={[mainStyle.mat15,
                 {
                   borderWidth:setSize(1.2),
                   borderRadius:setSize(4),
-                  borderColor:mainStyle.czt.color,
                   width:setSize(260)
                 }
               ]}
@@ -152,11 +154,12 @@ class PaySuccess extends React.Component<Props,State> {
                 </View>
                 <BxButton 
                   title={'去预定'}
-                  btnstyle={[mainStyle.bgcfff,mainStyle.mat15,mainStyle.flex1,
+                  plain
+                  color={mainStyle.czt.color}
+                  btnstyle={[mainStyle.mat15,mainStyle.flex1,
                     {
                       borderWidth:setSize(1.2),
                       borderRadius:setSize(4),
-                      borderColor:mainStyle.czt.color,
                     }
                   ]}
                   textstyle={[mainStyle.czt,mainStyle.fs13]}

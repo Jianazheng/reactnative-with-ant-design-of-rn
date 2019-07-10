@@ -146,7 +146,7 @@ class Settlement extends React.Component<Props,State> {
           data={{}}
           orderType={orderType} 
           handlePayment={()=>{
-            //this.props.navigation.push('PaySuccess')
+            this.props.navigation.push('WxPay')
           }}></PayBar>
           :null
         }
@@ -288,7 +288,7 @@ class PayBar extends React.Component<PayBarProps>{
               colors={[mainStyle.czt.color,mainStyle.cztc.color]}
               borderRadius={setSize(40)}
               disabled={false}
-              title={'支付'} 
+              title={'去支付'} 
               btnstyle={[mainStyle.mal15,{height:setSize(80),width:setSize(220)}]} 
               textstyle={[mainStyle.fs14]}
               onClick={()=>{handlePayment()}}>

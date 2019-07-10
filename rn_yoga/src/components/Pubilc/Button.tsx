@@ -1,5 +1,5 @@
 
-import React,{PureComponent} from 'react';
+import React from 'react';
 import { TouchableOpacity, Text, StyleSheet,View } from 'react-native';
 import {ActivityIndicator} from '@ant-design/react-native';
 import { mainStyle, setSize,screenW } from '../../public/style/style';
@@ -8,7 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 
 interface Props {
-  onClick:(func:void)=>void,
+  onClick:()=>void,
   btnstyle:any,
   textstyle:any,
   title:string,
@@ -24,7 +24,7 @@ interface State {
   clicked:boolean
 }
 
-export default class BxButton extends PureComponent<Props,State>{
+export default class BxButton extends React.Component<Props,State>{
   
   constructor(props:Props,state:State) {
     super(props);
@@ -33,20 +33,23 @@ export default class BxButton extends PureComponent<Props,State>{
     }
   }
 
-  handleClick=()=>{
-    let {clicked} = this.state;
+  shouldComponentUpdate(np,ns){
+    return np.disabled!=this.props.disabled||ns.clicked!=this.state.clicked
+  }
+
+
+  handleClick(){
+    let {clicked} = this.state
     if(clicked){
       return false
     }
     this.setState({
       clicked:true
     },()=>{
-      this.props.onClick();
-      setTimeout(()=>{
-        this.setState({
-          clicked:false
-        })
-      },400)
+      this.props.onClick()
+      this.setState({
+        clicked:false
+      })
     })
   }
 
@@ -73,7 +76,6 @@ export default class BxButton extends PureComponent<Props,State>{
     let {clicked} = this.state
     let {title,disabled,btnstyle,textstyle,borderRadius,color,colors,plain} = this.props
     if(borderRadius==undefined)borderRadius = setSize(6)
-    console.log(colors,color)
     if(!disabled&&!clicked){
       return(
         <TouchableOpacity

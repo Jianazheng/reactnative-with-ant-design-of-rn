@@ -13,7 +13,13 @@ class Cart {
     cartInvalid:[],// 已过期的
     ids:[],
     cartTotalPrice:0,
-    cartTotals:0
+    cartTotals:0,
+    settlementInfo:{
+      orderCount:0,
+      orderPrice:0,
+      pStatusArray:[],
+      pass:0
+    }
   }
 
   @computed get cartList(){
@@ -253,6 +259,21 @@ class Cart {
       cartList[type][index].count = count.toString()
       let response = await new Fetch('/cart/product_edit','POST',params,{})
       return response
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+  /**
+   * 购物车结算
+   */
+  @action async settlement(){
+    try {
+      let {ids,settlementInfo} = this.cartData
+      let params = {cart:ids}
+      let response = await new Fetch('/order/settle_cart','POST',params,{})
+      settlementInfo = response.data
+      return settlementInfo
     } catch (error) {
       console.log(error)
       return null

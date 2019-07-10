@@ -98,9 +98,17 @@ class CartList extends React.Component<Props,State> {
 
   handleSubmit(){
     let {cartStore,navigation} = this.props
-    let {cartList,cartListObj2Arr,ids} = cartStore
+    let {ids} = cartStore
     if(ids.length>0){
-      navigation.navigate('Settlement',{type:'pay'})
+      console.log(ids)
+      cartStore.settlement()
+      .then(res=>{
+        if(res.pass==1){
+          navigation.navigate('Settlement',{type:'pay'})
+        }else{
+          navigation.navigate('Payfail',{type:'pay'})
+        }
+      })
     }else{
       Toast.info('请选择商品',1.4,undefined,false)
     }
@@ -169,7 +177,7 @@ class CartList extends React.Component<Props,State> {
           </View>
         </ScrollView>
         <View style={[mainStyle.h120,mainStyle.brt1e2,mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.palr15]}>
-          <View style={[mainStyle.row,mainStyle.aiCenter]}>
+          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.mal10]}>
             <BxRadio 
             checked={selectAll&&cartListObj2Arr.length==ids.length}
             size={18} 
