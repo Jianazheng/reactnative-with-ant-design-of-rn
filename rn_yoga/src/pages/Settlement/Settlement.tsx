@@ -15,7 +15,7 @@ interface State {
 
 let imgw = setSize(180);
 
-@inject('cartStore')
+@inject('cartStore','addressStore')
 @observer
 class Settlement extends React.Component<Props,State> {
   static navigationOptions = {
@@ -44,8 +44,7 @@ class Settlement extends React.Component<Props,State> {
 
   render(){
     let {orderType} = this.state
-    let {navigation,cartStore,cartStore:{settlementInfo}} = this.props
-    console.log(settlementInfo)
+    let {navigation,cartStore,cartStore:{settlementInfo},addressStore:{addressSelect}} = this.props
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -68,10 +67,10 @@ class Settlement extends React.Component<Props,State> {
               }}>
                 <View style={[mainStyle.row,mainStyle.pa15,mainStyle.aiCenter,mainStyle.jcBetween]}>
                   <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mar15]}>
-                    <Text style={[mainStyle.fs14,mainStyle.c333,mainStyle.mab5]}>广东省广州市海珠区琶洲中州中心2333号</Text>
+                    <Text style={[mainStyle.fs14,mainStyle.c333,mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>18828838888</Text>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>斌斌</Text>
+                      <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.mobile}</Text>
+                      <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.consignee}</Text>
                     </View>
                   </View>
                   <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs22]}>&#xe64d;</Text>
@@ -131,7 +130,10 @@ class Settlement extends React.Component<Props,State> {
           data={settlementInfo}
           orderType={orderType} 
           handlePayment={()=>{
-            this.props.navigation.push('WxPay')
+            cartStore.createOrder(addressSelect.id)
+            .then(res=>{
+              navigation.replace('WxPay',{type:1})
+            })
           }}></PayBar>
           :null
         }

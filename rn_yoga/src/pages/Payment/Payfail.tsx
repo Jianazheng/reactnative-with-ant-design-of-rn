@@ -13,8 +13,7 @@ interface State {
 
 class Payfail extends React.Component<Props,State> {
   static navigationOptions = {
-    headerTitle:headerTitle('支付失败'),
-    headerRight:headerRight(<Text></Text>),
+    header:null,
   }
   constructor(props:Props,state:State) {
     super(props);
@@ -36,18 +35,17 @@ class Payfail extends React.Component<Props,State> {
         <View style={[mainStyle.bgcfff,mainStyle.column,mainStyle.aiCenter,mainStyle.patb20]}>
           <Text style={[mainStyle.icon,mainStyle.c999,{fontSize:setSize(140)}]}>&#xe654;</Text>
           <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mat10]}>支付失败</Text>
-          <Text style={[mainStyle.c999,mainStyle.fs12,mainStyle.mat5]}>你可以在未支付订单中继续支付</Text>
+          <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.mat10]}>你可以在未支付订单中继续支付</Text>
           <BxButton 
           title={'重新支付'}
-          btnstyle={[mainStyle.bgcfff,mainStyle.mat15,
+          colors={[mainStyle.czt.color,mainStyle.cztc.color]}
+          btnstyle={[mainStyle.mat15,
             {
-              borderWidth:setSize(1.2),
               borderRadius:setSize(4),
-              borderColor:mainStyle.czt.color,
               width:setSize(260)
             }
           ]}
-          textstyle={[mainStyle.czt,mainStyle.fs14]}
+          textstyle={[mainStyle.cfff,mainStyle.fs14]}
           onClick={()=>{}}
           ></BxButton>
         </View>

@@ -6,6 +6,7 @@ import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import RNStorage from './../../public/js/storage';
 
 
 interface Props {}
@@ -62,14 +63,16 @@ class Login extends React.Component<Props,State> {
 
   async handleWxLogin(){
     try {
-      let {userStore,navigation} = this.props;
+      let {userStore,navigation} = this.props
       let response = await userStore.WxLogin()
       if(response!=null){
         if(response.errorCode==1056){
           //未绑定手机
         }else{
+          await userStore.setToken(response.data.token)
+          await RNStorage.save({key:'token',data:response.data.token})
           await userStore.GetUserInfo()
-          navigation.goBack();
+          navigation.goBack()
         }
       }
     } catch (error) {

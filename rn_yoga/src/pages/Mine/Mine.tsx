@@ -183,7 +183,7 @@ class Mine extends React.Component<Props> {
                 </View>
                 <View style={[mainStyle.column]}>
                   <TouchableOpacity style={[mainStyle.flex1,mainStyle.brb1f2]} onPress={()=>{
-                    this.goto('Address',{})
+                    this.goto('Address',{type:'check'})
                   }}>
                     <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.palr15,]}>
                       <View style={[mainStyle.row,mainStyle.aiCenter]}>

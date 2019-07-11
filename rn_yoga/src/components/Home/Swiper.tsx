@@ -23,11 +23,13 @@ class HomeSwiper extends React.Component<Props> {
       <View style={[mainStyle.bgcfff]}>
         {
           fullWidth?<Swiper
+            key={img.length}
             style={{backgroundColor:mainStyle.bgcf2.backgroundColor}}
             width={width}
             height={width}
-            autoplay
             loop
+            showsPagination
+            autoplayTimeout={2}
             paginationStyle={styles.swiperPagination}
             dot={
               <View style={[styles.swiperDot]}></View>
@@ -47,11 +49,14 @@ class HomeSwiper extends React.Component<Props> {
           :
           <View style={[styles.swiperMain,mainStyle.aiCenter,mainStyle.jcCenter]}>
             <Swiper
+              key={img.length}
+              autoplay={true}
               style={{backgroundColor:mainStyle.bgcf2.backgroundColor}}
               width={sww}
               height={swh}
-              autoplay
               loop
+              showsPagination
+              autoplayTimeout={2}
               paginationStyle={styles.swiperPagination}
               dot={
                 <View style={[styles.swiperDot]}></View>

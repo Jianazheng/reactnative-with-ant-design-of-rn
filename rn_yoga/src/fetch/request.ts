@@ -3,37 +3,39 @@ import { obj2str } from "../tools/function";
 import { Toast } from '@ant-design/react-native';
 import userStore from './../store/modules/userStore';
 import RNStorage from './../public/js/storage';
-import { DeviceEventEmitter } from "react-native";
+import { DeviceEventEmitter,Alert } from "react-native";
 
 
 export class Fetch{
-  constructor(api:string,method:string,data:object,headers:any){
+  constructor(api:string,method:string,data:object,headers = {}){
     
     return new Promise((resolve,reject)=>{
-      let reqUrl = OP.baseURL+OP.baseVersion+api;
-      let reqOption = {};
 
-      headers['token'] = userStore.token;
+      let reqUrl = OP.baseURL+OP.baseVersion+api
+
+      let reqOption = {}
+
+      headers.token = userStore.token
 
       switch (headers['Content-Type']) {
         case 'multipart/form-data':
-            headers['Content-Type'] = 'multipart/form-data';
-            reqOption.body = data;
-          break;
+            headers['Content-Type'] = 'multipart/form-data'
+            reqOption.body = data
+          break
         default:
-            headers['Content-Type'] = 'application/json';
+            headers['Content-Type'] = 'application/json'
             if(method=='post'||method=='POST'){
-              reqOption.body = JSON.stringify(data);
+              reqOption.body = JSON.stringify(data)
             }else{
-              let strs = '?'+obj2str(data);
-              reqUrl+=strs;
+              let strs = '?'+obj2str(data)
+              reqUrl+=strs
             }
-          break;
+          break
       }
 
-      reqOption.method = method;
+      reqOption.method = method
 
-      reqOption.headers = headers;
+      reqOption.headers = headers
 
       fetch(reqUrl,reqOption)
       .then(async (response) => {
@@ -54,23 +56,25 @@ export class Fetch{
             let errdata = JSON.parse(response.data)
             if(errdata.errorCode==1056){
               Toast.info(errdata.message,1.4,undefined,false)
-              DeviceEventEmitter.emit('TOBIND','yes');
+              DeviceEventEmitter.emit('TOBIND',errdata.data);//未绑定手机，跳转至绑定页面，listener在首页
+              resolve(errdata);
             }else{
               Toast.info('验证失败，请重新登录',1.4,undefined,false)
               userStore.removeToken()
               RNStorage.remove({key:'token'}).then(ress=>{
                 DeviceEventEmitter.emit('TOLOGIN','yes');
               });
+              reject(response.data);
             }
-            reject(response.data);
+            
             break;
           case 400:
-            Toast.info(response.data.message,1.8,undefined,false)
-            reject(response.data);
+              Toast.info(response.data.message,1.8,undefined,false)
+              reject(response.data);
             break;      
           case 500:
             Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
-            //console.warn(response.data)
+            console.warn(response.data)
             reject(response.data);
             break;
           default:
@@ -80,9 +84,9 @@ export class Fetch{
         }
       })
       .catch((error) => {
-        Toast.info(error,1.8,undefined,false)
+        Toast.info(error.toString(),1.8,undefined,false)
         console.warn(error)
-        reject(error);
+        reject(error)
       });
     })
 

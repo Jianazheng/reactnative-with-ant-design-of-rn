@@ -7,7 +7,7 @@ import Password from './../pages/Login/Password';
 import UserInfo from './../pages/Mine/UserInfo';
 import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
 import CartList from './../pages/Cart/CartList';
-import Settlement from './../pages/Order/Settlement';
+import Settlement from './../pages/Settlement/Settlement';
 import Payfail from './../pages/Payment/Payfail';
 import PaySuccess from './../pages/Payment/PaySuccess';
 import GoodsList from './../pages/Goods/GoodsList';
@@ -29,6 +29,8 @@ import Address from './../pages/Mine/Address';
 import AddressOperate from './../pages/Mine/AddressOperate';
 import MyLevel from './../pages/Mine/MyLevel';
 import WxPay from './../pages/Payment/WxPay';
+import SettlementFail from './../pages/Settlement/SettlementFail';
+import WxBind from './../pages/Login/WxBind';
 
 
 
@@ -37,6 +39,7 @@ export const navItem = {
   Register:{screen:Register},
   Forget:{screen:Forget},
   Password:{screen:Password},
+  WxBind:{screen:WxBind},
   UserInfo:{screen:UserInfo},
   CourseList:{screen:CourseList},
   OutlineCourse:{screen:OutlineCourse},
@@ -47,6 +50,7 @@ export const navItem = {
   CartList:{screen:CartList},
   ClassifyList:{screen:ClassifyList},
   Settlement:{screen:Settlement},
+  SettlementFail:{screen:SettlementFail},
   WxPay:{screen:WxPay},
   Payfail:{screen:Payfail},
   PaySuccess:{screen:PaySuccess},

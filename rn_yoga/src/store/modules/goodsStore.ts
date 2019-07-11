@@ -6,7 +6,7 @@ class Goods {
     
   }
   @observable goodsData = {
-    goodsInfo:[],
+    goodsInfo:{},
     goodsItem:{is_collection:0},
     goodsClassify:[],
     recommendGoods:[],
@@ -60,6 +60,7 @@ class Goods {
 
   @action async getGoodsInfo(id:string|number){
     try {
+      this.goodsData.goodsInfo = {}
       let response = await new Fetch('/product/detail','GET',{id},{});
       let goodsInfo = response.data;
       if(goodsInfo.sku.length>0){
@@ -68,7 +69,6 @@ class Goods {
         })
         this.goodsData.goodsItem = goodsInfo.sku[0]
       }
-      
       this.goodsData.goodsInfo = goodsInfo;
       return response
     } catch (error) {

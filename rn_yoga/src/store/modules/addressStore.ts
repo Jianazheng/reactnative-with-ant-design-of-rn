@@ -8,7 +8,8 @@ class Address {
   }
   @observable addressData = {
     addressArr:[],
-    addressInfo:{}
+    addressInfo:{},
+    addressSelect:{}
   }
 
   @computed get addressArr(){
@@ -17,6 +18,15 @@ class Address {
 
   @computed get addressInfo(){
     return this.addressData.addressInfo
+  }
+
+  @computed get addressSelect(){
+    let {addressSelect} = this.addressData
+    return addressSelect
+  }
+
+  @action setAddress(val){
+    this.addressData.addressSelect = val
   }
 
   @action async addOrEditAddress(params:object,type:string){
@@ -57,7 +67,7 @@ class Address {
         }
       }
       this.addressData.addressArr = response.data.data
-      return response
+      return this.addressData.addressArr
     } catch (error) {
       return null
     }

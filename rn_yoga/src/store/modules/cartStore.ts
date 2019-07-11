@@ -18,13 +18,19 @@ class Cart {
       orderCount:0,
       orderPrice:0,
       pStatusArray:[],
-      pass:0
-    }
+      pass:0,
+      address:{}
+    },
+    orderStatus:{}
   }
 
   @computed get settlementInfo(){
     return this.cartData.settlementInfo
   } 
+
+  @computed get orderStatus(){
+    return this.cartData.orderStatus
+  }
 
   @computed get cartList(){
     let {cartList} = this.cartData
@@ -277,6 +283,25 @@ class Cart {
       let params = {cart:ids}
       let response = await new Fetch('/order/settle_cart','POST',params,{})
       this.cartData.settlementInfo = response.data
+      if(response.data.pass==0){
+        Toast.info(response.message,1.4,undefined,false)
+      }
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+  /**
+   * 生成订单
+   */
+  @action async createOrder(address_id){
+    try {
+      let {ids} = this.cartData
+      let params = {cart:ids,address_id}
+      let response = await new Fetch('/order/place_cart','POST',params,{})
+      Toast.info(response.message,1.4,undefined,false)
+      this.cartData.orderStatus = response.data
       return response.data
     } catch (error) {
       console.log(error)

@@ -34,7 +34,7 @@ export default class BxButton extends React.Component<Props,State>{
   }
 
   shouldComponentUpdate(np,ns){
-    return np.disabled!=this.props.disabled||ns.clicked!=this.state.clicked
+    return np.disabled!=this.props.disabled||ns.clicked!=this.state.clicked||np.title!=this.props.title
   }
 
 

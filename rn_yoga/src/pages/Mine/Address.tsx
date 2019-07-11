@@ -65,6 +65,17 @@ class Address extends React.Component<Props,State> {
     ];
   }
 
+  handleClick(item){
+    let {addressStore,navigation} = this.props
+    let {params} = navigation.state
+    if(params.type=='select'){
+      addressStore.setAddress(item)
+      navigation.goBack()
+    }else{
+      this.goto('AddressOperate',{id:item.id,type:'edit'})
+    }
+  }
+
   render(){
     let {loading} = this.state
     let {addressStore,navigation} = this.props
@@ -107,7 +118,7 @@ class Address extends React.Component<Props,State> {
                   right={this.right(val)}
                   >
                     <TouchableOpacity onPress={()=>{
-                      this.goto('AddressOperate',{id:val.id,type:'edit'})
+                      this.handleClick(val)
                     }}>
                       <View style={[mainStyle.flex1,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15]}>
                         <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>

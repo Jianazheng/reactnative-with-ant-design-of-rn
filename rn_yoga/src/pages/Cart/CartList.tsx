@@ -7,7 +7,6 @@ import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
-import { isDebuggerStatement } from '@babel/types';
 
 interface Props {}
 interface State {
@@ -15,7 +14,7 @@ interface State {
   selectAll:boolean
 }
 
-@inject('cartStore')
+@inject('cartStore','addressStore')
 @observer
 class CartList extends React.Component<Props,State> {
   static navigationOptions = {
@@ -35,7 +34,11 @@ class CartList extends React.Component<Props,State> {
   componentDidMount(){
     this.getCartList()
     this.TORELOAD = DeviceEventEmitter.addListener('TORELOAD',(res)=>{
-      this.getCartList()
+      this.setState({
+        showLoading:true
+      },()=>{
+        this.getCartList()
+      })
     })
   }
 
@@ -107,16 +110,19 @@ class CartList extends React.Component<Props,State> {
   }
 
   handleSubmit(){
-    let {cartStore,navigation} = this.props
+    let {cartStore,navigation,addressStore} = this.props
     let {ids} = cartStore
     if(ids.length>0){
-      console.log(ids)
       cartStore.settlement()
       .then(res=>{
         if(res.pass==1){
+          if(res.address){
+            res.address.region = JSON.parse(res.address.region)
+            addressStore.setAddress(res.address)
+          }
           navigation.navigate('Settlement',{type:'pay'})
         }else{
-          navigation.navigate('Payfail',{type:'pay'})
+          navigation.navigate('SettlementFail',{type:'pay'})
         }
       })
     }else{
@@ -362,7 +368,7 @@ class CartItem extends React.Component<CartItemProps>{
           type=='train'
           ?<View style={[mainStyle.column,mainStyle.aiStart,mainStyle.mal15,mainStyle.flex1]}>
             <Text style={[mainStyle.c333,mainStyle.fs12]}>{data.name}</Text>
-            <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.lesson}课时</Text>
+            <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.bgcf7,mainStyle.pa5_10,mainStyle.mab5,mainStyle.mat5]}>{data.sku_name}</Text>
             <Text style={[mainStyle.czt,mainStyle.fs10,mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
           </View>:null
         }

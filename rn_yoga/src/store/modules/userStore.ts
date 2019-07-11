@@ -132,13 +132,9 @@ class User {
       Wechat.registerApp('wxa66b688d8d2383df')
       let isInstalled  = await Wechat.isWXAppInstalled()
       if (isInstalled) {
-
         let responseCode = await Wechat.sendAuthRequest(scope, state)
         let res = await new Fetch('/login/wechat','POST',{code:responseCode.code},{})
-        await RNStorage.save({key:'token',data:res.data})
-        this.userData.token = res.data
         return res
-
       } else {
         Alert.alert('请安装微信');
         return null
@@ -146,6 +142,15 @@ class User {
     } catch (error) {
       Alert.alert('登录授权发生错误：');
       console.log(error)
+      return null
+    }
+  }
+
+  @action async bindPhone(params:object){
+    try {
+      let response = await new Fetch('/login/wechat_bind','POST',params,{});
+      return response;
+    } catch (error) {
       return null
     }
   }

@@ -5,12 +5,15 @@ import { IconOutline } from "@ant-design/icons-react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
 
 interface Props {}
 interface State {
   
 }
 
+@inject('cartStore','paymentStore')
+@observer
 class WxPay extends React.Component<Props,State> {
   static navigationOptions = {
     header:null,
@@ -22,7 +25,20 @@ class WxPay extends React.Component<Props,State> {
     };
   }
 
+  handleToPay(){
+    let {cartStore:{orderStatus},paymentStore,navigation} = this.props
+    console.log(orderStatus)
+    let {params} = navigation.state
+    paymentStore.WXPay(params.type,orderStatus.order_no)
+    .then(res=>{
+      console.log(res)
+    })
+    //navigation.replace('PaySuccess')
+  }
+
   render(){
+    let {cartStore:{settlementInfo}} = this.props
+    console.log(settlementInfo)
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -35,7 +51,7 @@ class WxPay extends React.Component<Props,State> {
         <View style={[mainStyle.bgcf7,mainStyle.column,mainStyle.flex1]}>
           <View style={[mainStyle.bgcfff,mainStyle.palr15]}>
             <View style={[mainStyle.row,mainStyle.jcCenter,mainStyle.pa30,mainStyle.mab20,mainStyle.mat20]}>
-              <Text style={[mainStyle.cjin]}><Text style={[mainStyle.fs12]}>￥</Text><Text style={[{fontSize:setSize(72)}]}>120.00</Text></Text>
+              <Text style={[mainStyle.cjin]}><Text style={[mainStyle.fs12]}>￥</Text><Text style={[{fontSize:setSize(72)}]}>{settlementInfo.orderPrice}</Text></Text>
             </View>
             <View style={[mainStyle.bgcfff,mainStyle.column]}>
               <View style={[mainStyle.jcBetween,mainStyle.row,mainStyle.aiCenter,mainStyle.brb1f2,mainStyle.brt1f2,mainStyle.h100]}>
@@ -59,7 +75,7 @@ class WxPay extends React.Component<Props,State> {
           btnstyle={[{width:screenW-setSize(60)}]}
           textstyle={[mainStyle.fs13]}
           onClick={()=>{
-            this.props.navigation.replace('PaySuccess');
+            this.handleToPay()
           }}
           ></BxButton>
         </View>

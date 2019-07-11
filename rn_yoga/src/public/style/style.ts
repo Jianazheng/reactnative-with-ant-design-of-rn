@@ -203,3 +203,4 @@ const contentPadding = setSize(30);
 export {
     setSize,setText,screenH,screenW,mainStyle,contentPadding
 }
+
