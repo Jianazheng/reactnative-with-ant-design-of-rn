@@ -116,7 +116,7 @@ class CartList extends React.Component<Props,State> {
       cartStore.settlement()
       .then(res=>{
         if(res.pass==1){
-          if(res.address){
+          if(res.address.region){
             res.address.region = JSON.parse(res.address.region)
             addressStore.setAddress(res.address)
           }

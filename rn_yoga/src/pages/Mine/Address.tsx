@@ -5,6 +5,7 @@ import { mainStyle,screenH, setSize } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import BxButton from '../../components/Pubilc/Button';
 
 interface Props {}
 interface State {
@@ -79,6 +80,7 @@ class Address extends React.Component<Props,State> {
   render(){
     let {loading} = this.state
     let {addressStore,navigation} = this.props
+    let {params} = navigation.state
     let addressArr = addressStore.addressArr
     return (
       <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf7]}>
@@ -106,42 +108,87 @@ class Address extends React.Component<Props,State> {
         text="加载中..."
         animating={loading}
         ></ActivityIndicator>
-        <View style={[mainStyle.flex1,mainStyle.mat15]}>
-          <ScrollView style={[mainStyle.flex1]}>
-            <View style={[mainStyle.flex1,mainStyle.palr15,mainStyle.column]}>
-              {
-                addressArr.map((val,i)=>(
-                  <SwipeAction
-                  key={i}
-                  autoClose
-                  style={[mainStyle.bgcfff,mainStyle.mab15,{borderRadius:setSize(6)}]}
-                  right={this.right(val)}
-                  >
-                    <TouchableOpacity onPress={()=>{
-                      this.handleClick(val)
-                    }}>
-                      <View style={[mainStyle.flex1,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15]}>
-                        <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                          <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.consignee}</Text>
-                          <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.mobile}</Text>
-                        </View>
-                        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
-                          <Text style={[mainStyle.c666,mainStyle.fs13]}>{val.region.length>0?(val.region[0]+' - '+val.region[1]+' - '+val.region[2]):null}</Text>
-                          <Text style={[mainStyle.cztc,mainStyle.fs12]}>{val.is_default==1?'默认地址':''}</Text>
-                        </View>
-                        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
-                          <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.lh36]} numberOfLines={2}>
-                            {val.address}
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </SwipeAction>
-                ))
-              }
+        {
+          addressArr.length>0
+          ?<View style={[mainStyle.flex1,mainStyle.mat15]}>
+            <ScrollView style={[mainStyle.flex1]}>
+              <View style={[mainStyle.flex1,mainStyle.palr15,mainStyle.column]}>
+                {
+                  addressArr.map((val,i)=>{
+                    //选择地址时不出现删除按钮
+                    if(params.type=='select'){
+                      return (
+                        <TouchableOpacity 
+                        style={[mainStyle.bgcfff,mainStyle.mab15,{borderRadius:setSize(6)}]}
+                        onPress={()=>{
+                          this.handleClick(val)
+                        }}>
+                          <View style={[mainStyle.flex1,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15]}>
+                            <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+                              <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.consignee}</Text>
+                              <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.mobile}</Text>
+                            </View>
+                            <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
+                              <Text style={[mainStyle.c666,mainStyle.fs13]}>{val.region.length>0?(val.region[0]+' - '+val.region[1]+' - '+val.region[2]):null}</Text>
+                              <Text style={[mainStyle.cztc,mainStyle.fs12]}>{val.is_default==1?'默认地址':''}</Text>
+                            </View>
+                            <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
+                              <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.lh36]} numberOfLines={2}>
+                                {val.address}
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      )
+                    }else{
+                      return (
+                        <SwipeAction
+                        key={i}
+                        autoClose
+                        style={[mainStyle.bgcfff,mainStyle.mab15,{borderRadius:setSize(6)}]}
+                        right={this.right(val)}
+                        >
+                          <TouchableOpacity onPress={()=>{
+                            this.handleClick(val)
+                          }}>
+                            <View style={[mainStyle.flex1,mainStyle.column,mainStyle.jcBetween,mainStyle.pa15]}>
+                              <View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+                                <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.consignee}</Text>
+                                <Text style={[mainStyle.c333,mainStyle.fs14]}>{val.mobile}</Text>
+                              </View>
+                              <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
+                                <Text style={[mainStyle.c666,mainStyle.fs13]}>{val.region.length>0?(val.region[0]+' - '+val.region[1]+' - '+val.region[2]):null}</Text>
+                                <Text style={[mainStyle.cztc,mainStyle.fs12]}>{val.is_default==1?'默认地址':''}</Text>
+                              </View>
+                              <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.mat10]}>
+                                <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.lh36]} numberOfLines={2}>
+                                  {val.address}
+                                </Text>
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        </SwipeAction>
+                      )
+                    }
+                  })
+                }
+              </View>
+            </ScrollView>
+          </View>
+          :<View style={[mainStyle.flex1,mainStyle.row,mainStyle.aiCenter,mainStyle.jcCenter]}>
+            <View style={[mainStyle.column,mainStyle.aiCenter]}>
+              <Text style={[mainStyle.fs12,mainStyle.c666,mainStyle.mab15]}>还没有地址哦</Text>
+              <BxButton
+              title={'添加地址'}
+              colors={[mainStyle.czt.color,mainStyle.cztc.color]}
+              btnstyle={[mainStyle.palr15]}
+              onClick={()=>{
+                navigation.navigate('AddressOperate',{type:'add',id:''});
+              }}
+              ></BxButton>
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        }
       </View>
     )
   }

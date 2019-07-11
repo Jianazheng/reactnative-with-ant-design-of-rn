@@ -41,7 +41,6 @@ class AddressOperate extends React.Component<Props,State> {
     if(params.type=='edit'){
       addressStore.getAddressInfo(params.id)
       .then(res=>{
-        console.log(res)
         this.setState({
           mobile:res.mobile,
           consignee:res.consignee,
@@ -68,6 +67,8 @@ class AddressOperate extends React.Component<Props,State> {
     }
     addressStore.addOrEditAddress(postData,params.type)
     .then(res=>{
+      postData.region = region
+      if(params.type=='add')addressStore.setAddress(postData)
       navigation.goBack()
     })
   }

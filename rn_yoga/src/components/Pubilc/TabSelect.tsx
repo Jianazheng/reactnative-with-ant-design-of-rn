@@ -37,6 +37,7 @@ class TabSelect extends React.Component<Props,State> {
         <ScrollView 
         nestedScrollEnabled
         horizontal
+        showsHorizontalScrollIndicator={false}
         style={[mainStyle.row,mainStyle.flex1]}>
           <View style={[mainStyle.row,mainStyle.mal10,mainStyle.mar10,mainStyle.aiCenter,mainStyle.h100]}>
           {

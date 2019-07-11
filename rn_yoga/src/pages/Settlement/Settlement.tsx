@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, ScrollView, Image,StyleSheet, TouchableOpacity } from 'react-native';
 import { mainStyle,setSize, screenW } from '../../public/style/style';
-import { IconOutline } from "@ant-design/icons-react-native";
+import { Toast } from "@ant-design/react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
@@ -42,9 +42,21 @@ class Settlement extends React.Component<Props,State> {
     })
   }
 
+  handleCreateOrder(){
+    let {navigation,cartStore,addressStore:{addressSelect}} = this.props
+    if(!addressSelect.id){
+      Toast.info('请添加收货地址',1.4,undefined,false)
+      return false
+    }
+    cartStore.createOrder(addressSelect.id)
+    .then(res=>{
+      navigation.replace('WxPay',{type:1})
+    })
+  }
+
   render(){
     let {orderType} = this.state
-    let {navigation,cartStore,cartStore:{settlementInfo},addressStore:{addressSelect}} = this.props
+    let {navigation,cartStore:{settlementInfo},addressStore:{addressSelect}} = this.props
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
         <NavTop
@@ -62,20 +74,34 @@ class Settlement extends React.Component<Props,State> {
                   <Text style={[mainStyle.fs14,mainStyle.c333]}>选择地址</Text>
                 </View>
               </View>
-              <TouchableOpacity onPress={()=>{
-                navigation.navigate('Address',{type:'select'})
-              }}>
-                <View style={[mainStyle.row,mainStyle.pa15,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                  <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mar15]}>
-                    <Text style={[mainStyle.fs14,mainStyle.c333,mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
-                    <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.mobile}</Text>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.consignee}</Text>
+              {
+                addressSelect.region?
+                <TouchableOpacity onPress={()=>{
+                  navigation.navigate('Address',{type:'select'})
+                }}>
+                  <View style={[mainStyle.row,mainStyle.pa15,mainStyle.aiCenter,mainStyle.jcBetween]}>
+                    <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mar15]}>
+                      <Text style={[mainStyle.fs14,mainStyle.c333,mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
+                      <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween]}>
+                        <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.mobile}</Text>
+                        <Text style={[mainStyle.fs13,mainStyle.c333]}>{addressSelect.consignee}</Text>
+                      </View>
                     </View>
+                    <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs22]}>&#xe64d;</Text>
                   </View>
-                  <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs22]}>&#xe64d;</Text>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity onPress={()=>{
+                  navigation.navigate('AddressOperate',{type:'add'})
+                }}>
+                  <View style={[mainStyle.row,mainStyle.pa15,mainStyle.aiCenter,mainStyle.jcBetween]}>
+                    <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mar15,mainStyle.mat5]}>
+                      <Text style={[mainStyle.fs14,mainStyle.c333,mainStyle.mab5]}>请添加收货地址</Text>
+                    </View>
+                    <Text style={[mainStyle.icon,mainStyle.c666,mainStyle.fs22]}>&#xe64d;</Text>
+                  </View>
+                </TouchableOpacity>
+              }
               <Image style={[{width:screenW-setSize(60)},mainStyle.imgContain]} source={require('../../../images/addressbg.png')}></Image>
             </View>
             <View style={[mainStyle.column,mainStyle.bgcfff,{borderRadius:setSize(10)},mainStyle.mab15]}>
@@ -130,10 +156,7 @@ class Settlement extends React.Component<Props,State> {
           data={settlementInfo}
           orderType={orderType} 
           handlePayment={()=>{
-            cartStore.createOrder(addressSelect.id)
-            .then(res=>{
-              navigation.replace('WxPay',{type:1})
-            })
+            this.handleCreateOrder()
           }}></PayBar>
           :null
         }
