@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, ScrollView, Image,StyleSheet, TouchableOpacity } from 'react-native';
 import { mainStyle,setSize, screenW } from '../../public/style/style';
-import { Toast } from "@ant-design/react-native";
+import { Toast,ActivityIndicator } from "@ant-design/react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
@@ -10,7 +10,8 @@ import { observer, inject } from 'mobx-react';
 
 interface Props {}
 interface State {
-  orderType:string
+  orderType:string,
+  showLoading:boolean
 }
 
 let imgw = setSize(180);
@@ -26,7 +27,8 @@ class Settlement extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      orderType:''
+      orderType:'',
+      showLoading:true,
     };
   }
 
@@ -38,7 +40,8 @@ class Settlement extends React.Component<Props,State> {
       }
     }
     this.setState({
-      orderType:params.type
+      orderType:params.type,
+      showLoading:false
     })
   }
 
@@ -48,14 +51,29 @@ class Settlement extends React.Component<Props,State> {
       Toast.info('请添加收货地址',1.4,undefined,false)
       return false
     }
+    this.setState({showLoading:true})
+    //提交订单
     cartStore.createOrder(addressSelect.id)
     .then(res=>{
-      navigation.replace('WxPay',{type:1})
+      //刷新购物车
+      cartStore.getCartList()
+      .then(cartlistSuccess=>{
+        this.setState({showLoading:false})
+      })
+      .catch(cartlistFail=>{
+        this.setState({showLoading:false})
+      })
+      setTimeout(()=>{
+        navigation.replace('WxPay',{type:1})
+      },500)
+    })
+    .catch(err=>{
+      this.setState({showLoading:false})
     })
   }
 
   render(){
-    let {orderType} = this.state
+    let {orderType,showLoading} = this.state
     let {navigation,cartStore:{settlementInfo},addressStore:{addressSelect}} = this.props
     return (
       <View style={[mainStyle.flex1,mainStyle.column]}>
@@ -66,6 +84,12 @@ class Settlement extends React.Component<Props,State> {
           navigation.goBack()
         }}
         ></NavTop>
+        <ActivityIndicator
+          animating={showLoading}
+          toast
+          size="large"
+          text="正在提交..."
+        />
         <ScrollView style={[mainStyle.flex1,mainStyle.bgcf7]}>
           <View style={[mainStyle.column,mainStyle.flex1,mainStyle.pa15]}>
             <View style={[mainStyle.column,mainStyle.bgcfff,{borderRadius:setSize(10),overflow:'hidden'},mainStyle.mab15]}>
@@ -92,7 +116,7 @@ class Settlement extends React.Component<Props,State> {
                 </TouchableOpacity>
                 :
                 <TouchableOpacity onPress={()=>{
-                  navigation.navigate('AddressOperate',{type:'add'})
+                  navigation.navigate('Address',{type:'add'})
                 }}>
                   <View style={[mainStyle.row,mainStyle.pa15,mainStyle.aiCenter,mainStyle.jcBetween]}>
                     <View style={[mainStyle.column,mainStyle.flex1,mainStyle.mar15,mainStyle.mat5]}>

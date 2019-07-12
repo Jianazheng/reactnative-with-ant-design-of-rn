@@ -39,7 +39,7 @@ export class Fetch{
 
       fetch(reqUrl,reqOption)
       .then(async (response) => {
-        //console.log(await response.text())
+        //console.log(response)
         if(response.status==200||response.status==400){
           return {data:await response.json(),status:response.status}
         }else{
@@ -73,20 +73,19 @@ export class Fetch{
               reject(response.data);
             break;      
           case 500:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
-            console.warn(response.data)
+            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.4,undefined,false)
             reject(response.data);
             break;
           default:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.8,undefined,false)
+            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.4,undefined,false)
             reject(response.data);
             break;
         }
       })
       .catch((error) => {
         Toast.info(error.toString(),1.8,undefined,false)
-        console.warn(error)
-        reject(error)
+        console.warn('有错误信息')
+        reject({})
       });
     })
 

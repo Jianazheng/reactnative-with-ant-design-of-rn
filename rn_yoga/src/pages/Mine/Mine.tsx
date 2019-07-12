@@ -8,7 +8,7 @@ import { Toast } from '@ant-design/react-native';
 
 interface Props {}
 
-@inject('userStore')
+@inject('userStore','orderStore')
 @observer
 class Mine extends React.Component<Props> {
   static navigationOptions = {
@@ -32,8 +32,9 @@ class Mine extends React.Component<Props> {
   }
 
   componentDidMount(){
-    let {userStore} = this.props;
-    userStore.GetUserInfo();
+    let {userStore,orderStore} = this.props
+    userStore.GetUserInfo()
+    orderStore.getOrderNumber()
   }
 
   goto(routeName:string,params:any){
@@ -53,8 +54,8 @@ class Mine extends React.Component<Props> {
   }
 
   render(){
-    let {userStore} = this.props;
-    let userInfo = userStore.userInfo;
+    let {userStore,userStore:{userInfo},orderStore:{orderNumber}} = this.props
+    console.log(orderNumber)
     return (
       <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1,mainStyle.positonre]}>
@@ -106,26 +107,30 @@ class Mine extends React.Component<Props> {
                     this.goto('MyOrder',{})
                   }}>
                     <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                      <Image style={[mainStyle.bgcc2,styles.orderImg]}></Image>
+                      {orderNumber.all?<Text style={[styles.point,mainStyle.bgczt,mainStyle.fs11,mainStyle.cfff]}>{orderNumber.all}</Text>:null}
+                      <Image source={require('../../../images/allo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13,mainStyle.c333]}>全部</Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity style={[mainStyle.flex1]}>
                     <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                      <Image style={[mainStyle.bgcc2,styles.orderImg]}></Image>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>培训订单</Text>
+                      {orderNumber.notPay?<Text style={[styles.point,mainStyle.bgczt,mainStyle.fs11,mainStyle.cfff]}>{orderNumber.notPay}</Text>:null}
+                      <Image source={require('../../../images/pxo.png')} style={[styles.orderImg]}></Image>
+                      <Text style={[mainStyle.fs13,mainStyle.c333]}>未支付</Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity style={[mainStyle.flex1]}>
                     <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                      <Image style={[mainStyle.bgcc2,styles.orderImg]}></Image>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>课程订单</Text>
+                      {orderNumber.pay?<Text style={[styles.point,mainStyle.bgczt,mainStyle.fs11,mainStyle.cfff]}>{orderNumber.pay}</Text>:null}
+                      <Image source={require('../../../images/kco.png')} style={[styles.orderImg]}></Image>
+                      <Text style={[mainStyle.fs13,mainStyle.c333]}>已支付</Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity style={[mainStyle.flex1]}>
                     <View style={[mainStyle.column,mainStyle.aiCenter,mainStyle.jcCenter]}>
-                      <Image style={[mainStyle.bgcc2,styles.orderImg]}></Image>
-                      <Text style={[mainStyle.fs13,mainStyle.c333]}>商品订单</Text>
+                      {orderNumber.cancel?<Text style={[styles.point,mainStyle.bgczt,mainStyle.fs11,mainStyle.cfff]}>{orderNumber.cancel}</Text>:null}
+                      <Image source={require('../../../images/spo.png')} style={[styles.orderImg]}></Image>
+                      <Text style={[mainStyle.fs13,mainStyle.c333]}>已取消</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -248,10 +253,25 @@ const styles = StyleSheet.create({
     zIndex:1,
   },
   orderImg:{
-    height:(screenW-setSize(400))/4,
-    width:(screenW-setSize(400))/4,
-    marginTop:setSize(30),
-    marginBottom:setSize(20),
+    height:(screenW-setSize(200))/4,
+    width:(screenW-setSize(200))/4,
+    marginTop:setSize(20),
+    transform:[
+      {translateY:setSize(10)}
+    ]
+  },
+  point:{
+    position:'absolute',
+    right:setSize(16),
+    top:setSize(40),
+    height:setSize(34),
+    minWidth:setSize(54),
+    textAlign:'center',
+    lineHeight:setSize(34),
+    borderRadius:setSize(17),
+    borderWidth:setSize(1),
+    borderColor:mainStyle.cfff.color,
+    zIndex:1
   }
 })
 

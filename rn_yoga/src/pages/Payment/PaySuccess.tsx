@@ -5,6 +5,8 @@ import { IconOutline } from "@ant-design/icons-react-native";
 import BxButton from '../../components/Pubilc/Button';
 import { Checkbox } from '@ant-design/react-native';
 import NavTop from '../../router/navTop';
+import { observer, inject } from 'mobx-react';
+
 
 interface Props {}
 interface State {
@@ -13,6 +15,8 @@ interface State {
 
 let imgw = setSize(180);
 
+@inject('paymentStore')
+@observer
 class PaySuccess extends React.Component<Props,State> {
   static navigationOptions = {
     header:null,
@@ -22,6 +26,11 @@ class PaySuccess extends React.Component<Props,State> {
     this.state = {
       checkBox1:false
     };
+  }
+
+  componentDidMount(){
+    let {paymentStore} = this.props
+    paymentStore.getOrderBook()
   }
 
   render(){

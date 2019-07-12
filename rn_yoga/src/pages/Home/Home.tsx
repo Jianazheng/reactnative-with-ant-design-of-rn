@@ -42,6 +42,7 @@ class Home extends React.Component<Props,State> {
 
   TOLOGIN:object;
   TOBIND:object;
+  
 
   constructor(props:Props,state:State) {
     super(props);
@@ -64,22 +65,24 @@ class Home extends React.Component<Props,State> {
     RNStorage.load({
       key: 'token',
     }).then(res=>{
+      console.log(res)
       userStore.setToken(res)
     }).catch(err=>{
       //console.log(err)
     })
-    this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',(res)=>{
+    this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',res=>{
       navigation.navigate('Login')
     })
-    this.TOBIND = DeviceEventEmitter.addListener('TOBIND',(res)=>{
-      console.log(res)
+    this.TOBIND = DeviceEventEmitter.addListener('TOBIND',res=>{
       navigation.navigate('WxBind',{wxdata:res})
     })
+    
   }
 
   componentWillUnmount(){
-    this.TOLOGIN.remove();
-    this.TOBIND.remove();
+    this.TOLOGIN.remove()
+    this.TOBIND.remove()
+    
   }
 
   goto(){
@@ -120,6 +123,7 @@ class Home extends React.Component<Props,State> {
               style={[mainStyle.icon,mainStyle.pa15,{paddingRight:0},mainStyle.fs22]} 
               onPress={()=>{
                 navigation.push('CartList')
+                //navigation.push('PaySuccess')
               }}>&#xe60a;</Text>
             )}></HomeSearchBar>
             <HomeSwiper img={homeStore.banner}></HomeSwiper>

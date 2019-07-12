@@ -126,6 +126,7 @@ class Cart {
 
   @action async getCartList(){
     try {
+      
       let response = await new Fetch('/cart/list','GET',{},{})
       let cartList = response.data
       let newobj = {}
@@ -138,6 +139,7 @@ class Cart {
           newArr.push(...cartList[i])
         }
       }
+      this.cartData.ids = []
       this.cartData.cartList = newobj
       this.cartData.cartListObj2Arr = newArr
       return response
@@ -300,7 +302,7 @@ class Cart {
       let {ids} = this.cartData
       let params = {cart:ids,address_id}
       let response = await new Fetch('/order/place_cart','POST',params,{})
-      Toast.info(response.message,1.4,undefined,false)
+      Toast.info(response.message,1,undefined,false)
       this.cartData.orderStatus = response.data
       return response.data
     } catch (error) {

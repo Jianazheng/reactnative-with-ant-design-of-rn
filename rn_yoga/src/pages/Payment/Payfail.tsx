@@ -1,8 +1,6 @@
 import React from 'react';
-import { Text, View, ScrollView, Image,StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import { mainStyle,setSize } from '../../public/style/style';
-import { IconOutline } from "@ant-design/icons-react-native";
-import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 
@@ -37,7 +35,7 @@ class Payfail extends React.Component<Props,State> {
           <Text style={[mainStyle.c333,mainStyle.fs13,mainStyle.mat10]}>支付失败</Text>
           <Text style={[mainStyle.c999,mainStyle.fs10,mainStyle.mat10]}>你可以在未支付订单中继续支付</Text>
           <BxButton 
-          title={'重新支付'}
+          title={'返回首页'}
           colors={[mainStyle.czt.color,mainStyle.cztc.color]}
           btnstyle={[mainStyle.mat15,
             {
@@ -46,7 +44,9 @@ class Payfail extends React.Component<Props,State> {
             }
           ]}
           textstyle={[mainStyle.cfff,mainStyle.fs14]}
-          onClick={()=>{}}
+          onClick={()=>{
+            this.props.navigation.popToTop()
+          }}
           ></BxButton>
         </View>
       </View>

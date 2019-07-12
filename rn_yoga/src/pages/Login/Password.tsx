@@ -50,7 +50,7 @@ class Password extends React.Component<Props,State> {
     }
     let res = await userStore.ChangePassword({mobile,password,rpassword})
     if(res!=null){
-      navigation.navigate('Login',{mobile})
+      navigation.replace('Login',{mobile})
     }
   }
 

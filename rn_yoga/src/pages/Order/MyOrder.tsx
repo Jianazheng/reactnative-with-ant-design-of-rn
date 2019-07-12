@@ -6,6 +6,7 @@ import BxTabView from '../../components/ScrollTabs/TabView';
 import BxListView from '../../components/Pubilc/ListView';
 import { CourseInfoItem2 } from '../../components/Course/CourseItem';
 import BxButton from './../../components/Pubilc/Button';
+import { observer, inject } from 'mobx-react';
 
 
 interface Props {}
@@ -13,6 +14,8 @@ interface State {
   tabs:Array<object>
 }
 
+@inject('orderStore')
+@observer
 class MyOrder extends React.Component<Props,State> {
   static navigationOptions = {
     header:null
@@ -21,12 +24,30 @@ class MyOrder extends React.Component<Props,State> {
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
-      tabs:[{title:'全部'},{title:'培训课程'},{title:'在线课程'},{title:'商品'}]
+      tabs:[{title:'全部',type:'all'},{title:'未支付',type:'unpay'},{title:'已支付',type:'pay'},{title:'已取消',type:'cancel'}]
     };
   }
 
+  componentDidMount(){
+    // let {orderStore,navigation} = this.props
+    // let {params} = navigation.state
+    // params = {type:'all'}
+    this.handleLoadOrder()
+  }
+
+  handleLoadOrder(){
+    console.log(233)
+    let {orderStore,navigation} = this.props
+    let {params} = navigation.state
+    params = {type:'all'}
+    orderStore.getOrderList(params.type)
+  }
+
   render(){
-    let {tabs} = this.state;
+    let {tabs} = this.state
+    let {navigation,orderStore,orderStore:{orderListAll}} = this.props
+    let {params} = navigation.state
+    console.log(orderListAll)
     return (
       <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf2]}>
         <NavTop
@@ -44,12 +65,15 @@ class MyOrder extends React.Component<Props,State> {
         >
           <View style={[mainStyle.flex1]}>
             <BxListView
-            pab={setSize(30)}
-            listData={[{},{},{},{},{}]}
+            pab={setSize(20)}
+            listData={orderListAll.data.slice()}
             colNumber={1}
-            nomore={true}
-            onLoadmore={()=>{}}
-            listItem={({item,index})=><OrderItem navigation={this.props.navigation} data={{}}></OrderItem>}
+            nomore={false}
+            loading={orderListAll.total==null||orderListAll.total>orderListAll.data.length}
+            onLoadmore={()=>{
+              this.handleLoadOrder()
+            }}
+            listItem={({item,index})=><OrderItem navigation={this.props.navigation} data={item}></OrderItem>}
             ></BxListView>
           </View>
           <View>
@@ -110,6 +134,7 @@ class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
             color={mainStyle.czt.color}
             borderRadius={setSize(30)}
             btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15]}
+            textstyle={[mainStyle.fs13]}
             onClick={()=>{
               this.goto('Settlement',{type:'pay'});
             }}
@@ -120,6 +145,7 @@ class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
             color={mainStyle.c666.color}
             borderRadius={setSize(30)}
             btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15,mainStyle.mal10]}
+            textstyle={[mainStyle.fs13]}
             onClick={()=>{
               this.goto('ApplyRefund',{type:'pay'});
             }}

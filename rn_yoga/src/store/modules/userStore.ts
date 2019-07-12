@@ -8,7 +8,7 @@ import * as Wechat from 'react-native-wechat';
 
 class User {
   constructor() {
-    
+    Wechat.registerApp('wxa66b688d8d2383df')
   }
   @observable userData = {
     token:'',
@@ -129,7 +129,6 @@ class User {
     try {
       const scope = 'snsapi_userinfo'
       const state = ''
-      Wechat.registerApp('wxa66b688d8d2383df')
       let isInstalled  = await Wechat.isWXAppInstalled()
       if (isInstalled) {
         let responseCode = await Wechat.sendAuthRequest(scope, state)

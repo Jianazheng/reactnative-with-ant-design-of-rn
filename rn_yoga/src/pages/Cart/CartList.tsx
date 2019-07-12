@@ -113,6 +113,7 @@ class CartList extends React.Component<Props,State> {
     let {cartStore,navigation,addressStore} = this.props
     let {ids} = cartStore
     if(ids.length>0){
+      this.setState({showLoading:true})
       cartStore.settlement()
       .then(res=>{
         if(res.pass==1){
@@ -124,6 +125,7 @@ class CartList extends React.Component<Props,State> {
         }else{
           navigation.navigate('SettlementFail',{type:'pay'})
         }
+        this.setState({showLoading:false})
       })
     }else{
       Toast.info('请选择商品',1.4,undefined,false)

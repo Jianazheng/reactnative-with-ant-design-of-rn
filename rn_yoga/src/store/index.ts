@@ -7,6 +7,7 @@ import trainStore from './modules/trainStore';
 import cartStore from './modules/cartStore';
 import addressStore from './modules/addressStore';
 import paymentStore from './modules/paymentStore';
+import orderStore from './modules/orderStore';
 
 
 export default {
@@ -18,5 +19,6 @@ export default {
   trainStore,
   cartStore,
   addressStore,
-  paymentStore
+  paymentStore,
+  orderStore
 }

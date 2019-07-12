@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image,StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, StyleSheet, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { mainStyle,setSize, screenW } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import {headerTitle,headerRight} from '../../router/navigationBar';
@@ -18,6 +18,10 @@ class WxPay extends React.Component<Props,State> {
   static navigationOptions = {
     header:null,
   }
+
+  TOPAYSUCCESS:object;
+  TOPAYFAIL:object;
+
   constructor(props:Props,state:State) {
     super(props);
     this.state = {
@@ -25,15 +29,31 @@ class WxPay extends React.Component<Props,State> {
     };
   }
 
+  componentDidMount(){
+    let {navigation} = this.props
+    this.TOPAYSUCCESS = DeviceEventEmitter.addListener('TOPAYSUCCESS',res=>{
+      navigation.replace('PaySuccess')
+    })
+    this.TOPAYFAIL = DeviceEventEmitter.addListener('TOPAYFAIL',res=>{
+      navigation.replace('Payfail')
+    })
+  }
+
+  componentWillUnmount(){
+    this.TOPAYSUCCESS.remove()
+    this.TOPAYFAIL.remove()
+  }
+
   handleToPay(){
     let {cartStore:{orderStatus},paymentStore,navigation} = this.props
-    console.log(orderStatus)
     let {params} = navigation.state
-    paymentStore.WXPay(params.type,orderStatus.order_no)
+    paymentStore.WXPay(params.type,orderStatus.order_id)
     .then(res=>{
-      console.log(res)
+      navigation.replace('PaySuccess')
     })
-    //navigation.replace('PaySuccess')
+    .catch(err=>{
+      navigation.replace('Payfail')
+    })
   }
 
   render(){
@@ -67,13 +87,13 @@ class WxPay extends React.Component<Props,State> {
             </View>
           </View>
         </View>
-        <View style={[mainStyle.row,mainStyle.h200,mainStyle.aiCenter,mainStyle.jcCenter]}>
+        <View style={[mainStyle.row,mainStyle.h120,mainStyle.aiCenter,mainStyle.jcCenter]}>
           <BxButton 
           title={'确认支付'}
           colors={['#54FF9F','#4EEE94']}
           borderRadius={setSize(6)}
-          btnstyle={[{width:screenW-setSize(60)}]}
-          textstyle={[mainStyle.fs13]}
+          btnstyle={[{width:screenW-setSize(60),height:setSize(80)}]}
+          textstyle={[mainStyle.fs14]}
           onClick={()=>{
             this.handleToPay()
           }}
