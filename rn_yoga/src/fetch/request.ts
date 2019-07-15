@@ -84,7 +84,7 @@ export class Fetch{
       })
       .catch((error) => {
         Toast.info(error.toString(),1.8,undefined,false)
-        console.warn('有错误信息')
+        console.warn(error)
         reject({})
       });
     })
