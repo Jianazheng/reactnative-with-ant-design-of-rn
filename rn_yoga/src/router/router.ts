@@ -1,5 +1,5 @@
 
-import {IndexTabs} from './tabs';
+import { IndexTabs } from './tabs';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Login/Register';
 import Forget from '../pages/Login/Forget';
@@ -31,45 +31,49 @@ import MyLevel from './../pages/Mine/MyLevel';
 import WxPay from './../pages/Payment/WxPay';
 import SettlementFail from './../pages/Settlement/SettlementFail';
 import WxBind from './../pages/Login/WxBind';
+import NotiveDetail from './../pages/Home/NotiveDetail';
+import OrderDetail from './../pages/Order/OrderDetail';
 
 
 
 export const navItem = {
-  Login: {screen: Login},
-  Register:{screen:Register},
-  Forget:{screen:Forget},
-  Password:{screen:Password},
-  WxBind:{screen:WxBind},
-  UserInfo:{screen:UserInfo},
-  CourseList:{screen:CourseList},
-  OutlineCourse:{screen:OutlineCourse},
-  OutlineCourseReserve:{screen:OutlineCourseReserve},
-  OnlineCourse:{screen:OnlineCourse},
-  OnlineCourseInfo:{screen:OnlineCourseInfo},
-  CourseInfo:{screen:CourseInfo},
-  CartList:{screen:CartList},
-  ClassifyList:{screen:ClassifyList},
-  Settlement:{screen:Settlement},
-  SettlementFail:{screen:SettlementFail},
-  WxPay:{screen:WxPay},
-  Payfail:{screen:Payfail},
-  PaySuccess:{screen:PaySuccess},
-  GoodsList:{screen:GoodsList},
-  GoodsInfo:{screen:GoodsInfo},
-  OnlineCourseList:{screen:OnlineCourseList},
-  MyOrder:{screen:MyOrder},
-  MyCollect:{screen:MyCollect},
-  RefundReason:{screen:RefundReason},
-  ApplyRefund:{screen:ApplyRefund},
-  MyCertificate:{screen:MyCertificate},
-  ViewPdf:{screen:ViewPdf},
-  Address:{screen:Address},
-  AddressOperate:{screen:AddressOperate},
-  MyLevel:{screen:MyLevel},
+  Login: { screen: Login },
+  Register: { screen: Register },
+  Forget: { screen: Forget },
+  Password: { screen: Password },
+  WxBind: { screen: WxBind },
+  UserInfo: { screen: UserInfo },
+  CourseList: { screen: CourseList },
+  OutlineCourse: { screen: OutlineCourse },
+  OutlineCourseReserve: { screen: OutlineCourseReserve },
+  OnlineCourse: { screen: OnlineCourse },
+  OnlineCourseInfo: { screen: OnlineCourseInfo },
+  CourseInfo: { screen: CourseInfo },
+  CartList: { screen: CartList },
+  ClassifyList: { screen: ClassifyList },
+  Settlement: { screen: Settlement },
+  SettlementFail: { screen: SettlementFail },
+  WxPay: { screen: WxPay },
+  Payfail: { screen: Payfail },
+  PaySuccess: { screen: PaySuccess },
+  GoodsList: { screen: GoodsList },
+  GoodsInfo: { screen: GoodsInfo },
+  OnlineCourseList: { screen: OnlineCourseList },
+  MyOrder: { screen: MyOrder },
+  OrderDetail: { screen: OrderDetail },
+  MyCollect: { screen: MyCollect },
+  RefundReason: { screen: RefundReason },
+  ApplyRefund: { screen: ApplyRefund },
+  MyCertificate: { screen: MyCertificate },
+  ViewPdf: { screen: ViewPdf },
+  Address: { screen: Address },
+  AddressOperate: { screen: AddressOperate },
+  MyLevel: { screen: MyLevel },
+  NotiveDetail: { screen: NotiveDetail },
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({
-        header: null
+      header: null
     })
   }
 }
@@ -77,7 +81,7 @@ export const navItem = {
 export const navConfig = {
   initialRouteName: 'Tab',
   headerMode: 'float',
-  navigationOptions:{
-    header:null,
+  navigationOptions: {
+    header: null,
   }
 }

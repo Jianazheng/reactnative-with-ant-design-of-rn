@@ -1,90 +1,118 @@
 import React from 'react';
 import { Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native';
-import { mainStyle,screenH,setSize } from '../../public/style/style';
+import { mainStyle, screenH, setSize } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import BxTabView from '../../components/ScrollTabs/TabView';
 import BxListView from '../../components/Pubilc/ListView';
-import { CourseInfoItem2 } from '../../components/Course/CourseItem';
+import { OrderGoodsItem, OrderCourseItem } from '../../components/Course/CourseItem';
 import BxButton from './../../components/Pubilc/Button';
 import { observer, inject } from 'mobx-react';
+import { toJS } from 'mobx';
+import { Modal } from '@ant-design/react-native';
 
 
-interface Props {}
+interface Props { }
 interface State {
-  tabs:Array<object>
+  tabs: Array<object>
 }
 
 @inject('orderStore')
 @observer
-class MyOrder extends React.Component<Props,State> {
+class MyOrder extends React.Component<Props, State> {
   static navigationOptions = {
-    header:null
+    header: null
   }
 
-  constructor(props:Props,state:State) {
+  constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      tabs:[{title:'全部',type:'all'},{title:'未支付',type:'unpay'},{title:'已支付',type:'pay'},{title:'已取消',type:'cancel'}]
+      tabs: [{ title: '全部', type: 'all' }, { title: '未支付', type: 'unpay' }, { title: '已支付', type: 'pay' }, { title: '已取消', type: 'cancel' }],
+      current: 0
     };
   }
 
-  componentDidMount(){
-    // let {orderStore,navigation} = this.props
-    // let {params} = navigation.state
-    // params = {type:'all'}
-    this.handleLoadOrder()
+  componentDidMount() {
+    this.handleLoadOrder('all', true)
   }
 
-  handleLoadOrder(){
-    console.log(233)
-    let {orderStore,navigation} = this.props
-    let {params} = navigation.state
-    params = {type:'all'}
-    orderStore.getOrderList(params.type)
+  handleLoadOrder(type: string, resize: boolean) {
+    let { orderStore, navigation } = this.props
+    orderStore.getOrderList(type, resize)
   }
 
-  render(){
-    let {tabs} = this.state
-    let {navigation,orderStore,orderStore:{orderListAll}} = this.props
-    let {params} = navigation.state
-    console.log(orderListAll)
+  handleTabChange(index: number) {
+    let { tabs } = this.state
+    this.handleLoadOrder(tabs[index].type, true)
+    this.setState({ current: index })
+  }
+
+  handleCancel(id: number | string) {
+    let { orderStore } = this.props
+    let { current } = this.state
+    Modal.alert('提示', '确认取消订单吗？', [
+      {
+        text: '取消',
+        onPress: () => { },
+        style: 'cancel',
+      },
+      {
+        text: '确认', onPress: () => {
+          orderStore.cancelOrder(id)
+            .then(res => {
+              this.handleTabChange(current)
+            })
+        }
+      },
+    ]);
+  }
+
+  render() {
+    let { tabs } = this.state
+    let { navigation, orderStore, orderStore: { orderListAll } } = this.props
     return (
-      <View style={[mainStyle.column,mainStyle.flex1,mainStyle.bgcf2]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
-        navType="normal"
-        title="我的订单"
-        onPress={()=>{
-          this.props.navigation.goBack();
-        }}
+          navType="normal"
+          title="我的订单"
+          onPress={() => {
+            this.props.navigation.goBack();
+          }}
         ></NavTop>
         <BxTabView
-        height={screenH-setSize(240)}
-        canScroll={true}
-        tabAlign={'center'}
-        tabs={tabs}
+          height={screenH - setSize(240)}
+          canScroll={true}
+          tabAlign={'center'}
+          tabs={tabs}
+          tabChange={(e) => {
+            this.handleTabChange(e)
+          }}
         >
-          <View style={[mainStyle.flex1]}>
-            <BxListView
-            pab={setSize(20)}
-            listData={orderListAll.data.slice()}
-            colNumber={1}
-            nomore={false}
-            loading={orderListAll.total==null||orderListAll.total>orderListAll.data.length}
-            onLoadmore={()=>{
-              this.handleLoadOrder()
-            }}
-            listItem={({item,index})=><OrderItem navigation={this.props.navigation} data={item}></OrderItem>}
-            ></BxListView>
-          </View>
-          <View>
-            <Text>2333</Text>
-          </View>
-          <View>
-            <Text>2333</Text>
-          </View>
-          <View>
-            <Text>2333</Text>
-          </View>
+          {
+            Object.keys(orderListAll).map((val, i) => (
+              <View key={i} style={[mainStyle.flex1]}>
+                <BxListView
+                  pab={setSize(20)}
+                  listData={orderListAll[val].data.slice()}
+                  colNumber={1}
+                  nomore={false}
+                  loading={orderListAll[val].total == null || orderListAll[val].total > orderListAll[val].data.length}
+                  onLoadmore={() => {
+                    this.handleLoadOrder(val, false)
+                  }}
+                  listItem={({ item, index }) =>
+                    <OrderItem
+                      key={index}
+                      navigation={this.props.navigation}
+                      data={item}
+                      onCancel={(e) => {
+                        this.handleCancel(e)
+                      }}
+                    ></OrderItem>
+                  }
+                ></BxListView>
+              </View>
+            ))
+          }
         </BxTabView>
       </View>
     )
@@ -96,65 +124,105 @@ interface OrderItemState {
 }
 
 interface OrderItemProps {
-  data:object,
-  navigation:any
+  data: object,
+  navigation: any,
+  onCancel: (id: string | number) => void
 }
 
-class OrderItem extends React.Component<OrderItemState,OrderItemProps>{
-  constructor(props:OrderItemProps){
+class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
+  constructor(props: OrderItemProps) {
     super(props)
   }
 
-  goto(routeName:string,params:any){
-    this.props.navigation.navigate(routeName,params);
+  goto(routeName: string, params: any) {
+    this.props.navigation.navigate(routeName, params);
   }
 
-  render(){
+  handleOrderCancel(id: string | number) {
+    let { onCancel } = this.props;
+    if (onCancel) onCancel(id)
+  }
+
+  render() {
+    let { data } = this.props
     return (
-      <View style={[mainStyle.column,mainStyle.mat15,mainStyle.bgcfff]}>
-        <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter,mainStyle.h100,mainStyle.bgcf7,mainStyle.palr15]}>
-          <View style={[mainStyle.row,mainStyle.jcBetween,mainStyle.aiCenter]}>
-            <Text style={[mainStyle.icon,mainStyle.c333]}>&#xe63d;</Text>
-            <Text style={[mainStyle.fs13,mainStyle.c333,mainStyle.mal10]}>订单号：8230832048234</Text>
+      <View style={[mainStyle.column, mainStyle.mat15, mainStyle.bgcfff]}>
+        <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100, mainStyle.bgcf2, mainStyle.palr15]}>
+          <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
+            <Text style={[mainStyle.icon, mainStyle.c333]}>&#xe63d;</Text>
+            <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>订单号：{data.order_number}</Text>
           </View>
-          <Text style={[mainStyle.fs13,mainStyle.czt]}>待付款</Text>
+          {data.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333]}>已完成</Text> : null}
+          {data.status == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待支付</Text> : null}
+          {data.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待发货</Text> : null}
+          {data.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>已发货</Text> : null}
+          {data.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>售后</Text> : null}
+          {data.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消</Text> : null}
         </View>
-        <View style={[mainStyle.bgcfff,mainStyle.palr15]}>
-          <CourseInfoItem2 data={{title:'高阶体式提升计划高阶体式提升计划'}}></CourseInfoItem2>
+        <View style={[mainStyle.bgcfff]}>
+          <TouchableOpacity onPress={() => {
+            this.goto('OrderDetail', { id: data.id })
+          }}>
+            <View>
+              {data.type == 1 ? <OrderGoodsItem data={data}></OrderGoodsItem> : null}
+              {data.type == 2 || data.type == 3 ? <OrderCourseItem data={data}></OrderCourseItem> : null}
+            </View>
+          </TouchableOpacity>
         </View>
-        <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.jcBetween,mainStyle.h100,mainStyle.brt1f2]}>
-          <Text style={[mainStyle.lh44,mainStyle.mal15]}>
-            <Text style={[mainStyle.fs13,mainStyle.c333]}>待支付金额：</Text>
-            <Text style={[mainStyle.fs14,mainStyle.czt]}>￥1800</Text>
+        <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.brt1f2]}>
+          <Text style={[mainStyle.lh44, mainStyle.mal15]}>
+            <Text style={[mainStyle.fs13, mainStyle.c333]}>待支付金额：</Text>
+            <Text style={[mainStyle.fs14, mainStyle.czt]}>￥{data.total_price}</Text>
           </Text>
-          <View style={[mainStyle.row,mainStyle.aiCenter,mainStyle.mar15]}>
-            <BxButton
-            title={'去支付'}
-            plain
-            color={mainStyle.czt.color}
-            borderRadius={setSize(30)}
-            btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15]}
-            textstyle={[mainStyle.fs13]}
-            onClick={()=>{
-              this.goto('Settlement',{type:'pay'});
-            }}
-            ></BxButton>
-            <BxButton
-            title={'取消订单'}
-            plain
-            color={mainStyle.c666.color}
-            borderRadius={setSize(30)}
-            btnstyle={[mainStyle.bgcfff,mainStyle.h60,mainStyle.palr15,mainStyle.mal10]}
-            textstyle={[mainStyle.fs13]}
-            onClick={()=>{
-              this.goto('ApplyRefund',{type:'pay'});
-            }}
-            ></BxButton>
+          <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mar15]}>
+            {
+              data.status == 2
+                ? <BxButton
+                  title={'去支付'}
+                  colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                  borderRadius={setSize(30)}
+                  btnstyle={[mainStyle.h60, mainStyle.palr15]}
+                  textstyle={[mainStyle.fs12]}
+                  onClick={() => {
+                    this.goto('Settlement', { type: 'pay' });
+                  }}
+                ></BxButton>
+                : null
+            }
+            {
+              data.status == 2
+                ? <BxButton
+                  title={'取消订单'}
+                  colors={[mainStyle.cc2.color, mainStyle.c999.color]}
+                  borderRadius={setSize(30)}
+                  btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                  textstyle={[mainStyle.fs12]}
+                  onClick={() => {
+                    this.handleOrderCancel(data.id)
+                  }}
+                ></BxButton>
+                : null
+            }
+            {
+              data.status == 4 || data.status == 3
+                ? <BxButton
+                  title={'申请退款'}
+                  colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                  borderRadius={setSize(30)}
+                  btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                  textstyle={[mainStyle.fs12]}
+                  onClick={() => {
+                    this.goto('ApplyRefund', { type: 'pay' });
+                  }}
+                ></BxButton>
+                : null
+            }
           </View>
         </View>
       </View>
     )
   }
 }
+
 
 export default MyOrder
