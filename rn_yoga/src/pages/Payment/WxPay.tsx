@@ -37,6 +37,7 @@ class WxPay extends React.Component<Props, State> {
     this.TOPAYFAIL = DeviceEventEmitter.addListener('TOPAYFAIL', res => {
       navigation.replace('Payfail')
     })
+    this.setState({ showLoading: false })
   }
 
   componentWillUnmount() {
@@ -45,15 +46,14 @@ class WxPay extends React.Component<Props, State> {
   }
 
   handleToPay() {
-    let { cartStore: { orderStatus }, paymentStore, navigation } = this.props
+    let { paymentStore, paymentStore: { payStatus }, navigation } = this.props
     let { params } = navigation.state
     this.setState({ showLoading: true })
-    paymentStore.WXPay(params.type, orderStatus.order_id)
+    paymentStore.WXPay(payStatus.order_type, payStatus.order_id)
       .then(res => {
         this.setState({ showLoading: false }, () => {
           navigation.replace('PaySuccess')
         })
-
       })
       .catch(err => {
         setTimeout(() => {
@@ -64,8 +64,8 @@ class WxPay extends React.Component<Props, State> {
 
   render() {
     let { showLoading } = this.state
-    let { cartStore: { settlementInfo } } = this.props
-    console.log(settlementInfo)
+    let { paymentStore: { payStatus } } = this.props
+    console.log(payStatus)
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop
@@ -84,7 +84,7 @@ class WxPay extends React.Component<Props, State> {
         <View style={[mainStyle.bgcf7, mainStyle.column, mainStyle.flex1]}>
           <View style={[mainStyle.bgcfff, mainStyle.palr15]}>
             <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.pa30, mainStyle.mab20, mainStyle.mat20]}>
-              <Text style={[mainStyle.cjin]}><Text style={[mainStyle.fs12]}>￥</Text><Text style={[{ fontSize: setSize(72) }]}>{settlementInfo.orderPrice}</Text></Text>
+              <Text style={[mainStyle.cjin]}><Text style={[mainStyle.fs12]}>￥</Text><Text style={[{ fontSize: setSize(72) }]}>{payStatus.orderPrice}</Text></Text>
             </View>
             <View style={[mainStyle.bgcfff, mainStyle.column]}>
               <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter, mainStyle.brb1f2, mainStyle.brt1f2, mainStyle.h100]}>

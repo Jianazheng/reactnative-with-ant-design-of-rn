@@ -78,33 +78,14 @@ export class Fetch {
             default:
               Toast.info('服务器错误：' + response.status + '，接口：' + reqUrl, 1.4, undefined, false)
               reject(response.data);
-<<<<<<< HEAD
-            break;      
-          case 500:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.4,undefined,false)
-            reject(response.data);
-            break;
-          default:
-            Toast.info('服务器错误：'+response.status+'，接口：'+reqUrl,1.4,undefined,false)
-            reject(response.data);
-            break;
-        }
-      })
-      .catch((error) => {
-        Toast.info(error.toString(),1.8,undefined,false)
-        console.warn(error)
-        reject({})
-      });
-=======
               break;
           }
         })
         .catch((error) => {
           Toast.info(error.toString(), 1.8, undefined, false)
-          console.warn('有错误信息')
+          console.warn(error)
           reject({})
         });
->>>>>>> c263d256baaff31b6775fabeab25cfb4df843dee
     })
 
   }

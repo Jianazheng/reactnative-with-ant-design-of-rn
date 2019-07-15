@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { mainStyle, setSize, screenW } from '../../public/style/style';
-import { Toast, ActivityIndicator } from "@ant-design/react-native";
+import { Toast, ActivityIndicator, Modal } from "@ant-design/react-native";
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import { OrderGoodsItem, OrderCourseItem } from '../../components/Course/CourseItem';
 import BxButton from '../../components/Pubilc/Button';
@@ -33,6 +33,14 @@ class OrderDetail extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    this.getDetail()
+  }
+
+  goto(routeName: string, params: any) {
+    this.props.navigation.navigate(routeName, params);
+  }
+
+  getDetail() {
     let { navigation: { state: { params } }, orderStore } = this.props
     orderStore.getOrderInfo(params.id)
       .then(res => {
@@ -42,10 +50,29 @@ class OrderDetail extends React.Component<Props, State> {
       })
   }
 
+  handleCancel(id: number | string) {
+    let { orderStore } = this.props
+    Modal.alert('提示', '确认取消订单吗？', [
+      {
+        text: '取消',
+        onPress: () => { },
+        style: 'cancel',
+      },
+      {
+        text: '确认', onPress: () => {
+          orderStore.cancelOrder(id)
+            .then(res => {
+              this.getDetail()
+            })
+        }
+      },
+    ]);
+  }
 
   render() {
     let { showLoading } = this.state
     let { navigation, orderStore: { orderInfo } } = this.props
+    let address = orderInfo.status == 2 ? orderInfo.address ? JSON.parse(orderInfo.address) : {} : {}
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop
@@ -66,42 +93,87 @@ class OrderDetail extends React.Component<Props, State> {
             <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
               <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
                 <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+                  <Text style={[mainStyle.fs14, mainStyle.c333]}>订单信息</Text>
+                </View>
+              </View>
+              <View style={[mainStyle.column, mainStyle.palr15, mainStyle.pab15]}>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>订单号</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{orderInfo.order_number}</Text>
+                </View>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>创建时间</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{orderInfo.create_time}</Text>
+                </View>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>订单状态</Text>
+                  {orderInfo.status == 1 ? <Text style={[mainStyle.fs12, mainStyle.c333]}>已完成</Text> : null}
+                  {orderInfo.status == 2 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待支付</Text> : null}
+                  {orderInfo.status == 3 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待发货</Text> : null}
+                  {orderInfo.status == 4 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>已发货</Text> : null}
+                  {orderInfo.status == 5 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>售后</Text> : null}
+                  {orderInfo.status == 6 ? <Text style={[mainStyle.fs12, mainStyle.c999]}>已取消</Text> : null}
+                </View>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>支付单号</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{orderInfo.pay_number}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
+              <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+                <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+                  <Text style={[mainStyle.fs14, mainStyle.c333]}>收货信息</Text>
+                </View>
+              </View>
+              <View style={[mainStyle.column, mainStyle.palr15, mainStyle.pab15]}>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>收货人</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{address.consignee}</Text>
+                </View>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>收货电话</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{address.mobile}</Text>
+                </View>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>收货地址</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs12]}>{address.region != null ? JSON.parse(address.region) : ''}{address.address}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
+              <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+                <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
                   <Text style={[mainStyle.fs14, mainStyle.c333]}>商品信息</Text>
                 </View>
               </View>
               <View style={[mainStyle.pab15]}>
-                {/* <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.pa15, mainStyle.brb1f2]}>
-                  <Image
-                    style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
-                    mode="widthFix"
-                    source={{ uri: 'http://' + orderInfo.good_img }}>
-                  </Image>
-                  <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs12]}>{orderInfo.good_name}</Text>
-                    <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{orderInfo.sku_name}</Text>
-                    <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14, mainStyle.fontsilm]}>{orderInfo.original_price}</Text></Text>
-                  </View>
-                </View> */}
-                <TouchableOpacity onPress={() => {
-
-                }}>
-                  <View>
-                    {orderInfo.type == 1 ? <OrderGoodsItem data={orderInfo}></OrderGoodsItem> : null}
-                    {orderInfo.type == 2 ? <OrderCourseItem data={orderInfo}></OrderCourseItem> : null}
-                  </View>
-                </TouchableOpacity>
+                <View>
+                  {orderInfo.type == 1
+                    ? <OrderGoodsItem
+                      data={orderInfo}
+                      onClick={() => this.goto('GoodsInfo', { id: orderInfo.good_id })}
+                    ></OrderGoodsItem>
+                    : null}
+                  {orderInfo.type == 2
+                    ? <OrderCourseItem
+                      data={orderInfo}
+                      onClick={() => this.goto('OnlineCourseInfo', { id: orderInfo.good_id })}
+                    ></OrderCourseItem>
+                    : null}
+                </View>
                 <View style={[mainStyle.column, mainStyle.palr15]}>
                   <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                     <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠价格</Text>
-                    <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{orderInfo.favorable_price}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs12]}>￥{orderInfo.favorable_price}</Text>
                   </View>
                   <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                     <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠金额</Text>
-                    <Text style={[mainStyle.czt, mainStyle.fs14]}>-￥{orderInfo.total_favorable}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs12]}>-￥{orderInfo.total_favorable}</Text>
                   </View>
                   <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                     <Text style={[mainStyle.c333, mainStyle.fs12]}>总金额</Text>
-                    <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{orderInfo.total_price}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs12]}>￥{orderInfo.total_price}</Text>
                   </View>
                 </View>
               </View>
@@ -118,7 +190,7 @@ class OrderDetail extends React.Component<Props, State> {
 
               }}
               handleCancel={() => {
-
+                this.handleCancel(orderInfo.id)
               }}
             ></PayBar>
             : null

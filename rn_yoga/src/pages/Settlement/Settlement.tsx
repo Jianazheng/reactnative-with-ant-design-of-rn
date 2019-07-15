@@ -16,7 +16,7 @@ interface State {
 
 let imgw = setSize(180);
 
-@inject('cartStore', 'addressStore')
+@inject('cartStore', 'addressStore', 'paymentStore')
 @observer
 class Settlement extends React.Component<Props, State> {
   static navigationOptions = {
@@ -46,7 +46,8 @@ class Settlement extends React.Component<Props, State> {
   }
 
   handleCreateOrder() {
-    let { navigation, cartStore, addressStore: { addressSelect } } = this.props
+    let { navigation, cartStore, cartStore: { settlementInfo }, paymentStore, addressStore: { addressSelect } } = this.props
+    let order_type = 1
     if (!addressSelect.id) {
       Toast.info('请添加收货地址', 1.4, undefined, false)
       return false
@@ -55,11 +56,13 @@ class Settlement extends React.Component<Props, State> {
     //提交订单
     cartStore.createOrder(addressSelect.id)
       .then(res => {
+        //保存支付参数
+        paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
         //刷新购物车
         cartStore.getCartList()
           .then(cartlistSuccess => {
             this.setState({ showLoading: false }, () => {
-              navigation.replace('WxPay', { type: 1 })
+              navigation.replace('WxPay', { type: order_type })
             })
           })
           .catch(cartlistFail => {

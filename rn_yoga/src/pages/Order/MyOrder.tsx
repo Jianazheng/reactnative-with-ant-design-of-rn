@@ -68,7 +68,7 @@ class MyOrder extends React.Component<Props, State> {
 
   render() {
     let { tabs } = this.state
-    let { navigation, orderStore, orderStore: { orderListAll } } = this.props
+    let { navigation, orderStore: { orderListAll } } = this.props
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -129,6 +129,8 @@ interface OrderItemProps {
   onCancel: (id: string | number) => void
 }
 
+@inject('paymentStore')
+@observer
 class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
   constructor(props: OrderItemProps) {
     super(props)
@@ -141,6 +143,14 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
   handleOrderCancel(id: string | number) {
     let { onCancel } = this.props;
     if (onCancel) onCancel(id)
+  }
+
+  handleToPay() {
+    let { paymentStore, data, navigation } = this.props
+    paymentStore.setPayStatus({ order_type: data.order_type, order_id: data.order_id, orderPrice: data.total_price })
+      .then(res => {
+        navigation.navigate('WxPay')
+      })
   }
 
   render() {
@@ -160,65 +170,78 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
           {data.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消</Text> : null}
         </View>
         <View style={[mainStyle.bgcfff]}>
-          <TouchableOpacity onPress={() => {
-            this.goto('OrderDetail', { id: data.id })
-          }}>
-            <View>
-              {data.type == 1 ? <OrderGoodsItem data={data}></OrderGoodsItem> : null}
-              {data.type == 2 || data.type == 3 ? <OrderCourseItem data={data}></OrderCourseItem> : null}
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.brt1f2]}>
-          <Text style={[mainStyle.lh44, mainStyle.mal15]}>
-            <Text style={[mainStyle.fs13, mainStyle.c333]}>待支付金额：</Text>
-            <Text style={[mainStyle.fs14, mainStyle.czt]}>￥{data.total_price}</Text>
-          </Text>
-          <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mar15]}>
-            {
-              data.status == 2
-                ? <BxButton
-                  title={'去支付'}
-                  colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                  borderRadius={setSize(30)}
-                  btnstyle={[mainStyle.h60, mainStyle.palr15]}
-                  textstyle={[mainStyle.fs12]}
-                  onClick={() => {
-                    this.goto('Settlement', { type: 'pay' });
-                  }}
-                ></BxButton>
-                : null
-            }
-            {
-              data.status == 2
-                ? <BxButton
-                  title={'取消订单'}
-                  colors={[mainStyle.cc2.color, mainStyle.c999.color]}
-                  borderRadius={setSize(30)}
-                  btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
-                  textstyle={[mainStyle.fs12]}
-                  onClick={() => {
-                    this.handleOrderCancel(data.id)
-                  }}
-                ></BxButton>
-                : null
-            }
-            {
-              data.status == 4 || data.status == 3
-                ? <BxButton
-                  title={'申请退款'}
-                  colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                  borderRadius={setSize(30)}
-                  btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
-                  textstyle={[mainStyle.fs12]}
-                  onClick={() => {
-                    this.goto('ApplyRefund', { type: 'pay' });
-                  }}
-                ></BxButton>
-                : null
-            }
+          <View>
+            {data.type == 1
+              ? <OrderGoodsItem
+                data={data}
+                onClick={() => this.goto('OrderDetail', { id: data.id })}
+              ></OrderGoodsItem>
+              : null}
+            {data.type == 2 || data.type == 3
+              ? <OrderCourseItem
+                data={data}
+                onClick={() => this.goto('OrderDetail', { id: data.id })}
+              ></OrderCourseItem>
+              : null}
           </View>
         </View>
+        {data.status != 6
+          ? <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.brt1f2]}>
+            {
+              data.status == 2
+                ? <Text style={[mainStyle.lh44, mainStyle.mal15]}>
+                  <Text style={[mainStyle.fs13, mainStyle.c333]}>待支付金额：</Text>
+                  <Text style={[mainStyle.fs14, mainStyle.czt]}>￥{data.total_price}</Text>
+                </Text>
+                : <Text></Text>
+            }
+            <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mar15]}>
+              {
+                data.status == 2
+                  ? <BxButton
+                    title={'去支付'}
+                    colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                    borderRadius={setSize(30)}
+                    btnstyle={[mainStyle.h60, mainStyle.palr15]}
+                    textstyle={[mainStyle.fs12]}
+                    onClick={() => {
+                      this.handleToPay()
+                    }}
+                  ></BxButton>
+                  : null
+              }
+              {
+                data.status == 2
+                  ? <BxButton
+                    title={'取消订单'}
+                    colors={[mainStyle.cc2.color, mainStyle.c999.color]}
+                    borderRadius={setSize(30)}
+                    btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                    textstyle={[mainStyle.fs12]}
+                    onClick={() => {
+                      this.handleOrderCancel(data.id)
+                    }}
+                  ></BxButton>
+                  : null
+              }
+              {
+                data.status == 4 || data.status == 3
+                  ? <BxButton
+                    title={'申请退款'}
+                    colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                    borderRadius={setSize(30)}
+                    btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                    textstyle={[mainStyle.fs12]}
+                    onClick={() => {
+                      this.goto('ApplyRefund', { type: 'pay' })
+                    }}
+                  ></BxButton>
+                  : null
+              }
+            </View>
+          </View>
+          : null
+        }
       </View>
     )
   }

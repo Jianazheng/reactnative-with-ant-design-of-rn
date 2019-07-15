@@ -187,9 +187,14 @@ class OrderGoodsItem extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, onClick } = this.props;
     return (
-      <View style={[styles.infoCourse, mainStyle.pa15]}>
+      <TouchableOpacity
+        style={[styles.infoCourse, mainStyle.pa15]}
+        onPress={() => {
+          if (onClick) onClick()
+        }}
+      >
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.good_img }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
@@ -199,11 +204,11 @@ class OrderGoodsItem extends PureComponent<CourseInfoItemProps>{
             </View>
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
               <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.original_price}</Text>
-              <Text style={[mainStyle.c333, mainStyle.fs15]}>x{data.count}</Text>
+              <Text style={[mainStyle.c333, mainStyle.fs15]}>x {data.count}</Text>
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }
@@ -213,9 +218,14 @@ class OrderCourseItem extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, onClick } = this.props;
     return (
-      <View style={[styles.infoCourse, mainStyle.pa15]}>
+      <TouchableOpacity
+        style={[styles.infoCourse, mainStyle.pa15]}
+        onPress={() => {
+          if (onClick) onClick()
+        }}
+      >
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.good_img }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
@@ -225,7 +235,7 @@ class OrderCourseItem extends PureComponent<CourseInfoItemProps>{
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }
