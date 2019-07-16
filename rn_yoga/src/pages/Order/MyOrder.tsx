@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Alert, Image, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { mainStyle, screenH, setSize } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import BxTabView from '../../components/ScrollTabs/TabView';
@@ -23,16 +23,30 @@ class MyOrder extends React.Component<Props, State> {
     header: null
   }
 
+  TORELOADORDERLIST: object;
+
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
       tabs: [{ title: '全部', type: 'all' }, { title: '未支付', type: 'unpay' }, { title: '已支付', type: 'pay' }, { title: '已取消', type: 'cancel' }],
-      current: 0
+      current: undefined
     };
   }
 
   componentDidMount() {
-    this.handleLoadOrder('all', true)
+    let { tabs, current } = this.state
+    let { navigation } = this.props
+    let { params } = navigation.state
+    let types = params.index ? tabs[params.index].type : 'all'
+    this.handleLoadOrder(types, true)
+    this.TORELOADLIST = DeviceEventEmitter.addListener('TORELOADORDERLIST', res => {
+      //重新回到列表时刷新列表，防止状态未更新
+      this.handleLoadOrder(current != undefined ? tabs[current].type : types, true)
+    })
+  }
+
+  componentWillUnmount() {
+    this.TORELOADLIST.remove()
   }
 
   handleLoadOrder(type: string, resize: boolean) {
@@ -59,6 +73,7 @@ class MyOrder extends React.Component<Props, State> {
         text: '确认', onPress: () => {
           orderStore.cancelOrder(id)
             .then(res => {
+              //刷新列表
               this.handleTabChange(current)
             })
         }
@@ -67,8 +82,9 @@ class MyOrder extends React.Component<Props, State> {
   }
 
   render() {
-    let { tabs } = this.state
+    let { tabs, current } = this.state
     let { navigation, orderStore: { orderListAll } } = this.props
+    let { params } = navigation.state
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -82,6 +98,7 @@ class MyOrder extends React.Component<Props, State> {
           height={screenH - setSize(240)}
           canScroll={true}
           tabAlign={'center'}
+          currentPageIndex={params.index}
           tabs={tabs}
           tabChange={(e) => {
             this.handleTabChange(e)
@@ -89,7 +106,7 @@ class MyOrder extends React.Component<Props, State> {
         >
           {
             Object.keys(orderListAll).map((val, i) => (
-              <View key={i} style={[mainStyle.flex1]}>
+              <View key={i} style={[mainStyle.flex1, { height: screenH - setSize(240) }]}>
                 <BxListView
                   pab={setSize(20)}
                   listData={orderListAll[val].data.slice()}
@@ -129,7 +146,7 @@ interface OrderItemProps {
   onCancel: (id: string | number) => void
 }
 
-@inject('paymentStore')
+@inject('paymentStore', 'orderStore')
 @observer
 class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
   constructor(props: OrderItemProps) {
@@ -140,17 +157,48 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
     this.props.navigation.navigate(routeName, params);
   }
 
-  handleOrderCancel(id: string | number) {
+  handleToCancel(id: string | number) {
     let { onCancel } = this.props;
     if (onCancel) onCancel(id)
   }
 
   handleToPay() {
     let { paymentStore, data, navigation } = this.props
-    paymentStore.setPayStatus({ order_type: data.order_type, order_id: data.order_id, orderPrice: data.total_price })
+    paymentStore.setPayStatus({ order_type: data.order_type, order_id: data.id, orderPrice: data.total_price })
       .then(res => {
         navigation.navigate('WxPay')
       })
+  }
+
+  handleToRefund() {
+    let { orderStore, data, navigation } = this.props
+    orderStore.setOrderId(data)
+      .then(res => {
+        if (data.type == 2) {
+          navigation.navigate('ApplyRefund')
+        } else if (data.type == 1) {
+          navigation.navigate('RefundReason')
+        }
+      })
+  }
+
+  handleCancelRefund() {
+    let { orderStore, data } = this.props
+    Modal.alert('提示', '确认取消退款吗？', [
+      {
+        text: '取消',
+        onPress: () => { },
+        style: 'cancel',
+      },
+      {
+        text: '确认', onPress: () => {
+          orderStore.cancelRefund(data.id)
+            .then(res => {
+              DeviceEventEmitter.emit('TORELOADORDERLIST', 'yes')
+            })
+        }
+      },
+    ]);
   }
 
   render() {
@@ -195,8 +243,23 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                 </Text>
                 : <Text></Text>
             }
+            {
+              data.status == 5 && data.type != 3
+                ? <View style={[mainStyle.mal15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.flex1]}>
+                  {/* 退款状态 */}
+                  {data.refund.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333]}>已退款</Text> : null}
+                  {data.refund.status == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>退款订单审核中</Text> : null}
+                  {data.refund.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>审核成功，待回寄商品</Text> : null}
+                  {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待卖家收货</Text> : null}
+                  {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待退款</Text> : null}
+                  {data.refund.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消退款</Text> : null}
+                  {data.refund.status == 7 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>拒绝退款</Text> : null}
+                </View>
+                : <Text></Text>
+            }
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mar15]}>
               {
+                //未支付
                 data.status == 2
                   ? <BxButton
                     title={'去支付'}
@@ -211,6 +274,7 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                   : null
               }
               {
+                //未支付
                 data.status == 2
                   ? <BxButton
                     title={'取消订单'}
@@ -219,13 +283,14 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                     btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
                     textstyle={[mainStyle.fs12]}
                     onClick={() => {
-                      this.handleOrderCancel(data.id)
+                      this.handleToCancel(data.id)
                     }}
                   ></BxButton>
                   : null
               }
               {
-                data.status == 4 || data.status == 3
+                //已支付，已发货与未发货
+                (data.status == 4 || data.status == 3) && data.type != 3
                   ? <BxButton
                     title={'申请退款'}
                     colors={[mainStyle.czt.color, mainStyle.cztc.color]}
@@ -233,7 +298,22 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                     btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
                     textstyle={[mainStyle.fs12]}
                     onClick={() => {
-                      this.goto('ApplyRefund', { type: 'pay' })
+                      this.handleToRefund()
+                    }}
+                  ></BxButton>
+                  : null
+              }
+              {
+                //已支付，退款审核中
+                data.status == 5 && data.type != 3
+                  ? <BxButton
+                    title={'取消退款'}
+                    colors={[mainStyle.c999.color, mainStyle.cc2.color]}
+                    borderRadius={setSize(30)}
+                    btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                    textstyle={[mainStyle.fs12]}
+                    onClick={() => {
+                      this.handleCancelRefund()
                     }}
                   ></BxButton>
                   : null

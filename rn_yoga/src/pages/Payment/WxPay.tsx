@@ -19,8 +19,8 @@ class WxPay extends React.Component<Props, State> {
     header: null,
   }
 
-  TOPAYSUCCESS: object;
-  TOPAYFAIL: object;
+  TOPAYSUCCESS: object;//支付成功跳转
+  TOPAYFAIL: object;//支付失败跳转
 
   constructor(props: Props, state: State) {
     super(props);
@@ -54,6 +54,11 @@ class WxPay extends React.Component<Props, State> {
         this.setState({ showLoading: false }, () => {
           navigation.replace('PaySuccess')
         })
+        if (params.from) {
+          if (params.from == 'order-detail') {
+            DeviceEventEmitter.emit('TORELOADORDER', params.from)
+          }
+        }
       })
       .catch(err => {
         setTimeout(() => {

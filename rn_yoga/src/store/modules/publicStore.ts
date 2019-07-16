@@ -24,11 +24,20 @@ class Public {
         current_page: 1,
         total: null
       }
-    ]
+    ],
+    notiveList: {
+      data: [],
+      current_page: 1,
+      total: null
+    }
   }
 
   @computed get collectData() {
     return this.publicData.collectData
+  }
+
+  @computed get notiveList() {
+    return this.publicData.notiveList
   }
 
   @action async setCollection(common_id: string | number, type: string, isCollect: string | number) {
@@ -43,10 +52,21 @@ class Public {
     }
   }
 
+  @action async getNotiveList() {
+    try {
+      let response = await new Fetch('/announcement/list', 'GET', { type: 1 }, {})
+      let notiveList = response.data
+      console.log(notiveList)
+      return response.data
+    } catch (error) {
+      return null
+    }
+  }
+
   @action async getNotiveInfo(id) {
     try {
       let params = { id }
-      let response = await new Fetch('/announcement/detail', 'POST', params, {})
+      let response = await new Fetch('/announcement/detail', 'GET', params, {})
       return response.data
     } catch (error) {
       return null

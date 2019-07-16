@@ -31,8 +31,9 @@ import MyLevel from './../pages/Mine/MyLevel';
 import WxPay from './../pages/Payment/WxPay';
 import SettlementFail from './../pages/Settlement/SettlementFail';
 import WxBind from './../pages/Login/WxBind';
-import NotiveDetail from './../pages/Home/NotiveDetail';
+import NotiveDetail from './../pages/Explore/NotiveDetail';
 import OrderDetail from './../pages/Order/OrderDetail';
+import NotiveList from './../pages/Explore/NotiveList';
 
 
 
@@ -69,6 +70,7 @@ export const navItem = {
   Address: { screen: Address },
   AddressOperate: { screen: AddressOperate },
   MyLevel: { screen: MyLevel },
+  NotiveList: { screen: NotiveList },
   NotiveDetail: { screen: NotiveDetail },
   Tab: {
     screen: IndexTabs,

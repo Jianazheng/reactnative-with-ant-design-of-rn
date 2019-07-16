@@ -106,30 +106,48 @@ class Mine extends React.Component<Props> {
                   </View>
                 </View>
                 <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.row]}>
-                  <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
-                    this.goto('MyOrder', {})
-                  }}>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1]}
+                    onPress={() => {
+                      this.goto('MyOrder', { index: 0 })
+                    }}
+                  >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                       {orderNumber.all ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.all}</Text> : null}
                       <Image source={require('../../../images/allo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>全部</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1]}>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1]}
+                    onPress={() => {
+                      this.goto('MyOrder', { index: 1 })
+                    }}
+                  >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                       {orderNumber.notPay ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.notPay}</Text> : null}
                       <Image source={require('../../../images/pxo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>未支付</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1]}>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1]}
+                    onPress={() => {
+                      this.goto('MyOrder', { index: 2 })
+                    }}
+                  >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                       {orderNumber.pay ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.pay}</Text> : null}
                       <Image source={require('../../../images/kco.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>已支付</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[mainStyle.flex1]}>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1]}
+                    onPress={() => {
+                      this.goto('MyOrder', { index: 3 })
+                    }}
+                  >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                       {orderNumber.cancel ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.cancel}</Text> : null}
                       <Image source={require('../../../images/spo.png')} style={[styles.orderImg]}></Image>

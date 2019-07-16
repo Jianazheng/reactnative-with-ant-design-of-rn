@@ -5876,10 +5876,6 @@ react-native-collapsible@^1.4.0:
   dependencies:
     prop-types "^15.6.2"
 
-react-native-doc-viewer@^2.7.8:
-  version "2.7.8"
-  resolved "https://registry.npm.taobao.org/react-native-doc-viewer/download/react-native-doc-viewer-2.7.8.tgz#43d065328fb1b7ec90d321e5bd234711e807c8f6"
-
 react-native-fs@^2.13.3:
   version "2.13.3"
   resolved "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"
@@ -5934,6 +5930,11 @@ react-native-scrollable-tab-view@^0.10.0:
     create-react-class "^15.6.2"
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
+
+react-native-splash-screen@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npm.taobao.org/react-native-splash-screen/download/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
+  integrity sha1-1H7IVXsbqYjuPqmNAUYwgbYP/0U=
 
 react-native-storage@^1.0.1:
   version "1.0.1"

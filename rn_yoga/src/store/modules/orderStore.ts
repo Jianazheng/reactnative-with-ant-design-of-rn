@@ -7,6 +7,7 @@ class Order {
 
   }
   @observable orderData = {
+    orderStatus: {},
     orderNumber: {},
     orderList: {
       all: {
@@ -30,7 +31,12 @@ class Order {
         page: 1
       }
     },
-    orderInfo: {}
+    orderInfo: {},
+    orderReason: {},
+    refundExplain: {
+      reason: [],
+      price: {}
+    }
   }
 
   @computed get orderNumber() {
@@ -43,6 +49,19 @@ class Order {
 
   @computed get orderInfo() {
     return this.orderData.orderInfo
+  }
+
+  @computed get refundExplain() {
+    return this.orderData.refundExplain
+  }
+
+  @computed get orderStatus() {
+    return this.orderData.orderStatus
+  }
+
+  @action async setOrderId(val) {
+    this.orderData.orderStatus = val
+    return val
   }
 
   @action async getOrderNumber() {
@@ -93,8 +112,10 @@ class Order {
   @action async getOrderInfo(order_id: string | number) {
     try {
       this.orderData.orderInfo = {}
+      if (!order_id) order_id = this.orderData.orderStatus.order_id
       let response = await new Fetch('/user/order_detail', 'GET', { order_id }, {})
       let orderInfo = response.data
+      this.orderData.orderStatus = orderInfo//保存最近的order,用于刷新订单详情，退款
       this.orderData.orderInfo = orderInfo
       return orderInfo
     } catch (error) {
@@ -106,6 +127,51 @@ class Order {
     try {
       this.orderData.orderInfo = {}
       let response = await new Fetch('/user/cancel_order', 'POST', { order_id }, {})
+      Toast.info(response.message, 1.4, undefined, false)
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getOrderReason() {
+    try {
+      let { orderStatus: { id } } = this.orderData
+      let response = await new Fetch('/order/refund_reason', 'GET', { order_id: id }, {})
+      let orderReason = response.data
+      this.orderData.orderReason = orderReason
+      return orderReason
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getRefundExplain() {
+    try {
+      let { orderStatus: { id } } = this.orderData
+      let response = await new Fetch('/order/train_refund_explain', 'GET', { order_id: id }, {})
+      let refundExplain = response.data
+      this.orderData.refundExplain = refundExplain
+      return orderReason
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async submitRefund(refund_reason: string) {
+    try {
+      let { orderStatus: { id, type } } = this.orderData
+      let response = await new Fetch('/order/submit_refund', 'POST', { order_id: id, type, refund_reason }, {})
+      Toast.info(response.message, 1.4, undefined, false)
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async cancelRefund(order_id: string | number) {
+    try {
+      let response = await new Fetch('/order/cancel_refund_order', 'POST', { order_id }, {})
       Toast.info(response.message, 1.4, undefined, false)
       return response
     } catch (error) {

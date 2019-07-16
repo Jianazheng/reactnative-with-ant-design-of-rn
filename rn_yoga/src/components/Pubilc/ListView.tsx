@@ -39,6 +39,7 @@ export default class BxListView extends React.Component<Props, State>{
 
   onShowMore() {
     let { onLoadmore, nomore } = this.props;
+    console.log('到底了')
     if (!nomore) {
       onLoadmore();
     }
@@ -85,14 +86,15 @@ export default class BxListView extends React.Component<Props, State>{
     return (
       <View style={[mainStyle.flex1]}>
         <FlatList
+          style={[mainStyle.flex1]}
           renderItem={listItem}
           contentContainerStyle={{ justifyContent: 'space-between' }}
           keyExtractor={(item, index) => index.toString()}
           data={listData}
           numColumns={colNumber}
-          initialNumToRender={10}
+          //initialNumToRender={10}
           refreshing={loading}
-          onEndReached={this.onShowMore.bind(this)}
+          onEndReached={() => this.onShowMore()}
           onEndReachedThreshold={0.2}
           ListHeaderComponent={this._renderHeader.bind(this)}
           ListFooterComponent={this._renderFooter.bind(this)}
