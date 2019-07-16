@@ -34,6 +34,7 @@ import WxBind from './../pages/Login/WxBind';
 import NotiveDetail from './../pages/Explore/NotiveDetail';
 import OrderDetail from './../pages/Order/OrderDetail';
 import NotiveList from './../pages/Explore/NotiveList';
+import SendBack from './../pages/Order/SendBack';
 
 
 
@@ -65,6 +66,7 @@ export const navItem = {
   MyCollect: { screen: MyCollect },
   RefundReason: { screen: RefundReason },
   ApplyRefund: { screen: ApplyRefund },
+  SendBack: { screen: SendBack },
   MyCertificate: { screen: MyCertificate },
   ViewPdf: { screen: ViewPdf },
   Address: { screen: Address },

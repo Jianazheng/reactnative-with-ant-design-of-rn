@@ -179,6 +179,17 @@ class Order {
     }
   }
 
+  @action async submitSendBack(params: object) {
+    try {
+      let { orderStatus: { id } } = this.orderData
+      let response = await new Fetch('/order/send_product_back', 'POST', { order_id: id, ...params }, {})
+      Toast.info(response.message, 1.4, undefined, false)
+      return response
+    } catch (error) {
+      return null
+    }
+  }
+
 }
 
 const orderStore = new Order()

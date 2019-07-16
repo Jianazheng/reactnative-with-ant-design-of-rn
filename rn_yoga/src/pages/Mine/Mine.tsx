@@ -49,13 +49,12 @@ class Mine extends React.Component<Props> {
 
   async handleLoginout() {
     let { userStore, navigation } = this.props;
-    let res = await userStore.Loginout();
+    await userStore.Loginout();
     navigation.navigate('Login', { from: 'Mine' });
   }
 
   render() {
-    let { userStore, userStore: { userInfo }, orderStore: { orderNumber } } = this.props
-    console.log(orderNumber)
+    let { userStore: { userInfo }, orderStore: { orderNumber } } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <ScrollView style={[mainStyle.flex1, mainStyle.positonre]}>

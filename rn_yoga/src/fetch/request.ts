@@ -47,7 +47,7 @@ export class Fetch {
           }
         })
         .then((response) => {
-          //console.log('接口:' + api, '参数：', data, '返回数据', response)
+          console.log('接口:' + api, '参数：', data, '返回数据', response)
           switch (response.status) {
             case 200:
               resolve(response.data);

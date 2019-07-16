@@ -120,6 +120,11 @@ class OrderDetail extends React.Component<Props, State> {
     ]);
   }
 
+  handleSendBack() {
+    let { navigation } = this.props
+    navigation.navigate('SendBack')
+  }
+
   render() {
     let { showLoading } = this.state
     let { navigation, orderStore: { orderInfo } } = this.props
@@ -266,6 +271,9 @@ class OrderDetail extends React.Component<Props, State> {
             ? <PayBar
               data={orderInfo}
               orderType='refund'
+              handleSendBack={() => {
+                this.handleSendBack()
+              }}
               handleCancelRefund={() => {
                 this.handleCancelRefund()
               }}
@@ -365,6 +373,7 @@ interface PayBarProps extends PayStatusProps {
   handlePayment: () => void,
   handleRefund: () => void,
   handleCancelRefund: () => void,
+  handleSendBack: () => void,
   data: object
 }
 //底部按钮栏
@@ -435,12 +444,25 @@ class PayBar extends React.Component<PayBarProps>{
               {data.refund.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.lh42]}>已退款</Text> : null}
               {data.refund.status == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>退款订单审核中</Text> : null}
               {data.refund.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>审核成功，待回寄商品</Text> : null}
-              {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>待卖家收货</Text> : null}
-              {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>待退款</Text> : null}
+              {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>待商家收货</Text> : null}
+              {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>待商家退款</Text> : null}
               {data.refund.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999, mainStyle.lh42]}>已取消退款</Text> : null}
               {data.refund.status == 7 ? <Text style={[mainStyle.fs13, mainStyle.czt, mainStyle.lh42]}>拒绝退款</Text> : null}
             </View>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
+              {
+                data.refund.status == 3
+                  ? <BxButton
+                    colors={[mainStyle.c999.color, mainStyle.cc2.color]}
+                    borderRadius={setSize(35)}
+                    disabled={false}
+                    title={'回寄商品'}
+                    btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(70), width: setSize(170) }]}
+                    textstyle={[mainStyle.fs12, mainStyle.cfff]}
+                    onClick={() => { handleSendBack() }}>
+                  </BxButton>
+                  : null
+              }
               <BxButton
                 colors={[mainStyle.c999.color, mainStyle.cc2.color]}
                 borderRadius={setSize(35)}

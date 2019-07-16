@@ -38,15 +38,17 @@ class MyOrder extends React.Component<Props, State> {
     let { navigation } = this.props
     let { params } = navigation.state
     let types = params.index ? tabs[params.index].type : 'all'
-    this.handleLoadOrder(types, true)
-    this.TORELOADLIST = DeviceEventEmitter.addListener('TORELOADORDERLIST', res => {
+    this.setState({ current: params.index }, () => {
+      this.handleLoadOrder(types, true)
+    })
+    this.TORELOADORDERLIST = DeviceEventEmitter.addListener('TORELOADORDERLIST', res => {
       //重新回到列表时刷新列表，防止状态未更新
-      this.handleLoadOrder(current != undefined ? tabs[current].type : types, true)
+      this.handleTabChange(current == undefined ? params.index == undefined ? 0 : params.index : params.index)
     })
   }
 
   componentWillUnmount() {
-    this.TORELOADLIST.remove()
+    this.TORELOADORDERLIST.remove()
   }
 
   handleLoadOrder(type: string, resize: boolean) {
@@ -194,11 +196,20 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
         text: '确认', onPress: () => {
           orderStore.cancelRefund(data.id)
             .then(res => {
+              console.log(res)
               DeviceEventEmitter.emit('TORELOADORDERLIST', 'yes')
             })
         }
       },
     ]);
+  }
+
+  handleToSendBack() {
+    let { orderStore, navigation, data } = this.props
+    orderStore.setOrderId(data)
+      .then(res => {
+        navigation.navigate('SendBack')
+      })
   }
 
   render() {
@@ -250,8 +261,8 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                   {data.refund.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333]}>已退款</Text> : null}
                   {data.refund.status == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>退款订单审核中</Text> : null}
                   {data.refund.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>审核成功，待回寄商品</Text> : null}
-                  {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待卖家收货</Text> : null}
-                  {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待退款</Text> : null}
+                  {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待商家收货</Text> : null}
+                  {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待商家退款</Text> : null}
                   {data.refund.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消退款</Text> : null}
                   {data.refund.status == 7 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>拒绝退款</Text> : null}
                 </View>
@@ -306,16 +317,36 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
               {
                 //已支付，退款审核中
                 data.status == 5 && data.type != 3
-                  ? <BxButton
-                    title={'取消退款'}
-                    colors={[mainStyle.c999.color, mainStyle.cc2.color]}
-                    borderRadius={setSize(30)}
-                    btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
-                    textstyle={[mainStyle.fs12]}
-                    onClick={() => {
-                      this.handleCancelRefund()
-                    }}
-                  ></BxButton>
+                  ? <View>
+                    {
+                      data.refund.status == 3
+                        ? <BxButton
+                          title={'回寄商品'}
+                          colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                          borderRadius={setSize(30)}
+                          btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                          textstyle={[mainStyle.fs12]}
+                          onClick={() => {
+                            this.handleToSendBack()
+                          }}
+                        ></BxButton>
+                        : null
+                    }
+                    {
+                      data.refund.status == 2
+                        ? <BxButton
+                          title={'取消退款'}
+                          colors={[mainStyle.c999.color, mainStyle.cc2.color]}
+                          borderRadius={setSize(30)}
+                          btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                          textstyle={[mainStyle.fs12]}
+                          onClick={() => {
+                            this.handleCancelRefund()
+                          }}
+                        ></BxButton>
+                        : null
+                    }
+                  </View>
                   : null
               }
             </View>

@@ -134,7 +134,9 @@ class Home extends React.Component<Props, State> {
                 height={height - setSize(240)}
                 canScroll={canScroll}
                 tabs={homeStore.trainCate}
+                currentPageIndex={tabIndex}
                 tabChange={(e) => {
+                  console.log(e)
                   this.setState({
                     tabIndex: e
                   })

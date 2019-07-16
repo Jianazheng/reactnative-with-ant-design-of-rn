@@ -72,6 +72,7 @@ class RefundReason extends React.Component<Props, State> {
     reasonStr += other
     if (reasonStr == '') {
       Toast.info('请输入退款原因', 1.4, undefined, false)
+      this.setState({ showLoading: false })
       return false
     }
     Modal.alert('确认申请退款', '申请退款审核通过后，会于1-3个工作日内将退款金额返回至您的微信账号', [
@@ -89,11 +90,12 @@ class RefundReason extends React.Component<Props, State> {
               }, () => {
                 navigation.goBack()
               })
+            }).catch(err => {
+              this.setState({ showLoading: false })
             })
         }
       },
     ]);
-
   }
 
   goto(routeName: string, params: any) {
