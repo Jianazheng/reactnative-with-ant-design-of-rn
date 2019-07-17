@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter } from 'r
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
-import {mainStyle, setSize} from '../../public/style/style';
+import { mainStyle, setSize } from '../../public/style/style';
 import TabSelect from '../../components/Pubilc/TabSelect';
 import { IconOutline } from "@ant-design/icons-react-native";
 import { Button } from '@ant-design/react-native';
@@ -16,23 +16,23 @@ import RNStorage from './../../public/js/storage';
 
 let { width, height } = Dimensions.get('window')
 
-interface Props {}
+interface Props { }
 interface State {
-  canScroll:boolean,
-  tabTop:number,
-  tabIndex:number
+  canScroll: boolean,
+  tabTop: number,
+  tabIndex: number
 }
 
-@inject('userStore','homeStore')
+@inject('userStore', 'homeStore')
 @observer
-class Home extends React.Component<Props,State> {
+class Home extends React.Component<Props, State> {
   static navigationOptions = {
     tabBarLabel: '首页',
-    tabBarIcon: ({focused}) => {
+    tabBarIcon: ({ focused }) => {
       if (focused) {
-          return (
-            <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_home_sel.png')}></Image>
-          );
+        return (
+          <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_home_sel.png')}></Image>
+        );
       }
       return (
         <Image style={[mainStyle.tabImg]} source={require('../../../images/tab_home_nor.png')}></Image>
@@ -40,117 +40,121 @@ class Home extends React.Component<Props,State> {
     },
   }
 
-  TOLOGIN:object;
+  TOLOGIN: object;
+  TOBIND: object;
 
-  constructor(props:Props,state:State) {
+
+  constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      tabTop:667,
-      tabIndex:0,
-      canScroll:false
+      tabTop: 667,
+      tabIndex: 0,
+      canScroll: false
     };
   }
 
-  componentWillMount(){
-    let {userStore,navigation} = this.props;
+  componentWillMount() {
+
+  }
+
+  componentDidMount() {
+    let { homeStore, userStore, navigation } = this.props
+    homeStore.getBanner()
+    homeStore.getAnnouncement()
+    homeStore.getTrainCate()
     RNStorage.load({
       key: 'token',
-    }).then(res=>{
+    }).then(res => {
       console.log(res)
       userStore.setToken(res)
-    }).catch(err=>{
-      console.log(err)
+    }).catch(err => {
+      //console.log(err)
     })
-    this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN',(res)=>{
-      navigation.navigate('Login');
+    this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN', res => {
+      navigation.navigate('Login')
     })
+    this.TOBIND = DeviceEventEmitter.addListener('TOBIND', res => {
+      navigation.navigate('WxBind', { wxdata: res })
+    })
+
   }
 
-  componentDidMount(){
-    let {homeStore} = this.props;
-    homeStore.getBanner();
-    homeStore.getAnnouncement();
-    homeStore.getTrainCate();
+  componentWillUnmount() {
+    this.TOLOGIN.remove()
+    this.TOBIND.remove()
+
   }
 
-  componentWillUnmount(){
-    this.TOLOGIN.remove();
-  }
-
-  goto(){
+  goto() {
     this.props.navigation.push('Login');
   }
 
-  handleScroll(e:any){
-    let {tabTop} = this.state;
-    if(e.nativeEvent){
+  handleScroll(e: any) {
+    let { tabTop } = this.state;
+    if (e.nativeEvent) {
       this.setState({
-        canScroll:tabTop<=e.nativeEvent.contentOffset.y+setSize(120)
+        canScroll: tabTop <= e.nativeEvent.contentOffset.y + setSize(120)
       })
     }
   }
 
-  render(){
-    let {canScroll,tabIndex} = this.state;
-    let {navigation,homeStore} = this.props;
-    //console.log(homeStore.trainCateShow)
+  render() {
+    let { canScroll, tabIndex } = this.state;
+    let { navigation, homeStore } = this.props;
     return (
-      <View style={[mainStyle.flex1,mainStyle.bgcf2]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf2]}>
         <ScrollView
-        style={[mainStyle.flex1]}
-        onScroll={(e)=>{
-          this.handleScroll(e);
-        }}
+          style={[mainStyle.flex1]}
+          onScroll={(e) => {
+            this.handleScroll(e);
+          }}
         >
-          <View onLayout={(e)=>{
+          <View onLayout={(e) => {
             this.setState({
-              tabTop:e.nativeEvent.layout.height
+              tabTop: e.nativeEvent.layout.height
             })
           }}>
-
-            <HomeSearchBar 
-            onSubmit={(e)=>{
-              console.log(e)
-            }}
-            leftBtn={(
-              <Text 
-              style={[mainStyle.icon,mainStyle.pa15,{paddingRight:0},mainStyle.fs22]} 
-              onPress={()=>{
-                navigation.push('CartList')
-              }}>&#xe60a;</Text>
-            )}></HomeSearchBar>
-
+            <HomeSearchBar
+              onSubmit={(e) => {
+                console.log(e)
+              }}
+              leftBtn={(
+                <Text
+                  style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}
+                  onPress={() => {
+                    navigation.push('CartList')
+                  }}>&#xe60a;</Text>
+              )}></HomeSearchBar>
             <HomeSwiper img={homeStore.banner}></HomeSwiper>
-
-            <HomeBroadcast list={homeStore.announcement}></HomeBroadcast>
-
+            <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
           </View>
           {
-            homeStore.trainCate.length>0
-            ?<BxTabView 
-            height={height-setSize(240)}
-            canScroll={canScroll} 
-            tabs={homeStore.trainCate}
-            tabChange={(e)=>{
-              this.setState({
-                tabIndex:e
-              })
-            }}
-            navigateTo={()=>{navigation.push('ClassifyList')}}
-            >
-              <View style={[mainStyle.flex1]}>
-                <Recommend navigation={navigation}></Recommend>
-              </View>
-              {
-                homeStore.trainCateShow.length>0?
-                homeStore.trainCateShow.map((val,i)=>
-                  <View style={[mainStyle.flex1,mainStyle.bgcf2]} key={i}>
-                    <HomeCourse currentIndex={i+1} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
-                  </View>
-                ):null
-              }
-            </BxTabView>
-            :null
+            homeStore.trainCate.length > 0
+              ? <BxTabView
+                height={height - setSize(240)}
+                canScroll={canScroll}
+                tabs={homeStore.trainCate}
+                currentPageIndex={tabIndex}
+                tabChange={(e) => {
+                  this.setState({
+                    tabIndex: e
+                  })
+                }}
+                navigateTo={() => { navigation.push('ClassifyList') }}
+              >
+                <View style={[mainStyle.flex1]}>
+                  <Recommend navigation={navigation}></Recommend>
+                </View>
+                {
+                  homeStore.trainCateShow.length > 0 ?
+                    homeStore.trainCateShow.map((val, i) =>
+                      <View style={[mainStyle.flex1, mainStyle.bgcf2]} key={i}>
+                        <HomeCourse currentIndex={i} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
+                      </View>
+                    ) : null
+                }
+              </BxTabView>
+              : null
           }
         </ScrollView>
       </View>

@@ -4,85 +4,85 @@ import { Toast } from '@ant-design/react-native';
 
 class Train {
   constructor() {
-    
+
   }
   @observable trainData = {
-    trainInfo:{
-      is_collection:0,
-      teacher:[],
-      relate_train:[]
+    trainInfo: {
+      is_collection: 0,
+      teacher: [],
+      relate_train: []
     },
-    frontInfo:{detail:[]},
-    trainSelectItem:[],
-    promotionInfo:[],
-    selectItem:{},
-    classify:[],
+    frontInfo: { detail: [] },
+    trainSelectItem: [],
+    promotionInfo: [],
+    selectItem: {},
+    classify: [],
     //培训列表
-    trainCourse:{
-      data:[],
-      total:null,
-      page:0
+    trainCourse: {
+      data: [],
+      total: null,
+      page: 0
     },
     //培训详情
-    trainCourseInfo:{
-      teacher:[],
-      servers:''
+    trainCourseInfo: {
+      teacher: [],
+      servers: ''
     },
     //培训服务
-    trainService:{
-      server:[]
+    trainService: {
+      server: []
     },
     //培训服务id集
-    serviceIdArr:[],
+    serviceIdArr: [],
     //培训购物车
-    cartItem:{price:'',type_name:''}
+    cartItem: { price: '', type_name: '' }
   }
 
-  @computed get cartItem(){
+  @computed get cartItem() {
     return this.trainData.cartItem
   }
 
-  @computed get trainInfo(){
+  @computed get trainInfo() {
     return this.trainData.trainInfo
   }
 
-  @computed get promotionInfo(){
+  @computed get promotionInfo() {
     return this.trainData.promotionInfo
   }
 
-  @computed get frontInfo(){
+  @computed get frontInfo() {
     return this.trainData.frontInfo
   }
 
-  @computed get trainSelectItem(){
+  @computed get trainSelectItem() {
     return this.trainData.trainSelectItem
   }
 
-  @computed get classify(){
+  @computed get classify() {
     return this.trainData.classify
   }
 
-  @computed get trainCourse(){
+  @computed get trainCourse() {
     return this.trainData.trainCourse
   }
 
-  @computed get trainCourseInfo(){
+  @computed get trainCourseInfo() {
     return this.trainData.trainCourseInfo
   }
 
-  @computed get trainService(){
+  @computed get trainService() {
     return this.trainData.trainService
   }
 
-  @computed get serviceIdArr(){
+  @computed get serviceIdArr() {
     return this.trainData.serviceIdArr
   }
 
-  @action async getClassify(){
+  @action async getClassify() {
     try {
-      let response = await new Fetch('/train/list','GET',{},{});
+      let response = await new Fetch('/train/list', 'GET', {}, {});
       let classifys = response.data;
-      if(classifys.length>0){
+      if (classifys.length > 0) {
         classifys[0].checked = true;
       }
       this.trainData.classify = classifys;
@@ -92,16 +92,21 @@ class Train {
     }
   }
 
-  @action classifySelect(index:number|string){
-    let {classify} = this.trainData
-    classify.map((val,i)=>{
-      val.checked = i==index?true:false
+  @action classifySelect(index: number | string) {
+    let { classify } = this.trainData
+    classify.map((val, i) => {
+      val.checked = i == index ? true : false
     })
   }
 
-  @action async getTrainInfo(id:string|number){
+  @action async getTrainInfo(id: string | number) {
     try {
-      let response = await new Fetch('/train/base_info','GET',{id},{});
+      this.trainData.trainInfo = {
+        is_collection: 0,
+        teacher: [],
+        relate_train: []
+      }
+      let response = await new Fetch('/train/base_info', 'GET', { id }, {});
       let trainInfo = response.data;
       this.trainData.trainInfo = trainInfo;
       return response
@@ -110,9 +115,10 @@ class Train {
     }
   }
 
-  @action async getFrontInfo(id:string|number){
+  @action async getFrontInfo(id: string | number) {
     try {
-      let response = await new Fetch('/train/front_train_info','GET',{id},{});
+      this.trainData.frontInfo = { detail: [] }
+      let response = await new Fetch('/train/front_train_info', 'GET', { id }, {});
       let frontInfo = response.data;
       this.trainData.frontInfo = frontInfo;
       return response
@@ -121,9 +127,10 @@ class Train {
     }
   }
 
-  @action async getTrainPromotion(id:string|number){
+  @action async getTrainPromotion(id: string | number) {
     try {
-      let response = await new Fetch('/train/promotion_info','GET',{id},{});
+      this.trainData.promotionInfo = []
+      let response = await new Fetch('/train/promotion_info', 'GET', { id }, {});
       let promotionInfo = response.data;
       this.trainData.promotionInfo = promotionInfo;
       return response
@@ -132,12 +139,12 @@ class Train {
     }
   }
 
-  @action async getTrainSelectItem(id:string|number){
+  @action async getTrainSelectItem(id: string | number) {
     try {
-      let response = await new Fetch('/train/sku_info','GET',{id},{})
+      let response = await new Fetch('/train/sku_info', 'GET', { id }, {})
       let trainSelectItem = response.data
       this.trainData.trainSelectItem = trainSelectItem
-      if(trainSelectItem.length>0){
+      if (trainSelectItem.length > 0) {
         this.trainData.cartItem = trainSelectItem[0]
       }
       return response
@@ -146,22 +153,22 @@ class Train {
     }
   }
 
-  @action selectItem(item:object){
+  @action selectItem(item: object) {
     this.trainData.selectItem = item;
   }
 
-  @action async getTrainCourse(){
+  @action async getTrainCourse() {
     try {
-      let {trainCourse} = this.trainData
-      let params = {page:this.trainCourse.page}
-      let response = await new Fetch('/train/mycourse/list','GET',{size:10,...params},{})
+      let { trainCourse } = this.trainData
+      let params = { page: this.trainCourse.page }
+      let response = await new Fetch('/train/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
-      if(trainCourse.data.length>=resd.total)return response
+      if (trainCourse.data.length >= resd.total) return response
       let newdata = trainCourse.data.concat(resd.data)
       trainCourse.data = newdata
       trainCourse.total = resd.total
-      if(trainCourse.data.length<resd.total){
-        trainCourse.page+=1
+      if (trainCourse.data.length < resd.total) {
+        trainCourse.page += 1
       }
       this.trainData.trainCourse = trainCourse
       return response
@@ -170,9 +177,9 @@ class Train {
     }
   }
 
-  @action async getTrainCourseInfo(id:string|number){
+  @action async getTrainCourseInfo(id: string | number) {
     try {
-      let response = await new Fetch('/train/mycourse/detail','GET',{id},{});
+      let response = await new Fetch('/train/mycourse/detail', 'GET', { id }, {});
       let trainCourseInfo = response.data;
       this.trainData.trainCourseInfo = trainCourseInfo;
       return response
@@ -181,9 +188,9 @@ class Train {
     }
   }
 
-  @action async getTrainService(id:string|number){
+  @action async getTrainService(id: string | number) {
     try {
-      let response = await new Fetch('/train/server/info','GET',{id},{});
+      let response = await new Fetch('/train/server/info', 'GET', { id }, {});
       let trainService = response.data;
       this.trainData.trainService = trainService;
       return response
@@ -192,17 +199,17 @@ class Train {
     }
   }
 
-  @action selectService(index:number|string){
-    let {trainService} = this.trainData
-    trainService.server[index].checked = trainService.server[index].checked?false:true
+  @action selectService(index: number | string) {
+    let { trainService } = this.trainData
+    trainService.server[index].checked = trainService.server[index].checked ? false : true
   }
 
-  @action async serviceEnsure(){
+  @action async serviceEnsure() {
     try {
-      let {trainService} = this.trainData
+      let { trainService } = this.trainData
       let newarr = []
-      for(let i in trainService.server){
-        if(trainService.server[i].checked){
+      for (let i in trainService.server) {
+        if (trainService.server[i].checked) {
           newarr.push(trainService.server[i].server_id)
         }
       }
@@ -215,28 +222,28 @@ class Train {
     }
   }
 
-  @action async toEnsureService(){
+  @action async toEnsureService() {
     try {
-      let {trainService,serviceIdArr} = this.trainData
+      let { trainService, serviceIdArr } = this.trainData
       let params = {
-        id:trainService.id,
-        server_id:serviceIdArr
+        id: trainService.id,
+        server_id: serviceIdArr
       }
-      let response = await new Fetch('/train/server/sure','POST',params,{});
-      Toast.info('预约成功',1.4,undefined,false)
+      let response = await new Fetch('/train/server/sure', 'POST', params, {});
+      Toast.info('预约成功', 1.4, undefined, false)
       return response
     } catch (error) {
       return null
     }
   }
 
-  @action selectCartItem(item:any){
+  @action selectCartItem(item: any) {
     this.trainData.cartItem = item
   }
 
-  @action changeCollect(){
-    let {trainInfo} = this.trainData
-    this.trainData.trainInfo.is_collection = trainInfo.is_collection==0?1:0
+  @action changeCollect() {
+    let { trainInfo } = this.trainData
+    this.trainData.trainInfo.is_collection = trainInfo.is_collection == 0 ? 1 : 0
   }
 
 }

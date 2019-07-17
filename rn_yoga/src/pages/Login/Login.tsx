@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, ScrollView, Animated } from 'react-native';
+import { Text, View, ScrollView, DeviceEventEmitter } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle,screenH,setSize, screenW } from '../../public/style/style';
 import {headerTitle,headerRight} from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import RNStorage from './../../public/js/storage';
 
 
 interface Props {}
@@ -51,22 +52,27 @@ class Login extends React.Component<Props,State> {
     }
     let response = await userStore.Login({mobile:mobile.replace(/ /g,''),password});
     if(response!=null){
-      Toast.info(response.message,1.4,undefined,false);
-      await userStore.GetUserInfo()
-      navigation.goBack();
+      Toast.info(response.message,1.4,undefined,false)
+      let userinfo = await userStore.GetUserInfo()
+      if(userinfo){
+        DeviceEventEmitter.emit('TORELOAD','yes')//刷新需要刷新的接口
+        navigation.goBack()
+      }
     }
   }
 
   async handleWxLogin(){
     try {
-      let {userStore,navigation} = this.props;
+      let {userStore,navigation} = this.props
       let response = await userStore.WxLogin()
       if(response!=null){
         if(response.errorCode==1056){
           //未绑定手机
         }else{
+          await userStore.setToken(response.data.token)
+          await RNStorage.save({key:'token',data:response.data.token})
           await userStore.GetUserInfo()
-          navigation.goBack();
+          navigation.goBack()
         }
       }
     } catch (error) {

@@ -8,7 +8,7 @@ import * as Wechat from 'react-native-wechat';
 
 class User {
   constructor() {
-    Wechat.registerApp('wxa66b688d8d2383df');
+    Wechat.registerApp('wxa66b688d8d2383df')
   }
   @observable userData = {
     token:'',
@@ -17,6 +17,10 @@ class User {
       username:'',
       mobile:'',
       level_name:'',
+    },
+    memberInfo:{
+      user:{},
+      level:[]
     }
   }
 
@@ -26,6 +30,10 @@ class User {
 
   @computed get userInfo(){
     return this.userData.userInfo
+  }
+
+  @computed get memberInfo(){
+    return this.userData.memberInfo
   }
 
   @action setToken(token:string){
@@ -123,13 +131,9 @@ class User {
       const state = ''
       let isInstalled  = await Wechat.isWXAppInstalled()
       if (isInstalled) {
-
         let responseCode = await Wechat.sendAuthRequest(scope, state)
         let res = await new Fetch('/login/wechat','POST',{code:responseCode.code},{})
-        await RNStorage.save({key:'token',data:res.data})
-        this.userData.token = res.data
         return res
-
       } else {
         Alert.alert('请安装微信');
         return null
@@ -137,6 +141,25 @@ class User {
     } catch (error) {
       Alert.alert('登录授权发生错误：');
       console.log(error)
+      return null
+    }
+  }
+
+  @action async bindPhone(params:object){
+    try {
+      let response = await new Fetch('/login/wechat_bind','POST',params,{});
+      return response;
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getMember(){
+    try {
+      let response = await new Fetch('/user/member','GET',{},{});
+      this.userData.memberInfo = response.data;
+      return response;
+    } catch (error) {
       return null
     }
   }

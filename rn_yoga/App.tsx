@@ -6,76 +6,79 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,BackHandler,ToastAndroid} from 'react-native';
-import {Provider, observer, inject} from 'mobx-react';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { Provider, observer, inject } from 'mobx-react';
 import store from './src/store/index';
-import {createStackNavigator,createAppContainer,NavigationEvents,NavigationState} from 'react-navigation';
-import {navItem,navConfig} from './src/router/router';
+import { createStackNavigator, createAppContainer, NavigationEvents, NavigationState } from 'react-navigation';
+import { navItem, navConfig } from './src/router/router';
 import { Provider as AntProvider } from '@ant-design/react-native';
 import { DeviceEventEmitter } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
+import { Toast } from '@ant-design/react-native';
 
 
-const AppNavigator =  createStackNavigator(navItem,navConfig);
+const AppNavigator = createStackNavigator(navItem, navConfig);
 
 const Tabs = createAppContainer(AppNavigator);
 
-interface Props {};
+interface Props { };
 
 export default class App extends Component<Props> {
 
-  lastBackPressed:number = new Date().getTime();
+  lastBackPressed: number = new Date().getTime();
 
-  constructor(props:Props){
+  constructor(props: Props) {
     super(props);
   }
 
-  componentWillMount(){
+  componentWillMount() {
     if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress',this.onBackAndroid);
+      BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
 
   }
 
-  componentDidMount(){
-    //console.error('点击dimiss关闭')
+  componentDidMount() {
+    SplashScreen.hide()
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     if (Platform.OS === 'android') {
       BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
     }
   }
-  
+
   onBackAndroid = () => {
     let lastBackTime = new Date().getTime();
-    if(this.lastBackPressed&&this.lastBackPressed+2000>=lastBackTime){
+    if (this.lastBackPressed && this.lastBackPressed + 2000 >= lastBackTime) {
       BackHandler.exitApp();
       return false;
-    }else{
+    } else {
       this.lastBackPressed = lastBackTime;
-      ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+      Toast.info('再按一次退出应用', 1.4, undefined, false)
       return true;
     }
   };
 
-  handleNavigationChange = (prevState:object, newState:object, action:object) =>{
+  handleNavigationChange = (prevState: object, newState: object, action: object) => {
     if (Platform.OS === 'android') {
       if (newState.routes.length > 1) {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-      }else{
-        BackHandler.addEventListener('hardwareBackPress',this.onBackAndroid);
+      } else {
+        BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
       }
     }
   }
+
   render() {
     return (
       <Provider {...store}>
         <AntProvider>
-        <Tabs 
-        onNavigationStateChange={(prevState, newState, action) =>{this.handleNavigationChange(prevState, newState, action)}}
-        uriPrefix="/app">
-        </Tabs>
+          <Tabs
+            onNavigationStateChange={(prevState, newState, action) => { this.handleNavigationChange(prevState, newState, action) }}
+            uriPrefix="/app">
+          </Tabs>
         </AntProvider>
       </Provider>
     );
@@ -83,20 +86,5 @@ export default class App extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
 });

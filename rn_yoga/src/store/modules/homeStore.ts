@@ -4,54 +4,54 @@ import { OP } from '../../fetch/option';
 
 class Home {
   constructor() {
-    
+
   }
   @observable homeData = {
-    banner:[],
-    announcement:[],
-    trainCate:[],
-    trainCateShow:[],
-    trainItem:[],
-    newItem:{},
-    recommendTrain:[],
-    recommendGoods:[]
+    banner: [],
+    announcement: [],
+    trainCate: [],
+    trainCateShow: [],
+    trainItem: [],
+    newItem: {},
+    recommendTrain: [],
+    recommendGoods: []
   }
 
-  @computed get banner(){
+  @computed get banner() {
     return this.homeData.banner
   }
 
-  @computed get announcement(){
+  @computed get announcement() {
     return this.homeData.announcement
   }
 
-  @computed get trainCate(){
+  @computed get trainCate() {
     return this.homeData.trainCate
   }
 
-  @computed get trainCateShow(){
+  @computed get trainCateShow() {
     return this.homeData.trainCateShow
   }
 
-  @computed get trainItem(){
+  @computed get trainItem() {
     return this.homeData.trainItem
   }
 
-  @computed get newItem(){
+  @computed get newItem() {
     return this.homeData.newItem
   }
 
-  @computed get recommendTrain(){
+  @computed get recommendTrain() {
     return this.homeData.recommendTrain
   }
 
-  @computed get recommendGoods(){
+  @computed get recommendGoods() {
     return this.homeData.recommendGoods
   }
 
-  @action async getBanner(){
+  @action async getBanner() {
     try {
-      let response = await new Fetch('/banner/list','GET',{type:2},{});
+      let response = await new Fetch('/banner/list', 'GET', { type: 2 }, {});
       let banner = response.data;
       this.homeData.banner = banner;
       return response
@@ -60,9 +60,9 @@ class Home {
     }
   }
 
-  @action async getAnnouncement(){
+  @action async getAnnouncement() {
     try {
-      let response = await new Fetch('/announcement/list','GET',{type:1},{});
+      let response = await new Fetch('/announcement/list', 'GET', { type: 1 }, {});
       let announcement = response.data;
       this.homeData.announcement = announcement;
       return response
@@ -71,15 +71,21 @@ class Home {
     }
   }
 
-  @action async getTrainCate(){
+  @action async getTrainCate() {
     try {
-      let response = await new Fetch('/train/train_cate_list','GET',{type:1},{});
-      this.homeData.trainCateShow = response.data;
+      let response = await new Fetch('/train/train_cate_list', 'GET', { type: 1 }, {});
+      let trainCateShow = response.data;
+      this.homeData.trainCateShow = trainCateShow;
+      let newTrainItem = []
+      trainCateShow.map((val, i) => {
+        newTrainItem.push({ id: val.id, category_name: val.category_name, child: val.child, trainList: [] })
+      })
+      this.homeData.trainItem = newTrainItem
       let trainCate = response.data;
-      trainCate.map((val,i)=>{
+      trainCate.map((val, i) => {
         val.title = val.category_name
       })
-      trainCate.unshift({title:'推荐'});
+      trainCate.unshift({ title: '推荐' });
       this.homeData.trainCate = trainCate;
       return response
     } catch (error) {
@@ -87,20 +93,21 @@ class Home {
     }
   }
 
-  @action async getTrainItem(id:number){
+  @action async getTrainItem(id: number, index: number | string) {
     try {
-      let response = await new Fetch('/train/train_index_list','GET',{id},{});
+      this.homeData.trainItem[index].trainList = []
+      let response = await new Fetch('/train/train_index_list', 'GET', { id }, {});
       let trainItem = response.data.train;
-      this.homeData.trainItem = trainItem;
+      this.homeData.trainItem[index].trainList = trainItem;
       return response
     } catch (error) {
       return null
     }
   }
 
-  @action async getNewTrain(){
+  @action async getNewTrain() {
     try {
-      let response = await new Fetch('/train/new_info','GET',{},{});
+      let response = await new Fetch('/train/new_info', 'GET', {}, {});
       let newItem = response.data;
       this.homeData.newItem = newItem;
       return response
@@ -109,9 +116,9 @@ class Home {
     }
   }
 
-  @action async getRecommendGoods(){
+  @action async getRecommendGoods() {
     try {
-      let response = await new Fetch('/product/recommend_list','GET',{size:9,page:1},{});
+      let response = await new Fetch('/product/recommend_list', 'GET', { size: 9, page: 1 }, {});
       let recommendGoods = response.data.data;
       this.homeData.recommendGoods = recommendGoods;
       return response
@@ -120,9 +127,9 @@ class Home {
     }
   }
 
-  @action async getRecommendTrain(){
+  @action async getRecommendTrain() {
     try {
-      let response = await new Fetch('/online/newcourse/list','GET',{size:8,page:1},{});
+      let response = await new Fetch('/online/newcourse/list', 'GET', { size: 8, page: 1 }, {});
       let recommendTrain = response.data;
       this.homeData.recommendTrain = recommendTrain;
       return response
