@@ -20,7 +20,6 @@ class GoodsList extends React.Component<Props, State> {
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      arr: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       searchBarTranslate: new Animated.Value(screenW),
       searchBarOpacity: new Animated.Value(0),
       autoFocus: false,
@@ -38,15 +37,12 @@ class GoodsList extends React.Component<Props, State> {
   componentDidMount() {
     let { navigation, goodsStore } = this.props;
     let { params } = navigation.state;
-    console.log(params);
-    params = { type: 'goods', cid: '' };
-    this.setState({
-      type: params.type,
-      cid: params.cid,
-    })
-    goodsStore.getGoodsClassify()
-      .then(res => {
-        goodsStore.getGoodslist(false);
+    goodsStore.setCate(params.cid, params.product_category_name)
+      .then(suc => {
+        goodsStore.getGoodsClassify()
+          .then(res => {
+            goodsStore.getGoodslist(false);
+          })
       })
 
   }

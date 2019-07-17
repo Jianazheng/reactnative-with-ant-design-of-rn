@@ -2,9 +2,9 @@
 
 import React, { PureComponent } from 'react';
 import { Text, View, Dimensions, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { mainStyle, contentPadding, setSize, screenH } from '../../../public/style/style';
+import { mainStyle, contentPadding, setSize, screenH } from '../../public/style/style';
 import { observer, inject } from 'mobx-react';
-import { splitStr } from '../../../tools/function';
+import { splitStr } from '../../tools/function';
 
 let { width, height } = Dimensions.get('window');
 

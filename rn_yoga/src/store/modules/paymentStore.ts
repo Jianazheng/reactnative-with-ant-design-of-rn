@@ -46,8 +46,6 @@ class Payment {
                     resolve({ status: 1, message: '支付成功' })
                     //保存订单参数
                     this.paymentData.payStatus = { order_type, order_id }
-                    //支付回调
-                    await new Fetch('/pay/notify_app', 'POST', {}, {})
                   }
                   return false
                 }).catch((err) => {

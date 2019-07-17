@@ -4,11 +4,13 @@ import React, { PureComponent } from 'react';
 import { Text, View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
 import { mainStyle, contentPadding, setSize, screenW } from '../../public/style/style';
 import { splitStr } from '../../tools/function';
+import PercentageCircle from 'react-native-percentage-circle';
 
 let { width, height } = Dimensions.get('window');
 
 interface CourseInfoItemProps {
   data: object,
+  navigation: object
 }
 
 class HomeCourseItem extends PureComponent<CourseInfoItemProps>{
@@ -40,16 +42,18 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, navigation } = this.props;
     return (
-      <TouchableOpacity style={[styles.infoCourse, mainStyle.pa15]} onPress={() => { }}>
+      <TouchableOpacity style={[styles.infoCourse, mainStyle.pa15]} onPress={() => {
+        navigation.navigate('TrainInfo', { id: data.id })
+      }}>
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
-          <Image style={[styles.CourseInfoImage, mainStyle.imgCover]} mode="widthFix" source={{ uri: 'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg' }}></Image>
+          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + (data.image_url ? data.image_url.length > 0 ? data.image_url[0] : '' : '') }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
-            <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.mab10]}>{data.title || data.train_name}</Text>
-            <Text style={[mainStyle.c999, mainStyle.fs14, mainStyle.mab10]}>{splitStr(data.reg_start_time, ' ')}至{splitStr(data.reg_end_time, ' ')}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.mab10]}>{data.title || data.train_name}</Text>
+            <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab10]}>{splitStr(data.reg_start_time, ' ')}至{splitStr(data.reg_end_time, ' ')}</Text>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mal20, mainStyle.mat10]}>{data.apply_num}人报名</Text>
+              <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mat10]}>{data.apply_num}人报名</Text>
             </View>
           </View>
         </View>
@@ -166,14 +170,14 @@ class CourseListItem extends React.Component<CourseListItemProps>{
               <View>
                 {
                   data.status == 1
-                    ? <Text style={[mainStyle.fs12, mainStyle.c999]}>已报到</Text>
+                    ? <Text style={[mainStyle.fs12, mainStyle.c333]}>已报到</Text>
                     : <Text style={[mainStyle.fs12, mainStyle.c999]}>未报到</Text>
                 }
               </View>
             </TouchableOpacity>
             : <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
               <View>
-                <Text style={[mainStyle.fs12, mainStyle.c999]}>已学{data.rate}</Text>
+                <PercentageCircle text={Number(data.rate) > 100 ? '已学完' : (data.rate + '%')} radius={setSize(imgw * 0.5)} borderWidth={setSize(6)} percent={Number(data.rate)} color={mainStyle.czt.color}></PercentageCircle>
               </View>
             </TouchableOpacity>
         }
@@ -196,7 +200,7 @@ class OrderGoodsItem extends PureComponent<CourseInfoItemProps>{
         }}
       >
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
-          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.good_img }}></Image>
+          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.good_img }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
             <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab10]} numberOfLines={2}>{data.good_name}</Text>
             <View style={[mainStyle.row]}>
@@ -227,7 +231,7 @@ class OrderCourseItem extends PureComponent<CourseInfoItemProps>{
         }}
       >
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
-          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.good_img }}></Image>
+          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.good_img }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
             <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab10]} numberOfLines={2}>{data.good_name}</Text>
             <View style={[mainStyle.row]}>

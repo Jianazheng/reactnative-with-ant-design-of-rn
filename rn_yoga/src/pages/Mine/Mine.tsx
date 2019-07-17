@@ -8,6 +8,8 @@ import { Toast } from '@ant-design/react-native';
 
 interface Props { }
 
+const defaultIcon = require('../../../images/defaultIcon.png')
+
 @inject('userStore', 'orderStore')
 @observer
 class Mine extends React.Component<Props> {
@@ -70,7 +72,7 @@ class Mine extends React.Component<Props> {
             </View>
             <View style={[styles.userinfo, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
               <TouchableOpacity onPressIn={() => { this.goto('UserInfo', {}) }}>
-                <Image style={[mainStyle.useravator]} source={{ uri: userInfo.avatar }}></Image>
+                <Image style={[mainStyle.useravator]} source={userInfo.avatar ? { uri: userInfo.avatar } : defaultIcon}></Image>
               </TouchableOpacity>
               <TouchableOpacity style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter]} onPressIn={() => { this.goto('UserInfo', {}) }}>
                 <View style={[mainStyle.column, mainStyle.flex1, mainStyle.palr10, mainStyle.aiStart]}>

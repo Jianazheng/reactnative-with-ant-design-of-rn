@@ -29,6 +29,18 @@ class Public {
       data: [],
       current_page: 1,
       total: null
+    },
+    myfinish: {
+      online: {
+        data: [],
+        current_page: 1,
+        total: null
+      },
+      train: {
+        data: [],
+        current_page: 1,
+        total: null
+      }
     }
   }
 
@@ -38,6 +50,10 @@ class Public {
 
   @computed get notiveList() {
     return this.publicData.notiveList
+  }
+
+  @computed get myfinish() {
+    return this.publicData.myfinish
   }
 
   @action async setCollection(common_id: string | number, type: string, isCollect: string | number) {
@@ -67,6 +83,17 @@ class Public {
     try {
       let params = { id }
       let response = await new Fetch('/announcement/detail', 'GET', params, {})
+      return response.data
+    } catch (error) {
+      return null
+    }
+  }
+
+  @action async getFinish(type) {
+    try {
+      let params = { type }
+      let response = await new Fetch('/mycourse/finish', 'GET', params, {})
+      this.publicData.myfinish[type] = response.data
       return response.data
     } catch (error) {
       return null

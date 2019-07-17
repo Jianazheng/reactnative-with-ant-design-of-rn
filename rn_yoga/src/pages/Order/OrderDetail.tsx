@@ -218,7 +218,13 @@ class OrderDetail extends React.Component<Props, State> {
                   {orderInfo.type == 2
                     ? <OrderCourseItem
                       data={orderInfo}
-                      onClick={() => this.goto('OnlineCourseInfo', { id: orderInfo.good_id })}
+                      onClick={() => this.goto('TrainInfo', { id: orderInfo.good_id })}
+                    ></OrderCourseItem>
+                    : null}
+                  {orderInfo.type == 3
+                    ? <OrderCourseItem
+                      data={orderInfo}
+                      onClick={() => this.goto('CourseInfo', { id: orderInfo.good_id })}
                     ></OrderCourseItem>
                     : null}
                 </View>
