@@ -5905,8 +5905,7 @@ react-native-modal-popover@^0.0.12:
 
 react-native-percentage-circle@^1.0.7:
   version "1.0.7"
-  resolved "https://registry.npm.taobao.org/react-native-percentage-circle/download/react-native-percentage-circle-1.0.7.tgz#5ae6b1fc0e288266a453a95543a437f5e4e81072"
-  integrity sha1-Wuax/A4ogmakU6lVQ6Q39eToEHI=
+  resolved "https://registry.npmjs.org/react-native-percentage-circle/-/react-native-percentage-circle-1.0.7.tgz#5ae6b1fc0e288266a453a95543a437f5e4e81072"
   dependencies:
     react "^16.3.2"
 
@@ -6131,7 +6130,6 @@ react@16.8.3:
 react@^16.3.2:
   version "16.8.6"
   resolved "https://registry.npm.taobao.org/react/download/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
-  integrity sha1-rWw6lhT9Ok6e9REX9U2IjaAfK74=
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

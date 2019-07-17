@@ -9,7 +9,8 @@ import CourseTeacher from './CourseTeacher';
 import CourseArtInfo from './CourseArtInfo';
 import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
-import { splitStr } from '../../../tools/function';
+import { ActivityIndicator } from '@ant-design/react-native';
+
 
 /**
  * 培训课程详情
@@ -28,7 +29,7 @@ interface State {
   clicking: boolean
 }
 
-@inject('trainStore', 'publicStore', 'cartStore', 'courseStore')
+@inject('publicStore', 'cartStore', 'courseStore')
 @observer
 class CourseInfo extends React.Component<Props, State> {
   static navigationOptions = {
@@ -45,6 +46,7 @@ class CourseInfo extends React.Component<Props, State> {
       showApplyNotice: false,
       showCartInfoDetails: false,
       showPromotion: false,
+      showLoading: true,
       courseData: [
 
       ]
@@ -52,9 +54,14 @@ class CourseInfo extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    let { navigation, courseStore, cartStore } = this.props
+    let { navigation, courseStore } = this.props
     let { params } = navigation.state
     courseStore.getCourseInfo(params.id)
+      .then(res => {
+        this.setState({ showLoading: false })
+      }).catch(err => {
+        this.setState({ showLoading: false })
+      })
   }
 
   goto() {
@@ -125,17 +132,14 @@ class CourseInfo extends React.Component<Props, State> {
   }
 
   handleCollection(common_id: string | number, type: string, isCollect: string | number) {
-    let { publicStore, trainStore } = this.props
+    let { publicStore, courseStore } = this.props
     publicStore.setCollection(common_id, type, isCollect)
-      .then(res => trainStore.changeCollect())
+      .then(res => courseStore.changeCollect())
   }
 
   render() {
-    let { canScroll, courseData, showApplyNotice, showCartInfoDetails, showPromotion } = this.state
-    let { trainStore, courseStore: { courseInfo }, navigation } = this.props
-    let trainInfo = trainStore.trainInfo
-    let promotionInfo = trainStore.promotionInfo
-    let frontInfo = trainStore.frontInfo
+    let { canScroll, showLoading } = this.state
+    let { courseStore: { courseInfo }, navigation } = this.props
     return (
       <View style={[mainStyle.column, mainStyle.flex1]}>
         <NavTop
@@ -156,6 +160,12 @@ class CourseInfo extends React.Component<Props, State> {
             </View>
           )}
         ></NavTop>
+        <ActivityIndicator
+          animating={showLoading}
+          toast
+          size="large"
+          text="加载中..."
+        />
         <ScrollView
           style={[mainStyle.flex1]}
           onScroll={(e) => {
@@ -206,7 +216,7 @@ class CourseInfo extends React.Component<Props, State> {
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
-              this.handleCollection(courseInfo.id, '1', courseInfo.is_collection)
+              this.handleCollection(courseInfo.id, '2', courseInfo.is_collection)
             }}>
               <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                 {

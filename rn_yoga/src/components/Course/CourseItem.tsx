@@ -177,7 +177,13 @@ class CourseListItem extends React.Component<CourseListItemProps>{
             </TouchableOpacity>
             : <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
               <View>
-                <PercentageCircle text={Number(data.rate) > 100 ? '已学完' : (data.rate + '%')} radius={setSize(imgw * 0.5)} borderWidth={setSize(6)} percent={Number(data.rate)} color={mainStyle.czt.color}></PercentageCircle>
+                <PercentageCircle
+                  text={data.rate ? Number(data.rate) > 100 ? '已学完' : (data.rate + '%') : '0%'}
+                  radius={setSize(imgw * 0.5)}
+                  borderWidth={setSize(6)}
+                  percent={data.rate ? Number(data.rate) : 0}
+                  color={mainStyle.czt.color}
+                ></PercentageCircle>
               </View>
             </TouchableOpacity>
         }
@@ -187,6 +193,37 @@ class CourseListItem extends React.Component<CourseListItemProps>{
 }
 
 class OrderGoodsItem extends PureComponent<CourseInfoItemProps>{
+  constructor(props: CourseInfoItemProps) {
+    super(props)
+  }
+  render() {
+    let { data, onClick } = this.props;
+    return (
+      <TouchableOpacity
+        style={[styles.infoCourse, mainStyle.pa15]}
+        onPress={() => {
+          if (onClick) onClick()
+        }}
+      >
+        <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
+          <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.good_img }}></Image>
+          <View style={[mainStyle.flex1, mainStyle.mal15]}>
+            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab10]} numberOfLines={2}>{data.good_name}</Text>
+            <View style={[mainStyle.row]}>
+              <Text style={[mainStyle.c666, mainStyle.fs10, mainStyle.bgcf2, mainStyle.pa5_10, { borderRadius: setSize(2) }]}>{data.good_sku_name}</Text>
+            </View>
+            <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
+              <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.original_price}</Text>
+              <Text style={[mainStyle.c333, mainStyle.fs15]}>x {data.count}</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
+
+class OrderTrainItem extends PureComponent<CourseInfoItemProps>{
   constructor(props: CourseInfoItemProps) {
     super(props)
   }
@@ -234,8 +271,9 @@ class OrderCourseItem extends PureComponent<CourseInfoItemProps>{
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.good_img }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
             <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab10]} numberOfLines={2}>{data.good_name}</Text>
-            <View style={[mainStyle.row]}>
-              <Text style={[mainStyle.c666, mainStyle.fs10, mainStyle.bgcf2, mainStyle.pa5_10, { borderRadius: setSize(2) }]}>{data.good_sku_name}</Text>
+            <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
+              <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.original_price}</Text>
+              <Text style={[mainStyle.c333, mainStyle.fs15]}>x {data.count}</Text>
             </View>
           </View>
         </View>
@@ -300,5 +338,6 @@ export {
   CourseApplyNotice,
   CourseListItem,
   OrderGoodsItem,
-  OrderCourseItem
+  OrderCourseItem,
+  OrderTrainItem
 }

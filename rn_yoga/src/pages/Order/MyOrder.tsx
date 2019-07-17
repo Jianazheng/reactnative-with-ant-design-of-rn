@@ -4,7 +4,7 @@ import { mainStyle, screenH, setSize } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import BxTabView from '../../components/ScrollTabs/TabView';
 import BxListView from '../../components/Pubilc/ListView';
-import { OrderGoodsItem, OrderCourseItem } from '../../components/Course/CourseItem';
+import { OrderGoodsItem, OrderCourseItem, OrderTrainItem } from '../../components/Course/CourseItem';
 import BxButton from './../../components/Pubilc/Button';
 import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
@@ -236,7 +236,13 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                 onClick={() => this.goto('OrderDetail', { id: data.id })}
               ></OrderGoodsItem>
               : null}
-            {data.type == 2 || data.type == 3
+            {data.type == 2
+              ? <OrderTrainItem
+                data={data}
+                onClick={() => this.goto('OrderDetail', { id: data.id })}
+              ></OrderTrainItem>
+              : null}
+            {data.type == 3
               ? <OrderCourseItem
                 data={data}
                 onClick={() => this.goto('OrderDetail', { id: data.id })}

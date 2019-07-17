@@ -112,12 +112,12 @@ class GoodsList extends React.Component<Props, State> {
               <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
                 this.showSearchBar();
               }}>
-                <Text style={[mainStyle.c333, mainStyle.icon, mainStyle.fs22]}>&#xe63f;</Text>
+                <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe63f;</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
-
+                navigation.navigate('CartList')
               }}>
-                <Text style={[mainStyle.c333, mainStyle.icon, mainStyle.fs22]}>&#xe608;</Text>
+                <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe60a;</Text>
               </TouchableOpacity>
             </View>
           )}

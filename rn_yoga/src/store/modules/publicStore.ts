@@ -60,7 +60,6 @@ class Public {
     try {
       let params = { common_id, type }
       let response = await new Fetch('/user/collection', 'POST', params, {})
-      console.log(response)
       Toast.info(response.message, 1.2, undefined, false)
       return response
     } catch (error) {

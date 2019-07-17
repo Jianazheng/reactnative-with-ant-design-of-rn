@@ -3,7 +3,7 @@ import { Text, View, ScrollView, DeviceEventEmitter, StyleSheet, TouchableOpacit
 import { mainStyle, setSize, screenW } from '../../public/style/style';
 import { Toast, ActivityIndicator, Modal } from "@ant-design/react-native";
 import { headerTitle, headerRight } from '../../router/navigationBar';
-import { OrderGoodsItem, OrderCourseItem } from '../../components/Course/CourseItem';
+import { OrderGoodsItem, OrderCourseItem, OrderTrainItem } from '../../components/Course/CourseItem';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
@@ -216,10 +216,10 @@ class OrderDetail extends React.Component<Props, State> {
                     ></OrderGoodsItem>
                     : null}
                   {orderInfo.type == 2
-                    ? <OrderCourseItem
+                    ? <OrderTrainItem
                       data={orderInfo}
                       onClick={() => this.goto('TrainInfo', { id: orderInfo.good_id })}
-                    ></OrderCourseItem>
+                    ></OrderTrainItem>
                     : null}
                   {orderInfo.type == 3
                     ? <OrderCourseItem
