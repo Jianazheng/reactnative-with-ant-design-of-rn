@@ -136,7 +136,6 @@ class Home extends React.Component<Props, State> {
                 tabs={homeStore.trainCate}
                 currentPageIndex={tabIndex}
                 tabChange={(e) => {
-                  console.log(e)
                   this.setState({
                     tabIndex: e
                   })
@@ -150,7 +149,7 @@ class Home extends React.Component<Props, State> {
                   homeStore.trainCateShow.length > 0 ?
                     homeStore.trainCateShow.map((val, i) =>
                       <View style={[mainStyle.flex1, mainStyle.bgcf2]} key={i}>
-                        <HomeCourse currentIndex={i + 1} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
+                        <HomeCourse currentIndex={i} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
                       </View>
                     ) : null
                 }

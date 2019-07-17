@@ -5,7 +5,7 @@ import Register from '../pages/Login/Register';
 import Forget from '../pages/Login/Forget';
 import Password from './../pages/Login/Password';
 import UserInfo from './../pages/Mine/UserInfo';
-import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
+import TrainInfo from './../pages/Train/TrainInfo';
 import CartList from './../pages/Cart/CartList';
 import Settlement from './../pages/Settlement/Settlement';
 import Payfail from './../pages/Payment/Payfail';
@@ -34,7 +34,9 @@ import WxBind from './../pages/Login/WxBind';
 import NotiveDetail from './../pages/Explore/NotiveDetail';
 import OrderDetail from './../pages/Order/OrderDetail';
 import NotiveList from './../pages/Explore/NotiveList';
-import SendBack from './../pages/Order/SendBack';
+//import SendBack from './../pages/Order/SendBack';
+import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
+import MyFinish from './../pages/Course/MyFinish';
 
 
 
@@ -50,7 +52,7 @@ export const navItem = {
   OutlineCourseReserve: { screen: OutlineCourseReserve },
   OnlineCourse: { screen: OnlineCourse },
   OnlineCourseInfo: { screen: OnlineCourseInfo },
-  CourseInfo: { screen: CourseInfo },
+  TrainInfo: { screen: TrainInfo },
   CartList: { screen: CartList },
   ClassifyList: { screen: ClassifyList },
   Settlement: { screen: Settlement },
@@ -66,7 +68,8 @@ export const navItem = {
   MyCollect: { screen: MyCollect },
   RefundReason: { screen: RefundReason },
   ApplyRefund: { screen: ApplyRefund },
-  SendBack: { screen: SendBack },
+  CourseInfo: { screen: CourseInfo },
+  //SendBack: { screen: SendBack },
   MyCertificate: { screen: MyCertificate },
   ViewPdf: { screen: ViewPdf },
   Address: { screen: Address },
@@ -74,6 +77,7 @@ export const navItem = {
   MyLevel: { screen: MyLevel },
   NotiveList: { screen: NotiveList },
   NotiveDetail: { screen: NotiveDetail },
+  MyFinish: { screen: MyFinish },
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({

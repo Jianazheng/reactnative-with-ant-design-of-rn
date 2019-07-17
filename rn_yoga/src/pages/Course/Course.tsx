@@ -8,6 +8,8 @@ import { ActivityIndicator } from '@ant-design/react-native';
 
 interface Props { }
 
+const defaultIcon = require('../../../images/defaultIcon.png')
+
 @inject('courseStore', 'userStore')
 @observer
 class Course extends React.Component<Props> {
@@ -72,7 +74,7 @@ class Course extends React.Component<Props> {
             <View style={[mainStyle.column, mainStyle.bgcfff]}>
               <View style={[mainStyle.pa15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.brb1f2]}>
                 <TouchableOpacity onPressIn={() => { this.goto('UserInfo', {}) }}>
-                  <Image style={[mainStyle.useravator]} source={{}}></Image>
+                  <Image style={[mainStyle.useravator]} source={userInfo.avatar ? { uri: userInfo.avatar } : defaultIcon}></Image>
                 </TouchableOpacity>
                 <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mal15, mainStyle.aiStart]}>
                   <Text style={[mainStyle.c333, mainStyle.fs16]}>{userInfo.username != '' ? userInfo.username : '请登录'}</Text>
@@ -94,21 +96,36 @@ class Course extends React.Component<Props> {
                 </View>
               </View>
               <View style={[mainStyle.palr15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb15]}>
-                <TouchableOpacity style={[mainStyle.flex1]}>
+                <TouchableOpacity
+                  style={[mainStyle.flex1]}
+                  onPress={() => {
+                    this.goto('CourseList', { type: 'outline' })
+                  }}
+                >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.train_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.train_num}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>培训课</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[mainStyle.flex1]}>
+                <TouchableOpacity
+                  style={[mainStyle.flex1]}
+                  onPress={() => {
+                    this.goto('CourseList', { type: 'online' })
+                  }}
+                >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter, mainStyle.brr1f2, mainStyle.brl1f2]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.online_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.online_num}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>在线课程</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[mainStyle.flex1]}>
+                <TouchableOpacity
+                  style={[mainStyle.flex1]}
+                  onPress={() => {
+                    this.goto('MyFinish', {})
+                  }}
+                >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.finish_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.finish_num}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>已学完</Text>
                   </View>
                 </TouchableOpacity>

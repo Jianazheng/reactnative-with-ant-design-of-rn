@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('cartStore', 'paymentStore')
+@inject('cartStore', 'paymentStore', 'orderStore')
 @observer
 class WxPay extends React.Component<Props, State> {
   static navigationOptions = {
@@ -46,7 +46,7 @@ class WxPay extends React.Component<Props, State> {
   }
 
   handleToPay() {
-    let { paymentStore, paymentStore: { payStatus }, navigation } = this.props
+    let { orderStore, paymentStore, paymentStore: { payStatus }, navigation } = this.props
     let { params } = navigation.state
     this.setState({ showLoading: true })
     paymentStore.WXPay(payStatus.order_type, payStatus.order_id)
@@ -59,6 +59,8 @@ class WxPay extends React.Component<Props, State> {
             DeviceEventEmitter.emit('TORELOADORDER', params.from)
           }
         }
+        //刷新订单数
+        orderStore.getOrderNumber()
       })
       .catch(err => {
         setTimeout(() => {
@@ -70,7 +72,6 @@ class WxPay extends React.Component<Props, State> {
   render() {
     let { showLoading } = this.state
     let { paymentStore: { payStatus } } = this.props
-    console.log(payStatus)
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop

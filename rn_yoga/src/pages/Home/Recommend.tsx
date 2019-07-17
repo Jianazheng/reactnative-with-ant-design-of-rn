@@ -22,11 +22,7 @@ class Recommend extends React.Component<Props, State> {
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      news: [
-        { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' },
-        { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' },
-        { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' }, { title: '运动防震瑜伽BR…', price: '￥79' },
-      ]
+
     };
   }
 
@@ -45,19 +41,17 @@ class Recommend extends React.Component<Props, State> {
     let { navigation, homeStore } = this.props;
     let newItem = homeStore.newItem;
     return (
-      <View style={[mainStyle.flex1, mainStyle.column, mainStyle.pa15, mainStyle.bgcfff]}>
+      <View style={[mainStyle.flex1, mainStyle.column, mainStyle.bgcf7]}>
         {
           newItem.id ?
-            <View style={[mainStyle.column]}>
+            <View style={[mainStyle.pa15, mainStyle.column, mainStyle.mab15, mainStyle.bgcfff]}>
               <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter]}>
-                <Text style={[mainStyle.c666, mainStyle.fs14]}>
-                  \\&nbsp;&nbsp;&nbsp;本期最新培训&nbsp;&nbsp;&nbsp;//
-              </Text>
+                <Text style={[mainStyle.c333, mainStyle.fs15]}>本期最新培训</Text>
               </View>
-              <TouchableOpacity style={[mainStyle.mab10]} onPress={() => { this.goto('CourseInfo', { id: newItem.id, type: 'all' }) }}>
+              <TouchableOpacity style={[mainStyle.mab10]} onPress={() => { this.goto('TrainInfo', { id: newItem.id, type: 'all' }) }}>
                 <View style={[styles.reMain, mainStyle.column]}>
                   <Image style={[styles.reImage, mainStyle.mat15, mainStyle.bgcf2]} resizeMode="cover" source={{ uri: newItem.image_url ? 'http://' + newItem.image_url[0] : '' }}></Image>
-                  <Text style={[mainStyle.fs15, mainStyle.c333, mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
+                  <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
                   <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mat10]}>
                     {newItem.sku_intro}
                     {newItem.train_start_time ? '，活动时间' + newItem.train_start_time.split(' ')[0] : ''}
@@ -83,10 +77,10 @@ class Recommend extends React.Component<Props, State> {
         <BxListView
           listData={[{}, {}]}
           listItem={({ item, index }) =>
-            <View>
+            <View style={[]}>
               {
                 index < 1 ?
-                  <View style={[mainStyle.flex1, mainStyle.mab10]}>
+                  <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
                     <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
                       this.goto('GoodsList', {})
                     }}>
@@ -107,7 +101,7 @@ class Recommend extends React.Component<Props, State> {
               }
               {
                 index >= 1 ?
-                  <View style={[mainStyle.flex1, mainStyle.mab10]}>
+                  <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
                     <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
                       this.goto('OnlineCourseList', {})
                     }}>

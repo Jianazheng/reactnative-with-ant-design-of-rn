@@ -5903,6 +5903,13 @@ react-native-modal-popover@^0.0.12:
     lodash.debounce "^4.0.8"
     prop-types "^15.6.2"
 
+react-native-percentage-circle@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/react-native-percentage-circle/download/react-native-percentage-circle-1.0.7.tgz#5ae6b1fc0e288266a453a95543a437f5e4e81072"
+  integrity sha1-Wuax/A4ogmakU6lVQ6Q39eToEHI=
+  dependencies:
+    react "^16.3.2"
+
 react-native-reanimated@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/react-native-reanimated/download/react-native-reanimated-1.0.1.tgz#5ecb6a2f6dad0351077ac9b771ca943b7ad6feda"
@@ -6120,6 +6127,16 @@ react@16.8.3:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.13.3"
+
+react@^16.3.2:
+  version "16.8.6"
+  resolved "https://registry.npm.taobao.org/react/download/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
+  integrity sha1-rWw6lhT9Ok6e9REX9U2IjaAfK74=
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.6"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
@@ -6475,7 +6492,7 @@ sax@~1.1.1:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/sax/download/sax-1.1.6.tgz#5d616be8a5e607d54e114afae55b7eaf2fcc3240"
 
-scheduler@^0.13.3:
+scheduler@^0.13.3, scheduler@^0.13.6:
   version "0.13.6"
   resolved "https://registry.npm.taobao.org/scheduler/download/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
   dependencies:

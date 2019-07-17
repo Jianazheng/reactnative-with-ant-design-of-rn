@@ -45,6 +45,21 @@ class Settlement extends React.Component<Props, State> {
     })
   }
 
+  handleGoTo(type: number | string, id: string | number) {
+    let { navigation } = this.props
+    switch (type) {
+      case 1:
+        navigation.navigate('GoodsInfo', { id })
+        break;
+      case 2:
+        navigation.navigate('TrainInfo', { id })
+        break;
+      case 3:
+        navigation.navigate('CourseInfo', { id })
+        break;
+    }
+  }
+
   handleCreateOrder() {
     let { navigation, cartStore, cartStore: { settlementInfo }, paymentStore, addressStore: { addressSelect } } = this.props
     let order_type = 1
@@ -139,31 +154,47 @@ class Settlement extends React.Component<Props, State> {
               {
                 settlementInfo.pStatusArray.map((val, i) => (
                   <View key={i} style={[mainStyle.pab15, i < settlementInfo.pStatusArray.length - 1 ? mainStyle.brb1f2 : null]}>
-                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.pa15, mainStyle.brb1f2]}>
-                      <Image
-                        style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
-                        mode="widthFix"
-                        source={{ uri: 'http://' + val.good_img }}>
-                      </Image>
-                      <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                        <Text style={[mainStyle.c333, mainStyle.fs12]}>{val.good_name}</Text>
-                        <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{val.sku_name}</Text>
-                        <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14, mainStyle.fontsilm]}>{val.original_price}</Text></Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.handleGoTo(val.type, val.good_id)
+                      }}
+                    >
+                      <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.pa15, mainStyle.brb1f2]}>
+                        <Image
+                          style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
+                          mode="widthFix"
+                          source={{ uri: 'http://' + val.good_img }}>
+                        </Image>
+                        <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
+                          <Text style={[mainStyle.c333, mainStyle.fs12]}>{val.good_name}</Text>
+                          {val.sku_name ? <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{val.sku_name}</Text> : null}
+                          <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14, mainStyle.fontsilm]}>{val.original_price}</Text></Text>
+                        </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                     <View style={[mainStyle.column, mainStyle.palr15]}>
-                      <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
-                        <Text style={[mainStyle.c333, mainStyle.fs12]}>课程数量</Text>
+                      <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
+                        <Text style={[mainStyle.c333, mainStyle.fs12]}>
+                          {val.type == 1 ? '商品数量' : '课程数量'}
+                        </Text>
                         <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.count}</Text>
                       </View>
-                      <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
-                        <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠价格</Text>
-                        <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.favorable_price}</Text>
-                      </View>
-                      <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
-                        <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠金额</Text>
-                        <Text style={[mainStyle.czt, mainStyle.fs14]}>-￥{val.total_favorable}</Text>
-                      </View>
+                      {
+                        val.type == 2
+                          ? <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                            <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠价格</Text>
+                            <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.favorable_price}</Text>
+                          </View>
+                          : null
+                      }
+                      {
+                        val.type == 2
+                          ? <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                            <Text style={[mainStyle.c333, mainStyle.fs12]}>优惠金额</Text>
+                            <Text style={[mainStyle.czt, mainStyle.fs14]}>-￥{val.total_favorable}</Text>
+                          </View>
+                          : null
+                      }
                       <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                         <Text style={[mainStyle.c333, mainStyle.fs12]}>总金额</Text>
                         <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.totalPrice}</Text>
