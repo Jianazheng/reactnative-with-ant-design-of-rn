@@ -1,6 +1,7 @@
 
 import React, { PureComponent } from 'react';
-import { View, WebView } from 'react-native';
+import { View } from 'react-native';
+import WebView from 'react-native-webview';
 import { mainStyle, setSize, screenW } from '../../public/style/style';
 
 

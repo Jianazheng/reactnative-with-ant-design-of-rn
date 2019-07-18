@@ -5876,6 +5876,11 @@ react-native-collapsible@^1.4.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-device-info@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.npm.taobao.org/react-native-device-info/download/react-native-device-info-2.2.2.tgz#777388b8cff4594c8db2ea3a53f2f1f9e2c611a1"
+  integrity sha1-d3OIuM/0WUyNsuo6U/Lx+eLGEaE=
+
 react-native-fs@^2.13.3:
   version "2.13.3"
   resolved "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"

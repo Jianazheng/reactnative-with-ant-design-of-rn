@@ -20,11 +20,9 @@ interface Props {
   goToPage: (i: number) => void,
 }
 type State = {
-  tabsSlide: any,
   currentIndex: number,
   scrollLeft: number,
   scrollWidth: number,
-  scrollInfoWidth: number
 }
 
 class BxTabbars extends React.Component<Props, State> {
@@ -33,10 +31,9 @@ class BxTabbars extends React.Component<Props, State> {
     super(props);
     this.state = {
       currentIndex: 0,
-      tabsSlide: new Animated.Value(setSize(5)),
       scrollLeft: 0,
       scrollWidth: 0,
-      scrollInfoWidth: 0
+      pageXs: 0
     }
   }
 
@@ -60,13 +57,15 @@ class BxTabbars extends React.Component<Props, State> {
 
   handleTabClick(i: number): void {
     let ref = this.refs['tabsItem' + i];
-    let { tabsSlide, scrollLeft, scrollWidth, scrollInfoWidth } = this.state;
-    let { current } = this.props;
-    let speed = 100;
+    let { scrollLeft, scrollWidth } = this.state;
+    let { current, tabNames } = this.props;
     if (current == i) return;//下标相同则不变，否则报错
-
     this.setState({
       currentIndex: i
+    }, () => {
+      if (this.props.goToPage) {
+        this.props.goToPage(i);
+      }
     })
     layout(ref).then(res => {
       //判断进度条位移
@@ -74,19 +73,11 @@ class BxTabbars extends React.Component<Props, State> {
       let scrollOffset = (offsetLeft + scrollLeft) / 2;
       if (offsetLeft / scrollWidth < 0.2) {
         scrollOffset = 0;
-      } else if (offsetLeft / scrollWidth > 0.8) {
-        scrollOffset = scrollInfoWidth;
+      } else if (offsetLeft / scrollWidth > 0.8 || i == tabNames.length - 1) {
+        this.refs['tab'].scrollToEnd({ animate: true })
+        return false
       }
-      Animated.timing(tabsSlide, {
-        toValue: i > 0 ? (-scrollOffset) : 0,
-        easing: Easing.ease,
-        duration: speed
-      }).start()
-
-      if (this.props.goToPage) {
-        this.props.goToPage(i);
-      }
-
+      this.refs['tab'].scrollTo({ x: scrollOffset, animate: true })
     }).catch(err => {
       //console.log(err);
       //console.warn('Tab切换报错了')
@@ -106,7 +97,7 @@ class BxTabbars extends React.Component<Props, State> {
 
   render() {
     let { tabNames, tabAlign, navigateTo, current, tabWidth } = this.props;
-    let { currentIndex, tabsSlide } = this.state;
+    let { currentIndex } = this.state;
     if (tabWidth == undefined) {
       tabWidth = screenW;
     }
@@ -153,20 +144,8 @@ class BxTabbars extends React.Component<Props, State> {
               horizontal={true}
               scrollEnabled={true}
               nestedScrollEnabled={true}
-              style={[mainStyle.row]}
-              contentContainerStyle={[mainStyle.jcBetween, mainStyle.h80, mainStyle.flex1]}>
-              <Animated.View style={[styles.scrollmain, mainStyle.row, {
-                transform: [
-                  {
-                    translateX: tabsSlide
-                  }
-                ]
-              }]}
-                onLayout={(e) => {
-                  this.setState({
-                    scrollInfoWidth: e.nativeEvent.layout.width
-                  })
-                }}>
+              contentContainerStyle={[mainStyle.h80, mainStyle.bgcfff]}>
+              <Animated.View style={[styles.scrollmain, mainStyle.row]}>
                 {
                   tabNames.map((val, i) => {
                     return (
@@ -187,9 +166,10 @@ class BxTabbars extends React.Component<Props, State> {
             <View>
               {
                 typeof navigateTo != undefined
-                  ? <TouchableOpacity style={[{ marginLeft: setSize(30) }]} onPressIn={() => {
-                    if (navigateTo) navigateTo()
-                  }}>
+                  ? <TouchableOpacity style={[styles.scrollmain, mainStyle.aiCenter, mainStyle.jcCenter, mainStyle.row, { marginLeft: setSize(30) }]}
+                    onPressIn={() => {
+                      if (navigateTo) navigateTo()
+                    }}>
                     <IconFill name="appstore" size={24} color={mainStyle.czt.color}></IconFill>
                   </TouchableOpacity>
                   : null

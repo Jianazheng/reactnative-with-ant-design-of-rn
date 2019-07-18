@@ -37,6 +37,7 @@ import NotiveList from './../pages/Explore/NotiveList';
 //import SendBack from './../pages/Order/SendBack';
 import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
 import MyFinish from './../pages/Course/MyFinish';
+import WebArea from './../pages/Explore/WebArea';
 
 
 
@@ -78,6 +79,7 @@ export const navItem = {
   NotiveList: { screen: NotiveList },
   NotiveDetail: { screen: NotiveDetail },
   MyFinish: { screen: MyFinish },
+  WebArea: { screen: WebArea },
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({

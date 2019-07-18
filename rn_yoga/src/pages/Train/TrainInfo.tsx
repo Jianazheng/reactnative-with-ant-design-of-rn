@@ -24,7 +24,6 @@ interface Props { }
 interface State {
   canScroll: boolean,
   tabTop: number,
-  courseData: Array<object>,
   showApplyNotice: boolean,
   showCartInfoDetails: boolean,
   showPromotion: boolean,
@@ -49,9 +48,6 @@ class TrainInfo extends React.Component<Props, State> {
       showCartInfoDetails: false,
       showPromotion: false,
       showLoading: true,
-      courseData: [
-
-      ]
     };
   }
 
@@ -89,8 +85,9 @@ class TrainInfo extends React.Component<Props, State> {
   }
 
   handleCloseCartInfoDetails(isok: boolean, fastbuy: boolean) {
-    let { showCartInfoDetails, clicking } = this.state;
-    let { cartStore, navigation } = this.props;
+    let { showCartInfoDetails, clicking } = this.state
+    let { cartStore, cartStore: { selectData }, navigation } = this.props
+    console.log(selectData)
     if (!showCartInfoDetails) {
       this.setState({
         showCartInfoDetails: isok
@@ -101,9 +98,9 @@ class TrainInfo extends React.Component<Props, State> {
           clicking: true
         }, () => {
           if (fastbuy) {//立即购买
-            cartStore.createCart()
+            cartStore.fastBuy(selectData)
               .then(res => {
-                navigation.push('Settlement', { type: 'pay' })
+                navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
               })
           } else {//加入购物车
             cartStore.createCart()

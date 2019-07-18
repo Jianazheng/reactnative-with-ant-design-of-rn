@@ -50,9 +50,9 @@ class CourseTeacherItem2 extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, onClick } = this.props;
     return (
-      <TouchableOpacity style={[mainStyle.mab15, styles.CourseInfo2, mainStyle.mar15]} onPress={() => { }}>
+      <TouchableOpacity style={[mainStyle.mab15, styles.CourseInfo2, mainStyle.mar15]} onPress={() => { if (onClick) onClick() }}>
         <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage2, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.avatar }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal10]}>

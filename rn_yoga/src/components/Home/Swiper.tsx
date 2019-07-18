@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { mainStyle, setSize } from '../../public/style/style';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 let { width, height } = Dimensions.get('window')
 let swh = width / 2 - setSize(20);
@@ -9,16 +10,44 @@ let sww = width - setSize(60);
 
 interface Props {
   fullWidth: boolean,
-  img: Array<object>
+  img: Array<object>,
+  navigation: object
 }
 
 class HomeSwiper extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
+    this.state = {
+      current: 0
+    }
+  }
+
+  handleTo(index: number) {
+    let { img, navigation } = this.props
+    let { content, attr_id } = img[index]
+    //attr_id:"关联类型ID，type:1-商品，2-培训，3-在线课程，4-资讯，0-自定义链接"
+    switch (attr_id) {
+      case '1':
+        navigation.navigate('GoodsInfo', { id: content })
+        break;
+      case '2':
+        navigation.navigate('TrainInfo', { id: content })
+        break;
+      case '3':
+        navigation.navigate('CourseInfo', { id: content })
+        break;
+      case '4':
+        navigation.navigate('NotiveDetail', { id: content })
+        break;
+      default:
+        navigation.navigate('WebArea', { url: content })
+        break;
+    }
   }
 
   render() {
-    let { fullWidth, img } = this.props;
+    let { fullWidth, img } = this.props
+    let { current } = this.state
     return (
       <View style={[mainStyle.bgcfff]}>
         {
@@ -64,11 +93,22 @@ class HomeSwiper extends React.Component<Props> {
                 activeDot={
                   <View style={[styles.swiperDotActive]}></View>
                 }
+                onTouchEnd={() => {
+                  this.handleTo(current)
+                }}
+                onIndexChanged={(current) => this.setState({ current })}
               >
                 {
                   img.map((val, i) => (
-                    <View key={i} style={[styles.swiperItem]}>
-                      <Image resizeMode="cover" key={i} style={[{ height: swh, width: sww }]} source={{ uri: 'http://' + val.image_url }}></Image>
+                    <View
+                      key={i}
+                      style={[styles.swiperItem]}
+                    >
+                      <Image
+                        resizeMode="cover"
+                        style={[{ height: swh, width: sww }]}
+                        source={{ uri: 'http://' + val.image_url }}
+                      ></Image>
                     </View>
                   ))
                 }

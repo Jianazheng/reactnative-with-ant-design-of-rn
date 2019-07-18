@@ -7,10 +7,10 @@ import BxRadio from '../../components/Pubilc/Radio';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import { DeviceEventEmitter } from 'react-native';
 
 interface Props { }
 interface State {
-  orderType: string,
   showLoading: boolean
 }
 
@@ -24,25 +24,28 @@ class Settlement extends React.Component<Props, State> {
     // headerRight:headerRight(<Text></Text>),
     header: null
   }
+
+  TORELOADCARTDATA: object;
+
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      orderType: '',
       showLoading: true,
     };
   }
 
   componentDidMount() {
-    let { navigation: { state: { params } } } = this.props
-    if (!params) {
-      params = {
-        type: 'pay'
-      }
-    }
+    let { cartStore } = this.props
     this.setState({
-      orderType: params.type,
-      showLoading: false
+      showLoading: false,
     })
+    this.TORELOADCARTDATA = DeviceEventEmitter.addListener('TORELOADCARTDATA', async res => {
+      await cartStore.settlement()
+    })
+  }
+
+  componentWillUnmount() {
+    this.TORELOADCARTDATA.remove()
   }
 
   handleGoTo(type: number | string, id: string | number) {
@@ -62,36 +65,53 @@ class Settlement extends React.Component<Props, State> {
 
   handleCreateOrder() {
     let { navigation, cartStore, cartStore: { settlementInfo }, paymentStore, addressStore: { addressSelect } } = this.props
+    let { params } = navigation.state
+    console.log(addressSelect)
     let order_type = 1
-    if (!addressSelect.id) {
+    if (!addressSelect.id && (params.type == 1 || params.type == undefined)) {
       Toast.info('请添加收货地址', 1.4, undefined, false)
       return false
     }
     this.setState({ showLoading: true })
-    //提交订单
-    cartStore.createOrder(addressSelect.id)
-      .then(res => {
-        //保存支付参数
-        paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
-        //刷新购物车
-        cartStore.getCartList()
-          .then(cartlistSuccess => {
-            this.setState({ showLoading: false }, () => {
-              navigation.replace('WxPay', { type: order_type })
+    if (params.from == 'fastbuy') {
+      //快速购买，提交订单
+      cartStore.fastbuyOrder(addressSelect.id)
+        .then(res => {
+          //保存支付参数
+          paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
+          this.setState({ showLoading: false }, () => {
+            navigation.replace('WxPay', { type: order_type })
+          })
+        }).catch(err => {
+          this.setState({ showLoading: false })
+        })
+    } else {
+      //购物车结算，提交订单
+      cartStore.createOrder(addressSelect.id)
+        .then(res => {
+          //保存支付参数
+          paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
+          //刷新购物车
+          cartStore.getCartList()
+            .then(cartlistSuccess => {
+              this.setState({ showLoading: false }, () => {
+                navigation.replace('WxPay', { type: order_type })
+              })
             })
-          })
-          .catch(cartlistFail => {
-            this.setState({ showLoading: false })
-          })
-      })
-      .catch(err => {
-        this.setState({ showLoading: false })
-      })
+            .catch(cartlistFail => {
+              this.setState({ showLoading: false })
+            })
+        })
+        .catch(err => {
+          this.setState({ showLoading: false })
+        })
+    }
   }
 
   render() {
-    let { orderType, showLoading } = this.state
+    let { showLoading } = this.state
     let { navigation, cartStore: { settlementInfo }, addressStore: { addressSelect } } = this.props
+    let { params } = navigation.state
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop
@@ -109,42 +129,45 @@ class Settlement extends React.Component<Props, State> {
         />
         <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
           <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pa15]}>
-            <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10), overflow: 'hidden' }, mainStyle.mab15]}>
-              <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
-                <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
-                  <Text style={[mainStyle.fs14, mainStyle.c333]}>选择地址</Text>
-                </View>
-              </View>
-              {
-                addressSelect.region ?
-                  <TouchableOpacity onPress={() => {
-                    navigation.navigate('Address', { type: 'select' })
-                  }}>
-                    <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15]}>
-                        <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
-                        <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                          <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.mobile}</Text>
-                          <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.consignee}</Text>
+            {
+              params.type == 1 || params.type == undefined
+                ? <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10), overflow: 'hidden' }, mainStyle.mab15]}>
+                  <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+                    <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+                      <Text style={[mainStyle.fs14, mainStyle.c333]}>选择地址</Text>
+                    </View>
+                  </View>
+                  {addressSelect.region ?
+                    <TouchableOpacity onPress={() => {
+                      navigation.navigate('Address', { type: 'select' })
+                    }}>
+                      <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                        <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15]}>
+                          <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
+                          <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                            <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.mobile}</Text>
+                            <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.consignee}</Text>
+                          </View>
                         </View>
+                        <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
                       </View>
-                      <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-                  :
-                  <TouchableOpacity onPress={() => {
-                    navigation.navigate('Address', { type: 'add' })
-                  }}>
-                    <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15, mainStyle.mat5]}>
-                        <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5]}>请添加收货地址</Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={() => {
+                      navigation.navigate('Address', { type: 'add' })
+                    }}>
+                      <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                        <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15, mainStyle.mat5]}>
+                          <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5]}>请添加收货地址</Text>
+                        </View>
+                        <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
                       </View>
-                      <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
-                    </View>
-                  </TouchableOpacity>
-              }
-              <Image style={[{ width: screenW - setSize(60) }, mainStyle.imgContain]} source={require('../../../images/addressbg.png')}></Image>
-            </View>
+                    </TouchableOpacity>
+                  }
+                  <Image style={[{ width: screenW - setSize(60) }, mainStyle.imgContain]} source={require('../../../images/addressbg.png')}></Image>
+                </View>
+                : null
+            }
             <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
               <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
                 <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
@@ -204,47 +227,23 @@ class Settlement extends React.Component<Props, State> {
                 ))
               }
             </View>
-            <PayStatus data={settlementInfo} orderType={orderType}></PayStatus>
+            <PayStatus data={settlementInfo}></PayStatus>
           </View>
         </ScrollView>
-        {
-          orderType == 'pay' ?
-            <PayBar
-              data={settlementInfo}
-              orderType={orderType}
-              handlePayment={() => {
-                this.handleCreateOrder()
-              }}></PayBar>
-            : null
-        }
-        {/* {
-          orderType=='nopay'?
-          <PayBar 
-          data={settlementInfo} 
-          orderType={orderType} 
-          handlePayment={()=>{
-            this.props.navigation.push('PaySuccess')
+
+        <PayBar
+          data={settlementInfo}
+          handlePayment={() => {
+            this.handleCreateOrder()
           }}
-          handleCancel={()=>{}}
-          ></PayBar>
-          :null
-        }
-        {
-          orderType=='afterpay'?
-          <PayBar 
-          data={settlementInfo} 
-          orderType={orderType} 
-          handleRefund={()=>{}}
-          ></PayBar>
-          :null
-        } */}
+        ></PayBar>
+
       </View>
     )
   }
 }
 
 interface PayStatusProps {
-  orderType: string,
   data: object
 }
 
@@ -253,84 +252,26 @@ class PayStatus extends React.Component<PayStatusProps>{
     super(props)
   }
   render() {
-    let { orderType } = this.props;
-    switch (orderType) {
-      case 'pay':
-        return (
-          <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
-            <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
-              <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
-                <Text style={[mainStyle.fs14, mainStyle.c333]}>支付方式</Text>
-              </View>
-            </View>
-            <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
-              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>微信支付</Text>
-                <RadioSelect></RadioSelect>
-              </View>
-            </View>
+    return (
+      <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
+        <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+          <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+            <Text style={[mainStyle.fs14, mainStyle.c333]}>支付方式</Text>
           </View>
-        )
-        break;
-      case 'nopay':
-        return (
-          <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
-            <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
-              <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
-                <Text style={[mainStyle.fs14, mainStyle.c333]}>支付信息</Text>
-              </View>
-            </View>
-            <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
-              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>待支付金额</Text>
-                <Text style={[mainStyle.czt, mainStyle.fs12]}>
-                  ￥
-                  <Text style={[mainStyle.czt, mainStyle.fs18]}> 46.10</Text>
-                </Text>
-              </View>
-            </View>
+        </View>
+        <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
+          <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
+            <Text style={[mainStyle.c333, mainStyle.fs12]}>微信支付</Text>
+            <RadioSelect></RadioSelect>
           </View>
-        )
-        break;
-      case 'afterpay':
-        return (
-          <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
-            <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
-              <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
-                <Text style={[mainStyle.fs14, mainStyle.c333]}>支付信息</Text>
-              </View>
-            </View>
-            <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
-              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>支付时间</Text>
-                <Text style={[mainStyle.c333, mainStyle.fs14]}>2019/04/05  19:03</Text>
-              </View>
-              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>支付方式</Text>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>微信支付</Text>
-              </View>
-              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat15]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>支付金额</Text>
-                <Text style={[mainStyle.czt, mainStyle.fs12]}>
-                  ￥
-                  <Text style={[mainStyle.czt, mainStyle.fs18]}> 46.10</Text>
-                </Text>
-              </View>
-            </View>
-          </View>
-        )
-        break;
-      default:
-        return <View></View>
-        break;
-    }
+        </View>
+      </View>
+    )
   }
 }
 
 interface PayBarProps extends PayStatusProps {
-  handleCancel: () => void,
   handlePayment: () => void,
-  handleRefund: () => void,
   data: object
 }
 
@@ -339,85 +280,29 @@ class PayBar extends React.Component<PayBarProps>{
     super(props)
   }
   render() {
-    let { orderType, handlePayment, handleCancel, handleRefund, data } = this.props;
-    switch (orderType) {
-      case 'pay':
-        return (
-          <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.fs12, mainStyle.lh42, mainStyle.c333]}>
-                合计：
+    let { handlePayment, data } = this.props;
+    return (
+      <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
+        <View style={[mainStyle.row, mainStyle.aiCenter]}>
+          <Text style={[mainStyle.fs12, mainStyle.lh42, mainStyle.c333]}>
+            合计：
                 <Text style={[mainStyle.czt]}>￥</Text>
-                <Text style={[mainStyle.czt, mainStyle.fs18]}>{data.orderPrice}</Text>
-              </Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <BxButton
-                colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                borderRadius={setSize(40)}
-                disabled={false}
-                title={'去支付'}
-                btnstyle={[mainStyle.mal15, { height: setSize(80), width: setSize(220) }]}
-                textstyle={[mainStyle.fs14]}
-                onClick={() => { handlePayment() }}>
-              </BxButton>
-            </View>
-          </View>
-        )
-        break;
-      case 'nopay':
-        return (
-          <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.czt, mainStyle.icon, mainStyle.fs18, mainStyle.lh42]}>&#xe639;</Text>
-              <Text style={[mainStyle.fs12, mainStyle.c333, mainStyle.lh44, { marginLeft: setSize(10) }]}>有问题，咨询在线客服</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <BxButton
-                colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                borderRadius={setSize(35)}
-                disabled={false}
-                title={'去支付'}
-                btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(70), width: setSize(170) }]}
-                textstyle={[mainStyle.fs12, mainStyle.cfff]}
-                onClick={() => { handlePayment() }}>
-              </BxButton>
-              <BxButton
-                colors={[mainStyle.cc2.color, mainStyle.c999.color]}
-                borderRadius={setSize(35)}
-                disabled={false}
-                title={'取消订单'}
-                btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(70), width: setSize(170) }]}
-                textstyle={[mainStyle.fs12, mainStyle.cfff]}
-                onClick={() => { handleCancel() }}>
-              </BxButton>
-            </View>
-          </View>
-        )
-        break;
-      case 'afterpay':
-        return (
-          <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-            </View>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <BxButton
-                colors={[mainStyle.cc2.color, mainStyle.c999.color]}
-                borderRadius={setSize(40)}
-                disabled={false}
-                title={'申请退款'}
-                btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(80), width: setSize(200) }]}
-                textstyle={[mainStyle.fs14, mainStyle.czt]}
-                onClick={() => { handleRefund() }}>
-              </BxButton>
-            </View>
-          </View>
-        )
-        break;
-      default:
-        return <View></View>
-        break;
-    }
+            <Text style={[mainStyle.czt, mainStyle.fs18]}>{data.orderPrice}</Text>
+          </Text>
+        </View>
+        <View style={[mainStyle.row, mainStyle.aiCenter]}>
+          <BxButton
+            colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+            borderRadius={setSize(40)}
+            disabled={false}
+            title={'去支付'}
+            btnstyle={[mainStyle.mal15, { height: setSize(80), width: setSize(220) }]}
+            textstyle={[mainStyle.fs14]}
+            onClick={() => { handlePayment() }}>
+          </BxButton>
+        </View>
+      </View>
+    )
   }
 }
 

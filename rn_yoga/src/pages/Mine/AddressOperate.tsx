@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter } from 'react-native';
 import { WhiteSpace, Switch, ActivityIndicator, Toast } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize, screenW } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -74,7 +74,10 @@ class AddressOperate extends React.Component<Props, State> {
           return false
         }
         postData.region = region
-        if (params.type == 'add') addressStore.setAddress(postData)
+        if (params.type == 'add') {
+          addressStore.setAddress(postData)
+          DeviceEventEmitter.emit('TORELOADCARTDATA', 'yes')
+        }
         navigation.goBack()
       })
   }

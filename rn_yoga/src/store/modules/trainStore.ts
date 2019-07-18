@@ -190,6 +190,7 @@ class Train {
 
   @action async getTrainService(id: string | number) {
     try {
+      this.trainData.trainService = { server: [] }
       let response = await new Fetch('/train/server/info', 'GET', { id }, {});
       let trainService = response.data;
       this.trainData.trainService = trainService;

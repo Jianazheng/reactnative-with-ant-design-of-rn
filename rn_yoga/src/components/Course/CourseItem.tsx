@@ -44,9 +44,11 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
   render() {
     let { data, navigation } = this.props;
     return (
-      <TouchableOpacity style={[styles.infoCourse, mainStyle.pa15]} onPress={() => {
-        navigation.navigate('TrainInfo', { id: data.id })
-      }}>
+      <TouchableOpacity
+        style={[styles.infoCourse, mainStyle.pa15]}
+        onPress={() => {
+          navigation.push('TrainInfo', { id: data.id })
+        }}>
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + (data.image_url ? data.image_url.length > 0 ? data.image_url[0] : '' : '') }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>

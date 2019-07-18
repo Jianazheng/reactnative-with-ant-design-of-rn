@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  Text, View, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Animated,
-  Easing
+  View, StyleSheet, Dimensions, ScrollView,
 } from 'react-native';
-import { mainStyle, setSize, contentPadding } from '../../public/style/style';
-
-import ScrollableTabView, { ScrollableTabBar, DefaultTabBar } from 'react-native-scrollable-tab-view';
+import { mainStyle, setSize, contentPadding, screenH } from '../../public/style/style';
+import { DeviceInfo } from './../../tools/devices'
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import BxTabbars from './Tabbar';
 
 const { width, height } = Dimensions.get('window');
@@ -34,9 +33,9 @@ class BxTabView extends React.Component<Props, State> {
     }
   }
 
-  // componentDidUpdate(np,ns){
-  //   return ns.currentIndex!=this.state.currentIndex
-  // }
+  componentDidMount() {
+
+  }
 
   handleChange({ i }) {
     this.setState({
@@ -55,11 +54,15 @@ class BxTabView extends React.Component<Props, State> {
         : this.state.currentIndex || currentPageIndex
       : currentPageIndex
     let scrollHeight = this.props.height
+    let paddingBottom = 0
+    let UA = DeviceInfo.getUserAgent()
+    let UAtype = RegExp(/HUAWEI|huawei/).test(UA)//华为手机去除高度限制，否则显示不全
+    if (UAtype) paddingBottom = screenH - scrollHeight
     if (tabs == undefined) tabs = []
     return (
       <View style={[mainStyle.flex1]}>
         <ScrollableTabView
-          style={[{ height: scrollHeight }]}
+          style={[{ height: scrollHeight + paddingBottom }]}
           locked={false}
           onChangeTab={(e) => {
             this.handleChange(e)
@@ -73,7 +76,7 @@ class BxTabView extends React.Component<Props, State> {
           {
             React.Children.map(children, (child, i) => {
               return (
-                <View key={i} style={[mainStyle.flex1, { height: scrollHeight }]}>
+                <View key={i} style={[mainStyle.flex1, { height: scrollHeight + paddingBottom }]}>
                   <ScrollView
                     style={[mainStyle.flex1]}
                     scrollEnabled={canScroll}

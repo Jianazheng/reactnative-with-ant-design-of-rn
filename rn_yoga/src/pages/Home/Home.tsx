@@ -125,7 +125,7 @@ class Home extends React.Component<Props, State> {
                     navigation.push('CartList')
                   }}>&#xe60a;</Text>
               )}></HomeSearchBar>
-            <HomeSwiper img={homeStore.banner}></HomeSwiper>
+            <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
             <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
           </View>
           {

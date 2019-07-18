@@ -62,7 +62,7 @@ class GoodsInfo extends React.Component<Props, State> {
 
   handleCloseCartInfoDetails(isok: boolean, fastbuy: boolean) {
     let { showCartInfoDetails, clicking } = this.state;
-    let { cartStore, navigation } = this.props;
+    let { cartStore, cartStore: { selectData }, navigation } = this.props;
     if (!showCartInfoDetails) {
       this.setState({
         showCartInfoDetails: isok
@@ -73,9 +73,9 @@ class GoodsInfo extends React.Component<Props, State> {
           clicking: true
         }, () => {
           if (fastbuy) {//立即购买
-            cartStore.createCart()
+            cartStore.fastBuy(selectData)
               .then(res => {
-                navigation.push('Settlement', { type: 'pay' })
+                navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
               })
           } else {//加入购物车
             cartStore.createCart()
@@ -170,6 +170,7 @@ class GoodsInfo extends React.Component<Props, State> {
             </View>
           </View>
           <BxTabView
+            currentPageIndex={0}
             height={height - setSize(160)}
             tabWidth={width - setSize(160)}
             canScroll={canScroll}
@@ -185,7 +186,7 @@ class GoodsInfo extends React.Component<Props, State> {
                   goodsInfo.attr_rule
                     ? goodsInfo.attr_rule.map((val, i) => (
                       <View key={i} style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.pa15, mainStyle.brr1e2, mainStyle.brb1e2]}>
-                        <Text style={[mainStyle.flex1, mainStyle.c666, mainStyle.fs14, mainStyle.brr1e2]}>{val.name}</Text>
+                        <Text style={[mainStyle.flex1, mainStyle.c666, mainStyle.fs14, mainStyle.brr1e2]}>{val.attr}</Text>
                         <Text style={[mainStyle.flex1, mainStyle.c666, mainStyle.fs14, mainStyle.pal15]}>{val.value}</Text>
                       </View>
                     ))
@@ -194,7 +195,6 @@ class GoodsInfo extends React.Component<Props, State> {
               </View>
             </View>
           </BxTabView>
-
         </ScrollView>
 
         <View style={[mainStyle.h120, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.fixedview, mainStyle.palr15, mainStyle.bgcfff, mainStyle.brt1e2]}>

@@ -84,17 +84,17 @@ class CourseInfo extends React.Component<Props, State> {
   }
 
   handleCloseCartInfoDetails(type: string) {
-    let { showCartInfoDetails, clicking } = this.state;
+    let { clicking } = this.state;
     let { cartStore, navigation, courseStore: { courseInfo } } = this.props;
-    cartStore.selectItem({ type: 3, good_id: courseInfo.id })
+    cartStore.selectItem({ type: 3, good_id: courseInfo.id, sku_id: '' })
     if (!clicking) {//防止多次点击请求购物车
       this.setState({
         clicking: true
       }, () => {
         if (type == 'fastbuy') {//立即购买
-          cartStore.createCart()
+          cartStore.fastBuy({ type: 3, good_id: courseInfo.id, sku_id: '' })
             .then(res => {
-              navigation.push('Settlement', { type: 'pay' })
+              navigation.navigate('Settlement', { type: 3, from: 'fastbuy' })
             })
         } else {//加入购物车
           cartStore.createCart()

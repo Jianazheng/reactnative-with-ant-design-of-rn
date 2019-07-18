@@ -47,7 +47,7 @@ export class Fetch {
           }
         })
         .then((response) => {
-          console.log('接口:' + api, '参数：', data, '返回数据', response)
+          //console.log('接口:' + api, '参数：', data, '返回数据', response)
           switch (response.status) {
             case 200:
               resolve(response.data);
@@ -73,7 +73,7 @@ export class Fetch {
               break;
             case 500:
               Toast.info('服务器错误：' + response.status + '，接口：' + reqUrl, 1.4, undefined, false)
-              console.warn(response.data)
+              //console.warn(response.data)
               reject(response.data);
               break;
             default:
@@ -84,7 +84,7 @@ export class Fetch {
         })
         .catch((error) => {
           Toast.info(error.toString(), 1.8, undefined, false)
-          console.warn(error)
+          //console.warn(error)
           reject({})
         });
     })

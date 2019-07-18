@@ -1,6 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
+import addressStore from './addressStore';
 
 class Cart {
   constructor() {
@@ -22,6 +23,10 @@ class Cart {
       address: {}
     },
     orderStatus: {}
+  }
+
+  @computed get selectData() {
+    return this.cartData.selectData
   }
 
   @computed get settlementInfo() {
@@ -295,13 +300,60 @@ class Cart {
     }
   }
   /**
-   * 生成订单
+   * 购物车结算生成订单
    */
   @action async createOrder(address_id) {
     try {
       let { ids } = this.cartData
       let params = { cart: ids, address_id }
       let response = await new Fetch('/order/place_cart', 'POST', params, {})
+      Toast.info(response.message, 1, undefined, false)
+      this.cartData.orderStatus = response.data
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+  /**
+   * 快速购买
+   */
+  @action async fastBuy(params: object) {
+    /**
+     * params:{
+    *   good_id :商品ID
+    *   type:商品类型，1-商品，2-培训，3-在线课程
+    *   sku_id:sku
+     * }
+     */
+    try {
+      let response = await new Fetch('/order/direct_settle', 'POST', { ...params }, {})
+      this.cartData.settlementInfo = response.data
+      if (response.data.pass == 0) {
+        Toast.info(response.message, 1.4, undefined, false)
+      } else {
+        if (params.type == 1) {
+          //保存地址
+          if (response.data.address.region) {
+            response.data.address.region = JSON.parse(response.data.address.region)
+            addressStore.setAddress(response.data.address)
+          }
+        }
+      }
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+  /**
+   * 快速购买生成订单
+   */
+  @action async fastbuyOrder(address_id = '') {
+    try {
+      let { selectData } = this.cartData
+      let params = { ...selectData, address_id }
+      let response = await new Fetch('/order/place_direct', 'POST', params, {})
       Toast.info(response.message, 1, undefined, false)
       this.cartData.orderStatus = response.data
       return response.data

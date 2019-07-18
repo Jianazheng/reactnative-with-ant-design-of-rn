@@ -123,6 +123,7 @@ class Address extends React.Component<Props, State> {
                       if (params.type == 'select') {
                         return (
                           <TouchableOpacity
+                            key={i}
                             style={[mainStyle.bgcfff, mainStyle.mab15, { borderRadius: setSize(6) }]}
                             onPress={() => {
                               this.handleClick(val)

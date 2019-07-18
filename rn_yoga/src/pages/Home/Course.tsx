@@ -61,12 +61,18 @@ class HomeCourse extends React.Component<Props, State> {
     let { data, homeStore, navigation, currentIndex } = this.props;
     return (
       <View style={[mainStyle.flex1]}>
-        <View style={[mainStyle.patb10, mainStyle.palr15, mainStyle.bgcfff]}>
-          <TabSelect tabs={data}
-            handleChange={(e) => {
-              this.handleTabChange(e)
-            }}></TabSelect>
-        </View>
+        {
+          data ?
+            data.length > 0
+              ? <View style={[mainStyle.patb10, mainStyle.palr15, mainStyle.bgcfff]}>
+                <TabSelect tabs={data}
+                  handleChange={(e) => {
+                    this.handleTabChange(e)
+                  }}></TabSelect>
+              </View>
+              : null
+            : null
+        }
         <View style={[mainStyle.pa15, mainStyle.bgcf2, mainStyle.flex1]}>
           {
             homeStore.trainItem[currentIndex].trainList.length > 0
