@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { mainStyle, setSize } from '../../public/style/style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Video from 'react-native-video';
 
 let { width, height } = Dimensions.get('window')
 let swh = width / 2 - setSize(20);
@@ -11,14 +12,17 @@ let sww = width - setSize(60);
 interface Props {
   fullWidth: boolean,
   img: Array<object>,
-  navigation: object
+  navigation: object,
+  children: JSX.Element
 }
 
 class HomeSwiper extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      current: 0
+      current: 0,
+      currentTime: 0,
+      seekableDuration: 0
     }
   }
 
@@ -45,9 +49,23 @@ class HomeSwiper extends React.Component<Props> {
     }
   }
 
+  getMin(time: number) {
+    let CM = Math.ceil(time / 60)
+    let CS = Math.ceil(time) % 60
+    return (CM > 1 ? '0' + CM : '00') + ':' + (CS > 9 ? CS : '0' + CS)
+  }
+
+  handlePlay() {
+    //this.refs['Video']
+  }
+
   render() {
-    let { fullWidth, img } = this.props
-    let { current } = this.state
+    let { fullWidth, img, children } = this.props
+    let { current, seekableDuration, currentTime } = this.state
+    let ct, st = '--'
+    ct = this.getMin(currentTime)
+    st = this.getMin(seekableDuration)
+    let reg = RegExp(/.mp3|.mp4|.avi|.flv/)
     return (
       <View style={[mainStyle.bgcfff]}>
         {
@@ -70,7 +88,33 @@ class HomeSwiper extends React.Component<Props> {
             {
               img.map((val, i) => (
                 <View key={i} style={[styles.swiperItem2]}>
-                  <Image key={i} resizeMode="cover" style={[{ height: width, width: width }]} source={{ uri: 'http://' + val }}></Image>
+                  {
+                    reg.test(val)
+                      ?
+                      <View style={[mainStyle.bgc000, mainStyle.positonre]}>
+                        <Video
+                          ref="Video"
+                          controls
+                          style={[{ height: width, width: width }]}
+                          source={{ uri: 'http://' + val }}
+                          poster={img.length > 1 ? 'http://' + img[1] : ''}
+                          repeat={false}
+                          resizeMode={'contain'}
+                          onProgress={({ currentTime, seekableDuration }) => {
+                            this.setState({
+                              currentTime, seekableDuration
+                            })
+                          }}
+                        ></Video>
+                      </View>
+                      :
+                      <Image
+                        resizeMode="cover"
+                        style={[{ height: width, width: width }]}
+                        source={{ uri: 'http://' + val }}
+                      ></Image>
+                  }
+
                 </View>
               ))
             }
@@ -158,7 +202,7 @@ const styles = StyleSheet.create({
     marginRight: setSize(10),
     borderRadius: setSize(10),
     backgroundColor: mainStyle.czt.color
-  }
+  },
 })
 
 export default HomeSwiper

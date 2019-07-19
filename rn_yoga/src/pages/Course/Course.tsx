@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -29,7 +29,8 @@ class Course extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      loading: true
+      loading: true,
+      refreshing: false
     };
   }
 
@@ -39,21 +40,31 @@ class Course extends React.Component<Props> {
 
   async loadCourse() {
     try {
-      let { userStore, courseStore } = this.props;
+      let { userStore, courseStore } = this.props
       await userStore.GetUserInfo()
       await courseStore.getOnlineCourseList()
       this.setState({
-        loading: false
+        loading: false,
+        refreshing: false
       })
     } catch (error) {
       this.setState({
-        loading: false
+        loading: false,
+        refreshing: false
       })
     }
   }
 
   goto(routeName: string, params: any) {
-    this.props.navigation.navigate(routeName, params);
+    this.props.navigation.navigate(routeName, params)
+  }
+
+  _onRefresh() {
+    this.setState({
+      refreshing: true
+    }, () => {
+      this.loadCourse()
+    })
   }
 
   render() {
@@ -69,7 +80,17 @@ class Course extends React.Component<Props> {
           text="加载中..."
           animating={loading}
         ></ActivityIndicator>
-        <ScrollView style={[mainStyle.flex1, mainStyle.positonre]}>
+        <ScrollView
+          style={[mainStyle.flex1, mainStyle.positonre]}
+          refreshControl={(
+            <RefreshControl
+              tintColor={mainStyle.czt.color}
+              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          )}
+        >
           <View style={[mainStyle.flex1]}>
             <View style={[mainStyle.column, mainStyle.bgcfff]}>
               <View style={[mainStyle.pa15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.brb1f2]}>
@@ -92,7 +113,13 @@ class Course extends React.Component<Props> {
                     : null}
                 </View>
                 <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                  <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.c666]}>&#xe616;</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.goto('NotiveList', {})
+                    }}>
+                    <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.c666, mainStyle.patb15]}>&#xe616;</Text>
+                  </TouchableOpacity>
+
                 </View>
               </View>
               <View style={[mainStyle.palr15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb15]}>
@@ -103,7 +130,7 @@ class Course extends React.Component<Props> {
                   }}
                 >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.train_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.train_num ? onlineCourseList.train_num : 0}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>培训课</Text>
                   </View>
                 </TouchableOpacity>
@@ -114,7 +141,7 @@ class Course extends React.Component<Props> {
                   }}
                 >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter, mainStyle.brr1f2, mainStyle.brl1f2]}>
-                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.online_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.online_num ? onlineCourseList.online_num : 0}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>在线课程</Text>
                   </View>
                 </TouchableOpacity>
@@ -125,7 +152,7 @@ class Course extends React.Component<Props> {
                   }}
                 >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.finish_num}</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.finish_num ? onlineCourseList.finish_num : 0}</Text>
                     <Text style={[mainStyle.c999, mainStyle.fs12]}>已学完</Text>
                   </View>
                 </TouchableOpacity>

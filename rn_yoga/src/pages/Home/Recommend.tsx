@@ -74,60 +74,43 @@ class Recommend extends React.Component<Props, State> {
             </View>
             : null
         }
-        <BxListView
-          listData={[{}, {}]}
-          listItem={({ item, index }) =>
-            <View style={[]}>
+        <View style={[mainStyle.column]}>
+          <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
+            <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
+              this.goto('GoodsList', { cid: '', product_category_name: '全部' })
+            }}>
+            </BxCateTitle>
+            <View style={[mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
               {
-                index < 1 ?
-                  <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-                    <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
-                      this.goto('GoodsList', {})
-                    }}>
-                    </BxCateTitle>
-                    <View style={[mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
-                      {
-                        homeStore.recommendGoods.length > 0
-                          ? homeStore.recommendGoods.map((item, index) => {
-                            return (
-                              <RecommendGoods index={index} navigation={navigation} data={item} key={index.toString()}></RecommendGoods>
-                            )
-                          })
-                          : null
-                      }
-                    </View>
-                  </View>
-                  : null
-              }
-              {
-                index >= 1 ?
-                  <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-                    <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
-                      this.goto('OnlineCourseList', {})
-                    }}>
-                    </BxCateTitle>
-                    <View style={[mainStyle.jcBetween, mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
-                      {
-
-                        homeStore.recommendTrain.length > 0
-                          ? homeStore.recommendTrain.map((item, index) => {
-                            return (
-                              <RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>
-                            )
-                          })
-                          : null
-                      }
-                    </View>
-                  </View>
+                homeStore.recommendGoods.length > 0
+                  ? homeStore.recommendGoods.map((item, index) => {
+                    return (
+                      <RecommendGoods index={index} navigation={navigation} data={item} key={index.toString()}></RecommendGoods>
+                    )
+                  })
                   : null
               }
             </View>
-          }
-          nomore={true}
-          colNumber={1}
-        >
-        </BxListView>
+          </View>
+          <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
+            <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
+              this.goto('OnlineCourseList', {})
+            }}>
+            </BxCateTitle>
+            <View style={[mainStyle.jcBetween, mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
+              {
 
+                homeStore.recommendTrain.length > 0
+                  ? homeStore.recommendTrain.map((item, index) => {
+                    return (
+                      <RecommendCourse navigation={navigation} data={item} key={index.toString()}></RecommendCourse>
+                    )
+                  })
+                  : null
+              }
+            </View>
+          </View>
+        </View>
       </View>
     )
   }
@@ -156,8 +139,8 @@ class RecommendGoods extends PureComponent<GoodsProps> {
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
           <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'http://' + data.image_url[0] : '' : '' }}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]}>{data.product_name}</Text>
-            <Text style={[mainStyle.czt, mainStyle.fs14]}>{data.list_price}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mab5, { height: setSize(60) }]} numberOfLines={2}>{data.product_name}</Text>
+            <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -188,7 +171,7 @@ class RecommendCourse extends PureComponent<CourseProps> {
             <Image style={[styles.reCourseImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.image }}></Image>
           </View>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]}>{data.course_name}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mab5]} numberOfLines={1}>{data.course_name}</Text>
             <Text style={[mainStyle.c999, mainStyle.fs11]}>{data.reply}人报名</Text>
           </View>
         </View>

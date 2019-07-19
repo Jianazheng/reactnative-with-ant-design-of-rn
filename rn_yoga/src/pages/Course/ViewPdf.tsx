@@ -1,45 +1,46 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, WebView } from 'react-native';
-import {mainStyle,setSize,screenH, screenW} from '../../public/style/style';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import WebView from 'react-native-webview';
 
 
-interface Props {}
+interface Props { }
 
-@inject('courseStore','trainStore')
+@inject('courseStore', 'trainStore')
 @observer
 class ViewPdf extends React.Component<Props> {
   static navigationOptions = {
-    header:null
+    header: null
   }
 
-  constructor(props:Props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      
+
     };
   }
 
-  componentDidMount(){
-    
+  componentDidMount() {
+
   }
 
-  render(){
-    let {navigation} = this.props
-    let {params} = navigation.state
+  render() {
+    let { navigation } = this.props
+    let { params } = navigation.state
     return (
-      <View style={[mainStyle.flex1,mainStyle.bgcf7]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
-        navType="normal"
-        title={'在线预览'}
-        onPress={()=>{
-          this.props.navigation.goBack();
-        }}
+          navType="normal"
+          title={'在线预览'}
+          onPress={() => {
+            navigation.goBack();
+          }}
         ></NavTop>
-        <WebView 
-        style={[mainStyle.flex1]}
-        source={{uri:params.url}}
+        <WebView
+          style={[mainStyle.flex1]}
+          source={{ uri: params.url }}
         ></WebView>
       </View>
     )
@@ -47,7 +48,7 @@ class ViewPdf extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  
+
 })
 
 export default ViewPdf

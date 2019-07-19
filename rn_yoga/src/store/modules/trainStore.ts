@@ -108,6 +108,11 @@ class Train {
       }
       let response = await new Fetch('/train/base_info', 'GET', { id }, {});
       let trainInfo = response.data;
+      if (trainInfo.video_url) {
+        if (trainInfo.image_url) {
+          trainInfo.image_url.unshift(trainInfo.video_url)
+        }
+      }
       this.trainData.trainInfo = trainInfo;
       return response
     } catch (error) {

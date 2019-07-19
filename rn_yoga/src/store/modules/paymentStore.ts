@@ -3,6 +3,8 @@ import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
 import * as Wechat from 'react-native-wechat';
 import { Alert, DeviceEventEmitter } from 'react-native';
+import courseStore from './courseStore';
+import orderStore from './orderStore';
 
 class Payment {
   constructor() {
@@ -10,7 +12,7 @@ class Payment {
   }
   @observable paymentData = {
     payStatus: {},
-    orderBook: {}
+    orderBook: []
   }
 
   @computed get payStatus() {
@@ -46,6 +48,10 @@ class Payment {
                     resolve({ status: 1, message: '支付成功' })
                     //保存订单参数
                     this.paymentData.payStatus = { order_type, order_id }
+                    //刷新我的课程
+                    await courseStore.getOnlineCourseList()
+                    //刷新订单数
+                    await orderStore.getOrderNumber()
                   }
                   return false
                 }).catch((err) => {

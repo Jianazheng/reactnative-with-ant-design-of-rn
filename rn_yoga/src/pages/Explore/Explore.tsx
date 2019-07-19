@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { mainStyle, screenW, setSize } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
@@ -31,7 +31,8 @@ class Explore extends React.Component<Props, State> {
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      news: [{}, {}, {}, {}]
+      news: [{}, {}, {}, {}],
+      refreshing: false
     };
   }
 
@@ -47,15 +48,43 @@ class Explore extends React.Component<Props, State> {
     this.props.navigation.push(router);
   }
 
+  _onRefresh() {
+    this.setState({
+      refreshing: true
+    }, () => {
+      let { goodsStore, courseStore } = this.props;
+      goodsStore.getGoodsClassify();
+      goodsStore.getRecommendGoods();
+      courseStore.getClassify();
+      courseStore.getRecommendCourse()
+        .then(res => {
+          this.setState({
+            refreshing: false
+          })
+        })
+    })
+  }
+
   render() {
-    let { navigation, goodsStore, courseStore } = this.props;
-    let goodsClassify = goodsStore.goodsClassify;
-    let recommendGoods = goodsStore.recommendGoods;
-    let courseClassify = courseStore.classify;
-    let recommendCourses = courseStore.recommendCourse;
+    let { navigation, goodsStore, courseStore } = this.props
+    let { refreshing } = this.state
+    let goodsClassify = goodsStore.goodsClassify
+    let recommendGoods = goodsStore.recommendGoods
+    let courseClassify = courseStore.classify
+    let recommendCourses = courseStore.recommendCourse
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
-        <ScrollView style={[mainStyle.flex1]}>
+        <ScrollView
+          style={[mainStyle.flex1]}
+          refreshControl={(
+            <RefreshControl
+              tintColor={mainStyle.czt.color}
+              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+              refreshing={refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          )}
+        >
           <View style={[mainStyle.flex1, mainStyle.column]}>
             <View style={[mainStyle.flex1, mainStyle.pal15, mainStyle.mab15, mainStyle.column, mainStyle.bgcfff]}>
               <View style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter]}>

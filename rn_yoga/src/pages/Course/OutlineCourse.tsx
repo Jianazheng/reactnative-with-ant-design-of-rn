@@ -129,7 +129,7 @@ class OutlineCourse extends React.Component<Props> {
         >
           <View style={[mainStyle.pa15]}>
             <Image
-              style={[mainStyle.h400, mainStyle.mab15]}
+              style={[mainStyle.h400, { width: setSize(400) }, mainStyle.mab15, mainStyle.imgCover]}
               source={{ uri: trainCourseInfo.classcertificate }}
             ></Image>
             <BxButton
@@ -150,12 +150,19 @@ class OutlineCourse extends React.Component<Props> {
           visible={this.state.showJS}
         >
           <View style={[mainStyle.pa15, mainStyle.column]}>
-            <View style={[mainStyle.column]}>
+            <View style={[mainStyle.column, { minHeight: setSize(460) }]}>
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
                 <Image style={[styles.CourseInfoImage2, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + currentTeacher.avatar }}></Image>
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
-              <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
+              <ScrollView
+                scrollEnabled
+                nestedScrollEnabled
+                showsVerticalScrollIndicator={false}
+                style={[mainStyle.flex1]}
+              >
+                <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
+              </ScrollView>
             </View>
             <BxButton
               title={'关闭'}
@@ -232,7 +239,7 @@ class OutlineCourse extends React.Component<Props> {
                             <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mat5]}>有效期</Text>
                             <Text style={[mainStyle.fs12, mainStyle.c666]}>{splitStr(trainCourseInfo.train_start_time, ' ')}-{splitStr(trainCourseInfo.train_end_time, ' ')}</Text>
                           </View>
-                          <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mat5]}>{trainCourseInfo.status == 1 ? '已报到' : '未报到'}</Text>
+                          <Text style={[mainStyle.fs13, trainCourseInfo.isreport == 1 ? mainStyle.c333 : mainStyle.czt, mainStyle.mat5]}>{trainCourseInfo.isreport == 1 ? '已报到' : '未报到'}</Text>
                         </View>
                       </View>
                     </View>

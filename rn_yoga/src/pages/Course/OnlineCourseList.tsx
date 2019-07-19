@@ -108,8 +108,8 @@ class OnlineCourseList extends React.Component<Props, State> {
 
 
   render() {
-    let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state;
-    let { navigation, courseStore } = this.props;
+    let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
+    let { navigation, courseStore } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -269,7 +269,7 @@ class OnlineCourseList extends React.Component<Props, State> {
                 listItem={({ item, index }) => <GoodsItem navigation={navigation} key={index.toString()} data={item} index={index}></GoodsItem>}
                 nomore={false}
                 colNumber={1}
-                loading={courseStore.courseList.total == null || courseStore.courseList.total > courseStore.courseList.data.length}
+                loading={courseStore.courseList.total == null || (courseStore.courseList.total > courseStore.courseList.data.length)}
                 onLoadmore={() => {
                   courseStore.getCourseList(false);
                 }}
@@ -280,7 +280,7 @@ class OnlineCourseList extends React.Component<Props, State> {
           }
         </View>
 
-      </View>
+      </View >
     )
   }
 }

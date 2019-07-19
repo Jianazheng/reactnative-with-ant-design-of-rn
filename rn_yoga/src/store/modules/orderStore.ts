@@ -128,6 +128,8 @@ class Order {
       this.orderData.orderInfo = {}
       let response = await new Fetch('/user/cancel_order', 'POST', { order_id }, {})
       Toast.info(response.message, 1.4, undefined, false)
+      //重新获取订单数量
+      this.getOrderNumber()
       return response
     } catch (error) {
       return null
@@ -163,6 +165,8 @@ class Order {
       let { orderStatus: { id, type } } = this.orderData
       let response = await new Fetch('/order/submit_refund', 'POST', { order_id: id, type, refund_reason }, {})
       Toast.info(response.message, 1.4, undefined, false)
+      //重新获取订单数量
+      this.getOrderNumber()
       return response
     } catch (error) {
       return null
@@ -173,6 +177,8 @@ class Order {
     try {
       let response = await new Fetch('/order/cancel_refund_order', 'POST', { order_id }, {})
       Toast.info(response.message, 1.4, undefined, false)
+      //重新获取订单数量
+      this.getOrderNumber()
       return response
     } catch (error) {
       return null
@@ -184,6 +190,8 @@ class Order {
       let { orderStatus: { id } } = this.orderData
       let response = await new Fetch('/order/send_product_back', 'POST', { order_id: id, ...params }, {})
       Toast.info(response.message, 1.4, undefined, false)
+      //重新获取订单数量
+      this.getOrderNumber()
       return response
     } catch (error) {
       return null

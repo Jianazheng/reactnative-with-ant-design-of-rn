@@ -25,11 +25,7 @@ class Public {
         total: null
       }
     ],
-    notiveList: {
-      data: [],
-      current_page: 1,
-      total: null
-    },
+    notiveList: null,
     myfinish: {
       online: {
         data: [],
@@ -71,7 +67,7 @@ class Public {
     try {
       let response = await new Fetch('/announcement/list', 'GET', { type: 1 }, {})
       let notiveList = response.data
-      console.log(notiveList)
+      this.publicData.notiveList = notiveList
       return response.data
     } catch (error) {
       return null

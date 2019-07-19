@@ -19,7 +19,8 @@ class Goods {
       data: [],
       current_page: 1,
       total: null
-    }
+    },
+    keyword: ''
   }
 
   @computed get goodsInfo() {
@@ -110,11 +111,12 @@ class Goods {
 
   @action async getGoodslist(reload: boolean) {
     try {
-      let { goodslist, cate, sort } = this.goodsData
+      let { goodslist, cate, sort, keyword } = this.goodsData
       let params = {
         cate_id: cate.id,
         sort: sort.sort,
-        page: goodslist.current_page
+        page: goodslist.current_page,
+        keyword
       }
       if (reload) {
         //重置列表
@@ -139,6 +141,11 @@ class Goods {
     } catch (error) {
       return null
     }
+  }
+
+  @action setKeyword(keyword: string) {
+    this.goodsData.keyword = keyword
+    this.getGoodslist(true)
   }
 
   @action async setCate(id: string, product_category_name: string) {

@@ -14,6 +14,7 @@ import { observer, inject } from 'mobx-react';
 import { splitStr } from '../../tools/function';
 import { ActivityIndicator } from '@ant-design/react-native';
 
+
 /**
  * 培训课程详情
  */
@@ -274,7 +275,7 @@ class TrainInfo extends React.Component<Props, State> {
               <CourseTeacher></CourseTeacher>
             </View>
             <View style={[mainStyle.mab40]}>
-              <CourseArtInfo></CourseArtInfo>
+              <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.mab40]}>
               <RelatedCourse navigation={navigation}></RelatedCourse>

@@ -208,7 +208,7 @@ class Course {
       let params = { page: this.onlineCourse.page }
       let response = await new Fetch('/online/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
-      if (onlineCourse.data.length >= resd.total) return response
+      if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
       let newdata = onlineCourse.data.concat(resd.data)
       onlineCourse.data = newdata
       onlineCourse.total = resd.total
@@ -218,6 +218,7 @@ class Course {
       this.courseData.onlineCourse = onlineCourse
       return response
     } catch (error) {
+      console.log(error)
       return null
     }
   }

@@ -78,7 +78,7 @@ class BxTabView extends React.Component<Props, State> {
               return (
                 <View key={i} style={[mainStyle.flex1, { height: scrollHeight + paddingBottom }]}>
                   <ScrollView
-                    style={[mainStyle.flex1]}
+                    style={[mainStyle.flex1, { height: scrollHeight + paddingBottom }]}
                     scrollEnabled={canScroll}
                     nestedScrollEnabled={true}>
                     {child}

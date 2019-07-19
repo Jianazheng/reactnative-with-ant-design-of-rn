@@ -59,8 +59,6 @@ class WxPay extends React.Component<Props, State> {
             DeviceEventEmitter.emit('TORELOADORDER', params.from)
           }
         }
-        //刷新订单数
-        orderStore.getOrderNumber()
       })
       .catch(err => {
         setTimeout(() => {

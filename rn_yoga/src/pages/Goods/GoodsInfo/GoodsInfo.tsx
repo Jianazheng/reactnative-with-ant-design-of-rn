@@ -177,7 +177,7 @@ class GoodsInfo extends React.Component<Props, State> {
             tabs={[{ title: '商品详情' }, { title: '参数规格' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.mab40, mainStyle.flex1]}>
+            <View style={[mainStyle.mab40, mainStyle.flex1, { height: height - setSize(160) }]}>
               <BxRichText text={goodsInfo.detail}></BxRichText>
             </View>
             <View style={[mainStyle.mab40, mainStyle.flex1, mainStyle.pa15]}>

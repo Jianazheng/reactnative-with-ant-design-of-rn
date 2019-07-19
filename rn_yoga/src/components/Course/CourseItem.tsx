@@ -171,9 +171,9 @@ class CourseListItem extends React.Component<CourseListItemProps>{
             ? <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
               <View>
                 {
-                  data.status == 1
-                    ? <Text style={[mainStyle.fs12, mainStyle.c333]}>已报到</Text>
-                    : <Text style={[mainStyle.fs12, mainStyle.c999]}>未报到</Text>
+                  data.isreport == 1
+                    ? <Text style={[mainStyle.fs12, mainStyle.c999]}>已报到</Text>
+                    : <Text style={[mainStyle.fs12, mainStyle.czt]}>未报到</Text>
                 }
               </View>
             </TouchableOpacity>

@@ -17,11 +17,11 @@ class CourseArtInfo extends React.Component<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { trainStore } = this.props;
+    let { trainStore, height } = this.props;
     let trainInfo = trainStore.trainInfo
     return (
-      <View style={[mainStyle.pa15]}>
-        <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10]}>
+      <View style={[mainStyle.pa15, mainStyle.flex1, { height: height }]}>
+        <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mab15, mainStyle.mat10]}>
           <Text style={[mainStyle.fs15, mainStyle.c333]}>课程详情</Text>
         </View>
         <BxRichText text={trainInfo.detail}></BxRichText>

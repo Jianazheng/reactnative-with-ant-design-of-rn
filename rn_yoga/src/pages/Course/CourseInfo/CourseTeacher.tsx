@@ -15,7 +15,7 @@ class CourseTeacher extends React.Component<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { teather } = this.props
+    let { teacher } = this.props
     return (
       <View style={[mainStyle.pa30, mainStyle.patb10, mainStyle.flex1]}>
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10, mainStyle.mab10]}>
@@ -24,7 +24,7 @@ class CourseTeacher extends React.Component<CourseInfoItemProps>{
         <BxListView
           nomore={true}
           colNumber={1}
-          listData={teather}
+          listData={teacher}
           listItem={({ item, index }) => (<CourseTeacherItem data={item}></CourseTeacherItem>)}>
         </BxListView>
       </View>

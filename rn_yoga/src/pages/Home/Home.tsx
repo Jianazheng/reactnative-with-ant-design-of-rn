@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -49,7 +49,8 @@ class Home extends React.Component<Props, State> {
     this.state = {
       tabTop: 667,
       tabIndex: 0,
-      canScroll: false
+      canScroll: false,
+      refreshing: false
     };
   }
 
@@ -98,8 +99,24 @@ class Home extends React.Component<Props, State> {
     }
   }
 
+  _onRefresh() {
+    this.setState({
+      refreshing: true
+    }, () => {
+      let { homeStore } = this.props
+      homeStore.getBanner()
+      homeStore.getAnnouncement()
+      homeStore.getTrainCate()
+        .then(res => {
+          this.setState({
+            refreshing: false
+          })
+        })
+    })
+  }
+
   render() {
-    let { canScroll, tabIndex } = this.state;
+    let { canScroll, tabIndex, refreshing } = this.state;
     let { navigation, homeStore } = this.props;
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf2]}>
@@ -108,6 +125,14 @@ class Home extends React.Component<Props, State> {
           onScroll={(e) => {
             this.handleScroll(e);
           }}
+          refreshControl={(
+            <RefreshControl
+              tintColor={mainStyle.czt.color}
+              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+              refreshing={refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          )}
         >
           <View onLayout={(e) => {
             this.setState({

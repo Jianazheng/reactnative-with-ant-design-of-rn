@@ -39,7 +39,8 @@ class PaySuccess extends React.Component<Props, State> {
   }
 
   render() {
-    let { navigation, paymentStore } = this.props
+    let { navigation, paymentStore: { orderBook } } = this.props
+    console.log(orderBook)
     return (
       <View style={[mainStyle.column, mainStyle.flex1]}>
         <NavTop
@@ -86,7 +87,7 @@ class PaySuccess extends React.Component<Props, State> {
               ></BxButton>
             </View>
           </View>
-          <View style={[mainStyle.column, mainStyle.bgcfff, mainStyle.mab15]}>
+          {/* <View style={[mainStyle.column, mainStyle.bgcfff, mainStyle.mab15]}>
             <View style={[mainStyle.brb1f2, mainStyle.patb15]}>
               <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter, mainStyle.palr15]}>
                 <Text style={[mainStyle.fs14, mainStyle.c333]}>特惠活动</Text>
@@ -103,7 +104,7 @@ class PaySuccess extends React.Component<Props, State> {
                 <View style={[mainStyle.bgcc2, styles.coursePz, mainStyle.mal15]}></View>
               </View>
             </View>
-          </View>
+          </View> */}
           <View style={[mainStyle.column, mainStyle.bgcfff, mainStyle.mab15]}>
             <View style={[mainStyle.brb1f2, mainStyle.patb15]}>
               <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter, mainStyle.palr15]}>
@@ -113,77 +114,48 @@ class PaySuccess extends React.Component<Props, State> {
             <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
               <Text style={[mainStyle.c999, mainStyle.fs13, mainStyle.mat15]}>
                 以下课程提供了预定服务，可在
-                <Text style={[mainStyle.c666]}>【上课】</Text>
+                <Text style={[mainStyle.c333]}>【我的培训课】</Text>
                 中选择预定
               </Text>
-              <View style={[]}>
-                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
-                  <Image
-                    style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }]}
-                    mode="widthFix"
-                    source={{ uri: 'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg' }}>
-                  </Image>
-                  <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>高阶体式提升计划</Text>
-                    <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mat10]}>
-                      <View style={[mainStyle.flex1]}>
-                        <Checkbox
-                          checked={this.state.checkBox1}
-                          style={{ color: mainStyle.czt.color }}
-                          onChange={event => {
-                            this.setState({ checkBox1: event.target.checked });
-                          }}>
-                          <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>座位</Text>
-                        </Checkbox>
+              <View style={[mainStyle.column]}>
+                {
+                  orderBook.map((val, i) =>
+                    <View key={i} style={[]}>
+                      <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
+                        <Image
+                          style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
+                          mode="widthFix"
+                          source={{ uri: 'http://' + orderBook.good_img }}>
+                        </Image>
+                        <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
+                          <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>{orderBook.good_name}</Text>
+                          <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mat10]}>
+                            {
+                              val.reserve.map((ser, index) =>
+                                <View key={index} style={[mainStyle.flex1, { width: screenW - setSize(90) - imgw }]}>
+                                  <Checkbox
+                                    style={{ color: mainStyle.czt.color }}>
+                                    <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
+                                  </Checkbox>
+                                </View>
+                              )
+                            }
+                          </View>
+                        </View>
                       </View>
-                      <View style={[mainStyle.flex1]}>
-                        <Checkbox
-                          checked={this.state.checkBox1}
-                          style={{ color: mainStyle.czt.color }}
-                          onChange={event => {
-                            this.setState({ checkBox1: event.target.checked });
-                          }}>
-                          <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>餐点</Text>
-                        </Checkbox>
-                      </View>
+                      <BxButton
+                        title={'去预定'}
+                        colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                        btnstyle={[mainStyle.mat15, mainStyle.flex1,]}
+                        borderRadius={setSize(4)}
+                        textstyle={[mainStyle.cfff, mainStyle.fs13]}
+                        onClick={() => {
+                          navigation.navigate('OutlineCourseReserve', { id: val.my_course_id })
+                        }}
+                      ></BxButton>
                     </View>
-                    <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1]}>
-                      <View style={[mainStyle.flex1]}>
-                        <Checkbox
-                          checked={this.state.checkBox1}
-                          style={{ color: mainStyle.czt.color }}
-                          onChange={event => {
-                            this.setState({ checkBox1: event.target.checked });
-                          }}>
-                          <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>座位</Text>
-                        </Checkbox>
-                      </View>
-                      <View style={[mainStyle.flex1]}>
-                        <Checkbox
-                          checked={this.state.checkBox1}
-                          style={{ color: mainStyle.czt.color }}
-                          onChange={event => {
-                            this.setState({ checkBox1: event.target.checked });
-                          }}>
-                          <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>餐点</Text>
-                        </Checkbox>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <BxButton
-                  title={'去预定'}
-                  plain
-                  color={mainStyle.czt.color}
-                  btnstyle={[mainStyle.mat15, mainStyle.flex1,
-                  {
-                    borderWidth: setSize(1.2),
-                    borderRadius: setSize(4),
-                  }
-                  ]}
-                  textstyle={[mainStyle.czt, mainStyle.fs13]}
-                  onClick={() => { }}
-                ></BxButton>
+                  )
+                }
               </View>
             </View>
           </View>

@@ -4,6 +4,7 @@ import { mainStyle, setSize } from '../../public/style/style';
 import BxListView from '../../components/Pubilc/ListView';
 import TabSelect from '../../components/Pubilc/TabSelect';
 import { observer, inject } from 'mobx-react';
+import { splitStr } from '../../tools/function';
 
 
 let { width, height } = Dimensions.get('window');
@@ -133,7 +134,7 @@ class CourseItem extends PureComponent<CourseItemProps> {
           <View style={[mainStyle.column, mainStyle.mat10, mainStyle.mab10, mainStyle.flex1]}>
             <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]}>原价：<Text style={[mainStyle.fs15]}>￥{data.price}</Text></Text>
             <Text style={[mainStyle.mab5]}>
-              <Text style={[mainStyle.c666, mainStyle.fs13]}>6月10日前报名特惠价：</Text>
+              <Text style={[mainStyle.c666, mainStyle.fs13]}>{splitStr(data.reg_end_time, ' ')}前报名特惠价：</Text>
               <Text style={[mainStyle.czt, mainStyle.fs15]}>{data.price}</Text>
             </Text>
             <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.mab5]}>

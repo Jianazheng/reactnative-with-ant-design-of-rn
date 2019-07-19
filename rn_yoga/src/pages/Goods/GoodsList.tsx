@@ -91,11 +91,14 @@ class GoodsList extends React.Component<Props, State> {
     })
   }
 
-
+  handleSearch() {
+    let { goodsStore, keyword } = this.props
+    goodsStore.setKeyword(keyword)
+  }
 
 
   render() {
-    let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow } = this.state
+    let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
     let { navigation, goodsStore } = this.props
     let goodslist = goodsStore.goodslist
     return (
@@ -129,9 +132,17 @@ class GoodsList extends React.Component<Props, State> {
           <HomeSearchBar
             placeholder={'搜索商品'}
             autoFocus={false}
+            onChange={(e) => {
+              this.setState({ keyword: e })
+            }}
+            onSubmit={(e) => {
+              this.handleSearch(e)
+            }}
             leftBtn={(
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
-                <TouchableOpacity style={[mainStyle.mal10]}>
+                <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
+                  this.handleSearch(keyword)
+                }}>
                   <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {

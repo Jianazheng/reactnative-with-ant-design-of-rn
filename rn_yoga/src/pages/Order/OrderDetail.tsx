@@ -157,7 +157,7 @@ class OrderDetail extends React.Component<Props, State> {
                   <Text style={[mainStyle.c333, mainStyle.fs12]}>订单状态</Text>
                   {orderInfo.status == 1 ? <Text style={[mainStyle.fs12, mainStyle.c333]}>已完成</Text> : null}
                   {orderInfo.status == 2 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待支付</Text> : null}
-                  {orderInfo.status == 3 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待发货</Text> : null}
+                  {orderInfo.status == 3 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>{orderInfo.type == 2 ? '待上课' : '待发货'}</Text> : null}
                   {orderInfo.status == 4 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>已发货</Text> : null}
                   {orderInfo.status == 5 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>售后</Text> : null}
                   {orderInfo.status == 6 ? <Text style={[mainStyle.fs12, mainStyle.c999]}>已取消</Text> : null}

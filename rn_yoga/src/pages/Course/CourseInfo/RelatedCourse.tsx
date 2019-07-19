@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { mainStyle, contentPadding, setSize } from '../../../public/style/style';
+import React from 'react';
+import { View, Text } from 'react-native';
+import { mainStyle, setSize } from '../../../public/style/style';
 import { CourseInfoItem } from '../../../components/Course/CourseItem';
 import BxListView from '../../../components/Pubilc/ListView';
-import { observer, inject } from 'mobx-react';
+
 
 interface CourseInfoItemProps {
 

@@ -60,7 +60,7 @@ class MyCourseList extends React.Component<Props> {
                 onLoadmore={() => {
                   courseStore.getOnlineCourse()
                 }}
-                loading={onlineCourse.total == null || onlineCourse.total > onlineCourse.data.length}
+                loading={onlineCourse.total == null || (onlineCourse.total > onlineCourse.data.length && onlineCourse.total >= 1)}
                 colNumber={1}
                 listData={onlineCourse.data}
                 listItem={({ item, index }) => (
@@ -74,7 +74,7 @@ class MyCourseList extends React.Component<Props> {
                 onLoadmore={() => {
                   trainStore.getTrainCourse()
                 }}
-                loading={trainCourse.total == null || trainCourse.total > trainCourse.data.length}
+                loading={trainCourse.total == null || (trainCourse.total > trainCourse.data.length && trainCourse.total >= 1)}
                 colNumber={1}
                 listData={trainCourse.data}
                 listItem={({ item, index }) => (

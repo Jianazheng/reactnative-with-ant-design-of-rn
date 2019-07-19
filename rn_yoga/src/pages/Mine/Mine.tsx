@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer, inject } from 'mobx-react';
@@ -29,7 +29,7 @@ class Mine extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      value: ''
+      refreshing: false
     };
   }
 
@@ -55,11 +55,36 @@ class Mine extends React.Component<Props> {
     navigation.navigate('Login', { from: 'Mine' });
   }
 
+  _onRefresh() {
+    this.setState({
+      refreshing: true
+    }, () => {
+      let { userStore, orderStore } = this.props
+      userStore.GetUserInfo()
+      orderStore.getOrderNumber()
+        .then(res => {
+          this.setState({
+            refreshing: false
+          })
+        })
+    })
+  }
+
   render() {
     let { userStore: { userInfo }, orderStore: { orderNumber } } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
-        <ScrollView style={[mainStyle.flex1, mainStyle.positonre]}>
+        <ScrollView
+          style={[mainStyle.flex1, mainStyle.positonre]}
+          refreshControl={(
+            <RefreshControl
+              tintColor={mainStyle.czt.color}
+              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          )}
+        >
           <View style={[mainStyle.flex1, mainStyle.positonre]}>
             <View style={[styles.userbg]}>
               <LinearGradient
@@ -91,8 +116,14 @@ class Mine extends React.Component<Props> {
                     : null}
                 </View>
               </TouchableOpacity>
-              <View style={[mainStyle.column, mainStyle.aiEnd]}>
-                <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.cfff]}>&#xe616;</Text>
+              <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mal20]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.goto('NotiveList', {})
+                  }}
+                >
+                  <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.cfff, mainStyle.patb15]}>&#xe616;</Text>
+                </TouchableOpacity>
                 {/* <Text style={[mainStyle.lh44,mainStyle.mat10]}>
                   <Text style={[mainStyle.icon,mainStyle.fs16,mainStyle.cfff]}>&#xe638;</Text>
                   <Text style={[mainStyle.icon,mainStyle.fs14,mainStyle.cfff]}> 4300分</Text>

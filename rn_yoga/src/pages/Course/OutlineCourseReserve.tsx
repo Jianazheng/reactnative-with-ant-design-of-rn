@@ -77,7 +77,7 @@ class OutlineCourseReserve extends React.Component<Props> {
                   <Text style={[mainStyle.c999, mainStyle.fs13, mainStyle.lh36]}>此课程提供以下预定服务，对预定价格或时间有疑问，可查看培训课程介绍，或咨询在线客服</Text>
                   <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
                     <TouchableOpacity onPress={() => {
-                      this.goto('CourseInfo', { id: trainService.course_id })
+                      this.goto('TrainInfo', { id: trainService.course_id })
                     }}>
                       <View style={[mainStyle.row, mainStyle.aiCenter]}>
                         <Text style={[mainStyle.icon, mainStyle.czt]}>&#xe623;</Text>

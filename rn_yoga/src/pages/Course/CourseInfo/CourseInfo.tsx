@@ -41,7 +41,7 @@ class CourseInfo extends React.Component<Props, State> {
     super(props);
     this.state = {
       clicking: false,
-      tabTop: 667,
+      tabTop: screenH,
       canScroll: false,
       showApplyNotice: false,
       showCartInfoDetails: false,
@@ -187,7 +187,7 @@ class CourseInfo extends React.Component<Props, State> {
           </View>
 
           <BxTabView
-            height={height - setSize(240)}
+            height={height - setSize(120)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}
@@ -198,7 +198,7 @@ class CourseInfo extends React.Component<Props, State> {
               <CourseTeacher teacher={courseInfo.teacher}></CourseTeacher>
             </View>
             <View style={[mainStyle.mab40]}>
-              <CourseArtInfo info={courseInfo.detail}></CourseArtInfo>
+              <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.mab40]}>
               <RelatedCourse course={courseInfo.relate_course}></RelatedCourse>

@@ -17,9 +17,9 @@ class CourseArtInfo extends React.Component<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { info } = this.props;
+    let { info, height } = this.props;
     return (
-      <View style={[mainStyle.pa15]}>
+      <View style={[mainStyle.flex1, { height }]}>
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10]}>
           <Text style={[mainStyle.fs15, mainStyle.c333]}>课程详情</Text>
         </View>

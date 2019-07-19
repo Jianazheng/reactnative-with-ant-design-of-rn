@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, WebView, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
@@ -26,9 +26,6 @@ class NotiveList extends React.Component<Props> {
   componentDidMount() {
     let { navigation, publicStore } = this.props
     publicStore.getNotiveList()
-      .then(res => {
-
-      })
   }
 
   handleLoadList(reload: boolean) {
@@ -48,18 +45,26 @@ class NotiveList extends React.Component<Props> {
         ></NavTop>
         <BxListView
           pab={setSize(20)}
-          listData={notiveList.data.slice()}
+          listData={notiveList}
           colNumber={1}
           nomore={false}
-          loading={notiveList.total == null || notiveList.total > notiveList.data.length}
+          loading={notiveList == null}
           onLoadmore={() => {
             this.handleLoadList(false)
           }}
           listItem={({ item, index }) =>
             <TouchableOpacity
+              style={[mainStyle.mab15]}
+              onPress={() => {
+                navigation.navigate('NotiveDetail', { id: item.id })
+              }}
             >
-              <View>
-                <Image></Image>
+              <View style={[mainStyle.pa15, mainStyle.flex1, mainStyle.column, mainStyle.bgcfff]}>
+                <Image
+                  style={[mainStyle.h300, mainStyle.imgCover, mainStyle.bgcf2, mainStyle.mab15, { width: screenW - setSize(60), borderRadius: setSize(6) }]}
+                  source={{ uri: 'http://' + item.image }}
+                ></Image>
+                <Text style={[mainStyle.fs13, mainStyle.c333]} numberOfLines={2}>{item.title}</Text>
               </View>
             </TouchableOpacity>
           }
