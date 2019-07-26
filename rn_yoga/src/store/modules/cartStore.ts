@@ -336,8 +336,9 @@ class Cart {
           //保存地址
           if (response.data.address.region) {
             response.data.address.region = JSON.parse(response.data.address.region)
-            addressStore.setAddress(response.data.address)
           }
+          addressStore.setAddress(response.data.address)
+
         }
       }
       return response.data

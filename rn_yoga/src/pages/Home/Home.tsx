@@ -63,6 +63,7 @@ class Home extends React.Component<Props, State> {
     homeStore.getBanner()
     homeStore.getAnnouncement()
     homeStore.getTrainCate()
+    homeStore.getupdate()
     RNStorage.load({
       key: 'token',
     }).then(res => {
@@ -104,6 +105,7 @@ class Home extends React.Component<Props, State> {
       refreshing: true
     }, () => {
       let { homeStore } = this.props
+      homeStore.getupdate()
       homeStore.getBanner()
       homeStore.getAnnouncement()
       homeStore.getTrainCate()

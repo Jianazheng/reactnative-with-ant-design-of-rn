@@ -239,7 +239,8 @@ class AddressOperate extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   input: {
     padding: 0,
-    color: mainStyle.c333.color
+    color: mainStyle.c333.color,
+    width: '100%'
   }
 })
 

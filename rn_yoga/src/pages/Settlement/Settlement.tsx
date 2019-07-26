@@ -35,12 +35,15 @@ class Settlement extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    let { cartStore } = this.props
+    let { navigation, cartStore } = this.props
+    let { params } = navigation.state
     this.setState({
       showLoading: false,
     })
     this.TORELOADCARTDATA = DeviceEventEmitter.addListener('TORELOADCARTDATA', async res => {
-      await cartStore.settlement()
+      if (params.from != 'fastbuy') {
+        await cartStore.settlement()
+      }
     })
   }
 

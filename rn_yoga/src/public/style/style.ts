@@ -37,6 +37,7 @@ const mainStyle = StyleSheet.create({
     pal15: { paddingLeft: setSize(30) },
     pal20: { paddingLeft: setSize(40) },
     pab15: { paddingBottom: setSize(30) },
+    pab40: { paddingBottom: setSize(80) },
     palr10: { paddingLeft: setSize(20), paddingRight: setSize(20) },
     palr15: { paddingLeft: setSize(30), paddingRight: setSize(30) },
     palr20: { paddingLeft: setSize(40), paddingRight: setSize(40) },

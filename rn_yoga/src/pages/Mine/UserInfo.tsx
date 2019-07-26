@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
 import { Modal } from '@ant-design/react-native';
 import { mainStyle, screenH } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -76,6 +76,15 @@ class UserInfo extends React.Component<Props, State> {
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
               <Text style={[mainStyle.fs15, mainStyle.c666]}>昵称</Text>
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
+                {/* <TextInput
+                  value={userInfo.username}
+                  placeholderTextColor={mainStyle.c999.color}
+                  style={[styles.input]}
+                  placeholder={"请输入收货人姓名"}
+                  onChangeText={userInfo => {
+                    this.setState({ userInfo })
+                  }}
+                ></TextInput> */}
                 <Text style={[mainStyle.c333, mainStyle.fs15]}>{userInfo.username}</Text>
               </View>
             </View>

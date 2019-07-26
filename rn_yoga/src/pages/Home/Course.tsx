@@ -119,43 +119,50 @@ class CourseItem extends PureComponent<CourseItemProps> {
         <TouchableOpacity
           style={[mainStyle.column, mainStyle.jcBetween, styles.CourseItemInfo, mainStyle.bgcfff]}
           onPress={() => {
-            this.goto('TrainInfo', { id: data.id, type: 'all' })
+            if (data.status == 1) {
+              this.goto('TrainInfo', { id: data.id, type: 'all' })
+            }
           }}
         >
           <View style={[mainStyle.flex1]}>
             <View style={[mainStyle.column]}>
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiStart, mainStyle.mab5]}>
-                <Text style={[mainStyle.c333, mainStyle.fs14]} numberOfLines={2}>{data.train_name}</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs14]} numberOfLines={2}>{data.train_name}{data.status == 1 ? '(' + data.sku_name + ')' : ''}</Text>
                 <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
               </View>
               <Text style={[mainStyle.c999, mainStyle.fs12]} numberOfLines={2}>{data.train_introduction}</Text>
             </View>
           </View>
-          <View style={[mainStyle.column, mainStyle.mat10, mainStyle.mab10, mainStyle.flex1]}>
-            <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]}>原价：<Text style={[mainStyle.fs15]}>￥{data.price}</Text></Text>
-            <Text style={[mainStyle.mab5]}>
-              <Text style={[mainStyle.c666, mainStyle.fs13]}>{splitStr(data.reg_end_time, ' ')}前报名特惠价：</Text>
-              <Text style={[mainStyle.czt, mainStyle.fs15]}>{data.price}</Text>
-            </Text>
-            <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.mab5]}>
-              {
-                data.dijia != '' && data.dijia != undefined && data.dijia != null
-                  ? <Text style={[mainStyle.fs12, mainStyle.bgcaa4, mainStyle.c8d0, styles.lowPrice, mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
-                  : null
-              }
-              {
-                data.promotion.length > 0
-                  ?
-                  <Text style={[mainStyle.fs13, mainStyle.czt]}>查看特惠活动</Text>
-                  :
-                  null
-              }
+          {data.status == 1 ?
+            <View>
+              <View style={[mainStyle.column, mainStyle.mat10, mainStyle.mab10, mainStyle.flex1]}>
+                <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]}>原价：<Text style={[mainStyle.fs15]}>￥{data.price}</Text></Text>
+                <Text style={[mainStyle.mab5]}>
+                  <Text style={[mainStyle.c666, mainStyle.fs13]}>{splitStr(data.promotion_time, ' ')}前报名特惠价：</Text>
+                  <Text style={[mainStyle.czt, mainStyle.fs15]}>{data.before_promotion_time}</Text>
+                </Text>
+                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.mab5]}>
+                  {
+                    data.dijia != '' && data.dijia != undefined && data.dijia != null
+                      ? <Text style={[mainStyle.fs12, mainStyle.bgcaa4, mainStyle.c8d0, styles.lowPrice, mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
+                      : null
+                  }
+                  {
+                    data.promotion.length > 0
+                      ?
+                      <Text style={[mainStyle.fs13, mainStyle.czt]}>查看特惠活动</Text>
+                      :
+                      null
+                  }
+                </View>
+              </View>
+              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.fs13, mainStyle.c999]}>截止报名日期：{data.reg_end_time}</Text>
+                <Text style={[mainStyle.fs13, mainStyle.c999]}>已报名{data.apply_num}人</Text>
+              </View>
             </View>
-          </View>
-          <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
-            <Text style={[mainStyle.fs13, mainStyle.c999]}>截止报名日期：{data.reg_end_time}</Text>
-            <Text style={[mainStyle.fs13, mainStyle.c999]}>已报名{data.apply_num}人</Text>
-          </View>
+            : <View style={[mainStyle.column, mainStyle.mat10, mainStyle.flex1]}><Text style={[mainStyle.fs14, mainStyle.czt]}>预售中</Text></View>
+          }
         </TouchableOpacity>
       </View>
     )

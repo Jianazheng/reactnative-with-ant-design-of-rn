@@ -41,7 +41,7 @@ class HomeSearchBar extends React.Component<Props> {
             autoFocus={this.props.autoFocus || false}
             style={[styles.input, mainStyle.flex1, mainStyle.fs14]}
             placeholderTextColor={mainStyle.c999.color}
-            placeholder={this.props.placeholder || '搜索培训课堂'}
+            placeholder={this.props.placeholder || '搜索培训课程'}
             onChangeText={(val) => {
               this.onChange(val);
             }}

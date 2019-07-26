@@ -81,6 +81,7 @@ class MyCourseList extends React.Component<Props> {
                   <CourseListItem key={index} data={item} navigation={navigation} type='outline'></CourseListItem>
                 )}
               ></BxListView>
+
           }
         </View>
       </View>

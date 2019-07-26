@@ -111,7 +111,7 @@ class GoodsInfo extends React.Component<Props, State> {
     let { goodsStore, navigation } = this.props;
     let goodsInfo = goodsStore.goodsInfo
     return (
-      <View style={[mainStyle.column, mainStyle.flex1]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
         <NavTop
           navType="normal"
           title="商品详情"

@@ -101,6 +101,9 @@ class TrainInfo extends React.Component<Props, State> {
           if (fastbuy) {//立即购买
             cartStore.fastBuy(selectData)
               .then(res => {
+                this.setState({
+                  clicking: false
+                })
                 navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
               })
           } else {//加入购物车
@@ -152,7 +155,7 @@ class TrainInfo extends React.Component<Props, State> {
     let promotionInfo = trainStore.promotionInfo
     let frontInfo = trainStore.frontInfo
     return (
-      <View style={[mainStyle.column, mainStyle.flex1]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
         <NavTop
           navType="normal"
           title="培训课程详情"
@@ -322,7 +325,7 @@ class TrainInfo extends React.Component<Props, State> {
                 start={{ x: 1, y: 1 }}
                 end={{ x: 0, y: 0 }}
                 style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.flex1]}>
-                <Text style={[mainStyle.cfff, mainStyle.fs15]}>立即购买</Text>
+                <Text style={[mainStyle.cfff, mainStyle.fs15]}>立即报名</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>

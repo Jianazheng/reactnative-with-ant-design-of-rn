@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
+import { string } from 'prop-types';
 
 class Address {
   constructor() {
@@ -66,8 +67,8 @@ class Address {
           addressArr[i].region = []
         }
       }
-      this.addressData.addressArr = response.data.data
-      return this.addressData.addressArr
+      this.addressData.addressArr = addressArr;
+      return response
     } catch (error) {
       return null
     }

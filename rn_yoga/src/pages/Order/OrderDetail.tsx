@@ -128,7 +128,7 @@ class OrderDetail extends React.Component<Props, State> {
   render() {
     let { showLoading } = this.state
     let { navigation, orderStore: { orderInfo } } = this.props
-    let address = orderInfo.status == 2 ? orderInfo.address ? JSON.parse(orderInfo.address) : {} : {}
+    let address = orderInfo.type == 1 ? orderInfo.address ? JSON.parse(orderInfo.address) : {} : {}
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop

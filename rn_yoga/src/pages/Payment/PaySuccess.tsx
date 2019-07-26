@@ -105,60 +105,63 @@ class PaySuccess extends React.Component<Props, State> {
               </View>
             </View>
           </View> */}
-          <View style={[mainStyle.column, mainStyle.bgcfff, mainStyle.mab15]}>
-            <View style={[mainStyle.brb1f2, mainStyle.patb15]}>
-              <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter, mainStyle.palr15]}>
-                <Text style={[mainStyle.fs14, mainStyle.c333]}>预定服务</Text>
-              </View>
-            </View>
-            <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13, mainStyle.mat15]}>
-                以下课程提供了预定服务，可在
+          {
+            orderBook.length > 0 ?
+              <View style={[mainStyle.column, mainStyle.bgcfff, mainStyle.mab15]}>
+                <View style={[mainStyle.brb1f2, mainStyle.patb15]}>
+                  <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter, mainStyle.palr15]}>
+                    <Text style={[mainStyle.fs14, mainStyle.c333]}>预定服务</Text>
+                  </View>
+                </View>
+                <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
+                  <Text style={[mainStyle.c999, mainStyle.fs13, mainStyle.mat15]}>
+                    以下课程提供了预定服务，可在
                 <Text style={[mainStyle.c333]}>【我的培训课】</Text>
-                中选择预定
+                    中选择预定
               </Text>
-              <View style={[mainStyle.column]}>
-                {
-                  orderBook.map((val, i) =>
-                    <View key={i} style={[]}>
-                      <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
-                        <Image
-                          style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
-                          mode="widthFix"
-                          source={{ uri: 'http://' + orderBook.good_img }}>
-                        </Image>
-                        <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                          <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>{orderBook.good_name}</Text>
-                          <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mat10]}>
-                            {
-                              val.reserve.map((ser, index) =>
-                                <View key={index} style={[mainStyle.flex1, { width: screenW - setSize(90) - imgw }]}>
-                                  <Checkbox
-                                    style={{ color: mainStyle.czt.color }}>
-                                    <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
-                                  </Checkbox>
-                                </View>
-                              )
-                            }
+                  <View style={[mainStyle.column]}>
+                    {
+                      orderBook.map((val, i) =>
+                        <View key={i} style={[]}>
+                          <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
+                            <Image
+                              style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
+                              mode="widthFix"
+                              source={{ uri: 'http://' + orderBook.good_img }}>
+                            </Image>
+                            <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
+                              <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>{orderBook.good_name}</Text>
+                              <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mat10]}>
+                                {
+                                  val.reserve.map((ser, index) =>
+                                    <View key={index} style={[mainStyle.flex1, { width: screenW - setSize(90) - imgw }]}>
+                                      <Checkbox
+                                        style={{ color: mainStyle.czt.color }}>
+                                        <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
+                                      </Checkbox>
+                                    </View>
+                                  )
+                                }
+                              </View>
+                            </View>
                           </View>
+                          <BxButton
+                            title={'去预定'}
+                            colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                            btnstyle={[mainStyle.mat15, mainStyle.flex1,]}
+                            borderRadius={setSize(4)}
+                            textstyle={[mainStyle.cfff, mainStyle.fs13]}
+                            onClick={() => {
+                              navigation.navigate('OutlineCourseReserve', { id: val.my_course_id })
+                            }}
+                          ></BxButton>
                         </View>
-                      </View>
-                      <BxButton
-                        title={'去预定'}
-                        colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                        btnstyle={[mainStyle.mat15, mainStyle.flex1,]}
-                        borderRadius={setSize(4)}
-                        textstyle={[mainStyle.cfff, mainStyle.fs13]}
-                        onClick={() => {
-                          navigation.navigate('OutlineCourseReserve', { id: val.my_course_id })
-                        }}
-                      ></BxButton>
-                    </View>
-                  )
-                }
-              </View>
-            </View>
-          </View>
+                      )
+                    }
+                  </View>
+                </View>
+              </View> : null
+          }
         </ScrollView>
       </View>
     )

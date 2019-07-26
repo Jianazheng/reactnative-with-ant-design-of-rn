@@ -231,6 +231,20 @@ class Mine extends React.Component<Props> {
                       <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1]}
+                    onPress={() => {
+                      this.goto('CartList', {})
+                    }}
+                  >
+                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
+                      <View style={[mainStyle.row, mainStyle.aiCenter]}>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/cart.png')}></Image>
+                        <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>我的购物车</Text>
+                      </View>
+                      <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>

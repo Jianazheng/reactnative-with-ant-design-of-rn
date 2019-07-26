@@ -70,18 +70,24 @@ class CourseInfoItem2 extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, navigation } = this.props;
     return (
-      <TouchableOpacity style={[styles.infoCourse, mainStyle.bgcfff, mainStyle.patb15]} onPress={() => { }}>
+      <TouchableOpacity style={[styles.infoCourse, mainStyle.bgcfff, mainStyle.patb15]} onPress={() => { navigation.push('CourseInfo', { id: data.id }) }}>
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiStart, mainStyle.flex1]}>
-          <Image style={[styles.CourseInfoImage, mainStyle.imgCover]} mode="widthFix" source={{ uri: 'http://center.jkxuetang.com/wp-content/uploads/2019/05/cover-pic_-real-estate.jpg' }}></Image>
+          <Image style={[styles.CourseInfoImage, mainStyle.imgCover]} mode="widthFix" source={{ uri: 'http://' + data.image }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
-            <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.mab5]}>{data.title}</Text>
-            <View style={[mainStyle.row, mainStyle.jcBetween]}>
-              <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab5, mainStyle.bgcf2, { borderRadius: setSize(6), paddingLeft: setSize(12), paddingRight: setSize(12) }]}>6课时</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.mab5]}>{data.course_name}</Text>
+            {/* <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+              <Text style={[mainStyle.fs12, mainStyle.czt]}>{data.lesson}课时</Text>
+            </View> */}
+            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+              <Text style={[mainStyle.czt, mainStyle.fs12, mainStyle.mab5]}>{data.lesson}课时</Text>
+              <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab5]}>{data.reply}人报名</Text>
+              <Text style={[mainStyle.czt, mainStyle.fs12, mainStyle.mab5]}>￥{data.course_price}</Text>
             </View>
-            <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab5]}>122人报名</Text>
-            <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab5]}>2019.06.01-06.30</Text>
+            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+              {data.isreply == 1 ? <Text style={[mainStyle.bgcf2, mainStyle.fs12, { borderRadius: setSize(6), paddingLeft: setSize(12), paddingRight: setSize(12) }]}>已报名</Text> : null}
+            </View>
           </View>
         </View>
       </TouchableOpacity>

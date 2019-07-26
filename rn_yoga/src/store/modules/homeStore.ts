@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { OP } from '../../fetch/option';
-
+import { checkUpdata } from '../../tools/upgrade'
 class Home {
   constructor() {
 
@@ -47,6 +47,18 @@ class Home {
 
   @computed get recommendGoods() {
     return this.homeData.recommendGoods
+  }
+
+  @action async getupdate() {
+    try {
+      let response = await new Fetch('/index/init', 'GET', {}, {});
+      let res = response;
+      console.log(res);
+      checkUpdata(res, 'home');
+      return response
+    } catch (error) {
+      return null
+    }
   }
 
   @action async getBanner() {

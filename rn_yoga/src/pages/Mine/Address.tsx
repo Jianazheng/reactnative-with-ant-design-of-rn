@@ -36,7 +36,9 @@ class Address extends React.Component<Props, State> {
   handleGetAddress() {
     let { addressStore, navigation } = this.props
     addressStore.getAddress()
-      .then(res => { this.setState({ loading: false }) })
+      .then(res => {
+        this.setState({ loading: false })
+      })
       .catch(err => { this.setState({ loading: false }) })
   }
 
@@ -113,6 +115,7 @@ class Address extends React.Component<Props, State> {
           animating={loading}
         ></ActivityIndicator>
         {
+
           addressArr.length > 0
             ? <View style={[mainStyle.flex1, mainStyle.mat15]}>
               <ScrollView style={[mainStyle.flex1]}>

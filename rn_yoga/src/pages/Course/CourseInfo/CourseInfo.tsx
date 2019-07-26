@@ -94,6 +94,9 @@ class CourseInfo extends React.Component<Props, State> {
         if (type == 'fastbuy') {//立即购买
           cartStore.fastBuy({ type: 3, good_id: courseInfo.id, sku_id: '' })
             .then(res => {
+              this.setState({
+                clicking: false
+              })
               navigation.navigate('Settlement', { type: 3, from: 'fastbuy' })
             })
         } else {//加入购物车
@@ -141,7 +144,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { canScroll, showLoading } = this.state
     let { courseStore: { courseInfo }, navigation } = this.props
     return (
-      <View style={[mainStyle.column, mainStyle.flex1]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
         <NavTop
           navType="normal"
           title="在线课程详情"
@@ -201,7 +204,7 @@ class CourseInfo extends React.Component<Props, State> {
               <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.mab40]}>
-              <RelatedCourse course={courseInfo.relate_course}></RelatedCourse>
+              <RelatedCourse course={courseInfo.relate_course} navigation={navigation}></RelatedCourse>
             </View>
           </BxTabView>
 

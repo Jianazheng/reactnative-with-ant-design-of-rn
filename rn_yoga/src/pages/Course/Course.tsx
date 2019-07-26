@@ -14,7 +14,7 @@ const defaultIcon = require('../../../images/defaultIcon.png')
 @observer
 class Course extends React.Component<Props> {
   static navigationOptions = {
-    tabBarLabel: '课程',
+    tabBarLabel: '我的课程',
     tabBarIcon: ({ focused }) => {
       if (focused) {
         return (

@@ -3,8 +3,8 @@ import { obj2str } from "../tools/function";
 import { Toast } from '@ant-design/react-native';
 import userStore from './../store/modules/userStore';
 import RNStorage from './../public/js/storage';
-import { DeviceEventEmitter, Alert } from "react-native";
-
+import { DeviceEventEmitter, Alert, Platform } from "react-native";
+import deviceInfo from 'react-native-device-info';
 
 export class Fetch {
   constructor(api: string, method: string, data: object, headers = {}) {
@@ -16,7 +16,9 @@ export class Fetch {
       let reqOption = {}
 
       headers.token = userStore.token
-
+      headers['app-type'] = Platform.OS
+      headers.version = deviceInfo.getVersion();
+      headers.did = deviceInfo.getUniqueID();
       switch (headers['Content-Type']) {
         case 'multipart/form-data':
           headers['Content-Type'] = 'multipart/form-data'
@@ -39,7 +41,6 @@ export class Fetch {
 
       fetch(reqUrl, reqOption)
         .then(async (response) => {
-          //console.log(response)
           if (response.status == 200 || response.status == 400) {
             return { data: await response.json(), status: response.status }
           } else {
@@ -47,7 +48,7 @@ export class Fetch {
           }
         })
         .then((response) => {
-          //console.log('接口:' + api, '参数：', data, '返回数据', response)
+          console.log('接口:' + api, '参数：', data, '返回数据', response)
           switch (response.status) {
             case 200:
               resolve(response.data);

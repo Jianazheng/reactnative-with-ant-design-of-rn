@@ -30,7 +30,7 @@ class WebArea extends React.Component<Props> {
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
           navType="normal"
-          title={'邱显锋整体瑜伽'}
+          title={'邱显峰整体瑜伽'}
           onPress={() => {
             navigation.goBack();
           }}

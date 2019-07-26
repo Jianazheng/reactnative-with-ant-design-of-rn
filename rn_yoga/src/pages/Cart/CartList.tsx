@@ -86,7 +86,7 @@ class CartList extends React.Component<Props, State> {
 
   handleDelectCartMain(typenum) {
     let { cartStore } = this.props;
-    Modal.alert('提示', '确认移除选中的商品吗？', [
+    Modal.alert('提示', '确认移除此模块中的全部商品吗？', [
       {
         text: '取消',
         onPress: () => { },
@@ -328,7 +328,7 @@ class CartItem extends React.Component<CartItemProps>{
     if (type == 'course') {
       routeName = 'CourseInfo'
     } else if (type == 'train') {
-      routeName = 'CourseInfo'
+      routeName = 'TrainInfo'
     }
     this.props.navigation.navigate(routeName, params);
   }
@@ -347,7 +347,7 @@ class CartItem extends React.Component<CartItemProps>{
             }}></BxRadio>
         </View>
         <TouchableOpacity onPress={() => {
-          this.goto(type, { id: data.id })
+          this.goto(type, { id: data.good_id })
         }}>
           <Image
             style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
