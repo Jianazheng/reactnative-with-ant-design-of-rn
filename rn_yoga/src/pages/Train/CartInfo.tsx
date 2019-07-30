@@ -59,7 +59,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
               mode="widthFix"
               source={{
                 uri:
-                  trainInfo.image_url ? trainInfo.image_url.length > 0 ? trainInfo.image_url[0] : '' : ''
+                  trainInfo.image_url ? trainInfo.image_url.length > 0 ? 'http://' + trainInfo.image_url[0] : '' : ''
               }}></Image>
             <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mal15,
             { height: imgw }

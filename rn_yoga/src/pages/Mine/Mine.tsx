@@ -34,7 +34,8 @@ class Mine extends React.Component<Props> {
   }
 
   componentDidMount() {
-    let { userStore, orderStore } = this.props
+    let { userStore, orderStore, navigation } = this.props
+    console.log(navigation);
     userStore.GetUserInfo()
     orderStore.getOrderNumber()
   }
@@ -218,7 +219,7 @@ class Mine extends React.Component<Props> {
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={[mainStyle.flex1]}
+                    style={[mainStyle.flex1, mainStyle.brb1f2]}
                     onPress={() => {
                       this.goto('MyLevel', {})
                     }}

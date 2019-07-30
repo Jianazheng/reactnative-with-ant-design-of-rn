@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
@@ -39,8 +39,9 @@ class ViewPdf extends React.Component<Props> {
           }}
         ></NavTop>
         <WebView
-          style={[mainStyle.flex1]}
-          source={{ uri: params.url }}
+          style={[{ width: screenW, height: screenH }]}
+          source={{ uri: 'http://' + params.url }}
+          onLoadProgress={e => console.log(e.nativeEvent.progress)}
         ></WebView>
       </View>
     )

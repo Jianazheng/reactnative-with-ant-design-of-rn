@@ -202,7 +202,7 @@ class CollectItem extends React.Component<CollectItemState, CollectItemProps>{
                 onPress={() => {
                   this.goto('CourseInfo', { id: data.common_id });
                 }}>
-                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.lh42, mainStyle.mab5]} numberOfLines={2}>高阶体式提升计划</Text>
+                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.lh42, mainStyle.mab5]} numberOfLines={2}>{data.course != undefined ? data.course.course_name : ''}</Text>
               </TouchableOpacity>
               <View style={[mainStyle.row]}>
                 <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf7,
@@ -213,12 +213,12 @@ class CollectItem extends React.Component<CollectItemState, CollectItemProps>{
                   paddingTop: setSize(2),
                   paddingBottom: setSize(2)
                 }
-                ]}>{data.course.lesson}课时</Text>
+                ]}>{data.course != undefined ? data.course.lesson : ''}课时</Text>
               </View>
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
                 <View style={[mainStyle.row, mainStyle.aiEnd]}>
-                  <Text style={[mainStyle.fs14, mainStyle.czt]}>￥5900</Text>
-                  <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal15]}>{data.course.reply}人报名</Text>
+                  <Text style={[mainStyle.fs14, mainStyle.czt]}>￥{data.course != undefined ? data.course.course_price : ''}</Text>
+                  <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal15]}>{data.course != undefined ? data.course.reply : ''}人报名</Text>
                 </View>
                 <TouchableOpacity onPress={() => {
                   this.handleCancelCollect(data, 1)

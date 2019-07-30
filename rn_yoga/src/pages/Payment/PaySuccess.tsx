@@ -127,10 +127,10 @@ class PaySuccess extends React.Component<Props, State> {
                             <Image
                               style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
                               mode="widthFix"
-                              source={{ uri: 'http://' + orderBook.good_img }}>
+                              source={{ uri: 'http://' + val.image_url }}>
                             </Image>
                             <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                              <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>{orderBook.good_name}</Text>
+                              <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.flex1]}>{val.train_name}({val.sku_name})</Text>
                               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mat10]}>
                                 {
                                   val.reserve.map((ser, index) =>
@@ -145,16 +145,18 @@ class PaySuccess extends React.Component<Props, State> {
                               </View>
                             </View>
                           </View>
-                          <BxButton
-                            title={'去预定'}
-                            colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                            btnstyle={[mainStyle.mat15, mainStyle.flex1,]}
-                            borderRadius={setSize(4)}
-                            textstyle={[mainStyle.cfff, mainStyle.fs13]}
-                            onClick={() => {
-                              navigation.navigate('OutlineCourseReserve', { id: val.my_course_id })
-                            }}
-                          ></BxButton>
+                          {
+                            val.length > 0 ? <BxButton
+                              title={'去预定'}
+                              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                              btnstyle={[mainStyle.mat15, mainStyle.flex1,]}
+                              borderRadius={setSize(4)}
+                              textstyle={[mainStyle.cfff, mainStyle.fs13]}
+                              onClick={() => {
+                                navigation.navigate('OutlineCourseReserve', { id: val.my_course_id })
+                              }}
+                            ></BxButton> : null
+                          }
                         </View>
                       )
                     }

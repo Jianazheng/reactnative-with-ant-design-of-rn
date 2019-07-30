@@ -86,6 +86,8 @@ class OnlineCourseInfo extends React.Component<Props> {
   }
 
   handleOpenPPT(url: string) {
+    console.log(url);
+
     this.goto('ViewPdf', { url })
   }
 
@@ -135,7 +137,7 @@ class OnlineCourseInfo extends React.Component<Props> {
                   ? onlineCourseStudy.url != ''
                     ? <Video
                       style={[styles.videoVertical]}
-                      source={{ uri: onlineCourseStudy.url }}
+                      source={{ uri: 'http://' + onlineCourseStudy.url }}
                       controls
                       resizeMode={'contain'}
                     ></Video>

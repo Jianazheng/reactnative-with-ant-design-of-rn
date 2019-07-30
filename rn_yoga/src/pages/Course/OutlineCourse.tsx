@@ -155,14 +155,11 @@ class OutlineCourse extends React.Component<Props> {
                 <Image style={[styles.CourseInfoImage2, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + currentTeacher.avatar }}></Image>
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
-              <ScrollView
-                scrollEnabled
-                nestedScrollEnabled
-                showsVerticalScrollIndicator={false}
+              <View
                 style={[mainStyle.flex1]}
               >
                 <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
-              </ScrollView>
+              </View>
             </View>
             <BxButton
               title={'关闭'}
@@ -247,58 +244,59 @@ class OutlineCourse extends React.Component<Props> {
                 </View>
               </View>
             </View>
-            <View style={[mainStyle.column, mainStyle.palr15, mainStyle.mat15, mainStyle.mab30]}>
-              <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }]}>
-                <View style={[mainStyle.column, mainStyle.brb1f2]}>
-                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
-                    <Text style={[mainStyle.fs13, mainStyle.c333]}>预定服务</Text>
+            {trainCourseInfo.server != null ?
+              <View style={[mainStyle.column, mainStyle.palr15, mainStyle.mat15, mainStyle.mab30]}>
+                <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }]}>
+                  <View style={[mainStyle.column, mainStyle.brb1f2]}>
+                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
+                      <Text style={[mainStyle.fs13, mainStyle.c333]}>预定服务</Text>
+                    </View>
                   </View>
-                </View>
-                {/** 预定服务 */}
-                {
-                  trainCourseInfo.server != undefined
-                    ? trainCourseInfo.server.constructor == Array
-                      ? <View style={[mainStyle.column, mainStyle.pa15]}>
-                        <View style={[mainStyle.row, mainStyle.aiEnd, mainStyle.wrap, mainStyle.flex1]}>
-                          {
-                            trainCourseInfo.server.map((val, i) => (
-                              <TouchableOpacity key={i} style={[{ width: (screenW - setSize(120)) / 4 }]}>
-                                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.positonre]}>
-                                  <Checkbox
-                                    disabled
-                                    checked={true}
-                                    style={{ color: mainStyle.czt.color }}
-                                  >
-                                  </Checkbox>
-                                  <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal5, {
-                                    width: (screenW - setSize(170)) / 4,
-                                    left: -setSize(50),
-                                    paddingLeft: setSize(50),
-                                    zIndex: 1
-                                  }]}>{val}</Text>
-                                </View>
-                              </TouchableOpacity>
-                            ))
-                          }
-                        </View>
-                        <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mat15, { width: screenW - setSize(120), paddingLeft: setSize(4) }]}>
-                          <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mab15, {}]}>
-                            <Text style={[mainStyle.icon, mainStyle.c999, mainStyle.fs14]}>&#xe659;</Text>
-                            <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mal5]}>如需变更服务请联系在线客服</Text>
+                  {/** 预定服务 */}
+                  {
+                    trainCourseInfo.server != undefined
+                      ? trainCourseInfo.server.constructor == Array
+                        ? <View style={[mainStyle.column, mainStyle.pa15]}>
+                          <View style={[mainStyle.row, mainStyle.aiEnd, mainStyle.wrap, mainStyle.flex1]}>
+                            {
+                              trainCourseInfo.server.map((val, i) => (
+                                <TouchableOpacity key={i} style={[{ width: (screenW - setSize(120)) / 4 }]}>
+                                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.positonre]}>
+                                    <Checkbox
+                                      disabled
+                                      checked={true}
+                                      style={{ color: mainStyle.czt.color }}
+                                    >
+                                    </Checkbox>
+                                    <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal5, {
+                                      width: (screenW - setSize(170)) / 4,
+                                      left: -setSize(50),
+                                      paddingLeft: setSize(50),
+                                      zIndex: 1
+                                    }]}>{val}</Text>
+                                  </View>
+                                </TouchableOpacity>
+                              ))
+                            }
                           </View>
-                          <TouchableOpacity>
-                            <View style={[mainStyle.row, mainStyle.aiCenter]}>
-                              <Text style={[mainStyle.icon, mainStyle.czt]}>&#xe623;</Text>
-                              <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mal5]}>咨询在线客服</Text>
+                          <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mat15, { width: screenW - setSize(120), paddingLeft: setSize(4) }]}>
+                            <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mab15, {}]}>
+                              <Text style={[mainStyle.icon, mainStyle.c999, mainStyle.fs14]}>&#xe659;</Text>
+                              <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mal5]}>如需变更服务请联系在线客服</Text>
                             </View>
-                          </TouchableOpacity>
+                            <TouchableOpacity>
+                              <View style={[mainStyle.row, mainStyle.aiCenter]}>
+                                <Text style={[mainStyle.icon, mainStyle.czt]}>&#xe623;</Text>
+                                <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mal5]}>咨询在线客服</Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
+                        : this.serviceReserve(trainCourseInfo)
                       : this.serviceReserve(trainCourseInfo)
-                    : this.serviceReserve(trainCourseInfo)
-                }
-              </View>
-            </View>
+                  }
+                </View>
+              </View> : null}
           </View>
         </ScrollView>
       </View>

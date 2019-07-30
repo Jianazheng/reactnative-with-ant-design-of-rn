@@ -21,6 +21,11 @@ class User {
     memberInfo: {
       user: {},
       level: []
+    },
+    certList: {
+      data: [],
+      total: null,
+      page: 1
     }
   }
 
@@ -39,7 +44,9 @@ class User {
   @action setToken(token: string) {
     this.userData.token = token
   }
-
+  @computed get certList() {
+    return this.userData.certList
+  }
   @action removeToken() {
     this.userData.token = ''
   }
@@ -166,6 +173,26 @@ class User {
     }
   }
 
+  @action async GetCertList() {
+    try {
+      let { certList } = this.userData
+      let params = { page: this.certList.page }
+      let response = await new Fetch('/user/cert_list', 'GET', { size: 10, ...params }, {});
+      let resd = response.data
+      certList.total = resd.total
+      if (certList.data.length >= resd.total) return response
+      let newdata = certList.data.concat(resd.data)
+      certList.data = newdata
+      if (certList.data.length < resd.total) {
+        certList.page += 1
+      }
+      console.log(toJS(certList));
+      this.userData.certList = certList
+      return response;
+    } catch (error) {
+      return null
+    }
+  }
 }
 
 const userStore = new User()

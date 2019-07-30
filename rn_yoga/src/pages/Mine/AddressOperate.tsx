@@ -75,7 +75,7 @@ class AddressOperate extends React.Component<Props, State> {
         }
         postData.region = region
         if (params.type == 'add') {
-          addressStore.setAddress(postData)
+          addressStore.setAddress(res.data.data)
           DeviceEventEmitter.emit('TORELOADCARTDATA', 'yes')
         }
         navigation.goBack()

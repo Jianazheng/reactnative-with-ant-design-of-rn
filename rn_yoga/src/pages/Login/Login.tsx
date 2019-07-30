@@ -56,13 +56,12 @@ class Login extends React.Component<Props, State> {
       let userinfo = await userStore.GetUserInfo()
       if (userinfo) {
         DeviceEventEmitter.emit('TORELOAD', 'yes')//刷新需要刷新的接口
-        let resetActiom = navigation.reset({
-          index: 0,//默认打开actions中的第几个页面
-          actions: [
-            navigation.goBack()
-          ]
-        })
-        navigation.dispatch(resetActiom)
+        console.log(navigation.state.params!=undefined && navigation.state.params.form == 'Password');
+        if (navigation.state.params!=undefined && navigation.state.params.form == 'Password') {
+          navigation.navigate('Home');
+        } else {
+          navigation.goBack()
+        }
       }
     }
   }
@@ -98,7 +97,7 @@ class Login extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <ScrollView style={[mainStyle.flex1]}>
+        <ScrollView style={[mainStyle.flex1]} keyboardShouldPersistTaps="handled">
           <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, { height: screenH - setSize(200) }]}>
             <View style={[mainStyle.column]}>
               <WhiteSpace style={[{ height: setSize(120) }]} />

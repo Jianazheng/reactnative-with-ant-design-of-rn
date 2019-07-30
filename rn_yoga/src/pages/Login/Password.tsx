@@ -58,7 +58,7 @@ class Password extends React.Component<Props, State> {
       //   ]
       // })
       // navigation.dispatch(resetActiom)
-      navigation.replace('Login', mobile);
+      navigation.replace('Login', { mobile: mobile, form: 'Password' });
     }
   }
 

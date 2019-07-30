@@ -94,7 +94,7 @@ class Register extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <ScrollView style={[mainStyle.flex1]}>
+        <ScrollView style={[mainStyle.flex1]} keyboardShouldPersistTaps="handled">
           <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, { height: screenH - setSize(200) }]}>
             <View style={[mainStyle.column]}>
               <WhiteSpace style={[{ height: setSize(120) }]} />

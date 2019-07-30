@@ -23,8 +23,14 @@ class ClassifyList extends React.Component<Props> {
   }
 
   componentDidMount() {
-    let { trainStore } = this.props;
-    trainStore.getClassify();
+    let { trainStore, navigation } = this.props;
+    let params = navigation.state.params;
+    let index = params != undefined ? params.index : 0;
+    trainStore.getClassify().then(() => {
+      if (index != 0) {
+        this.handleLeftItemSelect(index);
+      }
+    });
   }
 
   goto(routeName: string, params: any) {

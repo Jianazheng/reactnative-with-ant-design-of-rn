@@ -223,7 +223,8 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
           </View>
           {data.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333]}>已完成</Text> : null}
           {data.status == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待支付</Text> : null}
-          {data.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待发货</Text> : null}
+          {data.status == 3 && data.type == 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待上课</Text> : null}
+          {data.status == 3 && data.type != 2 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待发货</Text> : null}
           {data.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>已发货</Text> : null}
           {data.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>售后</Text> : null}
           {data.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消</Text> : null}

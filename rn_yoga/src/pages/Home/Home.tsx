@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -146,11 +146,11 @@ class Home extends React.Component<Props, State> {
                 console.log(e)
               }}
               leftBtn={(
-                <Text
-                  style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}
-                  onPress={() => {
-                    navigation.push('CartList')
-                  }}>&#xe60a;</Text>
+                <TouchableOpacity onPress={() => {
+                  navigation.push('CartList')
+                }}>
+                  <Text style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}>&#xe60a;</Text>
+                </TouchableOpacity>
               )}></HomeSearchBar>
             <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
             <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>

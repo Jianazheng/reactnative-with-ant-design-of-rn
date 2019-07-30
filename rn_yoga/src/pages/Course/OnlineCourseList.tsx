@@ -39,12 +39,9 @@ class OnlineCourseList extends React.Component<Props, State> {
     let { navigation, courseStore } = this.props;
     let { params } = navigation.state;
     console.log(params);
-    params = { type: 'goods', cid: '' };
-    courseStore.getClassify()
-    this.setState({
-      type: params.type,
-      cid: params.cid,
-    })
+    if (params.cid == undefined) {
+      courseStore.setCondition('全部', '')
+    }
     courseStore.getClassify()
       .then(res => {
         courseStore.getCourseList(true);

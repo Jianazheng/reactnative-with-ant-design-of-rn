@@ -11,6 +11,7 @@ import { CartInfo } from './CartInfo';
 import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import BxRichText from '../../../components/Pubilc/RichText';
+import { Toast } from '@ant-design/react-native';
 
 
 let { width, height } = Dimensions.get('window')
@@ -73,10 +74,17 @@ class GoodsInfo extends React.Component<Props, State> {
           clicking: true
         }, () => {
           if (fastbuy) {//立即购买
-            cartStore.fastBuy(selectData)
-              .then(res => {
-                navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
-              })
+            if (selectData.product_stock > 0) {
+              cartStore.fastBuy(selectData)
+                .then(res => {
+                  this.setState({
+                    clicking: false
+                  })
+                  navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
+                })
+            } else {
+              Toast.info('库存不足', 1.2, undefined, false)
+            }
           } else {//加入购物车
             cartStore.createCart()
               .then(res => {
@@ -111,7 +119,7 @@ class GoodsInfo extends React.Component<Props, State> {
     let { goodsStore, navigation } = this.props;
     let goodsInfo = goodsStore.goodsInfo
     return (
-      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab140]}>
         <NavTop
           navType="normal"
           title="商品详情"

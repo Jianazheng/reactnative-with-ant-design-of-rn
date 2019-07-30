@@ -136,6 +136,7 @@ class Cart {
       let cartList = response.data
       let newobj = {}
       let newArr = []
+      this.cartData.cartInvalid = [];
       for (let i in cartList) {
         if (i == 'invalid') {
           this.cartData.cartInvalid = cartList[i]

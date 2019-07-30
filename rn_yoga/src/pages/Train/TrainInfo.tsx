@@ -155,7 +155,7 @@ class TrainInfo extends React.Component<Props, State> {
     let promotionInfo = trainStore.promotionInfo
     let frontInfo = trainStore.frontInfo
     return (
-      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
+      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab140]}>
         <NavTop
           navType="normal"
           title="培训课程详情"
@@ -193,13 +193,13 @@ class TrainInfo extends React.Component<Props, State> {
                   <Taps>已报名</Taps>
                   <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
                     <Text style={[styles.span]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-                    {trainInfo.train_introduction}
+                    {trainInfo.train_name}
                   </Text>
                 </View>
                 :
                 <View style={[mainStyle.row, mainStyle.mab10]}>
                   <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
-                    {trainInfo.train_introduction}
+                    {trainInfo.train_name}
                   </Text>
                 </View>
             }

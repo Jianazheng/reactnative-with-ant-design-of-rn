@@ -69,7 +69,6 @@ class Settlement extends React.Component<Props, State> {
   handleCreateOrder() {
     let { navigation, cartStore, cartStore: { settlementInfo }, paymentStore, addressStore: { addressSelect } } = this.props
     let { params } = navigation.state
-    console.log(addressSelect)
     let order_type = 1
     if (!addressSelect.id && (params.type == 1 || params.type == undefined)) {
       Toast.info('请添加收货地址', 1.4, undefined, false)
@@ -133,7 +132,7 @@ class Settlement extends React.Component<Props, State> {
         <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
           <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pa15]}>
             {
-              params.type == 1 || params.type == undefined
+              params.type == 1 || params.type == undefined || settlementInfo.isProduct != 0
                 ? <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10), overflow: 'hidden' }, mainStyle.mab15]}>
                   <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
                     <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>

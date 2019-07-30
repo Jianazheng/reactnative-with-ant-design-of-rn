@@ -91,23 +91,23 @@ class Explore extends React.Component<Props, State> {
           )}
         >
           <View style={[mainStyle.flex1, mainStyle.column]}>
-            {/* <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
+            <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
               <View style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter]}>
                 <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.fontbold]}>线下课程</Text>
               </View>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween]}>
                 {
-                  trainClassify.map((item, index) => <Classify navigation={navigation} data={item} itemType="train" type={index == 0 ? 'all' : 'item'} key={index.toString()}></Classify>)
+                  trainClassify.map((item, index) => <Classify navigation={navigation} data={item} index={index} itemType="train" type={'item'} key={index.toString()}></Classify>)
                 }
               </View>
-            </View> */}
+            </View>
             <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
               <View style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter]}>
                 <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.fontbold]}>商城</Text>
               </View>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween]}>
                 {
-                  goodsClassify.map((item, index) => <Classify navigation={navigation} data={item} itemType="goods" type={index == 0 ? 'all' : 'item'} key={index.toString()}></Classify>)
+                  goodsClassify.map((item, index) => <Classify navigation={navigation} data={item} index={index} itemType="goods" type={index == 0 ? 'all' : 'item'} key={index.toString()}></Classify>)
                 }
               </View>
             </View>
@@ -134,7 +134,7 @@ class Explore extends React.Component<Props, State> {
               </View>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween]}>
                 {
-                  courseClassify.map((item, index) => <Classify navigation={navigation} itemType="course" type={index == 0 ? 'all' : 'item'} data={item} key={index.toString()}></Classify>)
+                  courseClassify.map((item, index) => <Classify navigation={navigation} itemType="course" type={index == 0 ? 'all' : 'item'} data={item} index={index} key={index.toString()}></Classify>)
                 }
               </View>
             </View>
@@ -243,12 +243,12 @@ class Classify extends React.Component<ClassifyProps> {
   }
 
   render() {
-    let { data, type, itemType } = this.props;
+    let { data, type, itemType, index } = this.props;
     if (type == 'all') {
       if (itemType == 'goods') {
         return (
           <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('GoodsList', { cid: '', type: 'goods', product_category_name: '全部' }) }}>
-            <View style={[mainStyle.row, mainStyle.h160, mainStyle.pa15, styles[itemType], { minWidth: setSize(350) }]}>
+            <View style={[mainStyle.row, mainStyle.h160, mainStyle.pa15, styles[itemType], { width: setSize(335) }]}>
               <Image source={require('../../../images/goods2.png')}
                 style={[{ width: setSize(40), height: setSize(40) }]} ></Image>
               <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.pal10]}>全部</Text>
@@ -259,17 +259,8 @@ class Classify extends React.Component<ClassifyProps> {
       } else if (itemType == 'course') {
         return (
           <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('OnlineCourseList', { cid: '', type: 'course', categroy_name: '全部' }) }}>
-            <View style={[mainStyle.row, mainStyle.wrap, mainStyle.h160, mainStyle.pa15, styles[itemType], { minWidth: setSize(350) }]}>
+            <View style={[mainStyle.row, mainStyle.wrap, mainStyle.h160, mainStyle.pa15, styles[itemType], { width: setSize(335) }]}>
               <Image source={require('../../../images/online2.png')} style={[{ width: setSize(40), height: setSize(40) }]}></Image>
-              <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.pal10]}>全部</Text>
-            </View>
-          </TouchableOpacity>
-        )
-      } else if (itemType == 'train') {
-        return (
-          <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('OnlineCourseList', { cid: '', type: 'train', categroy_name: '全部' }) }}>
-            <View style={[mainStyle.row, mainStyle.wrap, mainStyle.h160, mainStyle.pa15, styles[itemType], { minWidth: setSize(350) }]}>
-              <Image source={require('../../../images/onsite2.png')} style={[{ width: setSize(40), height: setSize(40) }]}></Image>
               <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.pal10]}>全部</Text>
             </View>
           </TouchableOpacity>
@@ -279,7 +270,7 @@ class Classify extends React.Component<ClassifyProps> {
       if (itemType == 'goods') {
         return (
           <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('GoodsList', { cid: data.id, type: 'goods', product_category_name: data.product_category_name }) }}>
-            <View style={[mainStyle.row, mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { minWidth: setSize(350) }]}>
+            <View style={[mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { width: setSize(335) }]}>
               <Text style={[mainStyle.c333, mainStyle.fs13]}>{data.product_category_name}</Text>
               <Image source={require('../../../images/goods.png')}
                 style={[{ width: setSize(84), height: setSize(78), position: 'absolute', right: setSize(10), bottom: setSize(10) }]}></Image>
@@ -289,7 +280,7 @@ class Classify extends React.Component<ClassifyProps> {
       } else if (itemType == 'course') {
         return (
           <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('OnlineCourseList', { cid: data.id, type: 'course', categroy_name: data.categroy_name }) }}>
-            <View style={[mainStyle.row, mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { minWidth: setSize(350) }]}>
+            <View style={[mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { width: setSize(335) }]}>
               <Text style={[mainStyle.c333, mainStyle.fs13]}>{data.categroy_name}</Text>
               <Image source={require('../../../images/online.png')}
                 style={[{ width: setSize(84), height: setSize(78), position: 'absolute', right: setSize(10), bottom: setSize(10) }]}></Image>
@@ -298,8 +289,8 @@ class Classify extends React.Component<ClassifyProps> {
         )
       } else if (itemType == 'train') {
         return (
-          <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('OnlineCourseList', { cid: data.id, type: 'train', categroy_name: data.category_name }) }}>
-            <View style={[mainStyle.row, mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { minWidth: setSize(350) }]}>
+          <TouchableOpacity style={[mainStyle.mab15]} onPress={() => { this.gotoInfo('ClassifyList', { index: index, type: 'train', categroy_name: data.category_name }) }}>
+            <View style={[mainStyle.h160, mainStyle.pa15, styles[itemType], mainStyle.positonre, { width: setSize(335) }]}>
               <Text style={[mainStyle.c333, mainStyle.fs13]}>{data.category_name}</Text>
               <Image source={require('../../../images/onsite.png')}
                 style={[{ width: setSize(84), height: setSize(78), position: 'absolute', right: setSize(10), bottom: setSize(10) }]}></Image>

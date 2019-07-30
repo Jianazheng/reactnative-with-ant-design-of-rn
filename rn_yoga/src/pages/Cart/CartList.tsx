@@ -96,6 +96,7 @@ class CartList extends React.Component<Props, State> {
         text: '确认', onPress: () => {
           cartStore.delectCartMain(typenum)
             .then(res => {
+              console.log(2);
               this.getCartList();
             })
         }
@@ -192,7 +193,7 @@ class CartList extends React.Component<Props, State> {
                 : null
             }
             {
-              cartInvalid.length > 0
+              cartInvalid != undefined && cartInvalid.length > 0
                 ? <CartArray data={cartInvalid} title={'已失效'} type={'invalid'} typenum={4} num={cartInvalid.length ? cartInvalid.length : 0}
                   onDel={(e) => {
                     this.handleDelectCartMain(e)
@@ -258,9 +259,8 @@ class CartArray extends React.Component<CartArrayProps>{
   constructor(props: CartArrayProps) {
     super(props)
   }
-
   handleDelectCartMain(typenum) {
-    this.props.onDel(typenum)
+    this.props.onDel(typenum);
   }
 
   invalidItem = (val, i) => (
