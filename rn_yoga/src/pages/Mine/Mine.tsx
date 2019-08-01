@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer, inject } from 'mobx-react';
@@ -32,14 +32,21 @@ class Mine extends React.Component<Props> {
       refreshing: false
     };
   }
+  TORELOADMINE: object;
 
   componentDidMount() {
     let { userStore, orderStore, navigation } = this.props
     console.log(navigation);
     userStore.GetUserInfo()
     orderStore.getOrderNumber()
+    this.TORELOADMINE = DeviceEventEmitter.addListener('TORELOADMINE', res => {
+      userStore.GetUserInfo()
+      orderStore.getOrderNumber()
+    })
   }
-
+  componentWillUnmount() {
+    this.TORELOADMINE.remove()
+  }
   goto(routeName: string, params: any) {
     let { userStore, navigation } = this.props;
     if (userStore.token == '') {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -33,9 +33,15 @@ class Course extends React.Component<Props> {
       refreshing: false
     };
   }
-
+  TORELOADMYCOURSE: object;
   componentDidMount() {
     this.loadCourse()
+    this.TORELOADMYCOURSE = DeviceEventEmitter.addListener('TORELOADMYCOURSE', res => {
+      this.loadCourse()
+    })
+  }
+  componentWillUnmount() {
+    this.TORELOADMYCOURSE.remove()
   }
 
   async loadCourse() {

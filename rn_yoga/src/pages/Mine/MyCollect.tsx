@@ -64,7 +64,7 @@ class MyCollect extends React.Component<Props, State> {
           tabAlign={'center'}
           tabs={tabs}
           tabChange={(e) => {
-            publicStore.getCollectData(e + 1, false)
+            publicStore.getCollectData(e + 1, true)
           }}
         >
           <View style={[mainStyle.patb15]}>
@@ -162,12 +162,12 @@ class CollectItem extends React.Component<CollectItemState, CollectItemProps>{
                 onPress={() => {
                   this.goto('TrainInfo', { id: data.common_id });
                 }}>
-                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.lh42, mainStyle.mab5]} numberOfLines={2}>{data.train.train_name}</Text>
+                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.lh42, mainStyle.mab5]} numberOfLines={2}>{data.train != undefined ? data.train.train_name : ''}</Text>
               </TouchableOpacity>
-              <Text style={[mainStyle.c999, mainStyle.fs12]}>{data.train.train_start_time}</Text>
+              <Text style={[mainStyle.c999, mainStyle.fs12]}>{data.train ? data.train.train_start_time : ''}</Text>
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
                 <View style={[mainStyle.row, mainStyle.aiEnd]}>
-                  <Text style={[mainStyle.fs12, mainStyle.c999]}>{data.train.apply_num}人报名</Text>
+                  <Text style={[mainStyle.fs12, mainStyle.c999]}>{data.train ? data.train.apply_num : ''}人报名</Text>
                 </View>
                 <TouchableOpacity onPress={() => {
                   this.handleCancelCollect(data, 0)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet, Animated, Easing, Alert } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet, Animated, Easing, Alert, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import BxListView from '../../components/Pubilc/ListView';
 import NavTop from '../../router/navTop';
@@ -34,7 +34,7 @@ class OnlineCourseList extends React.Component<Props, State> {
   static navigationOptions = {
     header: null,
   }
-
+  TORELOADCOURSELIST: object;
   componentDidMount() {
     let { navigation, courseStore } = this.props;
     let { params } = navigation.state;
@@ -46,9 +46,13 @@ class OnlineCourseList extends React.Component<Props, State> {
       .then(res => {
         courseStore.getCourseList(true);
       })
-
+    this.TORELOADCOURSELIST = DeviceEventEmitter.addListener('TORELOADCOURSELIST', res => {
+      courseStore.getCourseList(true);
+    })
   }
-
+  componentWillUnmount() {
+    this.TORELOADCOURSELIST.remove()
+  }
   showSearchBar() {
     let { searchBarTranslate, searchBarOpacity } = this.state;
     Animated.timing(searchBarTranslate, {

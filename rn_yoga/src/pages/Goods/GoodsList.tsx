@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet, Animated, Easing, Alert } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet, Animated, Easing, Alert, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import BxListView from '../../components/Pubilc/ListView';
 import NavTop from '../../router/navTop';
@@ -33,6 +33,7 @@ class GoodsList extends React.Component<Props, State> {
   static navigationOptions = {
     header: null,
   }
+  TORELOADGOODLIST: object;
 
   componentDidMount() {
     let { navigation, goodsStore } = this.props;
@@ -44,7 +45,12 @@ class GoodsList extends React.Component<Props, State> {
             goodsStore.getGoodslist(false);
           })
       })
-
+    this.TORELOADGOODLIST = DeviceEventEmitter.addListener('TORELOADGOODLIST', res => {
+      goodsStore.getGoodslist(true);
+    })
+  }
+  componentWillUnmount() {
+    this.TORELOADGOODLIST.remove()
   }
 
   showSearchBar() {

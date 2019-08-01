@@ -58,6 +58,11 @@ class WxPay extends React.Component<Props, State> {
           if (params.from == 'order-detail') {
             DeviceEventEmitter.emit('TORELOADORDER', params.from)
           }
+        } else if (params.product_type == 3) {
+          DeviceEventEmitter.emit('TORELOADCOURSELIST', 'yes')
+          DeviceEventEmitter.emit('TORELOADRECOMMENDTRAIN', 'yes')
+        } else if (params.product_type == 1) {
+          DeviceEventEmitter.emit('TORELOADGOODLIST', 'yes')
         }
       })
       .catch(err => {

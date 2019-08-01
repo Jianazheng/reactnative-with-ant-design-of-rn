@@ -64,6 +64,7 @@ export class Fetch {
                 userStore.removeToken()
                 RNStorage.remove({ key: 'token' }).then(ress => {
                   DeviceEventEmitter.emit('TOLOGIN', 'yes');//token过期或者未登录，跳转登录页，listener在Home
+                  userStore.userInfo.username = '';
                 });
                 reject(response.data);
               }

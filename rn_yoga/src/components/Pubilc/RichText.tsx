@@ -41,7 +41,7 @@ export default class BxRichText extends PureComponent<Props, State>{
     let { height } = this.state
     return (
       <View style={[mainStyle.flex1]}>
-        <WebView style={[mainStyle.bgcfff, mainStyle.pa15, , { height: height, paddingBottom: setSize(140) }]}
+        <WebView style={[mainStyle.bgcfff, mainStyle.pa15, { height: height, paddingBottom: setSize(140) }]}
           bounces={false}
           injectedJavaScript={
             `(function () {
@@ -66,7 +66,7 @@ export default class BxRichText extends PureComponent<Props, State>{
           scalesPageToFit
           javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
           domStorageEnabled={true} // 适用于安卓
-          scrollEnabled={false}
+          scrollEnabled={true}
           onMessage={this.onMessage.bind(this)}
           source={{
             html: `<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, user-scaleable=no'><style type="text/css">
@@ -84,12 +84,6 @@ export default class BxRichText extends PureComponent<Props, State>{
             }))
             </script>
             </body></html>`,
-            // html: `<head><meta name='viewport' content='width=device-width, initial-scale=1.0, user-scaleable=no'><style type="text/css">
-            // *{padding:0;margin:0;}
-            // html,body{min-height:100%;}
-            // body{padding:10px;}
-            // .tour_product_explain img{ display: block!important; vertical-align: top!important; width: 100%!important;}
-            // </style></head>` + text,
             baseUrl: ''
           }}>
         </WebView>

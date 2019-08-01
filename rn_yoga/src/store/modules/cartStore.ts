@@ -342,7 +342,7 @@ class Cart {
 
         }
       }
-      return response.data
+      return response
     } catch (error) {
       console.log(error)
       return null

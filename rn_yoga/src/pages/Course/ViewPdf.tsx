@@ -40,7 +40,7 @@ class ViewPdf extends React.Component<Props> {
         ></NavTop>
         <WebView
           style={[{ width: screenW, height: screenH }]}
-          source={{ uri: 'http://' + params.url }}
+          source={{ uri: params.url }}
           onLoadProgress={e => console.log(e.nativeEvent.progress)}
         ></WebView>
       </View>

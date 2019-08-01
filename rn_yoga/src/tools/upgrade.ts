@@ -13,7 +13,7 @@ export function checkUpdata(res, from) {
           { text: '不了' },
           {
             text: '是', onPress: () => {
-              NativeModules.upgrade.upgrade(res.data.apk_url);
+              NativeModules.upgrade.upgrade('http://' + res.data.apk_url);
               let title = '正在下载最新版本';
               if (Platform.OS == 'android') ToastAndroid.show(title, ToastAndroid.SHORT);
             }

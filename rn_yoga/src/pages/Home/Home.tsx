@@ -113,6 +113,7 @@ class Home extends React.Component<Props, State> {
           this.setState({
             refreshing: false
           })
+          DeviceEventEmitter.emit('TORELOADTRAINITEM', 'yes')
         })
     })
   }

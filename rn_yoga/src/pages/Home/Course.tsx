@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, StyleSheet, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import BxListView from '../../components/Pubilc/ListView';
 import TabSelect from '../../components/Pubilc/TabSelect';
@@ -29,7 +29,20 @@ class HomeCourse extends React.Component<Props, State> {
       updateView: true
     };
   }
-
+  TORELOADTRAINITEM: object;
+  componentDidMount() {
+    let { homeStore, data, currentIndex } = this.props;
+    this.TORELOADTRAINITEM = DeviceEventEmitter.addListener('TORELOADTRAINITEM', res => {
+      this.setState({
+        cateId: data[0].id
+      }, () => {
+        homeStore.getTrainItem(data[0].id, currentIndex);
+      })
+    })
+  }
+  componentWillUnmount() {
+    this.TORELOADTRAINITEM.remove()
+  }
   componentDidUpdate() {
     let { homeStore, data, currentIndex } = this.props;
     let { cateId } = this.state;

@@ -104,7 +104,9 @@ class TrainInfo extends React.Component<Props, State> {
                 this.setState({
                   clicking: false
                 })
-                navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
+                if (res.status != 400) {
+                  navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
+                }
               })
           } else {//加入购物车
             cartStore.createCart()
@@ -252,15 +254,15 @@ class TrainInfo extends React.Component<Props, State> {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                if (promotionInfo.length == 0) return
+                if (frontInfo.length == 0) return
                 this.handleCloseApplyNotice(true)
               }}>
                 <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
                   <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
                     <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
-                    {promotionInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
+                    {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
                   </View>
-                  {promotionInfo.length > 0 ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+                  {frontInfo.length > 0 ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
                 </View>
               </TouchableOpacity>
             </View>

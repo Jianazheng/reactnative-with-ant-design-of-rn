@@ -82,7 +82,7 @@ class Settlement extends React.Component<Props, State> {
           //保存支付参数
           paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
           this.setState({ showLoading: false }, () => {
-            navigation.replace('WxPay', { type: order_type })
+            navigation.replace('WxPay', { type: order_type, product_type: params.type })
           })
         }).catch(err => {
           this.setState({ showLoading: false })
@@ -132,7 +132,7 @@ class Settlement extends React.Component<Props, State> {
         <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
           <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pa15]}>
             {
-              params.type == 1 || params.type == undefined || settlementInfo.isProduct != 0
+              params.type == 1 || params.type == undefined || settlementInfo.isProduct == 1
                 ? <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10), overflow: 'hidden' }, mainStyle.mab15]}>
                   <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
                     <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>

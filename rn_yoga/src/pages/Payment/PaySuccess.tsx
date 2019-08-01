@@ -146,7 +146,7 @@ class PaySuccess extends React.Component<Props, State> {
                             </View>
                           </View>
                           {
-                            val.length > 0 ? <BxButton
+                            val.reserve.length > 0 ? <BxButton
                               title={'去预定'}
                               colors={[mainStyle.czt.color, mainStyle.cztc.color]}
                               btnstyle={[mainStyle.mat15, mainStyle.flex1,]}

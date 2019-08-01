@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, StyleSheet, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
@@ -25,12 +25,18 @@ class Recommend extends React.Component<Props, State> {
 
     };
   }
-
+  TORELOADRECOMMENDTRAIN: object;
   componentDidMount() {
     let { homeStore } = this.props;
     homeStore.getNewTrain();
     homeStore.getRecommendGoods();
     homeStore.getRecommendTrain();
+    this.TORELOADRECOMMENDTRAIN = DeviceEventEmitter.addListener('TORELOADRECOMMENDTRAIN', res => {
+      homeStore.getRecommendTrain();
+    })
+  }
+  componentWillUnmount() {
+    this.TORELOADRECOMMENDTRAIN.remove()
   }
 
   goto(router: string, params: object) {
