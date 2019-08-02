@@ -122,6 +122,7 @@ class OrderDetail extends React.Component<Props, State> {
 
   handleSendBack() {
     let { navigation } = this.props
+    console.log(navigation);
     navigation.navigate('SendBack')
   }
 
@@ -388,7 +389,7 @@ class PayBar extends React.Component<PayBarProps>{
     super(props)
   }
   render() {
-    let { orderType, handlePayment, handleCancel, handleRefund, handleCancelRefund, data } = this.props;
+    let { orderType, handlePayment, handleCancel, handleRefund, handleCancelRefund, handleSendBack, data } = this.props;
     switch (orderType) {
       case 'nopay':
         return (

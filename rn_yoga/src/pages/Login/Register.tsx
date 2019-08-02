@@ -70,7 +70,7 @@ class Register extends React.Component<Props, State> {
         this.setState({
           clicking: true
         }, () => {
-          navigation.replace('Login')
+          navigation.replace('Info', { form: 'Login' })
         })
         setTimeout(() => {
           this.setState({

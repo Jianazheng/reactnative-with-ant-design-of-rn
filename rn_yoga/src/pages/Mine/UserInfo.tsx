@@ -1,14 +1,18 @@
 import React from 'react';
-import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
-import { Modal } from '@ant-design/react-native';
+import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Modal, InputItem, Toast, WhiteSpace } from '@ant-design/react-native';
 import { mainStyle, screenH } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import BxButton from '../../components/Pubilc/Button';
+
 
 interface Props { }
 interface State {
-
+  email: string,
+  address: string,
+  clicking: boolean
 }
 
 const defaultIcon = require('../../../images/defaultIcon.png')
@@ -25,8 +29,12 @@ class UserInfo extends React.Component<Props, State> {
   codeRef: any;
   constructor(props: Props, state: State) {
     super(props);
+    let { userStore } = this.props;
+    let userInfo = userStore.userInfo;
     this.state = {
-
+      email: userInfo.email || '',
+      address: userInfo.address || '',
+      clicking: false
     };
   }
 
@@ -48,9 +56,28 @@ class UserInfo extends React.Component<Props, State> {
       ['新的昵称']
     );
   }
+  handleSubmit() {
+    let { userStore, navigation } = this.props;
+    let { email, address } = this.state;
+    if (email == '' || address == '') {
+      Toast.info('请完善信息');
+      return false
+    }
+    this.setState({
+      clicking: true
+    })
+    userStore.EditInfo({ email, address })
+      .then(res => {
+        this.setState({
+          clicking: false
+        })
+      })
+
+  }
 
   render() {
     let { userStore } = this.props;
+    let { email, address, clicking } = this.state;
     let userInfo = userStore.userInfo;
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.bgcf7]}>
@@ -61,7 +88,7 @@ class UserInfo extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <View style={[mainStyle.flex1, mainStyle.mat15]}>
+        <ScrollView style={[mainStyle.flex1, mainStyle.mat15]} keyboardShouldPersistTaps="handled">
           <TouchableOpacity>
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
               <Text style={[mainStyle.fs15, mainStyle.c666]}>头像</Text>
@@ -70,11 +97,9 @@ class UserInfo extends React.Component<Props, State> {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            this.handleEditUsername()
-          }}>
+          <TouchableOpacity>
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
-              <Text style={[mainStyle.fs15, mainStyle.c666]}>昵称</Text>
+              <Text style={[mainStyle.fs15, mainStyle.c666]}>用户名</Text>
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
                 {/* <TextInput
                   value={userInfo.username}
@@ -97,13 +122,68 @@ class UserInfo extends React.Component<Props, State> {
               </View>
             </View>
           </TouchableOpacity>
+          <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
+            <Text style={[mainStyle.fs15, mainStyle.c666]}>性别</Text>
+            <View style={[mainStyle.row, mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c333, mainStyle.fs14]}>{userInfo.sex == 1 ? '男' : '女'}</Text>
+            </View>
+          </View>
+          <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
+            <Text style={[mainStyle.fs15, mainStyle.c666]}>生日</Text>
+            <View style={[mainStyle.row, mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c333, mainStyle.fs14]}>{userInfo.birthday || ''}</Text>
+            </View>
+          </View>
           <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.bgcfff]}>
             <Text style={[mainStyle.fs15, mainStyle.c666]}>会员等级</Text>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs14]}>{userInfo.level_name}</Text>
             </View>
           </View>
-        </View>
+          <View style={[mainStyle.column, mainStyle.bgcfff]}>
+            <InputItem
+              clear
+              type="text"
+              ref={el => (this.codeRef = el)}
+              value={email}
+              onChange={value => {
+                this.setState({
+                  email: value
+                });
+              }}
+              placeholder="请输入邮箱"
+              style={[mainStyle.fs14]}
+            >
+              <Text style={[mainStyle.c333, mainStyle.fs14]}>邮箱</Text>
+            </InputItem>
+            <InputItem
+              clear
+              type="text"
+              ref={el => (this.codeRef = el)}
+              value={address}
+              onChange={value => {
+                this.setState({
+                  address: value
+                });
+              }}
+              placeholder="请输入居住地"
+              style={[mainStyle.fs14]}
+            >
+              <Text style={[mainStyle.c333, mainStyle.fs14]}>居住地</Text>
+            </InputItem>
+            <WhiteSpace />
+          </View>
+          <View style={[mainStyle.palr15]}>
+            <View style={[mainStyle.mat20]}>
+              <BxButton
+                title="提交"
+                disabled={clicking}
+                colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                onClick={() => { this.handleSubmit() }}
+              ></BxButton>
+            </View>
+          </View>
+        </ScrollView>
       </View>
     )
   }

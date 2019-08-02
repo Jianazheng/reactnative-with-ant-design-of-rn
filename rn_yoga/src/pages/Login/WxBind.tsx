@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Alert, Image,DeviceEventEmitter } from 'react-native';
-import {WingBlank,WhiteSpace,InputItem, Toast} from '@ant-design/react-native';
+import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter } from 'react-native';
+import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle, setSize } from '../../public/style/style';
-import {headerTitle,headerRight} from '../../router/navigationBar';
+import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import BxCodeInput from '../../components/Pubilc/CodeInput';
 import NavTop from '../../router/navTop';
@@ -10,68 +10,69 @@ import { observer, inject } from 'mobx-react';
 import RNStorage from './../../public/js/storage';
 
 
-interface Props {}
+interface Props { }
 interface State {
-  codeText:string,
-  mobile:string,
-  code:string,
-  password:string,
-  codeSec:number
+  codeText: string,
+  mobile: string,
+  code: string,
+  password: string,
+  codeSec: number
 }
 
 @inject('userStore')
 @observer
-class WxBind extends React.Component<Props,State> {
+class WxBind extends React.Component<Props, State> {
   static navigationOptions = {
     // headerTitle:headerTitle('重置密码'),
     // headerRight:headerRight(<Text></Text>),
-    header:null
+    header: null
   }
-  timer:any;
-  codeRef:any;
-  constructor(props:Props,state:State) {
+  timer: any;
+  codeRef: any;
+  constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      mobile:'',
-      code:'',
-      imgcode:'',
-      password:'',
-      clicking:false,
-      sending:false
+      mobile: '',
+      code: '',
+      imgcode: '',
+      password: '',
+      clicking: false,
+      sending: false
     };
   }
 
-  async handleVerify(){
-    let {userStore,navigation} = this.props
-    let {params} = navigation.state
-    let {mobile,code} = this.state
-    if(mobile==''||code==''){
+  async handleVerify() {
+    let { userStore, navigation } = this.props
+    let { params } = navigation.state
+    let { mobile, code } = this.state
+    if (mobile == '' || code == '') {
       Toast.info('请输入信息')
       return false
     }
-    let mobiles = mobile.replace(/ /g,'');
-    let res = await userStore.bindPhone({mobile:mobiles,code,access_token:{...params.wxdata}})
-    if(res!=null){
+    let mobiles = mobile.replace(/ /g, '');
+    let res = await userStore.bindPhone({ mobile: mobiles, code, access_token: { ...params.wxdata } })
+    if (res != null) {
       await userStore.setToken(res.data)
-      await RNStorage.save({key:'token',data:res.data})
-      DeviceEventEmitter.emit('TORELOAD','yes')//刷新需要刷新的接口
-      navigation.popToTop()
+      await RNStorage.save({ key: 'token', data: res.data })
+      DeviceEventEmitter.emit('TORELOAD', 'yes')//刷新需要刷新的接口
+      // navigation.popToTop()
+      navigation.replace('Info', { form: 'Home' })
     }
   }
 
-  render(){
-    let {mobile,imgcode,clicking} = this.state;
+  render() {
+    let { mobile, imgcode, clicking } = this.state;
     return (
       <View style={[mainStyle.flex1]}>
         <NavTop
-        navType="normal"
-        title="绑定手机"
-        onPress={()=>{
-          this.props.navigation.goBack();
-        }}
+          navType="normal"
+          title="绑定手机"
+          onPress={() => {
+            this.props.navigation.goBack();
+          }}
         ></NavTop>
-        <View style={[mainStyle.column,mainStyle.jcBetween,mainStyle.flex1]}>
-          <View style={[mainStyle.mab30,{marginTop:setSize(120)}]}>
+        <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
+          <View style={[mainStyle.mab30, { marginTop: setSize(120) }]}>
             <InputItem
               clear
               type="phone"
@@ -79,13 +80,13 @@ class WxBind extends React.Component<Props,State> {
               value={mobile}
               onChange={value => {
                 this.setState({
-                  mobile:value
+                  mobile: value
                 });
               }}
               style={[mainStyle.fs14]}
               placeholder="请输入手机号"
             >
-              <Text style={[mainStyle.c333,mainStyle.fs14]}>手机号</Text>
+              <Text style={[mainStyle.c333, mainStyle.fs14]}>手机号</Text>
             </InputItem>
 
             {/* <InputItem
@@ -106,23 +107,23 @@ class WxBind extends React.Component<Props,State> {
               <Text style={[mainStyle.c333,mainStyle.fs14]}>图片验证码</Text>
             </InputItem> */}
 
-            <BxCodeInput 
-            mobile={mobile}
-            sendType="bind"
-            codeView={(e)=>{
-              this.setState({
-                code:e
-              })
-            }}/>
+            <BxCodeInput
+              mobile={mobile}
+              sendType="bind"
+              codeView={(e) => {
+                this.setState({
+                  code: e
+                })
+              }} />
             <WhiteSpace />
-            <View style={[mainStyle.mat30,mainStyle.palr15]}>
-              <BxButton 
-              title="确认绑定" 
-              disabled={clicking} 
-              colors={[mainStyle.czt.color,mainStyle.cztc.color]}
-              onClick={()=>{
-                this.handleVerify();
-              }}></BxButton>
+            <View style={[mainStyle.mat30, mainStyle.palr15]}>
+              <BxButton
+                title="确认绑定"
+                disabled={clicking}
+                colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                onClick={() => {
+                  this.handleVerify();
+                }}></BxButton>
             </View>
           </View>
         </View>

@@ -179,6 +179,9 @@ class User {
       let params = { page: this.certList.page }
       let response = await new Fetch('/user/cert_list', 'GET', { size: 10, ...params }, {});
       let resd = response.data
+      if (certList.page == 1) {
+        certList.data = [];
+      }
       certList.total = resd.total
       if (certList.data.length >= resd.total) return response
       let newdata = certList.data.concat(resd.data)
@@ -186,12 +189,39 @@ class User {
       if (certList.data.length < resd.total) {
         certList.page += 1
       }
-      console.log(toJS(certList));
       this.userData.certList = certList
       return response;
     } catch (error) {
       return null
     }
+  }
+  @action async CompleteInfo(params: object) {
+    return new Promise((resolve, reject) => {
+      let response = new Fetch('/user/complete_info', 'POST', params, {});
+      response.then(res => {
+        Toast.info(res.message, 2);
+        resolve(res);
+      })
+        .catch(err => {
+
+        })
+
+    })
+  }
+  @action async EditInfo(params: object) {
+    return new Promise((resolve, reject) => {
+      let response = new Fetch('/user/edit_name', 'POST', params, {});
+      response.then(res => {
+        this.userData.userInfo.email = params.email;
+        this.userData.userInfo.address = params.address;
+        Toast.info(res.message, 2);
+        resolve(res);
+      })
+        .catch(err => {
+
+        })
+
+    })
   }
 }
 

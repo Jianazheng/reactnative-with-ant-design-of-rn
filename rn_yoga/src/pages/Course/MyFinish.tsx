@@ -45,7 +45,7 @@ class MyFinish extends React.Component<Props> {
   _renderItem = (data, type) => (
     <TouchableOpacity style={[mainStyle.flex1, mainStyle.bgcfff, mainStyle.pa15]}
       onPress={() => {
-
+        this.goto('OutlineCourse', { id: data.id })
       }}>
       <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.brr1f2]}>
         <Image

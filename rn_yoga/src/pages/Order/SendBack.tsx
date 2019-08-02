@@ -27,7 +27,7 @@ class SendBack extends React.Component<Props, State> {
     this.state = {
       express_number: '',
       express_company: '',
-      showLoading: true
+      showLoading: false
     };
   }
 

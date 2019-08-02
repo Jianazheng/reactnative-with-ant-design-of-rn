@@ -149,7 +149,7 @@ class Course {
       courseList.data = newdata;
       courseList.total = cl.total;
       courseList.current_page = cl.current_page;
-      if (courseList.data.length < cl.total && courseList.current_page > 1) {
+      if (courseList.data.length < cl.total && courseList.current_page >= 1) {
         courseList.current_page += 1;
       }
       this.courseData.courseList = courseList

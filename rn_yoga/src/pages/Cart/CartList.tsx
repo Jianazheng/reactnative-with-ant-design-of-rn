@@ -122,7 +122,9 @@ class CartList extends React.Component<Props, State> {
         this.setState({ showLoading: true })
         let res = await cartStore.settlement()
         if (res != null) {
-          if (res.pass == 1) {
+          if (res.errorCode == 1083) {
+            navigation.navigate('Info');
+          } else if (res.pass == 1) {
             if (res.address.region) {
               res.address.region = JSON.parse(res.address.region)
               addressStore.setAddress(res.address)

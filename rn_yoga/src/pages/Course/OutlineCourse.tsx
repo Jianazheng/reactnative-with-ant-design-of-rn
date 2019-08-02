@@ -128,10 +128,12 @@ class OutlineCourse extends React.Component<Props> {
           visible={this.state.showPZ}
         >
           <View style={[mainStyle.pa15]}>
-            <Image
-              style={[mainStyle.h400, { width: setSize(400) }, mainStyle.mab15, mainStyle.imgCover]}
-              source={{ uri: trainCourseInfo.classcertificate }}
-            ></Image>
+            <View style={[mainStyle.aiCenter]}>
+              <Image
+                style={[mainStyle.h400, { width: setSize(400) }, mainStyle.mab15, mainStyle.imgCover]}
+                source={{ uri: trainCourseInfo.classcertificate }}
+              ></Image>
+            </View>
             <BxButton
               title={'关闭'}
               colors={[mainStyle.c999.color, mainStyle.cc2.color]}
@@ -155,11 +157,13 @@ class OutlineCourse extends React.Component<Props> {
                 <Image style={[styles.CourseInfoImage2, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + currentTeacher.avatar }}></Image>
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
-              <View
+              <ScrollView
+                nestedScrollEnabled
+                scrollEnabled
                 style={[mainStyle.flex1]}
               >
                 <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
-              </View>
+              </ScrollView>
             </View>
             <BxButton
               title={'关闭'}

@@ -106,6 +106,8 @@ class TrainInfo extends React.Component<Props, State> {
                 })
                 if (res.status != 400) {
                   navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
+                } else {
+                  navigation.navigate('Info');
                 }
               })
           } else {//加入购物车
@@ -262,7 +264,7 @@ class TrainInfo extends React.Component<Props, State> {
                     <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
                     {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
                   </View>
-                  {frontInfo.length > 0 ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+                  {frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
                 </View>
               </TouchableOpacity>
             </View>

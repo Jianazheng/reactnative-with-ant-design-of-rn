@@ -6,7 +6,9 @@ import NavTop from '../../router/navTop';
 
 
 interface Props { }
-
+interface State {
+  content: string
+}
 
 class WebArea extends React.Component<Props> {
   static navigationOptions = {
@@ -16,16 +18,21 @@ class WebArea extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {
-
+      content: ''
     };
   }
 
   componentDidMount() {
-
+    let { navigation } = this.props
+    let { params } = navigation.state;
+    this.setState({
+      content: params.url
+    })
   }
 
   render() {
     let { navigation } = this.props
+    let { content } = this.state
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -38,7 +45,7 @@ class WebArea extends React.Component<Props> {
         <WebView
           originWhitelist={['*']}
           scrollEnabled={true}
-          source={{ uri: 'https://www.baidu.com' }}
+          source={{ uri: content }}
         ></WebView>
       </View>
     )

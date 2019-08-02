@@ -291,10 +291,14 @@ class Cart {
       let params = { cart: toJS(ids) }
       let response = await new Fetch('/order/settle_cart', 'POST', params, {})
       this.cartData.settlementInfo = response.data
-      if (response.data.pass == 0) {
+      if (response.errorCode == 1083) {
+        return response
+      } else if (response.data.pass == 0) {
         Toast.info(response.message, 1.4, undefined, false)
+        return response.data
+      } else {
+        return response.data
       }
-      return response.data
     } catch (error) {
       console.log(error)
       return null
@@ -339,7 +343,6 @@ class Cart {
             response.data.address.region = JSON.parse(response.data.address.region)
           }
           addressStore.setAddress(response.data.address)
-
         }
       }
       return response

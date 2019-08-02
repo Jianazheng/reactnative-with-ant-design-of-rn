@@ -2,6 +2,7 @@
 import { IndexTabs } from './tabs';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Login/Register';
+import Info from '../pages/Login/Info';
 import Forget from '../pages/Login/Forget';
 import Password from './../pages/Login/Password';
 import UserInfo from './../pages/Mine/UserInfo';
@@ -34,7 +35,7 @@ import WxBind from './../pages/Login/WxBind';
 import NotiveDetail from './../pages/Explore/NotiveDetail';
 import OrderDetail from './../pages/Order/OrderDetail';
 import NotiveList from './../pages/Explore/NotiveList';
-//import SendBack from './../pages/Order/SendBack';
+import SendBack from './../pages/Order/SendBack';
 import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
 import MyFinish from './../pages/Course/MyFinish';
 import WebArea from './../pages/Explore/WebArea';
@@ -44,6 +45,7 @@ import WebArea from './../pages/Explore/WebArea';
 export const navItem = {
   Login: { screen: Login },
   Register: { screen: Register },
+  Info: { screen: Info },
   Forget: { screen: Forget },
   Password: { screen: Password },
   WxBind: { screen: WxBind },
@@ -70,7 +72,7 @@ export const navItem = {
   RefundReason: { screen: RefundReason },
   ApplyRefund: { screen: ApplyRefund },
   CourseInfo: { screen: CourseInfo },
-  //SendBack: { screen: SendBack },
+  SendBack: { screen: SendBack },
   MyCertificate: { screen: MyCertificate },
   ViewPdf: { screen: ViewPdf },
   Address: { screen: Address },

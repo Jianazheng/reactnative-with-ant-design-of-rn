@@ -116,7 +116,7 @@ class Goods {
         cate_id: cate.id,
         sort: sort.sort,
         page: goodslist.current_page,
-        keyword
+        search: keyword || ''
       }
       if (reload) {
         //重置列表
@@ -133,7 +133,7 @@ class Goods {
       goodslist.data = goodslist.data.concat(gl.data)
       goodslist.current_page = gl.current_page
       goodslist.total = gl.total
-      if (goodslist.data.length < gl.total && goodslist.current_page > 1) {
+      if (goodslist.data.length < gl.total && goodslist.current_page >= 1) {
         goodslist.current_page += 1;
       }
       this.goodsData.goodslist = goodslist

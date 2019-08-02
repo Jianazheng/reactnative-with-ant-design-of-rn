@@ -133,7 +133,7 @@ class OnlineCourseInfo extends React.Component<Props> {
             {/** 视频播放start */}
             <View style={[styles.videoVertical, mainStyle.bgc000, mainStyle.positonre]}>
               {
-                onlineCourseStudy.nowtype == 'andio' || onlineCourseStudy.nowtype == 'video'
+                onlineCourseStudy.nowtype == 'audio' || onlineCourseStudy.nowtype == 'video'
                   ? onlineCourseStudy.url != ''
                     ? <Video
                       style={[styles.videoVertical]}

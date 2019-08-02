@@ -105,14 +105,6 @@ class AddressOperate extends React.Component<Props, State> {
           onPress={() => {
             this.props.navigation.goBack();
           }}
-          children={(
-            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.flex1, mainStyle.mar15]}>
-              <TouchableOpacity
-              >
-                <Text style={[mainStyle.czt, mainStyle.fs13]}>新增地址</Text>
-              </TouchableOpacity>
-            </View>
-          )}
         ></NavTop>
         {
           params.type == 'edit'

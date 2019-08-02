@@ -97,7 +97,7 @@ class OnlineCourse extends React.Component<Props> {
                     borderRadius={setSize(60)}
                     btnstyle={[{ width: screenW - setSize(120), height: setSize(70) }, mainStyle.mat10]}
                     onClick={() => {
-                      this.goto('OnlineCourseInfo', { id: onlineCourseInfo.course_id, course_id: onlineCourseInfo.course_id, summary_id: '' })
+                      this.goto('OnlineCourseInfo', { id: onlineCourseInfo.id, course_id: onlineCourseInfo.course_id, summary_id: '' })
                     }}
                   ></BxButton>
                 </View>
