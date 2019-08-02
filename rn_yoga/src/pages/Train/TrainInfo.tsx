@@ -264,7 +264,7 @@ class TrainInfo extends React.Component<Props, State> {
                     <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
                     {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
                   </View>
-                  {frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+                  {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
                 </View>
               </TouchableOpacity>
             </View>
@@ -338,7 +338,7 @@ class TrainInfo extends React.Component<Props, State> {
         {showApplyNotice ?
           <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
           {
-            height: screenH * (frontInfo.apply_detail ? frontInfo.apply_detail.length * 0.12 : 0.3)
+            height: screenH * (frontInfo.apply_detail ? frontInfo.apply_detail.length * 0.16 : 0.3)
           }
           ]}>
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
@@ -355,7 +355,7 @@ class TrainInfo extends React.Component<Props, State> {
         {showCartInfoDetails ?
           <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15,
           {
-            height: screenH * 0.55
+            height: screenH * 1
           }
           ]}>
             <CartInfo

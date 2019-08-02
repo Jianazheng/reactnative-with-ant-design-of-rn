@@ -42,7 +42,7 @@ class GoodsList extends React.Component<Props, State> {
       .then(suc => {
         goodsStore.getGoodsClassify()
           .then(res => {
-            goodsStore.getGoodslist(false);
+            goodsStore.getGoodslist(true);
           })
       })
     this.TORELOADGOODLIST = DeviceEventEmitter.addListener('TORELOADGOODLIST', res => {

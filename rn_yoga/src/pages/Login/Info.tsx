@@ -126,12 +126,11 @@ class Register extends React.Component<Props, State> {
                 mode="date"
                 minDate={new Date(1900, 1, 1)}
                 onChange={value => {
-                  console.log(value);
                   this.setState({
-                    birthday: value
+                    birthday: value.toLocaleDateString()
                   });
                 }}
-                format="YYYY-MM-DD"
+                format="YYYY/MM/DD"
               >
                 <PickerChildren>生日</PickerChildren>
               </DatePicker>
@@ -179,7 +178,7 @@ class Register extends React.Component<Props, State> {
             </View>
           </View>
         </ScrollView>
-      </View>
+      </View >
     )
   }
 }

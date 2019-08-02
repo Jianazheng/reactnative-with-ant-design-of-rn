@@ -158,7 +158,6 @@ class OutlineCourse extends React.Component<Props> {
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
               <ScrollView
-                nestedScrollEnabled
                 scrollEnabled
                 style={[mainStyle.flex1]}
               >

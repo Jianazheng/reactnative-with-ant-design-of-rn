@@ -118,6 +118,7 @@ class Goods {
         page: goodslist.current_page,
         search: keyword || ''
       }
+      console.log(reload)
       if (reload) {
         //重置列表
         goodslist = {
@@ -126,6 +127,7 @@ class Goods {
           total: null
         }
         this.goodsData.goodslist = goodslist
+        params.page = 1;
       }
       let response = await new Fetch('/product/list', 'GET', { size: 10, ...params }, {});
       let gl = response.data

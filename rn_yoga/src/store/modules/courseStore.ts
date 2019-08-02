@@ -141,6 +141,7 @@ class Course {
           total: null
         }
         this.courseData.courseList = courseList
+        params.page = 1;
       }
       let response = await new Fetch('/online/course/list', 'GET', { size: 10, ...params }, {});
       let cl = response.data.data
