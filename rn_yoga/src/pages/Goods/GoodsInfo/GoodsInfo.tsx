@@ -83,6 +83,9 @@ class GoodsInfo extends React.Component<Props, State> {
                   navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
                 })
             } else {
+              this.setState({
+                clicking: false
+              })
               Toast.info('库存不足', 1.2, undefined, false)
             }
           } else {//加入购物车

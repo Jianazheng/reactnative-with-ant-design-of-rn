@@ -201,6 +201,19 @@ class Mine extends React.Component<Props> {
                   <TouchableOpacity
                     style={[mainStyle.flex1, mainStyle.brb1f2]}
                     onPress={() => {
+                      this.goto('Info', {})
+                    }}>
+                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
+                      <View style={[mainStyle.row, mainStyle.aiCenter]}>
+                        <Image style={[mainStyle.userimg]} source={require('../../../images/collect.png')}></Image>
+                        <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>完善信息</Text>
+                      </View>
+                      <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[mainStyle.flex1, mainStyle.brb1f2]}
+                    onPress={() => {
                       this.goto('MyCollect', {})
                     }}>
                     <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>

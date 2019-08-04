@@ -35,7 +35,13 @@ class Train {
     //培训服务id集
     serviceIdArr: [],
     //培训购物车
-    cartItem: { price: '', type_name: '' }
+    cartItem: { price: '', type_name: '' },
+    keyword: '',
+    trainSearch: {
+      data: [],
+      total: 0,
+      current_page: 1
+    }
   }
 
   @computed get cartItem() {
@@ -77,7 +83,44 @@ class Train {
   @computed get serviceIdArr() {
     return this.trainData.serviceIdArr
   }
-
+  @computed get trainSearch() {
+    return this.trainData.trainSearch
+  }
+  @action setKeyword(keyword: string, issearch: boolean) {
+    this.trainData.keyword = keyword
+    if (issearch == true) {
+      this.getSearchList(true)
+    }
+  }
+  @action async getSearchList(reload: boolean | undefined) {
+    try {
+      let { trainSearch, keyword } = this.trainData
+      let params = { page: this.trainSearch.current_page, search: keyword }
+      if (reload) {
+        //重置列表
+        trainSearch = {
+          data: [],
+          current_page: 1,
+          total: 0
+        }
+        this.trainData.trainSearch = trainSearch
+        params.page = 1;
+      }
+      let response = await new Fetch('/train/search', 'GET', { size: 10, ...params }, {})
+      let resd = response.data
+      trainSearch.total = resd.total
+      if (trainSearch.data.length >= resd.total) return response
+      let newdata = trainSearch.data.concat(resd.data)
+      trainSearch.data = newdata
+      if (trainSearch.data.length < resd.total) {
+        trainSearch.current_page += 1
+      }
+      this.trainData.trainSearch = trainSearch
+      return response
+    } catch (error) {
+      return null
+    }
+  }
   @action async getClassify() {
     try {
       let response = await new Fetch('/train/list', 'GET', {}, {});
@@ -108,6 +151,7 @@ class Train {
       }
       let response = await new Fetch('/train/base_info', 'GET', { id }, {});
       let trainInfo = response.data;
+      trainInfo.cover = trainInfo.image_url.length > 0 ? trainInfo.image_url[0] : '';
       if (trainInfo.video_url) {
         if (trainInfo.image_url) {
           trainInfo.image_url.unshift(trainInfo.video_url)

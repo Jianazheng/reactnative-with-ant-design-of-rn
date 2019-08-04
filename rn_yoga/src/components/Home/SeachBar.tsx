@@ -48,6 +48,9 @@ class HomeSearchBar extends React.Component<Props> {
             onSubmitEditing={(event) => {
               this.props.onSubmit(event.nativeEvent.text);
             }}
+            onFocus={(event) => {
+              if (this.props.onFocus) this.props.onFocus(event);
+            }}
           ></TextInput>
         </View>
         <View>

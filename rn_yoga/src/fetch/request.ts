@@ -70,8 +70,12 @@ export class Fetch {
               }
               break;
             case 400:
-              Toast.info(response.data.message, 1.8, undefined, false)
-              reject(response.data);
+              if (response.data.errorCode == 1083) {
+                resolve(response)
+              } else {
+                Toast.info(response.data.message, 1.8, undefined, false)
+                reject(response.data);
+              }
               break;
             case 500:
               Toast.info('服务器错误：' + response.status + '，接口：' + reqUrl, 1.4, undefined, false)

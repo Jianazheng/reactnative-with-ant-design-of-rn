@@ -47,7 +47,7 @@ class SendBack extends React.Component<Props, State> {
     let { orderStore, navigation } = this.props
     if (express_number == '' || express_company == '') {
       Toast.info('请输入物流信息', 1.4, undefined, false)
-      this.setState({ showLoading: true })
+      this.setState({ showLoading: false })
       return false
     }
     Modal.alert('提示', '是否确认回寄物流信息？', [

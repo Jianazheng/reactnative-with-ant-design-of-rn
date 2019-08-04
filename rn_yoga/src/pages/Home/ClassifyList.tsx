@@ -136,7 +136,7 @@ class RightListItem extends React.PureComponent<RightListItemProps>{
   render() {
     let { item } = this.props;
     return (
-      <View style={[mainStyle.column, mainStyle.palr15]}>
+      <View style={[mainStyle.column, mainStyle.palr10]}>
         <View style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter]}>
           <Text style={[mainStyle.fs13, mainStyle.c333]}>{item.category_name}</Text>
         </View>
@@ -163,7 +163,7 @@ class RightListItem extends React.PureComponent<RightListItemProps>{
 
 const styles = StyleSheet.create({
   leftList: {
-    width: screenW * 0.25
+    width: screenW * 0.28
   },
   classItem: {
     height: setSize(120)
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     borderRightColor: mainStyle.bgcf7.backgroundColor
   },
   rightList: {
-    width: screenW * 0.75
+    width: screenW * 0.72
   }
 })
 

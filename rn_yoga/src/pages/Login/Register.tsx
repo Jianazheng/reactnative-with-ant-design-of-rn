@@ -61,6 +61,7 @@ class Register extends React.Component<Props, State> {
   handleRegister() {
     let { userStore, navigation } = this.props;
     let { mobile, mobileCode, password, rpassword } = this.state;
+
     if (mobile == '' || mobileCode == '' || password == '' || rpassword == '') {
       Toast.info('请输入注册信息');
       return false

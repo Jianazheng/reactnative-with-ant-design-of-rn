@@ -70,12 +70,13 @@ class AddressOperate extends React.Component<Props, State> {
     }
     addressStore.addOrEditAddress(postData, params.type)
       .then(res => {
-        if (res.errorCode != 2001) {
-          return false
-        }
+        // if (res.errorCode != 2001) {
+        //   return false
+        // }
         postData.region = region
         if (params.type == 'add') {
-          addressStore.setAddress(res.data.data)
+          postData.id = res.data.id;
+          addressStore.setAddress(postData)
           DeviceEventEmitter.emit('TORELOADCARTDATA', 'yes')
         }
         navigation.goBack()

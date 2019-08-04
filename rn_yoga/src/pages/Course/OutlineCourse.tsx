@@ -159,9 +159,9 @@ class OutlineCourse extends React.Component<Props> {
               </View>
               <ScrollView
                 scrollEnabled
-                style={[mainStyle.flex1]}
+                style={[mainStyle.flex1, mainStyle.mab15, mainStyle.mat10]}
               >
-                <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
+                <Text style={[mainStyle.c666, mainStyle.fs11]}>{currentTeacher.teacher_introduction}</Text>
               </ScrollView>
             </View>
             <BxButton

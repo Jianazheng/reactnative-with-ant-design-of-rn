@@ -104,6 +104,7 @@ class TrainInfo extends React.Component<Props, State> {
                 this.setState({
                   clicking: false
                 })
+                console.log(res)
                 if (res.status != 400) {
                   navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
                 } else {
@@ -338,7 +339,7 @@ class TrainInfo extends React.Component<Props, State> {
         {showApplyNotice ?
           <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
           {
-            height: screenH * (frontInfo.apply_detail ? frontInfo.apply_detail.length * 0.16 : 0.3)
+            height: screenH * (frontInfo.apply_detail ? frontInfo.apply_detail.length * 0.15 : 0.3)
           }
           ]}>
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
@@ -355,7 +356,7 @@ class TrainInfo extends React.Component<Props, State> {
         {showCartInfoDetails ?
           <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15,
           {
-            height: screenH * 1
+            height: screenH * 0.55
           }
           ]}>
             <CartInfo

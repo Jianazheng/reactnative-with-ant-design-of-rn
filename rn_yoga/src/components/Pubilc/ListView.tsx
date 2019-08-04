@@ -52,7 +52,7 @@ export default class BxListView extends React.Component<Props, State>{
   }
 
   _renderFooter = () => {
-    let { loading, nomore, pab } = this.props;
+    let { loading, nomore, pab, nomoretxt } = this.props;
     if (nomore) {
       return (
         <View style={[{ height: pab }]}></View>
@@ -62,7 +62,7 @@ export default class BxListView extends React.Component<Props, State>{
         return (
           <View style={[mainStyle.column, mainStyle.mat10]}>
             <View style={[mainStyle.row, mainStyle.patb10, mainStyle.jcCenter, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.c999, mainStyle.fs14]}>没有了</Text>
+              <Text style={[mainStyle.c999, mainStyle.fs14]}>{nomoretxt || '没有了'}</Text>
             </View>
             <View style={[{ height: pab }]}></View>
           </View>

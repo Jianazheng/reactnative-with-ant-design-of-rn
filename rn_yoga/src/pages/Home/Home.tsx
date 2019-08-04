@@ -23,7 +23,7 @@ interface State {
   tabIndex: number
 }
 
-@inject('userStore', 'homeStore')
+@inject('userStore', 'homeStore', 'trainStore')
 @observer
 class Home extends React.Component<Props, State> {
   static navigationOptions = {
@@ -120,7 +120,7 @@ class Home extends React.Component<Props, State> {
 
   render() {
     let { canScroll, tabIndex, refreshing } = this.state;
-    let { navigation, homeStore } = this.props;
+    let { navigation, homeStore, trainStore } = this.props;
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf2]}>
         <ScrollView
@@ -143,9 +143,7 @@ class Home extends React.Component<Props, State> {
             })
           }}>
             <HomeSearchBar
-              onSubmit={(e) => {
-                console.log(e)
-              }}
+              onFocus={(e) => { navigation.push('Search'); }}
               leftBtn={(
                 <TouchableOpacity onPress={() => {
                   navigation.push('CartList')

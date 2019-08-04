@@ -39,6 +39,7 @@ import SendBack from './../pages/Order/SendBack';
 import CourseInfo from './../pages/Course/CourseInfo/CourseInfo';
 import MyFinish from './../pages/Course/MyFinish';
 import WebArea from './../pages/Explore/WebArea';
+import Search from './../pages/Home/Search';
 
 
 
@@ -82,6 +83,7 @@ export const navItem = {
   NotiveDetail: { screen: NotiveDetail },
   MyFinish: { screen: MyFinish },
   WebArea: { screen: WebArea },
+  Search: { screen: Search },
   Tab: {
     screen: IndexTabs,
     navigationOptions: () => ({

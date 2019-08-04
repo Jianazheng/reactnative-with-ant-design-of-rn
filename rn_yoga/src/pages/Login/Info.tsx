@@ -6,7 +6,6 @@ import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import BxImgCodeInput from '../../components/Pubilc/ImgCodeInput';
-import { randomCode } from '../../tools/function';
 import { Fetch } from './../../fetch/request';
 import { observer, inject } from 'mobx-react';
 import userStore from './../../store/modules/userStore';
@@ -53,17 +52,17 @@ class Register extends React.Component<Props, State> {
     let { username, sex, birthday, email, address } = this.state;
     let { params } = navigation.state;
     console.log(params);
+    console.log({ username, sex: sex.toString(), birthday: birthday.toLocaleDateString().replace('/', '-').replace('/', '-'), email, address })
     if (username == '' || birthday == '' || email == '' || address == '') {
       Toast.info('请完善所有信息');
       return false
     }
-    console.log(sex);
-    userStore.CompleteInfo({ username, sex: sex.toString(), birthday, email, address })
+    userStore.CompleteInfo({ username, sex: sex.toString(), birthday: birthday.toLocaleDateString().replace('/', '-').replace('/', '-'), email, address })
       .then(res => {
         this.setState({
           clicking: true
         }, () => {
-          if (params.length > 0) {
+          if (params != undefined) {
             navigation.navigate({ routeName: params.form });
           } else {
             navigation.goBack();
@@ -127,10 +126,10 @@ class Register extends React.Component<Props, State> {
                 minDate={new Date(1900, 1, 1)}
                 onChange={value => {
                   this.setState({
-                    birthday: value.toLocaleDateString()
+                    birthday: value
                   });
                 }}
-                format="YYYY/MM/DD"
+                format="YYYY-MM-DD"
               >
                 <PickerChildren>生日</PickerChildren>
               </DatePicker>
