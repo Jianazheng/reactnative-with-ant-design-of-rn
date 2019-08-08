@@ -141,7 +141,7 @@ class CourseItem extends PureComponent<CourseItemProps> {
             <View style={[mainStyle.column]}>
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiStart, mainStyle.mab5]}>
                 <Text style={[mainStyle.c333, mainStyle.fs14]} numberOfLines={2}>{data.train_name}{data.status == 1 ? '(' + data.sku_name + ')' : ''}</Text>
-                <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text>
+                {data.status == 1 ? <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs22]}>&#xe64d;</Text> : null}
               </View>
               <Text style={[mainStyle.c999, mainStyle.fs12]} numberOfLines={2}>{data.train_introduction}</Text>
             </View>
@@ -150,10 +150,12 @@ class CourseItem extends PureComponent<CourseItemProps> {
             <View>
               <View style={[mainStyle.column, mainStyle.mat10, mainStyle.mab10, mainStyle.flex1]}>
                 <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]}>原价：<Text style={[mainStyle.fs15]}>￥{data.price}</Text></Text>
-                <Text style={[mainStyle.mab5]}>
-                  <Text style={[mainStyle.c666, mainStyle.fs13]}>{splitStr(data.promotion_time, ' ')}前报名特惠价：</Text>
-                  <Text style={[mainStyle.czt, mainStyle.fs15]}>{data.before_promotion_time}</Text>
-                </Text>
+                {data.promotion_time != undefined ?
+                  <Text style={[mainStyle.mab5]}>
+                    <Text style={[mainStyle.c666, mainStyle.fs13]}>{splitStr(data.promotion_time, ' ')}前报名特惠价：</Text>
+                    <Text style={[mainStyle.czt, mainStyle.fs15]}>{data.before_promotion_time}</Text>
+                  </Text>
+                  : null}
                 <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.mab5]}>
                   {
                     data.dijia != '' && data.dijia != undefined && data.dijia != null

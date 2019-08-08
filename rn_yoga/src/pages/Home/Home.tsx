@@ -13,7 +13,6 @@ import BxTabView from './../../components/ScrollTabs/TabView';
 import { observer, inject } from 'mobx-react';
 import RNStorage from './../../public/js/storage';
 
-
 let { width, height } = Dimensions.get('window')
 
 interface Props { }
@@ -23,7 +22,7 @@ interface State {
   tabIndex: number
 }
 
-@inject('userStore', 'homeStore', 'trainStore')
+@inject('userStore', 'homeStore', 'cartStore')
 @observer
 class Home extends React.Component<Props, State> {
   static navigationOptions = {
@@ -43,7 +42,6 @@ class Home extends React.Component<Props, State> {
   TOLOGIN: object;
   TOBIND: object;
 
-
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
@@ -59,7 +57,7 @@ class Home extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    let { homeStore, userStore, navigation } = this.props
+    let { homeStore, userStore, cartStore, navigation } = this.props
     homeStore.getBanner()
     homeStore.getAnnouncement()
     homeStore.getTrainCate()
@@ -69,22 +67,22 @@ class Home extends React.Component<Props, State> {
     }).then(res => {
       console.log(res)
       userStore.setToken(res)
+      cartStore.getCartList();
     }).catch(err => {
       //console.log(err)
     })
+
     this.TOLOGIN = DeviceEventEmitter.addListener('TOLOGIN', res => {
       navigation.navigate('Login')
     })
     this.TOBIND = DeviceEventEmitter.addListener('TOBIND', res => {
       navigation.navigate('WxBind', { wxdata: res })
     })
-
   }
 
   componentWillUnmount() {
     this.TOLOGIN.remove()
     this.TOBIND.remove()
-
   }
 
   goto() {
@@ -95,7 +93,7 @@ class Home extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: tabTop <= e.nativeEvent.contentOffset.y + setSize(120)
+        canScroll: e.nativeEvent.contentOffset.y >= 253 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
@@ -113,14 +111,13 @@ class Home extends React.Component<Props, State> {
           this.setState({
             refreshing: false
           })
-          DeviceEventEmitter.emit('TORELOADTRAINITEM', 'yes')
         })
     })
   }
 
   render() {
     let { canScroll, tabIndex, refreshing } = this.state;
-    let { navigation, homeStore, trainStore } = this.props;
+    let { navigation, homeStore, cartStore: { hascart } } = this.props;
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf2]}>
         <ScrollView
@@ -128,6 +125,7 @@ class Home extends React.Component<Props, State> {
           onScroll={(e) => {
             this.handleScroll(e);
           }}
+          stickyHeaderIndices={[3]}
           refreshControl={(
             <RefreshControl
               tintColor={mainStyle.czt.color}
@@ -137,23 +135,25 @@ class Home extends React.Component<Props, State> {
             />
           )}
         >
-          <View onLayout={(e) => {
+          {/* <View onLayout={(e) => {
             this.setState({
               tabTop: e.nativeEvent.layout.height
             })
-          }}>
-            <HomeSearchBar
-              onFocus={(e) => { navigation.push('Search'); }}
-              leftBtn={(
-                <TouchableOpacity onPress={() => {
-                  navigation.push('CartList')
-                }}>
-                  <Text style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}>&#xe60a;</Text>
-                </TouchableOpacity>
-              )}></HomeSearchBar>
-            <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
-            <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
-          </View>
+          }}
+          > */}
+          <HomeSearchBar
+            onFocus={(e) => { navigation.push('Search'); }}
+            leftBtn={(
+              <TouchableOpacity onPress={() => {
+                navigation.push('CartList')
+              }} style={[mainStyle.positonre]}>
+                <Text style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}>&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle]}></Text> : null}
+              </TouchableOpacity>
+            )}></HomeSearchBar>
+          <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
+          <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
+          {/* </View> */}
           {
             homeStore.trainCate.length > 0
               ? <BxTabView

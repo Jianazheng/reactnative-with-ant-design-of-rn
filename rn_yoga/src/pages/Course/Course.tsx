@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import { observer, inject } from 'mobx-react';
 import { ActivityIndicator } from '@ant-design/react-native';
+import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 interface Props { }
 
@@ -123,7 +124,8 @@ class Course extends React.Component<Props> {
                     onPress={() => {
                       this.goto('NotiveList', {})
                     }}>
-                    <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.c666, mainStyle.patb15]}>&#xe616;</Text>
+                    <IconOutline name="sound" size={20} color={[mainStyle.c666.color]}></IconOutline>
+                    {/* <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.c666, mainStyle.patb15]}>&#xe616;</Text> */}
                   </TouchableOpacity>
 
                 </View>
@@ -137,7 +139,7 @@ class Course extends React.Component<Props> {
                 >
                   <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                     <Text style={[mainStyle.czt, mainStyle.fs18, mainStyle.mab5]}>{onlineCourseList.train_num ? onlineCourseList.train_num : 0}</Text>
-                    <Text style={[mainStyle.c999, mainStyle.fs12]}>培训课</Text>
+                    <Text style={[mainStyle.c999, mainStyle.fs12]}>线下课程</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -173,7 +175,7 @@ class Course extends React.Component<Props> {
                       this.goto('CourseList', { type: 'outline' })
                     }}>
                     <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
-                      <Text style={[mainStyle.fs13, mainStyle.c333]}>我的培训课</Text>
+                      <Text style={[mainStyle.fs13, mainStyle.c333]}>我的线下课程</Text>
                       <View style={[mainStyle.row, mainStyle.aiCenter]}>
                         <Text style={[mainStyle.fs12, mainStyle.c999]}>全部</Text>
                         <Text style={[mainStyle.icon, mainStyle.c999, mainStyle.fs26, { marginBottom: setSize(5) }]}>&#xe64d;</Text>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity, Animated, DeviceEventEmitter } from 'react-native';
 import HomeSwiper from '../../components/Home/Swiper';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -13,6 +13,7 @@ import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { splitStr } from '../../tools/function';
 import { ActivityIndicator } from '@ant-design/react-native';
+import { consult } from '../../tools/function'
 
 
 /**
@@ -28,7 +29,9 @@ interface State {
   showApplyNotice: boolean,
   showCartInfoDetails: boolean,
   showPromotion: boolean,
-  clicking: boolean
+  clicking: boolean,
+  hascart: boolean,
+  cheight: number
 }
 
 @inject('trainStore', 'publicStore', 'cartStore')
@@ -49,11 +52,11 @@ class TrainInfo extends React.Component<Props, State> {
       showCartInfoDetails: false,
       showPromotion: false,
       showLoading: true,
+      cheight: height
     };
   }
-
   componentDidMount() {
-    let { navigation, trainStore, cartStore } = this.props
+    let { navigation, trainStore } = this.props
     let { params } = navigation.state
     trainStore.getTrainInfo(params.id)
       .then(res => {
@@ -65,7 +68,8 @@ class TrainInfo extends React.Component<Props, State> {
     trainStore.getTrainPromotion(params.id)
     trainStore.getTrainSelectItem(params.id)
   }
-
+  componentWillUnmount() {
+  }
   goto() {
     this.props.navigation.push('Login');
   }
@@ -74,7 +78,7 @@ class TrainInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: tabTop <= e.nativeEvent.contentOffset.y + setSize(120)
+        canScroll: e.nativeEvent.contentOffset.y >= 700 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
@@ -154,10 +158,11 @@ class TrainInfo extends React.Component<Props, State> {
   }
 
   render() {
-    let { canScroll, showLoading, showApplyNotice, showCartInfoDetails, showPromotion } = this.state
-    let { trainStore, navigation } = this.props
+    let { canScroll, showLoading, showApplyNotice, showCartInfoDetails, showPromotion, cheight } = this.state
+    let { trainStore, navigation, cartStore: { hascart } } = this.props
     let trainInfo = trainStore.trainInfo
     let promotionInfo = trainStore.promotionInfo
+    let cartItem = trainStore.cartItem
     let frontInfo = trainStore.frontInfo
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab140]}>
@@ -168,13 +173,14 @@ class TrainInfo extends React.Component<Props, State> {
             navigation.goBack();
           }}
           children={(
-            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1]}>
+            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1, mainStyle.positonre]}>
               <TouchableOpacity onPress={() => {
                 navigation.push('CartList')
               }}
               >
                 <Text style={[mainStyle.icon, { paddingRight: 0 }, mainStyle.fs22, mainStyle.c666]}
                 >&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle, { top: setSize(6) }]}></Text> : null}
               </TouchableOpacity>
             </View>
           )}
@@ -186,6 +192,7 @@ class TrainInfo extends React.Component<Props, State> {
         />
         <ScrollView
           style={[mainStyle.flex1]}
+          stickyHeaderIndices={[2]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
@@ -213,13 +220,14 @@ class TrainInfo extends React.Component<Props, State> {
               <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c999, mainStyle.fs13]}>截止报名时间: {splitStr(trainInfo.reg_end_time, ' ')}</Text>
+            </View>
+            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs13]}>
                 ￥<Text style={[mainStyle.fs22]}>{trainInfo.price}</Text>
               </Text>
             </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>截止报名日期: {splitStr(trainInfo.reg_end_time, ' ')}</Text>
-            </View>
+
             {
               promotionInfo.length > 0 ?
                 <Animated.View style={[mainStyle.column, mainStyle.mab10, mainStyle.mat10, mainStyle.positonre, !showPromotion ? { height: setSize(200), overflow: 'hidden' } : { paddingBottom: setSize(60) }]}>
@@ -251,7 +259,7 @@ class TrainInfo extends React.Component<Props, State> {
                 <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
                   <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
                     <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>选&nbsp;&nbsp;&nbsp;择</Text>
-                    <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>请选择类型</Text>
+                    <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>{cartItem.type_name || '请选择类型'}</Text>
                   </View>
                   <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
                 </View>
@@ -294,10 +302,10 @@ class TrainInfo extends React.Component<Props, State> {
 
         <View style={[mainStyle.h120, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.fixedview, mainStyle.bgcfff, mainStyle.brt1e2, mainStyle.palr15]}>
           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mar10, { width: screenW * 0.24 }]}>
-            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { }}>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { consult() }}>
               <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                 <Text style={[mainStyle.czt, mainStyle.icon, mainStyle.fs18, mainStyle.mab5]}>&#xe610;</Text>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>咨询</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs12]}>咨询{canScroll}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
@@ -339,7 +347,7 @@ class TrainInfo extends React.Component<Props, State> {
         {showApplyNotice ?
           <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
           {
-            height: screenH * (frontInfo.apply_detail ? frontInfo.apply_detail.length * 0.15 : 0.3)
+            height: screenH * (frontInfo.apply_detail && frontInfo.apply_detail.length > 1 ? 0.55 : 0.3)
           }
           ]}>
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
@@ -349,7 +357,7 @@ class TrainInfo extends React.Component<Props, State> {
                 onPress={() => { this.handleCloseApplyNotice(false) }}
               >&#xe651;</Text>
             </View>
-            <ApplyNotice data={frontInfo.apply_detail || []}></ApplyNotice>
+            <ApplyNotice data={frontInfo.apply_detail || []} relate={frontInfo.front_train_relate || 1}></ApplyNotice>
           </View>
           : null}
 

@@ -58,8 +58,7 @@ class Login extends React.Component<Props, State> {
         DeviceEventEmitter.emit('TORELOAD', 'yes')//刷新需要刷新的接口
         DeviceEventEmitter.emit('TORELOADMINE', 'yes')
         DeviceEventEmitter.emit('TORELOADMYCOURSE', 'yes')
-        console.log(navigation.state.params != undefined && navigation.state.params.form == 'Password');
-        if (navigation.state.params != undefined && navigation.state.params.form == 'Password') {
+        if (navigation.state.params != undefined && (navigation.state.params.form == 'Password' || navigation.state.params.form == 'Register')) {
           navigation.navigate('Home');
         } else {
           navigation.goBack()

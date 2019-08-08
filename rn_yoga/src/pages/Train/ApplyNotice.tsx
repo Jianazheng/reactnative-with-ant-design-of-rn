@@ -15,11 +15,11 @@ export default class ApplyNotice extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data } = this.props;
+    let { data, relate } = this.props;
     return (
       <View
         style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
-        <Text style={[mainStyle.patb20, mainStyle.fs13, mainStyle.c999]}>报名此课程之前，必须确保已完成以下培训课程：</Text>
+        <Text style={[mainStyle.patb20, mainStyle.fs13, mainStyle.c999]}>报名此课程之前，{relate == 0 ? '完成以下一个培训课程' : '必须确保已完成以下培训课程'}：</Text>
         <ScrollView
           scrollEnabled
           nestedScrollEnabled
@@ -46,12 +46,12 @@ export default class ApplyNotice extends PureComponent<CourseInfoItemProps>{
                     lineHeight: setSize(44),
                     marginLeft: setSize(50)
                   }
-                  ]}>{val.train_name}</Text>
+                  ]}>{val.train_name}({val.sku_name})</Text>
                 </View>
               )
             })
           }
-          <Text style={[mainStyle.czt, mainStyle.fs12, mainStyle.mat20]}>未全部完成以上培训课程的学员，请先报名学习上述培训课程。</Text>
+          <Text style={[mainStyle.czt, mainStyle.fs12, mainStyle.mat20, mainStyle.mab10]}>未全部完成以上培训课程{relate == 0 ? '(之一)' : ''}的学员，请先报名学习上述培训课程。</Text>
         </ScrollView>
       </View>
     )

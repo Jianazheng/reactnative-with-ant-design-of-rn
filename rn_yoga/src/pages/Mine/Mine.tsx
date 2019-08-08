@@ -4,6 +4,7 @@ import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer, inject } from 'mobx-react';
 import { Toast } from '@ant-design/react-native';
+import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 
 
 interface Props { }
@@ -60,6 +61,7 @@ class Mine extends React.Component<Props> {
   async handleLoginout() {
     let { userStore, navigation } = this.props;
     await userStore.Loginout();
+    DeviceEventEmitter.emit('TORELOADMINE', 'yes');
     navigation.navigate('Login', { from: 'Mine' });
   }
 
@@ -130,7 +132,8 @@ class Mine extends React.Component<Props> {
                     this.goto('NotiveList', {})
                   }}
                 >
-                  <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.cfff, mainStyle.patb15]}>&#xe616;</Text>
+                  <IconOutline name="sound" size={20} color={[mainStyle.cfff.color]}></IconOutline>
+                  {/* <Text style={[mainStyle.icon, mainStyle.fs24, mainStyle.cfff, mainStyle.patb15]}>&#xe616;</Text> */}
                 </TouchableOpacity>
                 {/* <Text style={[mainStyle.lh44,mainStyle.mat10]}>
                   <Text style={[mainStyle.icon,mainStyle.fs16,mainStyle.cfff]}>&#xe638;</Text>
@@ -153,7 +156,7 @@ class Mine extends React.Component<Props> {
                     }}
                   >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                      {orderNumber.all ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.all}</Text> : null}
+                      {/* {orderNumber.all ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.all}</Text> : null} */}
                       <Image source={require('../../../images/allo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>全部</Text>
                     </View>
@@ -189,7 +192,7 @@ class Mine extends React.Component<Props> {
                     }}
                   >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                      {orderNumber.cancel ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.cancel}</Text> : null}
+                      {/* {orderNumber.cancel ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.cancel}</Text> : null} */}
                       <Image source={require('../../../images/spo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>已取消</Text>
                     </View>
@@ -198,7 +201,7 @@ class Mine extends React.Component<Props> {
               </View>
               <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
                 <View style={[mainStyle.column]}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={[mainStyle.flex1, mainStyle.brb1f2]}
                     onPress={() => {
                       this.goto('Info', {})
@@ -210,7 +213,7 @@ class Mine extends React.Component<Props> {
                       </View>
                       <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <TouchableOpacity
                     style={[mainStyle.flex1, mainStyle.brb1f2]}
                     onPress={() => {

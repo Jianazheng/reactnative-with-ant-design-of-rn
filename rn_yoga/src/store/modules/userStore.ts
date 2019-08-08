@@ -197,9 +197,15 @@ class User {
   }
   @action async CompleteInfo(params: object) {
     return new Promise((resolve, reject) => {
+      let { userInfo } = this.userData;
       let response = new Fetch('/user/complete_info', 'POST', params, {});
       response.then(res => {
         Toast.info(res.message, 2);
+        userInfo.birthday = params.birthday;
+        userInfo.email = params.email;
+        userInfo.sex = params.sex;
+        userInfo.username = params.username;
+        userInfo.address = params.address;
         resolve(res);
       })
         .catch(err => {

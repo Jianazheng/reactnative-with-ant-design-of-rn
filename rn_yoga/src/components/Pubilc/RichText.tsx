@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Dimensions } from 'react-native';
 import WebView from 'react-native-webview';
 import { mainStyle, setSize, screenW, screenH } from '../../public/style/style';
 
@@ -19,11 +19,11 @@ export default class BxRichText extends PureComponent<Props, State>{
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      height: 0
+      height: this.props.height || Dimensions.get('window').height
     }
   }
 
-  onMessage(event) {
+  onmessage(event) {
     try {
       const action = JSON.parse(event.nativeEvent.data)
       console.log(action)
@@ -43,31 +43,22 @@ export default class BxRichText extends PureComponent<Props, State>{
       <View style={[mainStyle.flex1]}>
         <WebView style={[mainStyle.bgcfff, mainStyle.pa15, { height: height, paddingBottom: setSize(140) }]}
           bounces={false}
-          injectedJavaScript={
-            `(function () {
-                var height = null;
-                function changeHeight() {
-                  if (document.body.scrollHeight != height) {
-                    height = document.body.scrollHeight;
-                    if (window.postMessage) {
-                      window.postMessage(JSON.stringify({
-                        type: 'setHeight',
-                        height: height,
-                      }))
-                    }
-                  }
-                }
-                setTimeout(changeHeight, 300);
-            } ())`
-          }
+          onNavigationStateChange={(doc) => {
+            let h = !isNaN(parseInt(doc.title)) ? parseInt(doc.title) : height
+            console.log(h)
+            this.setState({
+              height: h
+            })
+            console.log(this.state.height);
+          }}
           automaticallyAdjustContentInsets
           originWhitelist={['*']}
           decelerationRate='normal'
           scalesPageToFit
           javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
-          domStorageEnabled={true} // 适用于安卓
-          scrollEnabled={true}
-          onMessage={this.onMessage.bind(this)}
+          domStorageEnabled={true}  // 适用于安卓
+          scrollEnabled={false}
+          onMessage={(e) => { this.onmessage(e) }}
           source={{
             html: `<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, user-scaleable=no'><style type="text/css">
             *{padding:0;margin:0;}
@@ -77,13 +68,13 @@ export default class BxRichText extends PureComponent<Props, State>{
             </style></head><body><div class='tour_product_explain' id='content'>
             ${text}
             </div>
+            </body>
             <script>
-            window.postMessage(JSON.stringify({
-              type: 'setHeight',
-              height: document.body.scrollHeight,
-            }))
-            </script>
-            </body></html>`,
+     window.onload = function () {
+       document.title = document.body.clientHeight;
+      } 
+   </script>
+            </html>`,
             baseUrl: ''
           }}>
         </WebView>

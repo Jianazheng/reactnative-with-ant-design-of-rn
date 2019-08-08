@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('courseStore')
+@inject('courseStore', 'cartStore')
 @observer
 class OnlineCourseList extends React.Component<Props, State> {
 
@@ -110,7 +110,7 @@ class OnlineCourseList extends React.Component<Props, State> {
 
   render() {
     let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
-    let { navigation, courseStore } = this.props
+    let { navigation, courseStore, cartStore: { hascart } } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -126,10 +126,11 @@ class OnlineCourseList extends React.Component<Props, State> {
               }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe63f;</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
+              <TouchableOpacity style={[mainStyle.flex1, mainStyle.positonre]} onPress={() => {
                 this.goto('CartList', {})
               }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle, { top: setSize(6), right: setSize(40) }]}></Text> : null}
               </TouchableOpacity>
             </View>
           )}

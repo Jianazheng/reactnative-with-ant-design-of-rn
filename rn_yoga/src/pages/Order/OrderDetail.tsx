@@ -129,7 +129,8 @@ class OrderDetail extends React.Component<Props, State> {
   render() {
     let { showLoading } = this.state
     let { navigation, orderStore: { orderInfo } } = this.props
-    let address = orderInfo.type == 1 ? orderInfo.address ? JSON.parse(orderInfo.address) : {} : {}
+    let address = orderInfo.type == 1 ? orderInfo.address ? orderInfo.address : {} : {}
+    let refund = orderInfo.status == 6 ? orderInfo.refund : {}
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop
@@ -245,6 +246,58 @@ class OrderDetail extends React.Component<Props, State> {
                 </View>
               </View>
             </View>
+            {orderInfo.status == 6 && orderInfo.refund != null ?
+              <View>
+                <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }, mainStyle.mab15]}>
+                  <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+                    <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+                      <Text style={[mainStyle.fs14, mainStyle.c333]}>取消信息</Text>
+                    </View>
+                  </View>
+                  <View style={[mainStyle.column, mainStyle.palr15, mainStyle.pab15]}>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>取消时间</Text>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>{refund.create_time}</Text>
+                    </View>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>取消支付金额</Text>
+                      <Text style={[mainStyle.czt, mainStyle.fs12]}>￥{refund.total_price}</Text>
+                    </View>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>取消原因</Text>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>{refund.refund_reason}</Text>
+                    </View>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>取消状态</Text>
+                      {refund.status == 1 ? <Text style={[mainStyle.fs12, mainStyle.c333]}>已退款</Text> : null}
+                      {refund.status == 2 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>退款订单审核中</Text> : null}
+                      {refund.status == 3 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>回寄商品</Text> : null}
+                      {refund.status == 4 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待卖家收货</Text> : null}
+                      {refund.status == 5 ? <Text style={[mainStyle.fs12, mainStyle.czt]}>待退款</Text> : null}
+                      {refund.status == 6 ? <Text style={[mainStyle.fs12, mainStyle.c999]}>取消退款</Text> : null}
+                      {refund.status == 7 ? <Text style={[mainStyle.fs12, mainStyle.c999]}>拒绝</Text> : null}
+                    </View>
+                  </View>
+                </View>
+                <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }]}>
+                  <View style={[mainStyle.brb1f2, mainStyle.patb15, mainStyle.palr15]}>
+                    <View style={[mainStyle.jcBetween, mainStyle.row, mainStyle.aiCenter]}>
+                      <Text style={[mainStyle.fs14, mainStyle.c333]}>退款信息</Text>
+                    </View>
+                  </View>
+                  <View style={[mainStyle.column, mainStyle.palr15, mainStyle.pab15]}>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>待扣除手续费</Text>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>-￥{refund.service_charge}</Text>
+                    </View>
+                    <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs12]}>待退款金额</Text>
+                      <Text style={[mainStyle.czt, mainStyle.fs12]}>-￥{refund.refund_amount}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              : null}
             <PayStatus data={orderInfo} orderType={orderInfo.status}></PayStatus>
           </View>
         </ScrollView>

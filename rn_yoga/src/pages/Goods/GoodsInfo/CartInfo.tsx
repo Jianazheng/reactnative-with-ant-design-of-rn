@@ -4,7 +4,8 @@ import React, { PureComponent, ReactComponentElement } from 'react';
 import { Text, View, Dimensions, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { mainStyle, contentPadding, setSize, screenH } from '../../../public/style/style';
 import { observer, inject } from 'mobx-react';
-import { JSXElement } from '@babel/types';
+import { JSXElement, validate } from '@babel/types';
+import InputNumber from '../../../components/Pubilc/InputNumber';
 
 let { width, height } = Dimensions.get('window');
 
@@ -39,10 +40,18 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
 
   handleSelectItem(val: object) {
     let { data, goodsStore, cartStore } = this.props;
+    let goodsItem = goodsStore.goodsItem;
+    val.count = goodsItem.count
     goodsStore.selectItem(val);
-    cartStore.selectItem({ type: 1, good_id: data.id, sku_id: val.id, product_stock: val.product_stock });
+    cartStore.selectItem({ type: 1, good_id: data.id, sku_id: val.id, product_stock: val.product_stock, count: goodsItem.count });
   }
-
+  changenum(e: number) {
+    let { data, goodsStore, cartStore } = this.props;
+    let goodsItem = goodsStore.goodsItem;
+    goodsItem.count = e;
+    goodsStore.selectItem(goodsItem);
+    cartStore.selectItem({ type: 1, good_id: data.id, sku_id: goodsItem.id, product_stock: goodsItem.product_stock, count: e });
+  }
   render() {
     let { data, goodsStore, closeBtn } = this.props;
     let { oncheck } = this.state;
@@ -111,6 +120,8 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                   : null
               }
             </View>
+            <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>数量</Text>
+            <InputNumber value={goodsItem.count} max={goodsItem.product_stock} onChange={(v) => { this.changenum(v) }}></InputNumber>
           </ScrollView>
         </View>
       </View>
@@ -131,12 +142,12 @@ const styles = StyleSheet.create({
     color: mainStyle.c666.color
   },
   goodsCheck: {
-    color: mainStyle.c8d0.color,
+    color: mainStyle.czt.color,
     backgroundColor: mainStyle.bgcf6e.backgroundColor,
     borderWidth: setSize(2),
     paddingTop: setSize(10),
     paddingBottom: setSize(8),
-    borderColor: mainStyle.c8d0.color,
+    borderColor: mainStyle.czt.color,
   }
 })
 

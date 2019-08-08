@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 
 class Goods {
@@ -68,6 +68,7 @@ class Goods {
         goodsInfo.sku.map((val, i) => {
           if (val.image_url) val.image_url = 'http://' + val.image_url;
         })
+        goodsInfo.sku[0].count = 1
         this.goodsData.goodsItem = goodsInfo.sku[0]
       }
       this.goodsData.goodsInfo = goodsInfo;
@@ -78,6 +79,7 @@ class Goods {
   }
 
   @action selectItem(item: object) {
+    item.count = item.count == undefined ? 1 : item.count;
     this.goodsData.goodsItem = item;
   }
 

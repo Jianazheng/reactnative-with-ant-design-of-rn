@@ -155,7 +155,8 @@ class OnlineCourse extends React.Component<Props> {
                     <View style={[mainStyle.flex1, mainStyle.row, mainStyle.pal15]}>
                       {
                         onlineCourseInfo.teacher.map((val, i) => (
-                          <CourseTeacherItem2 key={i} data={val} onClick={() => this.handleShowJS(val)}></CourseTeacherItem2>
+                          val != null ?
+                            <CourseTeacherItem2 key={i} data={val} onClick={() => this.handleShowJS(val)}></CourseTeacherItem2> : <Text></Text>
                         ))
                       }
                     </View>

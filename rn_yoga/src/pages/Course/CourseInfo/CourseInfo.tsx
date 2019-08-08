@@ -10,7 +10,7 @@ import CourseArtInfo from './CourseArtInfo';
 import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { ActivityIndicator } from '@ant-design/react-native';
-
+import { consult } from '../../../tools/function'
 
 /**
  * 培训课程详情
@@ -72,7 +72,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: tabTop <= e.nativeEvent.contentOffset.y + setSize(120)
+        canScroll: e.nativeEvent.contentOffset.y >= 565
       })
     }
   }
@@ -142,7 +142,7 @@ class CourseInfo extends React.Component<Props, State> {
 
   render() {
     let { canScroll, showLoading } = this.state
-    let { courseStore: { courseInfo }, navigation } = this.props
+    let { courseStore: { courseInfo }, cartStore: { hascart }, navigation } = this.props
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
         <NavTop
@@ -152,13 +152,14 @@ class CourseInfo extends React.Component<Props, State> {
             navigation.goBack();
           }}
           children={(
-            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1]}>
+            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1, mainStyle.positonre]}>
               <TouchableOpacity onPress={() => {
                 navigation.push('CartList')
               }}
               >
                 <Text style={[mainStyle.icon, { paddingRight: 0 }, mainStyle.fs22, mainStyle.c666]}
                 >&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle, { top: setSize(6) }]}></Text> : null}
               </TouchableOpacity>
             </View>
           )}
@@ -171,6 +172,7 @@ class CourseInfo extends React.Component<Props, State> {
         />
         <ScrollView
           style={[mainStyle.flex1]}
+          stickyHeaderIndices={[2]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
@@ -212,7 +214,7 @@ class CourseInfo extends React.Component<Props, State> {
 
         <View style={[mainStyle.h120, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.fixedview, mainStyle.bgcfff, mainStyle.brt1e2, mainStyle.palr15]}>
           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mar10, { width: screenW * 0.24 }]}>
-            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { }}>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { consult() }}>
               <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                 <Text style={[mainStyle.czt, mainStyle.icon, mainStyle.fs18, mainStyle.mab5]}>&#xe610;</Text>
                 <Text style={[mainStyle.c333, mainStyle.fs12]}>咨询</Text>

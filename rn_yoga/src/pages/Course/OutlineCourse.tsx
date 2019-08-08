@@ -10,7 +10,7 @@ import BxButton from '../../components/Pubilc/Button';
 import { observer, inject } from 'mobx-react';
 import { splitStr } from '../../tools/function';
 import { Modal } from '@ant-design/react-native';
-
+import { consult } from '../../tools/function'
 
 interface Props { }
 
@@ -99,7 +99,6 @@ class OutlineCourse extends React.Component<Props> {
     this.setState({ showJS: !showJS, currentTeacher })
   }
 
-
   render() {
     let { loading, currentTeacher } = this.state
     let { navigation, trainStore } = this.props
@@ -108,7 +107,7 @@ class OutlineCourse extends React.Component<Props> {
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
           navType="normal"
-          title="我的培训课"
+          title="我的线下课程"
           onPress={() => {
             this.props.navigation.goBack();
           }}
@@ -158,10 +157,12 @@ class OutlineCourse extends React.Component<Props> {
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
               <ScrollView
-                scrollEnabled
-                style={[mainStyle.flex1, mainStyle.mab15, mainStyle.mat10]}
+                scrollEnabled={true}
+                style={[mainStyle.flex1]}
               >
-                <Text style={[mainStyle.c666, mainStyle.fs11]}>{currentTeacher.teacher_introduction}</Text>
+                <View style={[mainStyle.mab15, mainStyle.mat10]}>
+                  <Text style={[mainStyle.c666, mainStyle.fs11]}>{currentTeacher.teacher_introduction}</Text>
+                </View>
               </ScrollView>
             </View>
             <BxButton
@@ -178,7 +179,7 @@ class OutlineCourse extends React.Component<Props> {
               <View style={[mainStyle.column, mainStyle.bgcfff, { borderRadius: setSize(10) }]}>
                 <View style={[mainStyle.column, mainStyle.brb1f2]}>
                   <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
-                    <Text style={[mainStyle.fs13, mainStyle.c333]}>培训课程详情</Text>
+                    <Text style={[mainStyle.fs13, mainStyle.c333]}>线下课程详情</Text>
                   </View>
                 </View>
                 <View style={[mainStyle.column]}>
@@ -196,7 +197,7 @@ class OutlineCourse extends React.Component<Props> {
                   <View style={[mainStyle.flex1, mainStyle.row, mainStyle.pal15]}>
                     {
                       trainCourseInfo.teacher.map((val, i) => (
-                        <CourseTeacherItem2 key={i} data={val} onClick={() => this.handleShowJS(val)}></CourseTeacherItem2>
+                        val != null ? <CourseTeacherItem2 key={i} data={val} onClick={() => this.handleShowJS(val)}></CourseTeacherItem2> : <Text></Text>
                       ))
                     }
                   </View>
@@ -287,7 +288,7 @@ class OutlineCourse extends React.Component<Props> {
                               <Text style={[mainStyle.icon, mainStyle.c999, mainStyle.fs14]}>&#xe659;</Text>
                               <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mal5]}>如需变更服务请联系在线客服</Text>
                             </View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => { consult() }}>
                               <View style={[mainStyle.row, mainStyle.aiCenter]}>
                                 <Text style={[mainStyle.icon, mainStyle.czt]}>&#xe623;</Text>
                                 <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mal5]}>咨询在线客服</Text>

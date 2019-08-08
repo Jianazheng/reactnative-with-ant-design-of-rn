@@ -270,10 +270,16 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                   {data.refund.status == 3 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>审核成功，待回寄商品</Text> : null}
                   {data.refund.status == 4 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待商家收货</Text> : null}
                   {data.refund.status == 5 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>待商家退款</Text> : null}
-                  {data.refund.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消退款</Text> : null}
-                  {data.refund.status == 7 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>拒绝退款</Text> : null}
                 </View>
                 : <Text></Text>
+            }
+            {
+              data.status == 3 && data.refund != null && data.type != 3 ?
+                <View style={[mainStyle.mal15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.flex1]}>
+                  {/* 退款状态 */}
+                  {data.refund.status == 6 ? <Text style={[mainStyle.fs13, mainStyle.c999]}>已取消退款</Text> : null}
+                  {data.refund.status == 7 ? <Text style={[mainStyle.fs13, mainStyle.czt]}>拒绝退款</Text> : null}
+                </View> : <Text></Text>
             }
             <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mar15]}>
               {
@@ -308,7 +314,7 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
               }
               {
                 //已支付，已发货与未发货
-                (data.status == 4 || data.status == 3) && data.type != 3
+                (data.status == 4 || data.status == 3) && (data.refund == null || data.refund.status != 7) && data.type != 3
                   ? <BxButton
                     title={'申请退款'}
                     colors={[mainStyle.czt.color, mainStyle.cztc.color]}

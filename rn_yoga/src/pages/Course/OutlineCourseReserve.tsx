@@ -5,6 +5,7 @@ import { Checkbox } from '@ant-design/react-native';
 import NavTop from '../../router/navTop';
 import BxButton from '../../components/Pubilc/Button';
 import { observer, inject } from 'mobx-react';
+import { consult } from '../../tools/function'
 
 
 interface Props { }
@@ -84,7 +85,7 @@ class OutlineCourseReserve extends React.Component<Props> {
                         <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mal5]}>查看培训详情</Text>
                       </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { consult() }}>
                       <View style={[mainStyle.row, mainStyle.aiCenter]}>
                         <Text style={[mainStyle.icon, mainStyle.czt]}>&#xe610;</Text>
                         <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mal5]}>咨询在线客服</Text>

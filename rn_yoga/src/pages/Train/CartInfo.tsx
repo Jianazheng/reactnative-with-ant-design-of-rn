@@ -130,12 +130,12 @@ const styles = StyleSheet.create({
     color: mainStyle.c666.color
   },
   goodsCheck: {
-    color: mainStyle.c8d0.color,
+    color: mainStyle.czt.color,
     backgroundColor: mainStyle.bgcf6e.backgroundColor,
     borderWidth: setSize(2),
     paddingTop: setSize(10),
     paddingBottom: setSize(8),
-    borderColor: mainStyle.c8d0.color,
+    borderColor: mainStyle.czt.color,
   }
 })
 

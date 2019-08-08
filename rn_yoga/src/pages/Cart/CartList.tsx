@@ -96,7 +96,6 @@ class CartList extends React.Component<Props, State> {
         text: '确认', onPress: () => {
           cartStore.delectCartMain(typenum)
             .then(res => {
-              console.log(2);
               this.getCartList();
             })
         }

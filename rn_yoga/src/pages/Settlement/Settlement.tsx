@@ -8,6 +8,7 @@ import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { DeviceEventEmitter } from 'react-native';
+import InputNumber from '../../components/Pubilc/InputNumber';
 
 interface Props { }
 interface State {
@@ -109,7 +110,17 @@ class Settlement extends React.Component<Props, State> {
         })
     }
   }
-
+  changenum(e: number) {
+    let { navigation, cartStore } = this.props;
+    let selectData = cartStore.selectData;
+    let settlementInfo = cartStore.settlementInfo;
+    let { params } = navigation.state
+    selectData.count = e;
+    if (settlementInfo.orderCount == 1 && params.type == 1 && settlementInfo.pStatusArray.length > 0) {
+      settlementInfo.pStatusArray[0].count = e;
+    }
+    cartStore.selectItem(selectData);
+  }
   render() {
     let { showLoading } = this.state
     let { navigation, cartStore: { settlementInfo }, addressStore: { addressSelect } } = this.props
@@ -202,7 +213,8 @@ class Settlement extends React.Component<Props, State> {
                         <Text style={[mainStyle.c333, mainStyle.fs12]}>
                           {val.type == 1 ? '商品数量' : '课程数量'}
                         </Text>
-                        <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.count}</Text>
+                        {val.type == 1 && params.type != 'pay' ? <InputNumber value={val.count} max={val.product_stock} onChange={(v) => { this.changenum(v) }}></InputNumber> :
+                          <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.count}</Text>}
                       </View>
                       {
                         val.type == 2
@@ -222,7 +234,7 @@ class Settlement extends React.Component<Props, State> {
                       }
                       <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                         <Text style={[mainStyle.c333, mainStyle.fs12]}>总金额</Text>
-                        <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.totalPrice}</Text>
+                        <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.type == 1 && params.type != 'pay' ? val.original_price * val.count : val.totalPrice}</Text>
                       </View>
                     </View>
                   </View>
@@ -235,6 +247,7 @@ class Settlement extends React.Component<Props, State> {
 
         <PayBar
           data={settlementInfo}
+          type={params.type}
           handlePayment={() => {
             this.handleCreateOrder()
           }}
@@ -282,14 +295,14 @@ class PayBar extends React.Component<PayBarProps>{
     super(props)
   }
   render() {
-    let { handlePayment, data } = this.props;
+    let { handlePayment, data, type } = this.props;
     return (
       <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
         <View style={[mainStyle.row, mainStyle.aiCenter]}>
           <Text style={[mainStyle.fs12, mainStyle.lh42, mainStyle.c333]}>
             合计：
                 <Text style={[mainStyle.czt]}>￥</Text>
-            <Text style={[mainStyle.czt, mainStyle.fs18]}>{data.orderPrice}</Text>
+            <Text style={[mainStyle.czt, mainStyle.fs18]}>{type == 1 && type != 'pay' ? data.pStatusArray[0].original_price * data.pStatusArray[0].count : data.orderPrice}</Text>
           </Text>
         </View>
         <View style={[mainStyle.row, mainStyle.aiCenter]}>

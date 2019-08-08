@@ -174,7 +174,10 @@ class CourseListItem extends React.Component<CourseListItemProps>{
         </TouchableOpacity>
         {
           type == 'outline'
-            ? <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
+            ? <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
+              {data.isserver == 0 ?
+                <TouchableOpacity style={[styles.serverbtn]} onPress={() => { this.goto('OutlineCourseReserve', { id: data.id }) }}><Text style={[mainStyle.cfff, mainStyle.fs11]}>预定服务</Text></TouchableOpacity>
+                : null}
               <View>
                 {
                   data.isreport == 1
@@ -182,7 +185,7 @@ class CourseListItem extends React.Component<CourseListItemProps>{
                     : <Text style={[mainStyle.fs12, mainStyle.czt]}>未报到</Text>
                 }
               </View>
-            </TouchableOpacity>
+            </View>
             : <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
               <View>
                 <PercentageCircle
@@ -336,6 +339,15 @@ const styles = StyleSheet.create({
   ApplyNoticeTitle: {
     height: CourseImageWidth * 0.16,
     lineHeight: CourseImageWidth * 0.16,
+  },
+  serverbtn: {
+    backgroundColor: mainStyle.czt.color,
+    paddingLeft: setSize(14),
+    paddingRight: setSize(14),
+    paddingTop: setSize(7),
+    paddingBottom: setSize(7),
+    marginBottom: setSize(16),
+    borderRadius: setSize(30)
   }
 })
 

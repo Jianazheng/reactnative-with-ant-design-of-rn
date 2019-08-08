@@ -4,7 +4,6 @@ import HomeSwiper from '../../../components/Home/Swiper';
 import { mainStyle, setSize, screenH, screenW } from '../../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { IconOutline } from "@ant-design/icons-react-native";
-import { Button } from '@ant-design/react-native';
 import { headerTitle, headerRight } from '../../../router/navigationBar';
 import BxTabView from './../../../components/ScrollTabs/TabView';
 import { CartInfo } from './CartInfo';
@@ -12,6 +11,7 @@ import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import BxRichText from '../../../components/Pubilc/RichText';
 import { Toast } from '@ant-design/react-native';
+import { consult } from '../../../tools/function'
 
 
 let { width, height } = Dimensions.get('window')
@@ -24,7 +24,7 @@ interface State {
   showCartInfoDetails: boolean
 }
 
-@inject('goodsStore', 'cartStore', 'publicStore')
+@inject('goodsStore', 'cartStore', 'publicStore', 'cartStore')
 @observer
 class GoodsInfo extends React.Component<Props, State> {
   static navigationOptions = {
@@ -38,16 +38,16 @@ class GoodsInfo extends React.Component<Props, State> {
       tabTop: 667,
       canScroll: false,
       clicking: false,
-      showCartInfoDetails: false,
+      showCartInfoDetails: false
     };
   }
-
   componentDidMount() {
-    let { navigation, goodsStore } = this.props;
+    let { navigation, goodsStore, cartStore: { cartList } } = this.props;
     let { params } = navigation.state;
     goodsStore.getGoodsInfo(params.id);
   }
-
+  componentWillUnmount() {
+  }
   goto() {
     this.props.navigation.push('Login');
   }
@@ -56,7 +56,7 @@ class GoodsInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: tabTop <= e.nativeEvent.contentOffset.y + setSize(120)
+        canScroll: e.nativeEvent.contentOffset.y >= 590
       })
     }
   }
@@ -119,8 +119,9 @@ class GoodsInfo extends React.Component<Props, State> {
 
   render() {
     let { canScroll, showCartInfoDetails } = this.state;
-    let { goodsStore, navigation } = this.props;
+    let { goodsStore, navigation, cartStore: { hascart } } = this.props;
     let goodsInfo = goodsStore.goodsInfo
+    let goodsItem = goodsStore.goodsItem
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab140]}>
         <NavTop
@@ -130,19 +131,21 @@ class GoodsInfo extends React.Component<Props, State> {
             navigation.goBack();
           }}
           children={(
-            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1]}>
+            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1, mainStyle.positonre]}>
               <TouchableOpacity onPress={() => {
                 navigation.push('CartList')
               }}
               >
                 <Text style={[mainStyle.icon, { paddingRight: 0 }, mainStyle.fs22, mainStyle.c666]}
                 >&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle, { top: setSize(6) }]}></Text> : null}
               </TouchableOpacity>
             </View>
           )}
         ></NavTop>
         <ScrollView
           style={[mainStyle.flex1]}
+          stickyHeaderIndices={[2]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
@@ -172,7 +175,7 @@ class GoodsInfo extends React.Component<Props, State> {
                   <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
                     <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
                       <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
-                      <Text style={[mainStyle.mal20, mainStyle.c333, mainStyle.fs15]}>请选择类型</Text>
+                      <Text style={[mainStyle.mal20, mainStyle.c333, mainStyle.fs15]}>{goodsItem.sku_name || '请选择类型'}</Text>
                     </View>
                     <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
                   </View>
@@ -188,7 +191,7 @@ class GoodsInfo extends React.Component<Props, State> {
             tabs={[{ title: '商品详情' }, { title: '参数规格' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.mab40, mainStyle.flex1, { height: height - setSize(160) }]}>
+            <View style={[mainStyle.mab40, mainStyle.flex1]}>
               <BxRichText text={goodsInfo.detail}></BxRichText>
             </View>
             <View style={[mainStyle.mab40, mainStyle.flex1, mainStyle.pa15]}>
@@ -210,7 +213,7 @@ class GoodsInfo extends React.Component<Props, State> {
 
         <View style={[mainStyle.h120, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.fixedview, mainStyle.palr15, mainStyle.bgcfff, mainStyle.brt1e2]}>
           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mar10, { width: screenW * 0.24 }]}>
-            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { }}>
+            <TouchableOpacity style={[mainStyle.flex1]} onPress={() => { consult() }}>
               <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
                 <Text style={[mainStyle.czt, mainStyle.icon, mainStyle.fs18, mainStyle.mab5]}>&#xe610;</Text>
                 <Text style={[mainStyle.c333, mainStyle.fs12]}>咨询</Text>

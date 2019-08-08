@@ -46,7 +46,7 @@ class MyCourseList extends React.Component<Props> {
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
           navType="normal"
-          title={params.type == 'online' ? '我的在线课程' : '我的培训课程'}
+          title={params.type == 'online' ? '我的在线课程' : '我的线下课程'}
           onPress={() => {
             this.props.navigation.goBack();
           }}

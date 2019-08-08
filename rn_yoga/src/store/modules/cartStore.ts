@@ -1,6 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
+import { DeviceEventEmitter } from 'react-native';
 import addressStore from './addressStore';
 
 class Cart {
@@ -22,7 +23,8 @@ class Cart {
       pass: 0,
       address: {}
     },
-    orderStatus: {}
+    orderStatus: {},
+    hascart: false
   }
 
   @computed get selectData() {
@@ -45,6 +47,9 @@ class Cart {
       }
     }
     return this.cartData.cartList
+  }
+  @computed get hascart() {
+    return this.cartData.hascart
   }
 
   @computed get cartListObj2Arr() {
@@ -128,7 +133,6 @@ class Cart {
      */
     this.cartData.selectData = item;
   }
-
   @action async getCartList() {
     try {
 
@@ -148,6 +152,7 @@ class Cart {
       this.cartData.ids = []
       this.cartData.cartList = newobj
       this.cartData.cartListObj2Arr = newArr
+      this.cartData.hascart = Object.keys(newobj).length > 0 ? true : false;
       return response
     } catch (error) {
       console.log(error)
@@ -166,6 +171,7 @@ class Cart {
       let params = { ...selectData }
       let response = await new Fetch('/cart/add', 'POST', params, {})
       Toast.info(response.message, 1.2, undefined, false)
+      this.cartData.hascart = true;
       return response
     } catch (error) {
       console.log(error)
@@ -239,9 +245,18 @@ class Cart {
     this.cartData.ids = newids;
   }
 
-  @action editCartItem(type: string, index: number, value: string) {
-    let { cartList } = this.cartData
-    cartList[type][index].count = value
+  @action async editCartItem(type: string, index: number, value: string) {
+    try {
+      let { cartList } = this.cartData
+      let id = cartList[type][index].id
+      let params = { id, num: value }
+      cartList[type][index].count = value
+      let response = await new Fetch('/cart/product_edit', 'POST', params, {})
+      return response
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
   /**
    * 购物车添加数量
@@ -314,6 +329,7 @@ class Cart {
       let response = await new Fetch('/order/place_cart', 'POST', params, {})
       Toast.info(response.message, 1, undefined, false)
       this.cartData.orderStatus = response.data
+      DeviceEventEmitter.emit('TORELOADMINE', 'yes');
       return response.data
     } catch (error) {
       console.log(error)
@@ -361,6 +377,7 @@ class Cart {
       let response = await new Fetch('/order/place_direct', 'POST', params, {})
       Toast.info(response.message, 1, undefined, false)
       this.cartData.orderStatus = response.data
+      DeviceEventEmitter.emit('TORELOADMINE', 'yes');
       return response.data
     } catch (error) {
       console.log(error)

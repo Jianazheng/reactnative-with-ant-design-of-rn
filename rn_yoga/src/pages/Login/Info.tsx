@@ -6,7 +6,7 @@ import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import BxImgCodeInput from '../../components/Pubilc/ImgCodeInput';
-import { Fetch } from './../../fetch/request';
+import { getDate } from './../../tools/function';
 import { observer, inject } from 'mobx-react';
 import userStore from './../../store/modules/userStore';
 
@@ -51,13 +51,11 @@ class Register extends React.Component<Props, State> {
     let { userStore, navigation } = this.props;
     let { username, sex, birthday, email, address } = this.state;
     let { params } = navigation.state;
-    console.log(params);
-    console.log({ username, sex: sex.toString(), birthday: birthday.toLocaleDateString().replace('/', '-').replace('/', '-'), email, address })
     if (username == '' || birthday == '' || email == '' || address == '') {
       Toast.info('请完善所有信息');
       return false
     }
-    userStore.CompleteInfo({ username, sex: sex.toString(), birthday: birthday.toLocaleDateString().replace('/', '-').replace('/', '-'), email, address })
+    userStore.CompleteInfo({ username, sex: sex.toString(), birthday: getDate(birthday.getTime() / 1000), email, address })
       .then(res => {
         this.setState({
           clicking: true

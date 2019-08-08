@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('goodsStore')
+@inject('goodsStore', 'cartStore')
 @observer
 class GoodsList extends React.Component<Props, State> {
 
@@ -26,7 +26,8 @@ class GoodsList extends React.Component<Props, State> {
       conditionShow: false,
       sortShow: false,
       type: '',
-      cid: ''
+      cid: '',
+      keyword: ''
     };
   }
 
@@ -97,15 +98,15 @@ class GoodsList extends React.Component<Props, State> {
     })
   }
 
-  handleSearch() {
-    let { goodsStore, keyword } = this.props
+  handleSearch(keyword) {
+    let { goodsStore } = this.props
     goodsStore.setKeyword(keyword)
   }
 
 
   render() {
     let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
-    let { navigation, goodsStore } = this.props
+    let { navigation, goodsStore, cartStore: { hascart } } = this.props
     let goodslist = goodsStore.goodslist
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
@@ -123,10 +124,11 @@ class GoodsList extends React.Component<Props, State> {
               }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe63f;</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[mainStyle.flex1]} onPress={() => {
+              <TouchableOpacity style={[mainStyle.flex1, mainStyle.positonre]} onPress={() => {
                 navigation.navigate('CartList')
               }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs22]}>&#xe60a;</Text>
+                {hascart ? <Text style={[mainStyle.circle, { top: setSize(6), right: setSize(40) }]}></Text> : null}
               </TouchableOpacity>
             </View>
           )}
