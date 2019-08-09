@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
 
@@ -36,6 +36,7 @@ class Train {
     serviceIdArr: [],
     //培训购物车
     cartItem: { price: '', type_name: '' },
+    oncheck: 0,
     keyword: '',
     trainSearch: {
       data: [],
@@ -47,7 +48,9 @@ class Train {
   @computed get cartItem() {
     return this.trainData.cartItem
   }
-
+  @computed get oncheck() {
+    return this.trainData.oncheck
+  }
   @computed get trainInfo() {
     return this.trainData.trainInfo
   }
@@ -192,10 +195,11 @@ class Train {
     try {
       let response = await new Fetch('/train/sku_info', 'GET', { id }, {})
       let trainSelectItem = response.data
-      this.trainData.trainSelectItem = trainSelectItem
       if (trainSelectItem.length > 0) {
+        this.trainData.oncheck = 0;
         this.trainData.cartItem = trainSelectItem[0]
       }
+      this.trainData.trainSelectItem = trainSelectItem
       return response
     } catch (error) {
       return null
@@ -287,8 +291,9 @@ class Train {
     }
   }
 
-  @action selectCartItem(item: any) {
-    this.trainData.cartItem = item
+  @action selectCartItem(item: any, index: number) {
+    this.trainData.cartItem = item;
+    this.trainData.oncheck = index;
   }
 
   @action changeCollect() {

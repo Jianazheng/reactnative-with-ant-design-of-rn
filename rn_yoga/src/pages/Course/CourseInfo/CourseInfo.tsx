@@ -72,7 +72,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 565
+        canScroll: e.nativeEvent.contentOffset.y >= 490
       })
     }
   }
@@ -144,7 +144,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { canScroll, showLoading } = this.state
     let { courseStore: { courseInfo }, cartStore: { hascart }, navigation } = this.props
     return (
-      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab40]}>
+      <View style={[mainStyle.column, mainStyle.flex1]}>
         <NavTop
           navType="normal"
           title="在线课程详情"
@@ -199,13 +199,13 @@ class CourseInfo extends React.Component<Props, State> {
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.mab40]}>
+            <View style={[mainStyle.pab140]}>
               <CourseTeacher teacher={courseInfo.teacher}></CourseTeacher>
             </View>
-            <View style={[mainStyle.mab40]}>
+            <View style={[mainStyle.pab180]}>
               <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.mab40]}>
+            <View style={[mainStyle.pab180]}>
               <RelatedCourse course={courseInfo.relate_course} navigation={navigation}></RelatedCourse>
             </View>
           </BxTabView>

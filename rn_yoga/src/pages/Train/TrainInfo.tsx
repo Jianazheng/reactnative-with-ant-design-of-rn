@@ -220,11 +220,14 @@ class TrainInfo extends React.Component<Props, State> {
               <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+              <Text style={[mainStyle.c999, mainStyle.fs13]}>开始报名时间: {splitStr(trainInfo.reg_start_time, ' ')}</Text>
+            </View>
+            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
               <Text style={[mainStyle.c999, mainStyle.fs13]}>截止报名时间: {splitStr(trainInfo.reg_end_time, ' ')}</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>{trainInfo.price}</Text>
+                ￥<Text style={[mainStyle.fs22]}>{cartItem.price}</Text>
               </Text>
             </View>
 
@@ -287,13 +290,13 @@ class TrainInfo extends React.Component<Props, State> {
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.mab40]}>
+            <View style={[mainStyle.pab180]}>
               <CourseTeacher></CourseTeacher>
             </View>
-            <View style={[mainStyle.mab40]}>
+            <View style={{ paddingBottom: setSize(200) }}>
               <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.mab40]}>
+            <View style={[mainStyle.pab180]}>
               <RelatedCourse navigation={navigation}></RelatedCourse>
             </View>
           </BxTabView>
@@ -344,41 +347,45 @@ class TrainInfo extends React.Component<Props, State> {
           </View>
         </View>
 
-        {showApplyNotice ?
-          <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
-          {
-            height: screenH * (frontInfo.apply_detail && frontInfo.apply_detail.length > 1 ? 0.55 : 0.3)
-          }
-          ]}>
-            <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
-              <Text style={[mainStyle.fs14, mainStyle.c333]}>报名条件</Text>
-              <Text
-                style={[mainStyle.c999, mainStyle.icon, mainStyle.fs20]}
-                onPress={() => { this.handleCloseApplyNotice(false) }}
-              >&#xe651;</Text>
-            </View>
-            <ApplyNotice data={frontInfo.apply_detail || []} relate={frontInfo.front_train_relate || 1}></ApplyNotice>
-          </View>
-          : null}
-
-        {showCartInfoDetails ?
-          <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15,
-          {
-            height: screenH * 0.55
-          }
-          ]}>
-            <CartInfo
-              closeBtn={
+        {
+          showApplyNotice ?
+            <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
+            {
+              height: screenH * (frontInfo.apply_detail && frontInfo.apply_detail.length > 1 ? 0.55 : 0.3)
+            }
+            ]}>
+              <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                <Text style={[mainStyle.fs14, mainStyle.c333]}>报名条件</Text>
                 <Text
                   style={[mainStyle.c999, mainStyle.icon, mainStyle.fs20]}
-                  onPress={() => { this.handleCloseCart() }}
-                >
-                  &#xe651;
+                  onPress={() => { this.handleCloseApplyNotice(false) }}
+                >&#xe651;</Text>
+              </View>
+              <ApplyNotice data={frontInfo.apply_detail || []} relate={frontInfo.front_train_relate || 1}></ApplyNotice>
+            </View>
+            : null
+        }
+
+        {
+          showCartInfoDetails ?
+            <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15,
+            {
+              height: screenH * 0.55
+            }
+            ]}>
+              <CartInfo
+                closeBtn={
+                  <Text
+                    style={[mainStyle.c999, mainStyle.icon, mainStyle.fs20]}
+                    onPress={() => { this.handleCloseCart() }}
+                  >
+                    &#xe651;
                 </Text>
-              }
-            ></CartInfo>
-          </View>
-          : null}
+                }
+              ></CartInfo>
+            </View>
+            : null
+        }
 
         {
           showCartInfoDetails || showApplyNotice ?
@@ -396,7 +403,7 @@ class TrainInfo extends React.Component<Props, State> {
             : null
         }
 
-      </View>
+      </View >
     )
   }
 }

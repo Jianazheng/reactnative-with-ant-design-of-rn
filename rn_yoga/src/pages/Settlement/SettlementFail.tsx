@@ -81,6 +81,7 @@ class SettlementFail extends React.Component<Props, State> {
                             <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{val.sku_name}</Text>
                           </View>
                           <Text style={[mainStyle.c333, mainStyle.fs13]}>￥{val.original_price}</Text>
+                          <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.mat5]}>{val.not_pass_reason}</Text>
                         </View>
                       </View>
                     )

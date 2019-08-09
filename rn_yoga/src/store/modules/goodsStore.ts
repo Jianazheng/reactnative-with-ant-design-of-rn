@@ -8,6 +8,7 @@ class Goods {
   @observable goodsData = {
     goodsInfo: {},
     goodsItem: { is_collection: 0 },
+    onckeck: 0,
     goodsClassify: [],
     recommendGoods: [],
     goodsCondition: [],
@@ -29,6 +30,9 @@ class Goods {
 
   @computed get goodsItem() {
     return this.goodsData.goodsItem
+  }
+  @computed get onckeck() {
+    return this.goodsData.onckeck
   }
 
   @computed get goodsClassify() {
@@ -78,9 +82,10 @@ class Goods {
     }
   }
 
-  @action selectItem(item: object) {
+  @action selectItem(item: object, i: number) {
     item.count = item.count == undefined ? 1 : item.count;
     this.goodsData.goodsItem = item;
+    this.goodsData.onckeck = i;
   }
 
   @action async getGoodsClassify() {

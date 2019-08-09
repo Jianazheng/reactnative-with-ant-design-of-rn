@@ -32,17 +32,20 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
   }
 
   componentDidMount() {
-    let { data, goodsStore, cartStore } = this.props;
-    if (data.sku && data.sku.length > 0) {
-      this.handleSelectItem(data.sku[0])
-    }
+    let { data, goodsStore: { onckeck }, cartStore } = this.props;
+    this.setState({
+      oncheck: onckeck
+    })
+    // if (data.sku && data.sku.length > 0) {
+    //   this.handleSelectItem(data.sku[0])
+    // }
   }
 
-  handleSelectItem(val: object) {
+  handleSelectItem(val: object, i) {
     let { data, goodsStore, cartStore } = this.props;
     let goodsItem = goodsStore.goodsItem;
     val.count = goodsItem.count
-    goodsStore.selectItem(val);
+    goodsStore.selectItem(val, i);
     cartStore.selectItem({ type: 1, good_id: data.id, sku_id: val.id, product_stock: val.product_stock, count: goodsItem.count });
   }
   changenum(e: number) {
@@ -108,7 +111,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                         this.setState({
                           oncheck: i
                         }, () => {
-                          this.handleSelectItem(val);
+                          this.handleSelectItem(val, i);
                         })
                       }}
                       key={i}

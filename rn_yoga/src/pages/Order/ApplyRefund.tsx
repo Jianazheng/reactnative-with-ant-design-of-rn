@@ -69,9 +69,9 @@ class ApplyRefund extends React.Component<Props, State> {
                   <Text style={[mainStyle.fs14, mainStyle.c333]}>已支付课程取消说明：</Text>
                 </View>
               </View>
-              <View style={[mainStyle.palr15, mainStyle.column, mainStyle.mat15, mainStyle.mab15]}>
+              <View style={[mainStyle.palr15, mainStyle.column, mainStyle.patb15]}>
                 {
-                  refundExplain.reason.map((val, i) => <Text key={i} style={[mainStyle.fs13, mainStyle.c666, mainStyle.mab10]}>{val.reason}</Text>)
+                  refundExplain.reason.map((val, i) => <Text key={i} style={[mainStyle.fs13, mainStyle.c666, mainStyle.mab10, { lineHeight: setSize(32) }]}>{val.reason}</Text>)
                 }
               </View>
             </View>
@@ -87,7 +87,7 @@ class ApplyRefund extends React.Component<Props, State> {
                 </View>
                 <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.mat10]}>
                   <Text style={[mainStyle.icon, mainStyle.c999]}>&#xe659;</Text>
-                  <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal5]}>手续费将在退款中扣除</Text>
+                    <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal5]}>手续费将在退款中扣除</Text>
                 </View>
               </View>
             </View>

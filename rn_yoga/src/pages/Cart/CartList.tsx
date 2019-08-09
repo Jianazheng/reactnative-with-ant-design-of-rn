@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter, RefreshControl } from 'react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { ActivityIndicator, Toast, Modal } from "@ant-design/react-native";
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -11,7 +11,8 @@ import { observer, inject } from 'mobx-react';
 interface Props { }
 interface State {
   showLoading: boolean,
-  selectAll: boolean
+  selectAll: boolean,
+  refreshing: boolean
 }
 
 @inject('cartStore', 'addressStore')
@@ -27,7 +28,8 @@ class CartList extends React.Component<Props, State> {
     super(props);
     this.state = {
       showLoading: true,
-      selectAll: false
+      selectAll: false,
+      refreshing: false
     };
   }
 
@@ -141,7 +143,13 @@ class CartList extends React.Component<Props, State> {
       Toast.info('请选择商品', 1.4, undefined, false)
     }
   }
-
+  _onRefresh() {
+    this.setState({
+      showLoading: true
+    }, () => {
+      this.getCartList()
+    })
+  }
   render() {
     let { showLoading, selectAll } = this.state
     let { cartStore, navigation } = this.props
@@ -164,7 +172,15 @@ class CartList extends React.Component<Props, State> {
             </View>
           )}
         ></NavTop>
-        <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
+        <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}
+          refreshControl={(
+            <RefreshControl
+              tintColor={mainStyle.czt.color}
+              colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+              refreshing={this.state.showLoading}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          )}>
           <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pa15]}>
             {
               cartList.product

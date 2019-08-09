@@ -80,7 +80,13 @@ class GoodsInfo extends React.Component<Props, State> {
                   this.setState({
                     clicking: false
                   })
-                  navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
+                  if (res != null) {
+                    navigation.navigate('Settlement', { type: 1, from: 'fastbuy' })
+                  }
+                }).catch(err => {
+                  this.setState({
+                    clicking: false
+                  })
                 })
             } else {
               this.setState({
@@ -165,7 +171,7 @@ class GoodsInfo extends React.Component<Props, State> {
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>{goodsInfo.list_price}</Text>
+                ￥<Text style={[mainStyle.fs22]}>{goodsItem.price}</Text>
               </Text>
               <Text style={[mainStyle.c999, mainStyle.fs13]}>{goodsInfo.sales_volume}人购买</Text>
             </View>

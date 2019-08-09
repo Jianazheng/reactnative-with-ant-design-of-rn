@@ -17,9 +17,9 @@ export default class InputNumber extends React.Component<Props> {
       value: this.props.value || 1
     };
     this.onChange = value => {
-      console.log(value)
-      this.setState({ value: value != '' ? parseInt(value) : '' }, () => {
-        if (this.props.onChange) this.props.onChange(value);
+      let v = value != '' ? parseInt(value) : '';
+      this.setState({ value: v }, () => {
+        if (this.props.onChange) this.props.onChange(v);
       });
     };
   }

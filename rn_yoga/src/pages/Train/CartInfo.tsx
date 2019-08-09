@@ -29,15 +29,20 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
   }
 
   componentDidMount() {
-    let { trainStore } = this.props
-    let trainSelectItem = trainStore.trainSelectItem
-    if (trainSelectItem.length > 0) this.handleSelectItem(trainSelectItem[0])
+    let { trainStore: { oncheck } } = this.props
+    this.setState({
+      oncheck: oncheck
+    })
+    // let trainSelectItem = trainStore.trainSelectItem
+    // let cartItem = trainStore.cartItem
+    // console.log(toJS(cartItem));
+    // if (trainSelectItem.length > 0 && cartItem.length <= 0) this.handleSelectItem(trainSelectItem[0])
   }
 
-  handleSelectItem(val: object) {
+  handleSelectItem(val: object, i) {
     let { trainStore, cartStore } = this.props
     let trainInfo = trainStore.trainInfo
-    trainStore.selectCartItem(val)
+    trainStore.selectCartItem(val, i);
     cartStore.selectItem({ type: 2, good_id: trainInfo.id, sku_id: val.id })
   }
 
@@ -99,7 +104,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                         key={i}
                         onPress={() => {
                           this.setState({ oncheck: i }, () => {
-                            this.handleSelectItem(val)
+                            this.handleSelectItem(val, i)
                           })
                         }}
                         style={[mainStyle.fs12, mainStyle.mab10, styles.goodsBtn, oncheck == i ? styles.goodsCheck : styles.goodsNo]}>

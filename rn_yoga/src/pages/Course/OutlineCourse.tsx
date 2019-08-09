@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, DeviceEventEmitter } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, DeviceEventEmitter, Alert } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
-import { Checkbox, ActivityIndicator } from '@ant-design/react-native';
+import { Checkbox, ActivityIndicator, Toast } from '@ant-design/react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import NavTop from '../../router/navTop';
@@ -11,7 +11,6 @@ import { observer, inject } from 'mobx-react';
 import { splitStr } from '../../tools/function';
 import { Modal } from '@ant-design/react-native';
 import { consult } from '../../tools/function'
-
 interface Props { }
 
 let imgw = (screenW - setSize(120)) * 0.28;
@@ -54,6 +53,7 @@ class OutlineCourse extends React.Component<Props> {
         this.setState({
           loading: false
         })
+        this.websoc()
       }).catch(err => {
         this.setState({
           loading: false
@@ -61,6 +61,46 @@ class OutlineCourse extends React.Component<Props> {
       })
   }
 
+  websoc() {
+    // 打开一个 web socket
+    var ws = new WebSocket("ws://yoga.t.jkxuetang.com:2345");
+    let { trainStore: { trainCourseInfo } } = this.props
+    ws.onopen = function () {
+      // Web Socket 已连接上，使用 send() 方法发送数据
+      console.log('WebSocket 连接成功');
+      //连接状态
+      if (ws.readyState != 1) {
+        console.log('链接失败')
+      }
+      let tmp = JSON.stringify({ type: 'start', user_id: trainCourseInfo.user_id, train_id: trainCourseInfo.course_id, sku_id: trainCourseInfo.sku_id });
+      ws.send(tmp);
+    };
+
+    ws.onmessage = function (evt) {
+      try {
+        var data = JSON.parse(evt.data);
+        switch (data.type) {
+          case 'start':
+            Toast.info(data.data.msg)
+            break;
+          case 'success':
+            if (data.data.status == 1) {
+              DeviceEventEmitter.emit('TORELOADCOURSELIST', 'yes');
+              DeviceEventEmitter.emit('TORELOADTRAIN', 'yes');
+              DeviceEventEmitter.emit('TORELOADMYCOURSE', 'yes')
+            }
+            break;
+        }
+      } catch (ex) {
+
+      }
+    };
+
+    ws.onclose = function (e) {
+      // 关闭 websocket
+      console.log(ws);
+    };
+  }
   goto(routeName: string, params: any) {
     this.props.navigation.navigate(routeName, params);
   }
@@ -157,12 +197,11 @@ class OutlineCourse extends React.Component<Props> {
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
               <ScrollView
+                nestedScrollEnabled
                 scrollEnabled={true}
                 style={[mainStyle.flex1]}
               >
-                <View style={[mainStyle.mab15, mainStyle.mat10]}>
-                  <Text style={[mainStyle.c666, mainStyle.fs11]}>{currentTeacher.teacher_introduction}</Text>
-                </View>
+                <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.patb10, { lineHeight: setSize(26) }]}>{currentTeacher.teacher_introduction}</Text>
               </ScrollView>
             </View>
             <BxButton

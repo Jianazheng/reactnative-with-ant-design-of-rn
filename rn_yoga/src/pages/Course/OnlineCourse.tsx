@@ -181,11 +181,12 @@ class OnlineCourse extends React.Component<Props> {
                 <Image style={[styles.CourseInfoImage2, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + currentTeacher.avatar }}></Image>
                 <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1, mainStyle.mal10]}>{currentTeacher.teacher_name}</Text>
               </View>
-              <View
+              <ScrollView
+                scrollEnabled={true}
                 style={[mainStyle.flex1]}
               >
-                <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.mab15, mainStyle.mat10]}>{currentTeacher.teacher_introduction}</Text>
-              </View>
+                <Text style={[mainStyle.c666, mainStyle.fs11, mainStyle.patb10, { lineHeight: setSize(26) }]}>{currentTeacher.teacher_introduction}</Text>
+              </ScrollView>
             </View>
             <BxButton
               title={'关闭'}

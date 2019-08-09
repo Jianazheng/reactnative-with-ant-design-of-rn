@@ -38,12 +38,12 @@ class CourseArtInfo extends React.Component<CourseInfoItemProps>{
             {
               trainInfo.question ?
                 trainInfo.question.map((item, i) => (
-                  <View style={[mainStyle.row, mainStyle.mab20]}>
+                  <View key={i} style={[mainStyle.row, mainStyle.pab20]}>
                     <Image source={{ uri: 'http://' + item.icon }} style={[styles.quesicon]}></Image>
                     <View style={[mainStyle.column, mainStyle.pal10]}>
                       <Text style={[mainStyle.fs13, mainStyle.c666]}>{item.question}</Text>
                       <View style={[mainStyle.mat15]}>
-                        <Text style={[mainStyle.c999, mainStyle.fs13]}>{item.answer}</Text>
+                        <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(32) }]}>{item.answer}</Text>
                       </View>
                     </View>
                   </View>

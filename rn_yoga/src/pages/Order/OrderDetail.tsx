@@ -7,6 +7,7 @@ import { OrderGoodsItem, OrderCourseItem, OrderTrainItem } from '../../component
 import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
+import { consult } from '../../tools/function';
 
 interface Props { }
 interface State {
@@ -447,10 +448,10 @@ class PayBar extends React.Component<PayBarProps>{
       case 'nopay':
         return (
           <View style={[mainStyle.h120, mainStyle.brt1e2, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.palr15]}>
-            <View style={[mainStyle.row, mainStyle.aiCenter]}>
+            <TouchableOpacity onPress={() => { consult() }} style={[mainStyle.row, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.icon, mainStyle.fs16, mainStyle.lh42]}>&#xe639;</Text>
               <Text style={[mainStyle.fs12, mainStyle.c333, mainStyle.lh44, { marginLeft: setSize(10) }]}>有问题，咨询在线客服</Text>
-            </View>
+            </TouchableOpacity>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
               <BxButton
                 colors={[mainStyle.czt.color, mainStyle.cztc.color]}
