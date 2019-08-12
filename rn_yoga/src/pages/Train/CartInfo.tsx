@@ -5,6 +5,7 @@ import { Text, View, Dimensions, ScrollView, Image, TouchableOpacity, StyleSheet
 import { mainStyle, contentPadding, setSize, screenH } from '../../public/style/style';
 import { observer, inject } from 'mobx-react';
 import { splitStr } from '../../tools/function';
+import trainStore from '../../store/modules/trainStore';
 
 let { width, height } = Dimensions.get('window');
 
@@ -29,13 +30,14 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
   }
 
   componentDidMount() {
-    let { trainStore: { oncheck } } = this.props
+    let { trainStore,cartStore } = this.props
+    let {oncheck,trainInfo,cartItem}=trainStore;
     this.setState({
       oncheck: oncheck
     })
+    cartStore.selectItem({ type: 2, good_id: trainInfo.id, sku_id: cartItem.id })
     // let trainSelectItem = trainStore.trainSelectItem
     // let cartItem = trainStore.cartItem
-    // console.log(toJS(cartItem));
     // if (trainSelectItem.length > 0 && cartItem.length <= 0) this.handleSelectItem(trainSelectItem[0])
   }
 
