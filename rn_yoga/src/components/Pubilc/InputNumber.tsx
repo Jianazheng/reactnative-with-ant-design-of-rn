@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   numberSelectInput: {
     width: setSize(100),
     height: setSize(50),
-    lineHeight: setSize(50),
+    lineHeight: setSize(34),
     textAlign: 'center',
     paddingTop: 0,
     paddingBottom: 0

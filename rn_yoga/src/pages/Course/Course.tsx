@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter,StatusBarIOS } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import { observer, inject } from 'mobx-react';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
+import {isios} from '../../tools/function'
 
 interface Props { }
 
@@ -31,7 +32,8 @@ class Course extends React.Component<Props> {
     super(props);
     this.state = {
       loading: true,
-      refreshing: false
+      refreshing: false,
+      statusBar:0
     };
   }
   TORELOADMYCOURSE: object;
@@ -40,6 +42,14 @@ class Course extends React.Component<Props> {
     this.TORELOADMYCOURSE = DeviceEventEmitter.addListener('TORELOADMYCOURSE', res => {
       this.loadCourse()
     })
+    if (isios()) {
+      let _this=this;
+			StatusBarIOS._nativeModule.getHeight((h) => {
+			  this.setState({
+					statusBar: h.height
+				})
+			});
+		}
   }
   componentWillUnmount() {
     this.TORELOADMYCOURSE.remove()
@@ -75,12 +85,12 @@ class Course extends React.Component<Props> {
   }
 
   render() {
-    let { loading } = this.state;
+    let { loading,statusBar } = this.state;
     let { navigation, userStore, courseStore } = this.props;
     let userInfo = userStore.userInfo;
     let onlineCourseList = courseStore.onlineCourseList
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7,{marginTop:statusBar}]}>
         <ActivityIndicator
           toast
           size="large"

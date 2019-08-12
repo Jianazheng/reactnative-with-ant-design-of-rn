@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions, RefreshControl,StatusBarIOS } from 'react-native';
 import { mainStyle, screenW, setSize } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
 import { observer, inject } from 'mobx-react';
 import trainStore from './../../store/modules/trainStore';
-
+import {isios} from '../../tools/function'
 
 let { width, height } = Dimensions.get('window');
 const contentPadding = setSize(30);
@@ -33,7 +33,8 @@ class Explore extends React.Component<Props, State> {
     super(props);
     this.state = {
       news: [{}, {}, {}, {}],
-      refreshing: false
+      refreshing: false,
+      statusBar:0
     };
   }
 
@@ -44,7 +45,14 @@ class Explore extends React.Component<Props, State> {
     courseStore.getClassify();
     courseStore.getRecommendCourse();
     trainStore.getClassify();
-
+    if (isios()) {
+      let _this=this;
+			StatusBarIOS._nativeModule.getHeight((h) => {
+			  this.setState({
+					statusBar: h.height
+				})
+			});
+		}
   }
 
   goto(router: string) {
@@ -71,14 +79,14 @@ class Explore extends React.Component<Props, State> {
 
   render() {
     let { navigation, goodsStore, courseStore, trainStore } = this.props
-    let { refreshing } = this.state
+    let { refreshing,statusBar } = this.state
     let goodsClassify = goodsStore.goodsClassify
     let recommendGoods = goodsStore.recommendGoods
     let courseClassify = courseStore.classify
     let recommendCourses = courseStore.recommendCourse
     let trainClassify = trainStore.trainData.classify
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7,{marginTop:statusBar}]}>
         <ScrollView
           style={[mainStyle.flex1]}
           refreshControl={(

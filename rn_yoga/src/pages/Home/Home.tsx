@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity,StatusBarIOS } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -12,6 +12,7 @@ import HomeCourse from './Course';
 import BxTabView from './../../components/ScrollTabs/TabView';
 import { observer, inject } from 'mobx-react';
 import RNStorage from './../../public/js/storage';
+import {isios} from '../../tools/function'
 
 let { width, height } = Dimensions.get('window')
 
@@ -19,7 +20,9 @@ interface Props { }
 interface State {
   canScroll: boolean,
   tabTop: number,
-  tabIndex: number
+  tabIndex: number,
+  refreshing: boolean,
+  statusBar:number
 }
 
 @inject('userStore', 'homeStore', 'cartStore')
@@ -48,7 +51,8 @@ class Home extends React.Component<Props, State> {
       tabTop: 667,
       tabIndex: 0,
       canScroll: false,
-      refreshing: false
+      refreshing: false,
+      statusBar:0
     };
   }
 
@@ -78,6 +82,14 @@ class Home extends React.Component<Props, State> {
     this.TOBIND = DeviceEventEmitter.addListener('TOBIND', res => {
       navigation.navigate('WxBind', { wxdata: res })
     })
+    if (isios()) {
+      let _this=this;
+			StatusBarIOS._nativeModule.getHeight((h) => {
+			  this.setState({
+					statusBar: h.height
+				})
+			});
+		}
   }
 
   componentWillUnmount() {
@@ -93,7 +105,7 @@ class Home extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 255 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= setSize(480) && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
@@ -116,10 +128,10 @@ class Home extends React.Component<Props, State> {
   }
 
   render() {
-    let { canScroll, tabIndex, refreshing } = this.state;
+    let { canScroll, tabIndex, refreshing,statusBar } = this.state;
     let { navigation, homeStore, cartStore: { hascart } } = this.props;
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf2]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf2,{marginTop:statusBar}]}>
         <ScrollView
           style={[mainStyle.flex1]}
           onScroll={(e) => {
