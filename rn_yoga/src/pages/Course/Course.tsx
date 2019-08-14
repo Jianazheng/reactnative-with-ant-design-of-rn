@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter,StatusBarIOS } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, RefreshControl, DeviceEventEmitter, StatusBarIOS } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import { observer, inject } from 'mobx-react';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
-import {isios} from '../../tools/function'
+import { isios } from '../../tools/function'
 
 interface Props { }
 
@@ -33,7 +33,7 @@ class Course extends React.Component<Props> {
     this.state = {
       loading: true,
       refreshing: false,
-      statusBar:0
+      statusBar: 0
     };
   }
   TORELOADMYCOURSE: object;
@@ -43,13 +43,13 @@ class Course extends React.Component<Props> {
       this.loadCourse()
     })
     if (isios()) {
-      let _this=this;
-			StatusBarIOS._nativeModule.getHeight((h) => {
-			  this.setState({
-					statusBar: h.height
-				})
-			});
-		}
+      let _this = this;
+      StatusBarIOS._nativeModule.getHeight((h) => {
+        this.setState({
+          statusBar: h.height
+        })
+      });
+    }
   }
   componentWillUnmount() {
     this.TORELOADMYCOURSE.remove()
@@ -85,12 +85,12 @@ class Course extends React.Component<Props> {
   }
 
   render() {
-    let { loading,statusBar } = this.state;
+    let { loading, statusBar } = this.state;
     let { navigation, userStore, courseStore } = this.props;
     let userInfo = userStore.userInfo;
     let onlineCourseList = courseStore.onlineCourseList
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf7,{marginTop:statusBar}]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7, { marginTop: statusBar }]}>
         <ActivityIndicator
           toast
           size="large"
@@ -123,7 +123,7 @@ class Course extends React.Component<Props> {
                       borderWidth: setSize(1),
                       paddingLeft: setSize(12),
                       paddingRight: setSize(12),
-                      borderRadius: setSize(40),
+                      borderRadius: setSize(18),
                     }
                     ]}
                     >{userInfo.level_name != '' ? userInfo.level_name : '登录后查看'}</Text>

@@ -119,7 +119,7 @@ class Mine extends React.Component<Props> {
                       borderWidth: setSize(1),
                       paddingLeft: setSize(12),
                       paddingRight: setSize(12),
-                      borderRadius: setSize(40),
+                      borderRadius: setSize(18),
                     }
                     ]}
                     >{userInfo.level_name != '' ? userInfo.level_name : '登录后查看'}</Text>
@@ -362,7 +362,8 @@ const styles = StyleSheet.create({
     borderRadius: setSize(17),
     borderWidth: setSize(1),
     borderColor: mainStyle.cfff.color,
-    zIndex: 1
+    zIndex: 1,
+    overflow: 'hidden'
   }
 })
 
