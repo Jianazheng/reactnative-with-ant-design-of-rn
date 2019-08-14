@@ -121,8 +121,8 @@ android {
         applicationId "com.rn_yoga"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.4"
+        versionCode 25
+        versionName "2.0.5"
     }
     
     splits {
