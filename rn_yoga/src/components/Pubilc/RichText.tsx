@@ -45,7 +45,6 @@ export default class BxRichText extends PureComponent<Props, State>{
           bounces={false}
           onNavigationStateChange={(doc) => {
             let h = !isNaN(parseInt(doc.title)) ? parseInt(doc.title) : height
-            console.log(h)
             this.setState({
               height: h
             })

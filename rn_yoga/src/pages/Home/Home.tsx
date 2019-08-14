@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity,StatusBarIOS } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity, StatusBarIOS } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -12,7 +12,7 @@ import HomeCourse from './Course';
 import BxTabView from './../../components/ScrollTabs/TabView';
 import { observer, inject } from 'mobx-react';
 import RNStorage from './../../public/js/storage';
-import {isios} from '../../tools/function'
+import { isios } from '../../tools/function'
 
 let { width, height } = Dimensions.get('window')
 
@@ -22,7 +22,7 @@ interface State {
   tabTop: number,
   tabIndex: number,
   refreshing: boolean,
-  statusBar:number
+  statusBar: number
 }
 
 @inject('userStore', 'homeStore', 'cartStore')
@@ -52,7 +52,7 @@ class Home extends React.Component<Props, State> {
       tabIndex: 0,
       canScroll: false,
       refreshing: false,
-      statusBar:0
+      statusBar: 0
     };
   }
 
@@ -83,13 +83,13 @@ class Home extends React.Component<Props, State> {
       navigation.navigate('WxBind', { wxdata: res })
     })
     if (isios()) {
-      let _this=this;
-			StatusBarIOS._nativeModule.getHeight((h) => {
-			  this.setState({
-					statusBar: h.height
-				})
-			});
-		}
+      let _this = this;
+      StatusBarIOS._nativeModule.getHeight((h) => {
+        this.setState({
+          statusBar: h.height
+        })
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -128,10 +128,10 @@ class Home extends React.Component<Props, State> {
   }
 
   render() {
-    let { canScroll, tabIndex, refreshing,statusBar } = this.state;
+    let { canScroll, tabIndex, refreshing, statusBar } = this.state;
     let { navigation, homeStore, cartStore: { hascart } } = this.props;
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf2,{marginTop:statusBar}]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf2, { marginTop: statusBar }]}>
         <ScrollView
           style={[mainStyle.flex1]}
           onScroll={(e) => {
@@ -147,25 +147,25 @@ class Home extends React.Component<Props, State> {
             />
           )}
         >
-          {/* <View onLayout={(e) => {
+          <View onLayout={(e) => {
             this.setState({
               tabTop: e.nativeEvent.layout.height
             })
           }}
-          > */}
-          <HomeSearchBar
-            onFocus={(e) => { navigation.push('Search'); }}
-            leftBtn={(
-              <TouchableOpacity onPress={() => {
-                navigation.push('CartList')
-              }} style={[mainStyle.positonre]}>
-                <Text style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}>&#xe60a;</Text>
-                {hascart ? <Text style={[mainStyle.circle]}></Text> : null}
-              </TouchableOpacity>
-            )}></HomeSearchBar>
-          <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
-          <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
-          {/* </View> */}
+          >
+            <HomeSearchBar
+              onFocus={(e) => { navigation.push('Search'); }}
+              leftBtn={(
+                <TouchableOpacity onPress={() => {
+                  navigation.push('CartList')
+                }} style={[mainStyle.positonre]}>
+                  <Text style={[mainStyle.icon, mainStyle.pa15, { paddingRight: 0 }, mainStyle.fs22]}>&#xe60a;</Text>
+                  {hascart ? <Text style={[mainStyle.circle]}></Text> : null}
+                </TouchableOpacity>
+              )}></HomeSearchBar>
+            <HomeSwiper navigation={navigation} img={homeStore.banner}></HomeSwiper>
+            <HomeBroadcast navigation={navigation} list={homeStore.announcement}></HomeBroadcast>
+          </View>
           {
             homeStore.trainCate.length > 0
               ? <BxTabView
@@ -180,7 +180,7 @@ class Home extends React.Component<Props, State> {
                 }}
                 navigateTo={() => { navigation.push('ClassifyList') }}
               >
-                <View style={[mainStyle.flex1, mainStyle.pab20, {paddingBottom:setSize(80)}]}>
+                <View style={[mainStyle.flex1, mainStyle.pab20, { paddingBottom: setSize(80) }]}>
                   <Recommend navigation={navigation}></Recommend>
                 </View>
                 {

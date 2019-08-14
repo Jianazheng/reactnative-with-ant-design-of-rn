@@ -200,6 +200,15 @@ const mainStyle = StyleSheet.create({
         width: screenH * 0.09,
         borderRadius: screenH * 0.09 / 2,
         backgroundColor: '#999',
+    },
+    circle: {
+        position: 'absolute',
+        width: setSize(16),
+        height: setSize(16),
+        backgroundColor: "#FF4560",
+        borderRadius: setSize(8),
+        top: setSize(32),
+        right: -setSize(6)
     }
 });
 const contentPadding = setSize(30);

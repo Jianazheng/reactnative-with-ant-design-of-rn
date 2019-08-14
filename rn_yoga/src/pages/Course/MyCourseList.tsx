@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import BxListView from '../../components/Pubilc/ListView';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -22,15 +22,22 @@ class MyCourseList extends React.Component<Props> {
       arr: [{}, {}, {}, {}, {}, {}]
     };
   }
+  TORELOADONLINECOURSELIST: object;
 
   componentDidMount() {
     let { courseStore, trainStore, navigation } = this.props
     let { params } = navigation.state
     if (params.type == 'online') {
       courseStore.getOnlineCourse()
+      this.TORELOADONLINECOURSELIST = DeviceEventEmitter.addListener('TORELOADONLINECOURSELIST', res => {
+        courseStore.getOnlineCourse()
+      })
     } else {
       trainStore.getTrainCourse()
     }
+  }
+  componentWillUnmount() {
+    this.TORELOADONLINECOURSELIST.remove()
   }
 
   goto(routeName: string, params: any) {

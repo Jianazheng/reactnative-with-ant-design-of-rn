@@ -483,15 +483,17 @@ class PayBar extends React.Component<PayBarProps>{
               <Text style={[mainStyle.fs12, mainStyle.c333, mainStyle.lh44, { marginLeft: setSize(10) }]}>有问题，咨询在线客服</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
-              <BxButton
-                colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-                borderRadius={setSize(35)}
-                disabled={false}
-                title={'申请退款'}
-                btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(70), width: setSize(170) }]}
-                textstyle={[mainStyle.fs12, mainStyle.cfff]}
-                onClick={() => { handleRefund() }}>
-              </BxButton>
+              {data.refund != null && data.refund.status != 7 ?
+                <BxButton
+                  colors={[mainStyle.czt.color, mainStyle.cztc.color]}
+                  borderRadius={setSize(35)}
+                  disabled={false}
+                  title={'申请退款'}
+                  btnstyle={[mainStyle.mal10, mainStyle.bgcfff, { height: setSize(70), width: setSize(170) }]}
+                  textstyle={[mainStyle.fs12, mainStyle.cfff]}
+                  onClick={() => { handleRefund() }}>
+                </BxButton>
+                : null}
             </View>
           </View>
         )

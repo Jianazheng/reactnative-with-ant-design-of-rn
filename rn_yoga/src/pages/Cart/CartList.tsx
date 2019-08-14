@@ -137,6 +137,7 @@ class CartList extends React.Component<Props, State> {
         }
         this.setState({ showLoading: false })
       } catch (error) {
+        this.setState({ showLoading: false })
         console.log(error)
       }
     } else {

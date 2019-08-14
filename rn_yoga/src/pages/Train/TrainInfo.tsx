@@ -56,8 +56,9 @@ class TrainInfo extends React.Component<Props, State> {
     };
   }
   componentDidMount() {
-    let { navigation, trainStore } = this.props
+    let { navigation, trainStore, cartStore: { hascart } } = this.props
     let { params } = navigation.state
+    console.log(hascart)
     trainStore.getTrainInfo(params.id)
       .then(res => {
         this.setState({ showLoading: false })

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import { Checkbox } from '@ant-design/react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -30,7 +30,7 @@ class OnlineCourse extends React.Component<Props> {
       currentTeacher: {}
     };
   }
-
+  TORELOADONLINECOURES: object;
   componentDidMount() {
     let { navigation, courseStore } = this.props
     let { params } = navigation.state
@@ -40,6 +40,18 @@ class OnlineCourse extends React.Component<Props> {
           loading: false
         })
       })
+    this.TORELOADONLINECOURES = DeviceEventEmitter.addListener('TORELOADONLINECOURES', res => {
+      courseStore.getOnlineCourseInfo(params.id)
+        .then(res => {
+          this.setState({
+            loading: false
+          })
+        })
+    })
+  }
+
+  componentWillUnmount() {
+    this.TORELOADONLINECOURES.remove()
   }
 
   goto(routeName: string, params: any) {
@@ -97,7 +109,7 @@ class OnlineCourse extends React.Component<Props> {
                     borderRadius={setSize(60)}
                     btnstyle={[{ width: screenW - setSize(120), height: setSize(70) }, mainStyle.mat10]}
                     onClick={() => {
-                      this.goto('OnlineCourseInfo', { id: onlineCourseInfo.id, course_id: onlineCourseInfo.course_id, summary_id: '' })
+                      this.goto('OnlineCourseInfo', { id: onlineCourseInfo.id, course_id: onlineCourseInfo.course_id, summary_id: '', rate: onlineCourseInfo.rate })
                     }}
                   ></BxButton>
                 </View>
@@ -123,6 +135,7 @@ class OnlineCourse extends React.Component<Props> {
                                   <Summary
                                     navigation={navigation}
                                     ids={{ id: onlineCourseInfo.id, course_id: onlineCourseInfo.course_id }}
+                                    rate={onlineCourseInfo.rate}
                                     item={item}
                                     key={ci}
                                   ></Summary>
@@ -204,6 +217,7 @@ class OnlineCourse extends React.Component<Props> {
 interface SummaryProps {
   item: object,
   ids: object,
+  rate: number,
   navigation: object
 }
 
@@ -218,10 +232,10 @@ class Summary extends React.PureComponent<SummaryProps>{
   }
 
   render() {
-    let { item, ids } = this.props
+    let { item, ids, rate } = this.props
     return (
       <TouchableOpacity onPress={() => {
-        this.goto('OnlineCourseInfo', { summary_id: item.id, ...ids })
+        this.goto('OnlineCourseInfo', { summary_id: item.id, rate: rate, ...ids })
       }}>
         <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.brb1f2]}>
           <View style={[mainStyle.row, mainStyle.aiCenter]}>

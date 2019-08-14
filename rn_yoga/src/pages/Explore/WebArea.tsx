@@ -46,6 +46,13 @@ class WebArea extends React.Component<Props> {
           originWhitelist={['*']}
           scrollEnabled={true}
           source={{ uri: content }}
+          domStorageEnabled={true}
+          javaScriptEnabled={true}
+          renderError={(e) => {
+            if (e === 'WebKitErrorDomain') {
+              return
+            }
+          }}
         ></WebView>
       </View>
     )

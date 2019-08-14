@@ -32,12 +32,12 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
   }
 
   componentDidMount() {
-    let { goodsStore,cartStore } = this.props
-    let {oncheck,goodsInfo,goodsItem}=goodsStore;
+    let { goodsStore, cartStore } = this.props
+    let { oncheck, goodsInfo, goodsItem } = goodsStore;
     this.setState({
-      oncheck: oncheck
+      oncheck: oncheck || 0
     })
-    cartStore.selectItem({type: 1, good_id: goodsInfo.id, sku_id: goodsItem.id, product_stock: goodsItem.product_stock, count: goodsItem.count })
+    cartStore.selectItem({ type: 1, good_id: goodsInfo.id, sku_id: goodsItem.id, product_stock: goodsItem.product_stock, count: goodsItem.count })
     // if (data.sku && data.sku.length > 0) {
     //   this.handleSelectItem(data.sku[0])
     // }

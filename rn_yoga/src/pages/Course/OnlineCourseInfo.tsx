@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, Animated, Platform, WebView } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image, Animated, Platform, WebView, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { CourseListItem } from '../../components/Course/CourseItem';
@@ -47,6 +47,13 @@ class OnlineCourseInfo extends React.Component<Props> {
           loading: false
         })
       })
+      if(params.rate!=100){
+        setTimeout(() => {
+          DeviceEventEmitter.emit('TORELOADONLINECOURES', '');
+          DeviceEventEmitter.emit('TORELOADONLINECOURSELIST', '');
+          DeviceEventEmitter.emit('TORELOADMYCOURSE', '');
+        }, 1000);
+      }
     console.log(params)
   }
 

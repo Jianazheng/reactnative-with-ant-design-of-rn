@@ -175,7 +175,7 @@ class CourseListItem extends React.Component<CourseListItemProps>{
         {
           type == 'outline'
             ? <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter, { width: imgw * 0.8 }]}>
-              {data.isserver == 0 ?
+              {data.server == 1 && data.isserver == 0 ?
                 <TouchableOpacity style={[styles.serverbtn]} onPress={() => { this.goto('OutlineCourseReserve', { id: data.id }) }}><Text style={[mainStyle.cfff, mainStyle.fs11]}>预定服务</Text></TouchableOpacity>
                 : null}
               <View>
