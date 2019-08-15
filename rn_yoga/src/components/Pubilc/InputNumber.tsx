@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { mainStyle, setSize } from '../../public/style/style';
+import { Toast } from '@ant-design/react-native';
 
 interface Props {
   leftBtn: JSX.Element,
@@ -17,6 +18,11 @@ export default class InputNumber extends React.Component<Props> {
       value: this.props.value || 1
     };
     this.onChange = value => {
+      let { max } = this.props;
+      if (max == 0) {
+        Toast.info('库存不足');
+        return;
+      }
       let v = value != '' ? parseInt(value) : '';
       this.setState({ value: v }, () => {
         if (this.props.onChange) this.props.onChange(v);
@@ -25,6 +31,11 @@ export default class InputNumber extends React.Component<Props> {
   }
   reduce() {
     let { value } = this.state;
+    let { max } = this.props;
+    if (max == 0) {
+      Toast.info('库存不足');
+      return;
+    }
     let v = value > 1 ? value - 1 : 1;
     this.setState({ value: v });
     this.onChange(v);
@@ -32,6 +43,10 @@ export default class InputNumber extends React.Component<Props> {
   addNumber() {
     let { value } = this.state;
     let { max } = this.props;
+    if (max == 0) {
+      Toast.info('库存不足');
+      return;
+    }
     let v = max ? value < max ? value + 1 : max : value + 1
     this.setState({ value: v });
     this.onChange(v);

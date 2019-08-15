@@ -97,7 +97,9 @@ class CourseInfo extends React.Component<Props, State> {
               this.setState({
                 clicking: false
               })
-              navigation.navigate('Settlement', { type: 3, from: 'fastbuy' })
+              if (res != null) {
+                navigation.navigate('Settlement', { type: 3, from: 'fastbuy' })
+              }
             })
         } else {//加入购物车
           cartStore.createCart()

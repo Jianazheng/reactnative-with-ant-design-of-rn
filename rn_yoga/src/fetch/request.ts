@@ -72,8 +72,6 @@ export class Fetch {
             case 400:
               if (response.data.errorCode == 1083) {
                 resolve(response)
-              } else if (response.data.errorCode == 1057) {
-                Toast.info(response.data.message, 1.8, undefined, false)
               } else {
                 Toast.info(response.data.message, 1.8, undefined, false)
                 reject(response.data);

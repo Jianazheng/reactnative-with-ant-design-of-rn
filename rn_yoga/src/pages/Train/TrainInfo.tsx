@@ -110,9 +110,9 @@ class TrainInfo extends React.Component<Props, State> {
                   clicking: false
                 })
                 console.log(res)
-                if (res.status != 400) {
+                if (res != null && res.status != 400) {
                   navigation.navigate('Settlement', { type: 2, from: 'fastbuy' })
-                } else {
+                } else if (res != null) {
                   navigation.navigate('Info');
                 }
               })

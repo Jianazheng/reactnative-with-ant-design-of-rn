@@ -208,7 +208,8 @@ const mainStyle = StyleSheet.create({
         backgroundColor: "#FF4560",
         borderRadius: setSize(8),
         top: setSize(32),
-        right: -setSize(6)
+        right: -setSize(6),
+        overflow: 'hidden'
     }
 });
 const contentPadding = setSize(30);

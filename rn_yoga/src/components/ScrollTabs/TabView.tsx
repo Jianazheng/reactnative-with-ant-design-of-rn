@@ -68,8 +68,8 @@ class BxTabView extends React.Component<Props, State> {
             this.handleChange(e)
           }}
           // initialPage={currentIndex}
-          //page={currentIndex}
-          prerenderingSiblingsNumber={1}
+          page={currentIndex}
+          prerenderingSiblingsNumber={0}
           renderTabBar={() => <BxTabbars tabWidth={tabWidth} current={currentIndex} tabAlign={tabAlign} tabNames={tabs} navigateTo={navigateTo}></BxTabbars>}
         >
 

@@ -116,7 +116,7 @@ class Settlement extends React.Component<Props, State> {
     let settlementInfo = cartStore.settlementInfo;
     let { params } = navigation.state
     selectData.count = e;
-    if (settlementInfo.orderCount == 1 && params.type == 1 && settlementInfo.pStatusArray.length > 0) {
+    if (params.type == 1 && settlementInfo.pStatusArray.length > 0) {
       settlementInfo.pStatusArray[0].count = e;
     }
     cartStore.selectItem(selectData);
@@ -301,7 +301,7 @@ class PayBar extends React.Component<PayBarProps>{
         <View style={[mainStyle.row, mainStyle.aiCenter]}>
           <Text style={[mainStyle.fs12, mainStyle.lh42, mainStyle.c333]}>
             合计：
-                <Text style={[mainStyle.czt]}>￥</Text>
+            <Text style={[mainStyle.czt]}>￥</Text>
             <Text style={[mainStyle.czt, mainStyle.fs18]}>{type == 1 && type != 'pay' ? data.pStatusArray[0].original_price * data.pStatusArray[0].count : data.orderPrice}</Text>
           </Text>
         </View>
