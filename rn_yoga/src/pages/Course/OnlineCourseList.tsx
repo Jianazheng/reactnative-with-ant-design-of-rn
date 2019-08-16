@@ -49,7 +49,6 @@ class OnlineCourseList extends React.Component<Props, State> {
     this.TORELOADCOURSELIST = DeviceEventEmitter.addListener('TORELOADCOURSELIST', res => {
       courseStore.getCourseList(true);
     })
-    console.log(mt || 1)
   }
   componentWillUnmount() {
     this.TORELOADCOURSELIST.remove()
@@ -156,7 +155,7 @@ class OnlineCourseList extends React.Component<Props, State> {
                   onPress={() => {
                     this.handleSearch(keyword)
                   }}>
-                  <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索{mt}</Text>
+                  <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
                   this.hideSearchBar();

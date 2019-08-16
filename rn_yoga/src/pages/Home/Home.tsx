@@ -105,7 +105,7 @@ class Home extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= setSize(460) && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= setSize(440) && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
