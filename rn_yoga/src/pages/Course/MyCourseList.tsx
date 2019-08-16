@@ -37,7 +37,10 @@ class MyCourseList extends React.Component<Props> {
     }
   }
   componentWillUnmount() {
-    this.TORELOADONLINECOURSELIST.remove()
+    let { params } = this.props.navigation.state
+    if (params.type == 'online') {
+      this.TORELOADONLINECOURSELIST.remove()
+    }
   }
 
   goto(routeName: string, params: any) {
