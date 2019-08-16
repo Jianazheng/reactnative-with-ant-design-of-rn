@@ -79,7 +79,7 @@ class TrainInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 700 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= 680 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }

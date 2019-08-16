@@ -48,7 +48,6 @@ export default class BxRichText extends PureComponent<Props, State>{
             this.setState({
               height: h
             })
-            console.log(this.state.height);
           }}
           automaticallyAdjustContentInsets
           originWhitelist={['*']}

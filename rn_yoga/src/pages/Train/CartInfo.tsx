@@ -30,8 +30,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
   }
 
   componentDidMount() {
-    let { trainStore, cartStore } = this.props
-    let { oncheck, trainInfo, cartItem } = trainStore;
+    let { trainStore: { oncheck, trainInfo, cartItem }, cartStore } = this.props
     this.setState({
       oncheck: oncheck || 0
     })

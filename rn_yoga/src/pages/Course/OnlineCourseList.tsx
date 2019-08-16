@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('courseStore', 'cartStore')
+@inject('courseStore', 'cartStore', 'publicStore')
 @observer
 class OnlineCourseList extends React.Component<Props, State> {
 
@@ -49,6 +49,7 @@ class OnlineCourseList extends React.Component<Props, State> {
     this.TORELOADCOURSELIST = DeviceEventEmitter.addListener('TORELOADCOURSELIST', res => {
       courseStore.getCourseList(true);
     })
+    console.log(mt || 1)
   }
   componentWillUnmount() {
     this.TORELOADCOURSELIST.remove()
@@ -110,7 +111,7 @@ class OnlineCourseList extends React.Component<Props, State> {
 
   render() {
     let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
-    let { navigation, courseStore, cartStore: { hascart } } = this.props
+    let { navigation, courseStore, cartStore: { hascart }, publicStore: { iosmt } } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <NavTop
@@ -155,7 +156,7 @@ class OnlineCourseList extends React.Component<Props, State> {
                   onPress={() => {
                     this.handleSearch(keyword)
                   }}>
-                  <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索</Text>
+                  <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索{mt}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
                   this.hideSearchBar();
@@ -204,7 +205,7 @@ class OnlineCourseList extends React.Component<Props, State> {
 
         {
           conditionShow ?
-            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2]}>
+            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2, { top: setSize(200) + iosmt }]}>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.bgcfff, styles.seacrhConditionMain]}>
                 {
                   courseStore.classify.map((val, i) => (
@@ -234,7 +235,7 @@ class OnlineCourseList extends React.Component<Props, State> {
         }
         {
           sortShow ?
-            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2]}>
+            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2, { top: setSize(200) + iosmt }]}>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.bgcfff, styles.seacrhConditionMain]}>
                 {
                   courseStore.orderbyArr.map((val, i) => (

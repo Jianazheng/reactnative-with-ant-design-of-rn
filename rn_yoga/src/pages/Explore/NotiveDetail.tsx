@@ -49,9 +49,11 @@ class NotiveDetail extends React.Component<Props> {
             navigation.goBack();
           }}
         ></NavTop>
-        <BxRichText
-          text={content}
-        ></BxRichText>
+        <ScrollView>
+          <BxRichText
+            text={content}
+          ></BxRichText>
+        </ScrollView>
       </View>
     )
   }

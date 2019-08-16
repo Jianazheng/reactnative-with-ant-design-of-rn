@@ -92,7 +92,7 @@ class Order {
       }
       let response = await new Fetch('/user/order_list', 'GET', { size: 10, ...params }, {})
       let newdata = response.data
-      let newlist = orderList[type].data.concat(newdata.data)
+      let newlist = page == 1 ? newdata.data : orderList[type].data.concat(newdata.data)
       if (newlist.length < newdata.total && newdata.total > 1) {
         page++
       }

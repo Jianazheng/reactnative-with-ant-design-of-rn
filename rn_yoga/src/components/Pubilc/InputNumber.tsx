@@ -19,11 +19,11 @@ export default class InputNumber extends React.Component<Props> {
     };
     this.onChange = value => {
       let { max } = this.props;
-      if (max == 0) {
+      let v = value != '' ? parseInt(value) : '';
+      if (max == 0 || v >= max) {
         Toast.info('库存不足');
         return;
       }
-      let v = value != '' ? parseInt(value) : '';
       this.setState({ value: v }, () => {
         if (this.props.onChange) this.props.onChange(v);
       });
@@ -43,7 +43,7 @@ export default class InputNumber extends React.Component<Props> {
   addNumber() {
     let { value } = this.state;
     let { max } = this.props;
-    if (max == 0) {
+    if (max == 0 || value >= max) {
       Toast.info('库存不足');
       return;
     }

@@ -39,7 +39,9 @@ class MyOrder extends React.Component<Props, State> {
     let { params } = navigation.state
     let types = params.index ? tabs[params.index].type : 'all'
     this.setState({ current: params.index }, () => {
-      this.handleLoadOrder(types, true)
+      if (types == 'all') {
+        this.handleLoadOrder(types, true)
+      }
     })
     this.TORELOADORDERLIST = DeviceEventEmitter.addListener('TORELOADORDERLIST', res => {
       //重新回到列表时刷新列表，防止状态未更新
@@ -116,7 +118,11 @@ class MyOrder extends React.Component<Props, State> {
                   nomore={false}
                   loading={orderListAll[val].total == null || orderListAll[val].total > orderListAll[val].data.length}
                   onLoadmore={() => {
-                    this.handleLoadOrder(val, false)
+                    if (orderListAll[val].total == null) {
+                      this.handleLoadOrder(val, true)
+                    } else {
+                      this.handleLoadOrder(val, false)
+                    }
                   }}
                   listItem={({ item, index }) =>
                     <OrderItem

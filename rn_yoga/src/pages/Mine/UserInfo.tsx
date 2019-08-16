@@ -99,7 +99,7 @@ class UserInfo extends React.Component<Props, State> {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
-              <Text style={[mainStyle.fs15, mainStyle.c666]}>用户名</Text>
+              <Text style={[mainStyle.fs15, mainStyle.c666]}>姓名</Text>
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
                 {/* <TextInput
                   value={userInfo.username}

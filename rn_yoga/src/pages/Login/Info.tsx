@@ -100,10 +100,10 @@ class Register extends React.Component<Props, State> {
                     username: value
                   });
                 }}
-                placeholder="请输入用户名"
+                placeholder="请输入姓名"
                 style={[mainStyle.fs14]}
               >
-                <Text style={[mainStyle.c333, mainStyle.fs14]}>用户名</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs14]}>姓名</Text>
               </InputItem>
               <Picker
                 value={sex}

@@ -22,6 +22,7 @@ import OutlineCourseReserve from './../pages/Course/OutlineCourseReserve';
 import OnlineCourse from './../pages/Course/OnlineCourse';
 import OnlineCourseInfo from './../pages/Course/OnlineCourseInfo';
 import MyCertificate from './../pages/Mine/MyCertificate';
+import MyCertImg from './../pages/Mine/MyCertImg';
 import ClassifyList from './../pages/Home/ClassifyList';
 import OnlineCourseList from '../pages/Course/OnlineCourseList';
 import GoodsInfo from './../pages/Goods/GoodsInfo/GoodsInfo';
@@ -82,6 +83,7 @@ export const navItem = {
   NotiveList: { screen: NotiveList },
   NotiveDetail: { screen: NotiveDetail },
   MyFinish: { screen: MyFinish },
+  MyCertImg: { screen: MyCertImg },
   WebArea: { screen: WebArea },
   Search: { screen: Search },
   Tab: {

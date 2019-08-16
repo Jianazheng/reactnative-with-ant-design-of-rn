@@ -37,7 +37,8 @@ class Public {
         current_page: 1,
         total: null
       }
-    }
+    },
+    iosmt: 0
   }
 
   @computed get collectData() {
@@ -50,6 +51,13 @@ class Public {
 
   @computed get myfinish() {
     return this.publicData.myfinish
+  }
+
+  @computed get iosmt() {
+    return this.publicData.iosmt
+  }
+  @action setiosmt(h: number) {
+    this.publicData.iosmt = h;
   }
 
   @action async setCollection(common_id: string | number, type: string, isCollect: string | number) {

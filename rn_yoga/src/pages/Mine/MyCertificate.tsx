@@ -60,19 +60,21 @@ class MyCertificate extends React.Component<Props, State> {
             colNumber={1}
             pab={setSize(20)}
             listItem={({ item, index }) => (
-              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.pa15, mainStyle.bgcfff, mainStyle.brb1f2]}>
-                <Image style={[mainStyle.bgcf2, {
-                  height: screenW * 0.4,
-                  width: screenW * 0.4 * 0.7,
-                }]} source={{ uri: 'http://' + item.cert_img }}></Image>
-                <View style={[mainStyle.flex1, mainStyle.mal15, mainStyle.patb10, mainStyle.column, mainStyle.jcBetween, { height: screenW * 0.4 }]}>
-                  <Text style={[mainStyle.c333, mainStyle.fs13]}>{item.train_name}({item.sku_name})</Text>
-                  <View style={[mainStyle.column]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs13]}>获取时间</Text>
-                    <Text style={[mainStyle.c666, mainStyle.fs12, mainStyle.mat10]}>{item.cert_time}</Text>
+              <TouchableOpacity onPress={() => { this.props.navigation.push('MyCertImg', { src: 'http://' + item.cert_img }) }}>
+                <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.pa15, mainStyle.bgcfff, mainStyle.brb1f2]}>
+                  <Image style={[mainStyle.bgcf2, {
+                    height: screenW * 0.4,
+                    width: screenW * 0.4 * 0.7,
+                  }]} source={{ uri: 'http://' + item.cert_img }}></Image>
+                  <View style={[mainStyle.flex1, mainStyle.mal15, mainStyle.patb10, mainStyle.column, mainStyle.jcBetween, { height: screenW * 0.4 }]}>
+                    <Text style={[mainStyle.c333, mainStyle.fs13]}>{item.train_name}({item.sku_name})</Text>
+                    <View style={[mainStyle.column]}>
+                      <Text style={[mainStyle.c333, mainStyle.fs13]}>获取时间</Text>
+                      <Text style={[mainStyle.c666, mainStyle.fs12, mainStyle.mat10]}>{item.cert_time}</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             )}></BxListView>
         </View>
       </View>

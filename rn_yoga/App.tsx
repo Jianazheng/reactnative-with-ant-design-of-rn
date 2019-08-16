@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { Platform, StyleSheet, Text, View, BackHandler, StatusBarIOS } from 'react-native';
 import { Provider, observer, inject } from 'mobx-react';
 import store from './src/store/index';
 import { createStackNavigator, createAppContainer, NavigationEvents, NavigationState } from 'react-navigation';
@@ -16,6 +16,7 @@ import { Provider as AntProvider } from '@ant-design/react-native';
 import { DeviceEventEmitter } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import { Toast } from '@ant-design/react-native';
+import { isios } from './src/tools/function'
 
 
 const AppNavigator = createStackNavigator(navItem, navConfig);
@@ -36,7 +37,11 @@ export default class App extends Component<Props> {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
-
+    if (isios()) {
+      StatusBarIOS._nativeModule.getHeight((h) => {
+        store.publicStore.setiosmt(h.height)
+      });
+    }
   }
 
   componentDidMount() {

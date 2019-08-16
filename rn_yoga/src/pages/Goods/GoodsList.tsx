@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('goodsStore', 'cartStore')
+@inject('goodsStore', 'cartStore', 'publicStore')
 @observer
 class GoodsList extends React.Component<Props, State> {
 
@@ -106,7 +106,7 @@ class GoodsList extends React.Component<Props, State> {
 
   render() {
     let { searchBarTranslate, searchBarOpacity, sortShow, conditionShow, keyword } = this.state
-    let { navigation, goodsStore, cartStore: { hascart } } = this.props
+    let { navigation, goodsStore, cartStore: { hascart }, publicStore: { iosmt } } = this.props
     let goodslist = goodsStore.goodslist
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
@@ -200,7 +200,7 @@ class GoodsList extends React.Component<Props, State> {
 
         {
           conditionShow ?
-            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2]}>
+            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2, { top: setSize(200) + iosmt }]}>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.bgcfff, styles.seacrhConditionMain]}>
                 {
                   goodsStore.goodsCondition.map((val, i) => (
@@ -230,7 +230,7 @@ class GoodsList extends React.Component<Props, State> {
         }
         {
           sortShow ?
-            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2]}>
+            <Animated.View style={[mainStyle.column, styles.seacrhCondition, mainStyle.brb1e2, { top: setSize(200) + iosmt }]}>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.bgcfff, styles.seacrhConditionMain]}>
                 {
                   goodsStore.goodsSort.map((val, i) => (

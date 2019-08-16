@@ -5,7 +5,6 @@ import userStore from './../store/modules/userStore';
 import RNStorage from './../public/js/storage';
 import { DeviceEventEmitter, Alert, Platform } from "react-native";
 import deviceInfo from 'react-native-device-info';
-
 export class Fetch {
   constructor(api: string, method: string, data: object, headers = {}) {
 

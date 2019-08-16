@@ -137,9 +137,9 @@ class HomeSwiper extends React.Component<Props> {
                 activeDot={
                   <View style={[styles.swiperDotActive]}></View>
                 }
-                onTouchEnd={() => {
-                  this.handleTo(current)
-                }}
+                // onTouchEnd={() => {
+                //   this.handleTo(current)
+                // }}
                 onIndexChanged={(current) => this.setState({ current })}
               >
                 {
@@ -148,11 +148,13 @@ class HomeSwiper extends React.Component<Props> {
                       key={i}
                       style={[styles.swiperItem]}
                     >
-                      <Image
-                        resizeMode="cover"
-                        style={[{ height: swh, width: sww }]}
-                        source={{ uri: 'http://' + val.image_url }}
-                      ></Image>
+                      <TouchableOpacity onPress={() => { this.handleTo(current) }}>
+                        <Image
+                          resizeMode="cover"
+                          style={[{ height: swh, width: sww }]}
+                          source={{ uri: 'http://' + val.image_url }}
+                        ></Image>
+                      </TouchableOpacity>
                     </View>
                   ))
                 }
