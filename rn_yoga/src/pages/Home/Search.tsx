@@ -12,7 +12,7 @@ interface State {
 
 }
 
-@inject('trainStore')
+@inject('trainStore', 'publicStore')
 @observer
 class Search extends React.Component<Props, State> {
 
@@ -50,9 +50,9 @@ class Search extends React.Component<Props, State> {
 
   render() {
     let { keyword, search } = this.state
-    let { navigation, trainStore } = this.props
+    let { navigation, trainStore, publicStore: { iosmt } } = this.props
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7, { marginTop: iosmt }]}>
         <HomeSearchBar
           placeholder={'搜索培训课程'}
           autoFocus={false}
