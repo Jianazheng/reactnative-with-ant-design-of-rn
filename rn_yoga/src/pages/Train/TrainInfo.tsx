@@ -61,6 +61,9 @@ class TrainInfo extends React.Component<Props, State> {
     console.log(hascart)
     trainStore.getTrainInfo(params.id)
       .then(res => {
+        if (res == null) {
+          navigation.goBack();
+        }
         this.setState({ showLoading: false })
       }).catch(err => {
         this.setState({ showLoading: false })
@@ -79,7 +82,7 @@ class TrainInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 680 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= 660 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
@@ -166,7 +169,7 @@ class TrainInfo extends React.Component<Props, State> {
     let cartItem = trainStore.cartItem
     let frontInfo = trainStore.frontInfo
     return (
-      <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pab140]}>
+      <View style={[mainStyle.column, mainStyle.flex1]}>
         <NavTop
           navType="normal"
           title="培训课程详情"
@@ -294,7 +297,7 @@ class TrainInfo extends React.Component<Props, State> {
             <View style={[mainStyle.pab180]}>
               <CourseTeacher></CourseTeacher>
             </View>
-            <View style={{ paddingBottom: setSize(200) }}>
+            <View style={[mainStyle.pab140]}>
               <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.pab180]}>

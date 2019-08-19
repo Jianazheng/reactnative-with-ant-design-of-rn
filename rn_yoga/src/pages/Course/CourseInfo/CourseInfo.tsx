@@ -11,7 +11,7 @@ import NavTop from '../../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { consult } from '../../../tools/function'
-
+import ApplyNotice from './ApplyNotice';
 /**
  * 培训课程详情
  */
@@ -58,10 +58,14 @@ class CourseInfo extends React.Component<Props, State> {
     let { params } = navigation.state
     courseStore.getCourseInfo(params.id)
       .then(res => {
+        if (res == null) {
+          navigation.goBack();
+        }
         this.setState({ showLoading: false })
       }).catch(err => {
         this.setState({ showLoading: false })
       })
+    courseStore.getFrontInfo(params.id)
   }
 
   goto() {
@@ -141,10 +145,9 @@ class CourseInfo extends React.Component<Props, State> {
     publicStore.setCollection(common_id, type, isCollect)
       .then(res => courseStore.changeCollect())
   }
-
   render() {
-    let { canScroll, showLoading } = this.state
-    let { courseStore: { courseInfo }, cartStore: { hascart }, navigation } = this.props
+    let { canScroll, showLoading, showApplyNotice } = this.state
+    let { courseStore: { courseInfo, frontInfo }, cartStore: { hascart }, navigation } = this.props
     return (
       <View style={[mainStyle.column, mainStyle.flex1]}>
         <NavTop
@@ -184,6 +187,7 @@ class CourseInfo extends React.Component<Props, State> {
             <View style={[mainStyle.column, mainStyle.mab10]}>
               <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}> {courseInfo.course_name}</Text>
               <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> {courseInfo.course_introduction}</Text>
+              <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> 购买后{courseInfo.validay || 1}天内有效</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs13]}>
@@ -191,6 +195,18 @@ class CourseInfo extends React.Component<Props, State> {
               </Text>
               <Text style={[mainStyle.c999, mainStyle.fs13]}>{courseInfo.reply}人报名</Text>
             </View>
+            <TouchableOpacity onPress={() => {
+              if (frontInfo.length == 0) return
+              this.handleCloseApplyNotice(true)
+            }}>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
+                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
+                  <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
+                  {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
+                </View>
+                {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+              </View>
+            </TouchableOpacity>
           </View>
 
           <BxTabView
@@ -257,6 +273,25 @@ class CourseInfo extends React.Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
+        {
+          showApplyNotice ?
+            <View style={[styles.fixedinfo, mainStyle.bgcfff, mainStyle.pa15,
+            {
+              height: screenH * (frontInfo.online_apply_detail && frontInfo.online_apply_detail.length > 1 ? 0.55 : 0.3)
+            }
+            ]}>
+              <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                <Text style={[mainStyle.fs14, mainStyle.c333]}>报名条件</Text>
+                <Text
+                  style={[mainStyle.c999, mainStyle.icon, mainStyle.fs20]}
+                  onPress={() => { this.handleCloseApplyNotice(false) }}
+                >&#xe651;</Text>
+              </View>
+              <ApplyNotice data={frontInfo.online_apply_detail || []} relate={frontInfo.front_train_relate || 1}></ApplyNotice>
+            </View>
+            : null
+        }
+
       </View>
     )
   }

@@ -70,6 +70,7 @@ class Settlement extends React.Component<Props, State> {
   handleCreateOrder() {
     let { navigation, cartStore, cartStore: { settlementInfo }, paymentStore, addressStore: { addressSelect } } = this.props
     let { params } = navigation.state
+    let selectData = cartStore.selectData;
     let order_type = 1
     if (!addressSelect.id && (params.type == 1 || params.type == undefined)) {
       Toast.info('请添加收货地址', 1.4, undefined, false)
@@ -81,7 +82,7 @@ class Settlement extends React.Component<Props, State> {
       cartStore.fastbuyOrder(addressSelect.id)
         .then(res => {
           //保存支付参数
-          paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: settlementInfo.orderPrice })
+          paymentStore.setPayStatus({ order_type: order_type, order_id: res.order_id, orderPrice: params.type == 1 && settlementInfo.pStatusArray.length == 1 ? settlementInfo.pStatusArray[0].original_price * selectData.count : settlementInfo.orderPrice })
           this.setState({ showLoading: false }, () => {
             navigation.replace('WxPay', { type: order_type, product_type: params.type })
           })
@@ -116,7 +117,7 @@ class Settlement extends React.Component<Props, State> {
     let settlementInfo = cartStore.settlementInfo;
     let { params } = navigation.state
     selectData.count = e;
-    if (params.type == 1 && settlementInfo.pStatusArray.length > 0) {
+    if (params.type == 1 && settlementInfo.pStatusArray.length == 1) {
       settlementInfo.pStatusArray[0].count = e;
     }
     cartStore.selectItem(selectData);

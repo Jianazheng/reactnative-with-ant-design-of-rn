@@ -39,9 +39,7 @@ class MyOrder extends React.Component<Props, State> {
     let { params } = navigation.state
     let types = params.index ? tabs[params.index].type : 'all'
     this.setState({ current: params.index }, () => {
-      if (types == 'all') {
-        this.handleLoadOrder(types, true)
-      }
+      this.handleLoadOrder(types, true)
     })
     this.TORELOADORDERLIST = DeviceEventEmitter.addListener('TORELOADORDERLIST', res => {
       //重新回到列表时刷新列表，防止状态未更新
@@ -366,6 +364,20 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                         : null
                     }
                   </View>
+                  : null
+              }
+              {
+                data.isexpress == 1
+                  ? <BxButton
+                    title={'查看物流'}
+                    colors={[mainStyle.c999.color, mainStyle.cc2.color]}
+                    borderRadius={setSize(30)}
+                    btnstyle={[mainStyle.h60, mainStyle.palr15, mainStyle.mal10]}
+                    textstyle={[mainStyle.fs12]}
+                    onClick={() => {
+                      this.goto('WebArea', { url: data.expressurl })
+                    }}
+                  ></BxButton>
                   : null
               }
             </View>

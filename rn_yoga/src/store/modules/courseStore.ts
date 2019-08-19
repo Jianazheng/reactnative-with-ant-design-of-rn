@@ -39,7 +39,8 @@ class Course {
       data: [],
       current_page: 1,
       total: null
-    }
+    },
+    frontInfo: {}
   }
 
   @computed get recommendCourse() {
@@ -49,7 +50,9 @@ class Course {
   @computed get courseInfo() {
     return this.courseData.courseInfo
   }
-
+  @computed get frontInfo() {
+    return this.courseData.frontInfo
+  }
   @computed get onlineCourseList() {
     return this.courseData.onlineCourseList
   }
@@ -187,7 +190,17 @@ class Course {
       return null
     }
   }
-
+  @action async getFrontInfo(id: string | number) {
+    try {
+      this.courseData.frontInfo = { detail: [] }
+      let response = await new Fetch('/online/front_train_info', 'GET', { id }, {});
+      let frontInfo = response.data;
+      this.courseData.frontInfo = frontInfo;
+      return response
+    } catch (error) {
+      return null
+    }
+  }
   @action selectItem(item: object) {
     this.courseData.goodsItem = item;
   }
@@ -211,7 +224,7 @@ class Course {
       let resd = response.data
       onlineCourse.total = resd.total
       if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
-      let newdata = onlineCourse.data.concat(resd.data)
+      let newdata = params.page == 1 ? resd.data : onlineCourse.data.concat(resd.data)
       onlineCourse.data = newdata
       if (onlineCourse.data.length < resd.total) {
         onlineCourse.page += 1

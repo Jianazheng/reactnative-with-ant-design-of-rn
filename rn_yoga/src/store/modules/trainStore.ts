@@ -218,7 +218,7 @@ class Train {
       let resd = response.data
       trainCourse.total = resd.total
       if (trainCourse.data.length >= resd.total) return response
-      let newdata = trainCourse.data.concat(resd.data)
+      let newdata = params.page == 1 ? resd.data : trainCourse.data.concat(resd.data)
       trainCourse.data = newdata
       if (trainCourse.data.length < resd.total) {
         trainCourse.page += 1

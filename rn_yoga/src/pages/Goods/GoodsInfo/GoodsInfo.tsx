@@ -44,7 +44,15 @@ class GoodsInfo extends React.Component<Props, State> {
   componentDidMount() {
     let { navigation, goodsStore, cartStore: { cartList } } = this.props;
     let { params } = navigation.state;
-    goodsStore.getGoodsInfo(params.id);
+    goodsStore.getGoodsInfo(params.id).then(res => {
+      if (res == null) {
+        navigation.goBack()
+      }
+    }).catch(err => {
+      console.log(err)
+    });
+    let goodsItem = goodsStore.goodsItem
+    goodsStore.selectItem(goodsItem, 0);
   }
   componentWillUnmount() {
   }

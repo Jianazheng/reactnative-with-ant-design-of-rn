@@ -88,6 +88,7 @@ class RefundReason extends React.Component<Props, State> {
               this.setState({
                 showLoading: false
               }, () => {
+                DeviceEventEmitter.emit('TORELOADORDERLIST', 'yes')
                 navigation.goBack()
               })
             }).catch(err => {

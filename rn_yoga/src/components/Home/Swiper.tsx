@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { mainStyle, setSize } from '../../public/style/style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Video from 'react-native-video';
 
 let { width, height } = Dimensions.get('window')
@@ -26,9 +25,9 @@ class HomeSwiper extends React.Component<Props> {
     }
   }
 
-  handleTo(index: number) {
+  handleTo(item: object) {
     let { img, navigation } = this.props
-    let { content, attr_id } = img[index]
+    let { content, attr_id } = item
     //attr_id:"关联类型ID，type:1-商品，2-培训，3-在线课程，4-资讯，0-自定义链接"
     switch (attr_id) {
       case '1':
@@ -137,10 +136,10 @@ class HomeSwiper extends React.Component<Props> {
                 activeDot={
                   <View style={[styles.swiperDotActive]}></View>
                 }
-                // onTouchEnd={() => {
-                //   this.handleTo(current)
-                // }}
-                onIndexChanged={(current) => this.setState({ current })}
+              // onTouchEnd={() => {
+              //   this.handleTo(current)
+              // }}
+              // onIndexChanged={(current) => { this.setState({ current }) }}
               >
                 {
                   img.map((val, i) => (
@@ -148,7 +147,7 @@ class HomeSwiper extends React.Component<Props> {
                       key={i}
                       style={[styles.swiperItem]}
                     >
-                      <TouchableOpacity onPress={() => { this.handleTo(current) }}>
+                      <TouchableOpacity onPress={() => { this.handleTo(val) }}>
                         <Image
                           resizeMode="cover"
                           style={[{ height: swh, width: sww }]}
