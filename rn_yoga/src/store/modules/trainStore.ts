@@ -21,7 +21,7 @@ class Train {
     trainCourse: {
       data: [],
       total: null,
-      page: 0
+      page: 1
     },
     //培训详情
     trainCourseInfo: {

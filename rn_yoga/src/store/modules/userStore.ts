@@ -26,7 +26,8 @@ class User {
       data: [],
       total: null,
       page: 1
-    }
+    },
+    imageData: []
   }
 
   @computed get token() {
@@ -40,7 +41,9 @@ class User {
   @computed get memberInfo() {
     return this.userData.memberInfo
   }
-
+  @computed get imageData() {
+    return toJS(this.userData.imageData)
+  }
   @action setToken(token: string) {
     this.userData.token = token
   }
@@ -50,7 +53,6 @@ class User {
   @action removeToken() {
     this.userData.token = ''
   }
-
   @action RegisterAndPassword(params: object) {
     return new Promise((resolve, reject) => {
       let response = new Fetch('/login/mobile_reg', 'POST', params, {});
@@ -175,21 +177,26 @@ class User {
 
   @action async GetCertList() {
     try {
-      let { certList } = this.userData
+      let { certList, imageData } = this.userData
       let params = { page: this.certList.page }
       let response = await new Fetch('/user/cert_list', 'GET', { size: 10, ...params }, {});
       let resd = response.data
       if (certList.page == 1) {
         certList.data = [];
+        imageData = [];
       }
       certList.total = resd.total
       if (certList.data.length >= resd.total) return response
       let newdata = certList.data.concat(resd.data)
       certList.data = newdata
+      for (let i = 0; i < newdata.length; i++) {
+        imageData.push(newdata[i].cert_img)
+      }
       if (certList.data.length < resd.total) {
         certList.page += 1
       }
       this.userData.certList = certList
+      this.userData.imageData = imageData;
       return response;
     } catch (error) {
       return null

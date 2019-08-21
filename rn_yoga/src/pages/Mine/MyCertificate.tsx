@@ -4,8 +4,8 @@ import { mainStyle, setSize, screenW } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import NavTop from '../../router/navTop';
 import BxListView from '../../components/Pubilc/ListView';
+import PreviewImage from '../../components/Pubilc/PreviewImage';
 import { observer, inject } from 'mobx-react';
-
 interface Props { }
 interface State {
 
@@ -19,7 +19,8 @@ class MyCertificate extends React.Component<Props, State> {
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-
+      currrentImage: 0,
+      visible: false
     };
   }
   componentDidMount() {
@@ -28,9 +29,11 @@ class MyCertificate extends React.Component<Props, State> {
   }
   render() {
     let { userStore } = this.props
+    let { currrentImage, visible } = this.state
     let certList = userStore.certList
+    let imageData = userStore.imageData;
     return (
-      <View style={[mainStyle.flex1, mainStyle.column, mainStyle.bgcf7]}>
+      <View style={[mainStyle.flex1, mainStyle.column, mainStyle.bgcf7, mainStyle.positonre]}>
         <NavTop
           navType="normal"
           title="我的证书"
@@ -60,7 +63,14 @@ class MyCertificate extends React.Component<Props, State> {
             colNumber={1}
             pab={setSize(20)}
             listItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => { this.props.navigation.push('MyCertImg', { src: 'http://' + item.cert_img }) }}>
+              <TouchableOpacity onPress={() => {
+                console.log(index)
+                this.setState({
+                  currrentImage: index,
+                  visible: true
+                })
+                // this.props.navigation.push('MyCertImg', { src: 'http://' + item.cert_img })
+              }}>
                 <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.pa15, mainStyle.bgcfff, mainStyle.brb1f2]}>
                   <Image style={[mainStyle.bgcf2, {
                     height: screenW * 0.4,
@@ -77,6 +87,7 @@ class MyCertificate extends React.Component<Props, State> {
               </TouchableOpacity>
             )}></BxListView>
         </View>
+        <PreviewImage curentImage={currrentImage} imaeDataUrl={imageData} modalVisible={visible} cancel={() => { console.log(1); this.setState({ visible: false }) }}></PreviewImage>
       </View>
     )
   }

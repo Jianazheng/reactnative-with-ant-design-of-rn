@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity, StatusBarIOS } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, DeviceEventEmitter, RefreshControl, TouchableOpacity, StatusBarIOS, PermissionsAndroid } from 'react-native';
 import HomeSearchBar from '../../components/Home/SeachBar';
 import HomeBroadcast from '../../components/Home/Broadcast';
 import HomeSwiper from '../../components/Home/Swiper';
@@ -90,13 +90,38 @@ class Home extends React.Component<Props, State> {
         })
       });
     }
+    this.requestReadPermission()
+
   }
 
   componentWillUnmount() {
     this.TOLOGIN.remove()
     this.TOBIND.remove()
   }
-
+  async requestReadPermission() {
+    try {
+      if (!isios()) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            'title': '提示',
+            'message': '没有访问相机权限，会导致后面无法保存图片到相册哦'
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('你已获取了读写权限');
+          // 继续运行其它代码
+        } else {
+          console.log('获取读写权限失败');
+        }
+      } else {
+        console.log('你已获取了读写权限');
+        // 继续运行其它代码
+      }
+    } catch (err) {
+      console.log(err.toString());
+    }
+  }
   goto() {
     this.props.navigation.push('Login');
   }

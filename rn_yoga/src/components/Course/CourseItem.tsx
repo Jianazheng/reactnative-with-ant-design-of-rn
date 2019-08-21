@@ -148,26 +148,23 @@ class CourseListItem extends React.Component<CourseListItemProps>{
               source={{ uri: 'http://' + data.img }}>
             </Image>
             <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mal15, { height: imgw * 0.7 }]}>
-              <Text style={[mainStyle.fs13, mainStyle.c333]}>{type == 'online' ? data.course_name : data.train_name}</Text>
-              {
-                type == 'online' ?
-                  <View style={[mainStyle.row, mainStyle.mat5, mainStyle.mab5]}>
-                    <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf7, mainStyle.mar10,
-                    {
-                      borderRadius: setSize(12),
-                      paddingLeft: setSize(14),
-                      paddingRight: setSize(14),
-                      paddingTop: setSize(1),
-                      paddingBottom: setSize(1)
-                    }
-                    ]}>{data.lesson}课时</Text>
-                    <Text style={[mainStyle.c999, mainStyle.fs12]}>有效期至{data.validay || ''}</Text>
-                  </View>
-                  : null}
+              <View style={[mainStyle.row, mainStyle.mat5, mainStyle.mab5, { overflow: 'hidden' }]}>
+                {type == 'online' ? <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf7, mainStyle.mar10,
+                {
+                  borderRadius: setSize(12),
+                  paddingLeft: setSize(14),
+                  paddingRight: setSize(14),
+                  paddingTop: setSize(1),
+                  paddingBottom: setSize(1)
+                }
+                ]}>{data.lesson}课时</Text> : null}
+                <Text style={[mainStyle.fs13, mainStyle.c333]} numberOfLines={1}>{type == 'online' ? data.course_name : data.train_name}</Text>
+              </View>
+              {type == 'online' ? <Text style={[mainStyle.c999, mainStyle.fs12]}>有效期至{data.validay || ''}</Text> : null}
               {
                 type == 'online'
-                  ? <Text style={[mainStyle.fs12, mainStyle.c999, { lineHeight: setSize(28) }]}>{data.create_time}</Text>
-                  : <Text style={[mainStyle.fs12, mainStyle.c999, { lineHeight: setSize(28) }]}>{data.train_start_time}</Text>
+                  ? <Text style={[mainStyle.fs12, mainStyle.mat5, mainStyle.c999, { lineHeight: setSize(28) }]}>{data.create_time}</Text>
+                  : <Text style={[mainStyle.fs12, mainStyle.mat5, mainStyle.c999, { lineHeight: setSize(28) }]}>{data.train_start_time}</Text>
               }
             </View>
           </View>

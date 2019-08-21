@@ -103,7 +103,7 @@ class OnlineCourse extends React.Component<Props> {
                 </View>
                 <View style={[mainStyle.column, mainStyle.pa15, mainStyle.aiCenter]}>
                   <Text style={[mainStyle.fs12, mainStyle.c999]}>上次学习时间：{onlineCourseInfo.lasttime || ''}</Text>
-                  <BxButton
+                  {onlineCourseInfo.chapter.length > 0 ? <BxButton
                     title={onlineCourseInfo.lasttime != null ? '继续学习' : '开始学习'}
                     colors={[mainStyle.czt.color, mainStyle.cztc.color]}
                     borderRadius={setSize(60)}
@@ -111,7 +111,7 @@ class OnlineCourse extends React.Component<Props> {
                     onClick={() => {
                       this.goto('OnlineCourseInfo', { id: onlineCourseInfo.id, course_id: onlineCourseInfo.course_id, summary_id: '', rate: onlineCourseInfo.rate })
                     }}
-                  ></BxButton>
+                  ></BxButton> : null}
                 </View>
               </View>
             </View>

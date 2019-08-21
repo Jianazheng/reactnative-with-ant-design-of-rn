@@ -266,7 +266,7 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
                 : <Text></Text>
             }
             {
-              data.status == 5 && data.type != 3
+              data.status == 5 && data.refund != null && data.type != 3
                 ? <View style={[mainStyle.mal15, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.flex1]}>
                   {/* 退款状态 */}
                   {data.refund.status == 1 ? <Text style={[mainStyle.fs13, mainStyle.c333]}>已退款</Text> : null}
@@ -333,7 +333,7 @@ class OrderItem extends React.Component<OrderItemState, OrderItemProps>{
               }
               {
                 //已支付，退款审核中
-                data.status == 5 && data.type != 3
+                data.status == 5 && data.refund != null && data.type != 3
                   ? <View>
                     {
                       data.refund.status == 3

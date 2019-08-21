@@ -149,7 +149,7 @@ class Course {
       let response = await new Fetch('/online/course/list', 'GET', { size: 10, ...params }, {});
       let cl = response.data.data
       if (courseList.data.length >= cl.total && cl.total > 0) return response;
-      let newdata = courseList.data.concat(cl.data);
+      let newdata = params.page <= 1 ? cl.data : courseList.data.concat(cl.data);
       courseList.data = newdata;
       courseList.total = cl.total;
       courseList.current_page = cl.current_page;

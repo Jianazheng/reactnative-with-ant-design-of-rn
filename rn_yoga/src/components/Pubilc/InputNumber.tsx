@@ -4,9 +4,8 @@ import { mainStyle, setSize } from '../../public/style/style';
 import { Toast } from '@ant-design/react-native';
 
 interface Props {
-  leftBtn: JSX.Element,
-  autoFocus: boolean,
-  placeholder: string,
+  value: number,
+  max: number,
   onChange: (e: string) => void
 }
 
