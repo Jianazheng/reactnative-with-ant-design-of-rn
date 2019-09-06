@@ -182,8 +182,8 @@ class Train {
   @action async getTrainPromotion(id: string | number) {
     try {
       this.trainData.promotionInfo = []
-      let response = await new Fetch('/train/promotion_info', 'GET', { id }, {});
-      let promotionInfo = response.data;
+      let response = await new Fetch('/train/promotion_info', 'GET', { id }, {}, 'v2');
+      let promotionInfo = response.data.promotion;
       this.trainData.promotionInfo = promotionInfo;
       return response
     } catch (error) {
@@ -193,7 +193,7 @@ class Train {
 
   @action async getTrainSelectItem(id: string | number) {
     try {
-      let response = await new Fetch('/train/sku_info', 'GET', { id }, {})
+      let response = await new Fetch('/train/sku_info', 'GET', { id }, {}, 'v2')
       let trainSelectItem = response.data
       if (trainSelectItem.length > 0) {
         this.trainData.oncheck = 0;

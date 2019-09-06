@@ -14,7 +14,7 @@ class RelatedCourse extends React.Component<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { course, navigation } = this.props;
+    let { course, navigation, backid } = this.props;
     return (
       <View style={[mainStyle.pa15]}>
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10]}>
@@ -24,7 +24,7 @@ class RelatedCourse extends React.Component<CourseInfoItemProps>{
           nomore={true}
           colNumber={1}
           listData={course}
-          listItem={({ item, index }) => (<CourseInfoItem2 navigation={navigation} data={item}></CourseInfoItem2>)}>
+          listItem={({ item, index }) => (<CourseInfoItem2 navigation={navigation} data={item} backid={backid}></CourseInfoItem2>)}>
         </BxListView>
       </View>
     )

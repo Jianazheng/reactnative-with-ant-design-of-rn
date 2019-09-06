@@ -56,10 +56,12 @@ class TrainInfo extends React.Component<Props, State> {
     };
   }
   componentDidMount() {
+    let { params } = this.props.navigation.state
+    this.reload(params.id);
+  }
+  reload(id) {
     let { navigation, trainStore, cartStore: { hascart } } = this.props
-    let { params } = navigation.state
-    console.log(hascart)
-    trainStore.getTrainInfo(params.id)
+    trainStore.getTrainInfo(id)
       .then(res => {
         if (res == null) {
           navigation.goBack();
@@ -68,9 +70,9 @@ class TrainInfo extends React.Component<Props, State> {
       }).catch(err => {
         this.setState({ showLoading: false })
       })
-    trainStore.getFrontInfo(params.id)
-    trainStore.getTrainPromotion(params.id)
-    trainStore.getTrainSelectItem(params.id)
+    trainStore.getFrontInfo(id)
+    trainStore.getTrainPromotion(id)
+    trainStore.getTrainSelectItem(id)
   }
   componentWillUnmount() {
   }
@@ -174,7 +176,13 @@ class TrainInfo extends React.Component<Props, State> {
           navType="normal"
           title="培训课程详情"
           onPress={() => {
-            navigation.goBack();
+            let { params } = navigation.state;
+            if (params.backid != undefined) {
+              this.reload(params.backid);
+              navigation.goBack();
+            } else {
+              navigation.goBack();
+            }
           }}
           children={(
             <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1, mainStyle.positonre]}>
@@ -242,7 +250,7 @@ class TrainInfo extends React.Component<Props, State> {
                   {
                     promotionInfo.map((val, i) => (
                       <Text key={i} style={[mainStyle.c666, mainStyle.fs14, mainStyle.lh42]}>
-                        {val.content}
+                        {val}
                       </Text>
                     ))
                   }
@@ -301,7 +309,7 @@ class TrainInfo extends React.Component<Props, State> {
               <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.pab180]}>
-              <RelatedCourse navigation={navigation}></RelatedCourse>
+              <RelatedCourse navigation={navigation} backid={trainInfo.id}></RelatedCourse>
             </View>
           </BxTabView>
 

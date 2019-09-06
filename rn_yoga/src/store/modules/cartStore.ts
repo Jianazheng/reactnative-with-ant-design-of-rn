@@ -304,7 +304,7 @@ class Cart {
     try {
       let { ids, settlementInfo } = this.cartData
       let params = { cart: toJS(ids) }
-      let response = await new Fetch('/order/settle_cart', 'POST', params, {})
+      let response = await new Fetch('/order/settle_cart', 'POST', params, {}, 'v2')
       this.cartData.settlementInfo = response.data
       if (response.errorCode == 1083) {
         return response
@@ -326,7 +326,7 @@ class Cart {
     try {
       let { ids } = this.cartData
       let params = { cart: ids, address_id }
-      let response = await new Fetch('/order/place_cart', 'POST', params, {})
+      let response = await new Fetch('/order/place_cart', 'POST', params, {}, 'v2')
       Toast.info(response.message, 1, undefined, false)
       this.cartData.orderStatus = response.data
       DeviceEventEmitter.emit('TORELOADMINE', 'yes');
@@ -348,7 +348,7 @@ class Cart {
      * }
      */
     try {
-      let response = await new Fetch('/order/direct_settle', 'POST', { ...params }, {})
+      let response = await new Fetch('/order/direct_settle', 'POST', { ...params }, {}, 'v2')
       this.cartData.settlementInfo = response.data
       if (response.data.pass == 0) {
         Toast.info(response.message, 1.4, undefined, false)
@@ -374,7 +374,7 @@ class Cart {
     try {
       let { selectData } = this.cartData
       let params = { ...selectData, address_id }
-      let response = await new Fetch('/order/place_direct', 'POST', params, {})
+      let response = await new Fetch('/order/place_direct', 'POST', params, {}, 'v2')
       Toast.info(response.message, 1, undefined, false)
       this.cartData.orderStatus = response.data
       DeviceEventEmitter.emit('TORELOADMINE', 'yes');

@@ -7,6 +7,7 @@ import BxButton from '../../components/Pubilc/Button';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { validate } from '@babel/types';
+import { OP } from '../../fetch/option';
 
 interface Props { }
 interface State {
@@ -74,7 +75,7 @@ class SettlementFail extends React.Component<Props, State> {
                       <View key={i} style={[mainStyle.row, mainStyle.jcBetween, mainStyle.pa15, mainStyle.bgcfff, mainStyle.brb1f2]}>
                         <Image
                           style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
-                          source={{ uri: val.good_img }}></Image>
+                          source={{ uri: 'http://' + val.good_img }}></Image>
                         <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mal15]}>
                           <Text style={[mainStyle.c333, mainStyle.fs13]}>{val.good_name}</Text>
                           <View style={[mainStyle.row]}>

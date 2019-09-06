@@ -1,6 +1,6 @@
 
 export const OP = {
-  baseURL:'http://yoga.t.jkxuetang.com/api/',
-  imgUrl:'http://yoga.t.jkxuetang.com',
-  baseVersion:'v1'
+  baseURL: 'https://yoga.t.jkxuetang.com/api/',
+  imgUrl: 'https://yoga.t.jkxuetang.com',
+  baseVersion: 'v1'
 }

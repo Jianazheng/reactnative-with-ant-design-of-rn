@@ -42,12 +42,12 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data, navigation } = this.props;
+    let { data, navigation, backid } = this.props;
     return (
       <TouchableOpacity
         style={[styles.infoCourse, mainStyle.pa15]}
         onPress={() => {
-          navigation.push('TrainInfo', { id: data.id })
+          navigation.push('TrainInfo', { id: data.id, backid: backid })
         }}>
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + (data.image_url ? data.image_url.length > 0 ? data.image_url[0] : '' : '') }}></Image>
@@ -70,9 +70,9 @@ class CourseInfoItem2 extends PureComponent<CourseInfoItemProps>{
     super(props)
   }
   render() {
-    let { data, navigation } = this.props;
+    let { data, navigation, backid } = this.props;
     return (
-      <TouchableOpacity style={[styles.infoCourse, mainStyle.bgcfff, mainStyle.patb15]} onPress={() => { navigation.push('CourseInfo', { id: data.id }) }}>
+      <TouchableOpacity style={[styles.infoCourse, mainStyle.bgcfff, mainStyle.patb15]} onPress={() => { navigation.push('CourseInfo', { id: data.id, backid: backid }) }}>
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiStart, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover]} mode="widthFix" source={{ uri: 'http://' + data.image }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>

@@ -1,5 +1,5 @@
 
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 import { Toast } from '@ant-design/react-native';
 import { Alert } from 'react-native';

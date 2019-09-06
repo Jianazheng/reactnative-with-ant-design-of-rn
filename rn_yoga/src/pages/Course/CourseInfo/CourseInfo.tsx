@@ -54,9 +54,12 @@ class CourseInfo extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    let { params } = this.props.navigation.state
+    this.reload(params.id)
+  }
+  reload(id) {
     let { navigation, courseStore } = this.props
-    let { params } = navigation.state
-    courseStore.getCourseInfo(params.id)
+    courseStore.getCourseInfo(id)
       .then(res => {
         if (res == null) {
           navigation.goBack();
@@ -65,9 +68,8 @@ class CourseInfo extends React.Component<Props, State> {
       }).catch(err => {
         this.setState({ showLoading: false })
       })
-    courseStore.getFrontInfo(params.id)
+    courseStore.getFrontInfo(id)
   }
-
   goto() {
     this.props.navigation.push('Login');
   }
@@ -154,7 +156,13 @@ class CourseInfo extends React.Component<Props, State> {
           navType="normal"
           title="在线课程详情"
           onPress={() => {
-            navigation.goBack();
+            let { params } = navigation.state;
+            if (params.backid != undefined) {
+              this.reload(params.backid);
+              navigation.goBack();
+            } else {
+              navigation.goBack();
+            }
           }}
           children={(
             <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.mar15, mainStyle.flex1, mainStyle.positonre]}>
@@ -201,7 +209,7 @@ class CourseInfo extends React.Component<Props, State> {
             }}>
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
                 <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
-                  <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
+                  <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>前置条件</Text>
                   {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
                 </View>
                 {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
@@ -224,7 +232,7 @@ class CourseInfo extends React.Component<Props, State> {
               <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
             <View style={[mainStyle.pab180]}>
-              <RelatedCourse course={courseInfo.relate_course} navigation={navigation}></RelatedCourse>
+              <RelatedCourse course={courseInfo.relate_course} navigation={navigation} backid={courseInfo.id}></RelatedCourse>
             </View>
           </BxTabView>
 
@@ -281,7 +289,7 @@ class CourseInfo extends React.Component<Props, State> {
             }
             ]}>
               <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                <Text style={[mainStyle.fs14, mainStyle.c333]}>报名条件</Text>
+                <Text style={[mainStyle.fs14, mainStyle.c333]}>前置条件</Text>
                 <Text
                   style={[mainStyle.c999, mainStyle.icon, mainStyle.fs20]}
                   onPress={() => { this.handleCloseApplyNotice(false) }}

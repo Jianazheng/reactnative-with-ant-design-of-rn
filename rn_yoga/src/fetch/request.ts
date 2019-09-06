@@ -6,11 +6,11 @@ import RNStorage from './../public/js/storage';
 import { DeviceEventEmitter, Alert, Platform } from "react-native";
 import deviceInfo from 'react-native-device-info';
 export class Fetch {
-  constructor(api: string, method: string, data: object, headers = {}) {
+  constructor(api: string, method: string, data: object, headers = {}, baseVersion: string) {
 
     return new Promise((resolve, reject) => {
 
-      let reqUrl = OP.baseURL + OP.baseVersion + api
+      let reqUrl = OP.baseURL + (baseVersion || OP.baseVersion) + api
 
       let reqOption = {}
 

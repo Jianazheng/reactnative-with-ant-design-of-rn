@@ -19,7 +19,7 @@ export default class ApplyNotice extends PureComponent<CourseInfoItemProps>{
     return (
       <View
         style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
-        <Text style={[mainStyle.patb20, mainStyle.fs13, mainStyle.c999]}>报名此课程之前，{relate == 0 ? '完成以下一个课程' : '必须确保已完成以下课程'}：</Text>
+        <Text style={[mainStyle.patb20, mainStyle.fs13, mainStyle.c999]}>购买此课程之前，{relate == 0 ? '完成以下一个课程' : '必须确保已完成以下课程'}：</Text>
         <ScrollView
           scrollEnabled
           nestedScrollEnabled
