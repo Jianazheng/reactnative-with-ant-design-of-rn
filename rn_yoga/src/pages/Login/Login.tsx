@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, ScrollView, DeviceEventEmitter } from 'react-native';
-import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
+import { Text, View, ScrollView, DeviceEventEmitter, StyleSheet, TouchableOpacity } from 'react-native';
+import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize, screenW } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
@@ -35,13 +35,11 @@ class Login extends React.Component<Props, State> {
       mobile: '',
       password: '',
       clicking: false,
-      sending: false,
+      sending: false
     };
   }
 
-  componentDidMount() {
 
-  }
 
   async handleLogin() {
     let { userStore, navigation } = this.props;
@@ -88,7 +86,6 @@ class Login extends React.Component<Props, State> {
 
   render() {
     let { mobile, password, clicking } = this.state
-    let { userStore } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert } from 'react-native';
-import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
+import { Text, View, ScrollView, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';
@@ -24,7 +24,8 @@ interface State {
   password: string,
   rpassword: string,
   codeSec: number,
-  clicking: boolean
+  clicking: boolean,
+  country_code: string
 }
 
 @inject('userStore')
@@ -47,6 +48,7 @@ class Register extends React.Component<Props, State> {
       password: '',
       imgcode: '',
       imgcode2: '',
+      country_code: '86',
       imgVerify: false,
       imgVerifyMsg: '请输入图片验证码',
       clicking: false,
@@ -55,18 +57,18 @@ class Register extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-
+    let { userStore } = this.props;
+    userStore.getareacode();
   }
 
   handleRegister() {
     let { userStore, navigation } = this.props;
-    let { mobile, mobileCode, password, rpassword } = this.state;
-
+    let { mobile, mobileCode, password, rpassword, country_code } = this.state;
     if (mobile == '' || mobileCode == '' || password == '' || rpassword == '') {
       Toast.info('请输入注册信息');
       return false
     }
-    userStore.RegisterAndPassword({ mobile: mobile.replace(/ /g, ''), mobileCode, password, rpassword, type: 'reg' })
+    userStore.RegisterAndPassword({ mobile: mobile.replace(/ /g, ''), mobileCode, password, rpassword, country_code: country_code.toString(), type: 'reg' })
       .then(res => {
         this.setState({
           clicking: true
@@ -85,7 +87,8 @@ class Register extends React.Component<Props, State> {
   handleChangeCode() { }
 
   render() {
-    let { mobile, password, rpassword, clicking, imgcode2 } = this.state;
+    let { mobile, password, rpassword, clicking, imgcode2, country_code } = this.state;
+    let { userStore: { codeList } } = this.props;
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
         <NavTop
@@ -99,6 +102,18 @@ class Register extends React.Component<Props, State> {
           <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, { height: screenH - setSize(200) }]}>
             <View style={[mainStyle.column]}>
               <WhiteSpace style={[{ height: setSize(120) }]} />
+              <Picker
+                value={country_code}
+                data={codeList}
+                cols={1}
+                onChange={value => {
+                  this.setState({
+                    country_code: value
+                  });
+                }}
+              >
+                <PickerChildren>区号</PickerChildren>
+              </Picker>
               <InputItem
                 clear
                 type="phone"
@@ -198,5 +213,26 @@ class Register extends React.Component<Props, State> {
     )
   }
 }
-
+const PickerChildren = (props: any) => (
+  <TouchableOpacity onPress={props.onPress}>
+    <View
+      style={[styles.pickersty, mainStyle.row]}
+    >
+      <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.flex1]}>{props.children}</Text>
+      <Text style={[mainStyle.fs14, mainStyle.c333]}>
+        {props.extra}
+      </Text>
+    </View>
+  </TouchableOpacity>
+);
+const styles = StyleSheet.create({
+  pickersty: {
+    paddingTop: setSize(30),
+    paddingBottom: setSize(30),
+    marginLeft: setSize(30),
+    paddingRight: setSize(30),
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#dddddd',
+  },
+})
 export default Register

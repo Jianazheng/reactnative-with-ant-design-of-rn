@@ -16,7 +16,7 @@ class User {
       avatar: '',
       username: '',
       mobile: '',
-      level_name: '',
+      level_name: ''
     },
     memberInfo: {
       user: {},
@@ -27,7 +27,8 @@ class User {
       total: null,
       page: 1
     },
-    imageData: []
+    imageData: [],
+    codeList: []
   }
 
   @computed get token() {
@@ -50,12 +51,16 @@ class User {
   @computed get certList() {
     return this.userData.certList
   }
+  @computed get codeList() {
+    return this.userData.codeList
+  }
   @action removeToken() {
     this.userData.token = ''
   }
+
   @action RegisterAndPassword(params: object) {
     return new Promise((resolve, reject) => {
-      let response = new Fetch('/login/mobile_reg', 'POST', params, {});
+      let response = new Fetch('/login/mobile_reg', 'POST', params, {}, 'v2');
       response.then(res => {
         Toast.info(res.message, 2);
         resolve(res);
@@ -235,6 +240,20 @@ class User {
         })
 
     })
+  }
+  @action async getareacode() {
+    try {
+      let response = await new Fetch('/identity/area_code_list', 'GET', {}, {}, 'v2');
+      const res = response.data;
+      let codelist = [];
+      for (var i = 0; i < res.length; i++) {
+        codelist.push({ 'label': res[i].name_zh + ' ' + '+' + res[i].phonecode, 'value': res[i].phonecode.toString() })
+      }
+      this.userData.codeList = codelist;
+      return response;
+    } catch (error) {
+      return null
+    }
   }
 }
 

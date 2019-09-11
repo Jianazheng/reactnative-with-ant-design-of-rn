@@ -4,7 +4,7 @@ import { Text, StyleSheet, View, Alert } from 'react-native';
 import { InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle, setSize, screenW } from '../../public/style/style';
 import { Fetch } from './../../fetch/request';
-
+import { observer, inject } from 'mobx-react';
 
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
 interface State {
 
 }
+@inject('userStore')
 
 export default class BxCodeInput extends PureComponent<Props, State>{
 
@@ -33,7 +34,8 @@ export default class BxCodeInput extends PureComponent<Props, State>{
   }
 
   handleCodeClick() {
-    let { mobile, sendType, verify, verifyMsg } = this.props;
+    let { mobile, sendType, verify, verifyMsg, userStore: { userInfo } } = this.props;
+    // let { userInfo } = this.userStore;
     let { sending } = this.state;
     if (mobile == '') {
       Toast.info('请输入手机号', 1.8);
@@ -49,7 +51,7 @@ export default class BxCodeInput extends PureComponent<Props, State>{
         if (mobile.indexOf(' ') > -1) {
           mobile = mobile.replace(/ /g, '');
         }
-        let sendCode = new Fetch('/identity/send', 'POST', { mobile, type: sendType }, {});
+        let sendCode = new Fetch('/identity/send', 'POST', { mobile, type: sendType, country_code: userInfo.phone_code || '' }, {}, 'v2');
         sendCode.then(res => {
           Toast.info('短信发送成功')
           this.timer = setInterval(() => {

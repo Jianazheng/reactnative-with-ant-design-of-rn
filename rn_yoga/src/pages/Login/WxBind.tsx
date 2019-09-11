@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter } from 'react-native';
+import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -16,7 +16,8 @@ interface State {
   mobile: string,
   code: string,
   password: string,
-  codeSec: number
+  codeSec: number,
+  country_code: string
 }
 
 @inject('userStore')
@@ -37,10 +38,14 @@ class WxBind extends React.Component<Props, State> {
       imgcode: '',
       password: '',
       clicking: false,
-      sending: false
+      sending: false,
+      country_code: ''
     };
   }
-
+  componentDidMount() {
+    let { userStore } = this.props;
+    userStore.getareacode();
+  }
   async handleVerify() {
     let { userStore, navigation } = this.props
     let { params } = navigation.state
@@ -61,7 +66,8 @@ class WxBind extends React.Component<Props, State> {
   }
 
   render() {
-    let { mobile, imgcode, clicking } = this.state;
+    let { mobile, imgcode, clicking, country_code } = this.state;
+    let { userStore: { codeList } } = this.props
     return (
       <View style={[mainStyle.flex1]}>
         <NavTop
@@ -73,6 +79,18 @@ class WxBind extends React.Component<Props, State> {
         ></NavTop>
         <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
           <View style={[mainStyle.mab30, { marginTop: setSize(120) }]}>
+            <Picker
+              value={country_code}
+              data={codeList}
+              cols={1}
+              onChange={value => {
+                this.setState({
+                  country_code: value
+                });
+              }}
+            >
+              <PickerChildren>区号</PickerChildren>
+            </Picker>
             <InputItem
               clear
               type="phone"
@@ -131,5 +149,26 @@ class WxBind extends React.Component<Props, State> {
     )
   }
 }
-
+const PickerChildren = (props: any) => (
+  <TouchableOpacity onPress={props.onPress}>
+    <View
+      style={[styles.pickersty, mainStyle.row]}
+    >
+      <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.flex1]}>{props.children}</Text>
+      <Text style={[mainStyle.fs14, mainStyle.c333]}>
+        {props.extra}
+      </Text>
+    </View>
+  </TouchableOpacity>
+);
+const styles = StyleSheet.create({
+  pickersty: {
+    paddingTop: setSize(30),
+    paddingBottom: setSize(30),
+    marginLeft: setSize(30),
+    paddingRight: setSize(30),
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#dddddd',
+  },
+})
 export default WxBind
