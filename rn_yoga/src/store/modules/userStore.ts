@@ -146,6 +146,7 @@ class User {
       const scope = 'snsapi_userinfo'
       const state = ''
       let isInstalled = await Wechat.isWXAppInstalled()
+      console.log(isInstalled);
       if (isInstalled) {
         let responseCode = await Wechat.sendAuthRequest(scope, state)
         let res = await new Fetch('/login/wechat', 'POST', { code: responseCode.code }, {})

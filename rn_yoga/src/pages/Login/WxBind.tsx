@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet } from 'react-native';
-import { WingBlank, WhiteSpace, InputItem, Toast } from '@ant-design/react-native';
+import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
 import BxButton from '../../components/Pubilc/Button';

@@ -4,7 +4,7 @@ import { mainStyle, setSize, screenH, screenW } from '../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
 import { CourseListItem } from '../../components/Course/CourseItem';
 import { observer, inject } from 'mobx-react';
-import { ActivityIndicator } from '@ant-design/react-native';
+import { ActivityIndicator, Toast } from '@ant-design/react-native';
 import { IconFill, IconOutline } from "@ant-design/icons-react-native";
 import { isios } from '../../tools/function'
 
@@ -73,7 +73,13 @@ class Course extends React.Component<Props> {
   }
 
   goto(routeName: string, params: any) {
-    this.props.navigation.navigate(routeName, params)
+    let { userStore, navigation } = this.props;
+    if (userStore.token == '') {
+      Toast.info('请登录', 1.8);
+      navigation.navigate('Login', { from: 'Mine' });
+    } else {
+      navigation.navigate(routeName, params);
+    }
   }
 
   _onRefresh() {
@@ -114,7 +120,7 @@ class Course extends React.Component<Props> {
                 <TouchableOpacity onPressIn={() => { this.goto('UserInfo', {}) }}>
                   <Image style={[mainStyle.useravator]} source={userInfo.avatar ? { uri: userInfo.avatar } : defaultIcon}></Image>
                 </TouchableOpacity>
-                <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mal15, mainStyle.aiStart]}>
+                <TouchableOpacity onPressIn={() => { this.goto('UserInfo', {}) }} style={[mainStyle.column, mainStyle.flex1, mainStyle.mal15, mainStyle.aiStart]}>
                   <Text style={[mainStyle.c333, mainStyle.fs16]}>{userInfo.username != '' ? userInfo.username : '请登录'}</Text>
                   {userInfo.level_name
                     ? <Text style={[mainStyle.czt, mainStyle.fs11, mainStyle.mat5,
@@ -128,7 +134,7 @@ class Course extends React.Component<Props> {
                     ]}
                     >{userInfo.level_name != '' ? userInfo.level_name : '登录后查看'}</Text>
                     : null}
-                </View>
+                </TouchableOpacity>
                 <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
                   <TouchableOpacity
                     onPress={() => {
