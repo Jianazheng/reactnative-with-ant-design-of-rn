@@ -88,7 +88,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
         <View style={[mainStyle.row, mainStyle.aiEnd, mainStyle.mab5, mainStyle.mat10]}>
           <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh42]}>我当前的优惠价：</Text>
           <Text style={[mainStyle.fs12, mainStyle.czt, mainStyle.lh42]}>￥</Text>
-          <Text style={[mainStyle.fs18, mainStyle.czt, mainStyle.lh42]}>{cartItem.min_price || 0}</Text>
+          <Text style={[mainStyle.fs18, mainStyle.czt, mainStyle.lh42]}>{cartItem.min_price || cartItem.mimi_price || 0}</Text>
         </View>
         <View style={[mainStyle.flex1]}>
           <ScrollView

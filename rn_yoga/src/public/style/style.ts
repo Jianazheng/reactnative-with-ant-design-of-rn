@@ -46,6 +46,7 @@ const mainStyle = StyleSheet.create({
     patb20: { paddingTop: setSize(40), paddingBottom: setSize(40) },
     patb15: { paddingTop: setSize(30), paddingBottom: setSize(30) },
     patb10: { paddingTop: setSize(20), paddingBottom: setSize(20) },
+    patb5: { paddingTop: setSize(10), paddingBottom: setSize(10) },
     pa15: { paddingTop: setSize(30), paddingBottom: setSize(30), paddingLeft: setSize(30), paddingRight: setSize(30) },
     pa20: { paddingTop: setSize(40), paddingBottom: setSize(40), paddingLeft: setSize(40), paddingRight: setSize(40) },
     pa30: { paddingTop: setSize(60), paddingBottom: setSize(60), paddingLeft: setSize(60), paddingRight: setSize(60) },
