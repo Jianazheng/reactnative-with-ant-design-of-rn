@@ -195,7 +195,7 @@ class Home extends React.Component<Props, State> {
           {
             homeStore.trainCate.length > 0
               ? <BxTabView
-                height={height - setSize(240)}
+                height={height - setSize(220)}
                 canScroll={canScroll}
                 tabs={homeStore.trainCate}
                 currentPageIndex={tabIndex}

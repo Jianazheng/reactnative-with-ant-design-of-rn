@@ -7,7 +7,6 @@ import { CourseTeacherItem2 } from '../../components/Course/TeacherItem';
 import BxButton from '../../components/Pubilc/Button';
 import Video from 'react-native-video';
 import { observer, inject } from 'mobx-react';
-import OpenFile from 'react-native-doc-viewer';
 const RNFS = require('react-native-fs');
 const SavePath = Platform.OS === 'ios' ? RNFS.LibraryDirectoryPath : RNFS.ExternalDirectoryPath;
 
@@ -47,13 +46,14 @@ class OnlineCourseInfo extends React.Component<Props> {
           loading: false
         })
       })
-      if(params.rate!=100){
-        setTimeout(() => {
-          DeviceEventEmitter.emit('TORELOADONLINECOURES', '');
-          DeviceEventEmitter.emit('TORELOADONLINECOURSELIST', '');
-          DeviceEventEmitter.emit('TORELOADMYCOURSE', '');
-        }, 1000);
-      }
+    console.log(params.rate)
+    if (params.rate != 100) {
+      setTimeout(() => {
+        DeviceEventEmitter.emit('TORELOADONLINECOURES', '');
+        DeviceEventEmitter.emit('TORELOADONLINECOURSELIST', '');
+        DeviceEventEmitter.emit('TORELOADMYCOURSE', '');
+      }, 1000);
+    }
     console.log(params)
   }
 
@@ -228,7 +228,7 @@ class Summary extends React.PureComponent<SummaryProps>{
     let { item, ids, oncheckid } = this.props
     return (
       <TouchableOpacity onPress={() => {
-        this.goto('OnlineCourseInfo', { summary_id: item.id, ...ids })
+        this.goto('OnlineCourseInfo', { summary_id: item.id, rate: rate, ...ids })
       }}>
         <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15, item.id == oncheckid ? styles.oncheck : mainStyle.brb1f2]}>
           <View style={[mainStyle.row, mainStyle.aiCenter]}>

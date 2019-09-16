@@ -87,7 +87,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                   <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.lh42, mainStyle.mab5]}>{data.product_name}</Text>
                   {closeBtn}
                 </View>
-                <Text style={[mainStyle.c999, mainStyle.fs12]}>{data.product_introduction}</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs12]} numberOfLines={2}>{data.product_introduction}</Text>
               </View>
               <View style={[mainStyle.row, mainStyle.aiEnd, mainStyle.mab5]}>
                 <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh42]}>价格：</Text>

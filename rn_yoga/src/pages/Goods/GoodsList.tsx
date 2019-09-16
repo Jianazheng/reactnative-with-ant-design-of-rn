@@ -135,7 +135,7 @@ class GoodsList extends React.Component<Props, State> {
         ></NavTop>
 
         <Animated.View style={[styles.searchBar,
-        { transform: [{ translateX: searchBarTranslate }], opacity: searchBarOpacity }
+        { transform: [{ translateX: searchBarTranslate }], opacity: searchBarOpacity, marginTop: iosmt }
         ]}>
           <HomeSearchBar
             placeholder={'搜索商品'}

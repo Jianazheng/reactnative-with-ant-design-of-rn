@@ -84,7 +84,7 @@ class TrainInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 660 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= 590 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
       })
     }
   }
@@ -160,7 +160,7 @@ class TrainInfo extends React.Component<Props, State> {
   handleCollection(common_id: string | number, type: string, isCollect: string | number) {
     let { publicStore, trainStore } = this.props
     publicStore.setCollection(common_id, type, isCollect)
-      .then(res => trainStore.changeCollect())
+      .then(res => { if (res != null) trainStore.changeCollect() })
   }
 
   render() {
@@ -295,7 +295,7 @@ class TrainInfo extends React.Component<Props, State> {
           </View>
 
           <BxTabView
-            height={height - setSize(240)}
+            height={height - setSize(160)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}

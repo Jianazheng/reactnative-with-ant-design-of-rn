@@ -121,6 +121,11 @@ class Train {
       this.trainData.trainSearch = trainSearch
       return response
     } catch (error) {
+      this.trainData.trainSearch = {
+        data: [],
+        current_page: 1,
+        total: 0
+      }
       return null
     }
   }

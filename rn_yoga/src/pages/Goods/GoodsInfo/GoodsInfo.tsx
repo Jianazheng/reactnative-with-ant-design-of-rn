@@ -121,7 +121,7 @@ class GoodsInfo extends React.Component<Props, State> {
   handleCollection(common_id: string | number, type: string, isCollect: number | string) {
     let { publicStore, goodsStore } = this.props
     publicStore.setCollection(common_id, type, isCollect)
-      .then(res => goodsStore.changeCollect())
+      .then(res => { if (res != null) goodsStore.changeCollect() })
       .catch(err => console.warn(err))
   }
 

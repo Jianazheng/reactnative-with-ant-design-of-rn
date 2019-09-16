@@ -137,7 +137,7 @@ class OnlineCourseList extends React.Component<Props, State> {
         ></NavTop>
 
         <Animated.View style={[styles.searchBar,
-        { transform: [{ translateX: searchBarTranslate }], opacity: searchBarOpacity }
+        { transform: [{ translateX: searchBarTranslate }], opacity: searchBarOpacity, marginTop: iosmt }
         ]}>
           <HomeSearchBar
             placeholder={'搜索课程'}
@@ -210,7 +210,7 @@ class OnlineCourseList extends React.Component<Props, State> {
                   courseStore.classify.map((val, i) => (
                     <TouchableOpacity
                       key={i}
-                      style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.seacrhConditionItem, val.checked ? mainStyle.bgczt : mainStyle.bgcfff]}
+                      style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.seacrhConditionItem, val.checked ? mainStyle.bgczt : mainStyle.bgcfff, mainStyle.palr10]}
                       onPress={() => {
                         courseStore.selectGoodsCondition(i)
                           .then(res => {

@@ -78,7 +78,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 490
+        canScroll: e.nativeEvent.contentOffset.y >= 590
       })
     }
   }
@@ -145,7 +145,7 @@ class CourseInfo extends React.Component<Props, State> {
   handleCollection(common_id: string | number, type: string, isCollect: string | number) {
     let { publicStore, courseStore } = this.props
     publicStore.setCollection(common_id, type, isCollect)
-      .then(res => courseStore.changeCollect())
+      .then(res => { if (res != null) courseStore.changeCollect() })
   }
   render() {
     let { canScroll, showLoading, showApplyNotice } = this.state
@@ -218,7 +218,7 @@ class CourseInfo extends React.Component<Props, State> {
           </View>
 
           <BxTabView
-            height={height - setSize(120)}
+            height={height - setSize(160)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}
