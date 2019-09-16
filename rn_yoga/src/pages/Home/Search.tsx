@@ -61,7 +61,9 @@ class Search extends React.Component<Props, State> {
           }}
           onSubmit={(e) => {
             this.setState({ keyword: e, search: true })
-            this.handleSearch(e)
+            if (e != '') {
+              this.handleSearch(e)
+            }
           }}
           leftBtn={(
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
