@@ -59,8 +59,8 @@ class Recommend extends React.Component<Props, State> {
                   <Image style={[styles.reImage, mainStyle.mat15, mainStyle.bgcf2]} resizeMode="cover" source={{ uri: newItem.image_url ? 'http://' + newItem.image_url[0] : '' }}></Image>
                   <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mat10]}>{newItem.train_name}（{newItem.sku_name}）</Text>
                   <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mat10]}>
-                    {newItem.sku_intro}
-                    {newItem.train_start_time ? '，活动时间' + newItem.train_start_time.split(' ')[0] : ''}
+                    {/* {newItem.sku_intro} */}
+                    {newItem.train_start_time ? '活动时间' + newItem.train_start_time.split(' ')[0] : ''}
                     {newItem.train_end_time ? '至' + newItem.train_end_time.split(' ')[0] : ''}
                     {newItem.reg_end_time ? '，截止报名时间' + newItem.reg_end_time.split(' ')[0] : ''}
                   </Text>

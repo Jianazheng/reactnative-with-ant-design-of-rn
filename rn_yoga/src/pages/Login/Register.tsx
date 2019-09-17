@@ -107,6 +107,7 @@ class Register extends React.Component<Props, State> {
                 data={codeList}
                 cols={1}
                 onChange={value => {
+                  console.log(value);
                   this.setState({
                     country_code: value
                   });
@@ -145,6 +146,7 @@ class Register extends React.Component<Props, State> {
               <BxCodeInput
                 mobile={mobile}
                 sendType="reg"
+                countrycode={country_code}
                 codeView={(e) => {
                   this.setState({
                     mobileCode: e

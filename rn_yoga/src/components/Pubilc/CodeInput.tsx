@@ -51,7 +51,7 @@ export default class BxCodeInput extends PureComponent<Props, State>{
         if (mobile.indexOf(' ') > -1) {
           mobile = mobile.replace(/ /g, '');
         }
-        let sendCode = new Fetch('/identity/send', 'POST', { mobile, type: sendType, country_code: userInfo.phone_code || '' }, {}, 'v2');
+        let sendCode = new Fetch('/identity/send', 'POST', { mobile, type: sendType, country_code: this.props.countrycode.toString() || userInfo.phone_code || '' }, {}, 'v2');
         sendCode.then(res => {
           Toast.info('短信发送成功')
           this.timer = setInterval(() => {

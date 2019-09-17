@@ -6,7 +6,7 @@ import { headerTitle, headerRight } from '../../router/navigationBar';
 import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import BxButton from '../../components/Pubilc/Button';
-
+// var ImagePicker = require('react-native-image-picker');
 
 interface Props { }
 interface State {
@@ -74,7 +74,31 @@ class UserInfo extends React.Component<Props, State> {
       })
 
   }
+  changehead() {
+    const options = {
+      title: '从相册选择或拍摄',
+      chooseFromLibraryButtonTitle: '从相册选择',
+      takePhotoButtonTitle: '拍摄',
+      cancelButtonTitle: '取消',
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    // ImagePicker.showImagePicker(options, (response) => {
+    //   if (!response.error) {
+    //     if (response.didCancel) {
+    //       return;
+    //     }
+    //     const source = { uri: response.uri };
+    //     this.base64 = response.data;
+    //     //注意，iOS 获取的图片地址要替换掉"file://",这是后面上传遇到的坑
+    //     this.fileURI = IS_IOS ? response.uri.replace('file://', '') : response.uri;
+    //     this.fileName = response.fileName || 'cash.jpg';
+    //     this.fileType = response.type;
+    //   }
 
+    // });
+  }
   render() {
     let { userStore } = this.props;
     let { email, address, clicking } = this.state;
@@ -89,7 +113,7 @@ class UserInfo extends React.Component<Props, State> {
           }}
         ></NavTop>
         <ScrollView style={[mainStyle.flex1, mainStyle.mat15]} keyboardShouldPersistTaps="handled">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.changehead()}>
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
               <Text style={[mainStyle.fs15, mainStyle.c666]}>头像</Text>
               <View style={[mainStyle.row, mainStyle.aiCenter]}>
