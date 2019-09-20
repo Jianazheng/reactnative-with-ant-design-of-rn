@@ -40,6 +40,7 @@ const mainStyle = StyleSheet.create({
     pab20: { paddingBottom: setSize(40) },
     pab140: { paddingBottom: setSize(140) },
     pab180: { paddingBottom: setSize(180) },
+    pab220: { paddingBottom: setSize(220) },
     palr10: { paddingLeft: setSize(20), paddingRight: setSize(20) },
     palr15: { paddingLeft: setSize(30), paddingRight: setSize(30) },
     palr20: { paddingLeft: setSize(40), paddingRight: setSize(40) },

@@ -227,6 +227,9 @@ class TrainInfo extends React.Component<Props, State> {
                   </Text>
                 </View>
             }
+            <View style={[mainStyle.row, mainStyle.mab10]}>
+              <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.train_introduction}</Text>
+            </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
               <Text style={[mainStyle.c999, mainStyle.fs13]}>活动时间: {splitStr(trainInfo.train_start_time, ' ')}至{splitStr(trainInfo.train_end_time, ' ')}</Text>
               <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
@@ -302,13 +305,13 @@ class TrainInfo extends React.Component<Props, State> {
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.pab180]}>
+            <View style={[mainStyle.pab220]}>
               <CourseTeacher></CourseTeacher>
             </View>
-            <View style={[mainStyle.pab140]}>
+            <View style={[mainStyle.pab220]}>
               <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.pab180]}>
+            <View style={[mainStyle.pab220]}>
               <RelatedCourse navigation={navigation} backid={trainInfo.id}></RelatedCourse>
             </View>
           </BxTabView>

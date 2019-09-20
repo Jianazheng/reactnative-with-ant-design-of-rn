@@ -175,7 +175,7 @@ class GoodsInfo extends React.Component<Props, State> {
               </Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>{goodsInfo.product_introduction}</Text>
+              <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(40) }]}>{goodsInfo.product_introduction}</Text>
             </View>
             <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
               <Text style={[mainStyle.czt, mainStyle.fs13]}>

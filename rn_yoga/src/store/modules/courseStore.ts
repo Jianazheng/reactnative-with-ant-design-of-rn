@@ -21,7 +21,7 @@ class Course {
     onlineCourse: {//在线课程列表
       data: [],
       total: null,
-      page: 0
+      page: 1
     },
     onlineCourseInfo: {//在线课程详情
       chapter: [],
@@ -223,8 +223,8 @@ class Course {
       let response = await new Fetch('/online/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
       onlineCourse.total = resd.total
-      if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
-      let newdata = params.page == 1 ? resd.data : onlineCourse.data.concat(resd.data)
+      // if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
+      let newdata = params.page <= 1 ? resd.data : onlineCourse.data.concat(resd.data)
       onlineCourse.data = newdata
       if (onlineCourse.data.length < resd.total) {
         onlineCourse.page += 1

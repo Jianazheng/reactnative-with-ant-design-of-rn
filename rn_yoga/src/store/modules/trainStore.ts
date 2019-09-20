@@ -222,7 +222,7 @@ class Train {
       let response = await new Fetch('/train/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
       trainCourse.total = resd.total
-      if (trainCourse.data.length >= resd.total) return response
+      // if (trainCourse.data.length >= resd.total) return response
       let newdata = params.page == 1 ? resd.data : trainCourse.data.concat(resd.data)
       trainCourse.data = newdata
       if (trainCourse.data.length < resd.total) {

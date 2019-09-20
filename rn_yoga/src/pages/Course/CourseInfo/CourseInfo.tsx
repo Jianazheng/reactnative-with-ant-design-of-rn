@@ -78,7 +78,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 590
+        canScroll: e.nativeEvent.contentOffset.y >= 560
       })
     }
   }
@@ -218,20 +218,20 @@ class CourseInfo extends React.Component<Props, State> {
           </View>
 
           <BxTabView
-            height={height - setSize(160)}
+            height={height - setSize(120)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
           >
-            <View style={[mainStyle.pab140]}>
+            <View style={[mainStyle.pab220]}>
               <CourseTeacher teacher={courseInfo.teacher}></CourseTeacher>
             </View>
-            <View style={[mainStyle.pab180]}>
+            <View style={[mainStyle.pab220]}>
               <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.pab180]}>
+            <View style={[mainStyle.pab220]}>
               <RelatedCourse course={courseInfo.relate_course} navigation={navigation} backid={courseInfo.id}></RelatedCourse>
             </View>
           </BxTabView>

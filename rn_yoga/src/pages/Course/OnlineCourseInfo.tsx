@@ -102,6 +102,7 @@ class OnlineCourseInfo extends React.Component<Props> {
     let { loading, hidefixedTop, showfixedTop, id, course_id, summary_id } = this.state
     let { navigation, courseStore } = this.props
     let onlineCourseStudy = courseStore.onlineCourseStudy
+    let { params } = navigation.state
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <Animated.View
@@ -182,6 +183,7 @@ class OnlineCourseInfo extends React.Component<Props> {
                                   oncheckid={summary_id}
                                   item={item}
                                   key={ci}
+                                  rate={params.rate || 0}
                                 ></Summary>
                               ))
                               : <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.pa15]}>暂无课程</Text>
@@ -225,7 +227,7 @@ class Summary extends React.PureComponent<SummaryProps>{
   }
 
   render() {
-    let { item, ids, oncheckid } = this.props
+    let { item, ids, oncheckid, rate } = this.props
     return (
       <TouchableOpacity onPress={() => {
         this.goto('OnlineCourseInfo', { summary_id: item.id, rate: rate, ...ids })

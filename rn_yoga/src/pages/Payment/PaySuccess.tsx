@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, StyleSheet, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { mainStyle, setSize, screenW } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxButton from '../../components/Pubilc/Button';
@@ -35,6 +35,7 @@ class PaySuccess extends React.Component<Props, State> {
 
   handleToOrder() {
     let { navigation, paymentStore: { payStatus } } = this.props
+    DeviceEventEmitter.emit('TORELOADORDERLIST', 'yes');
     navigation.navigate('MyOrder', { index: 2 })
   }
 
