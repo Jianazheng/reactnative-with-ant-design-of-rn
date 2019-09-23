@@ -59,7 +59,7 @@ export class Fetch {
                 DeviceEventEmitter.emit('TOBIND', errdata.data);//未绑定手机，跳转至绑定页面，listener在Home
                 resolve(errdata);
               } else {
-                Toast.info('验证失败，请重新登录', 1.4, undefined, false)
+                Toast.info('请登录', 1.4, undefined, false)
                 userStore.removeToken()
                 RNStorage.remove({ key: 'token' }).then(ress => {
                   DeviceEventEmitter.emit('TOLOGIN', 'yes');//token过期或者未登录，跳转登录页，listener在Home

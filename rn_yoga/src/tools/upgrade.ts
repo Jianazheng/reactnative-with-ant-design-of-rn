@@ -2,6 +2,9 @@ import { Platform, Alert, NativeModules, ToastAndroid } from 'react-native';
 import { Toast } from '@ant-design/react-native';
 export function checkUpdata(res, from) {
   //console.log(res)
+  if (res.errorCode == 1089) {
+    return false
+  }
   if (res.errorCode != 1001) {
     Toast.info('请重试', 1.2, undefined, false);
     return false

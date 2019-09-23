@@ -63,13 +63,13 @@ class TabSelect extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   tabItem: {
-    // height: setSize(60),
-    width: (width - setSize(100)) / 3,
+    height: setSize(60),
+    // width: (width - setSize(100)) / 3,
     paddingLeft: setSize(10),
     paddingRight: setSize(10)
   },
   info: {
-    width: (width - setSize(160)) / 3,
+    // width: (width - setSize(160)) / 3,
     borderRadius: setSize(30)
   },
   textNor: {

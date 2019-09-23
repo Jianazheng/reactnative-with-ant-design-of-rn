@@ -248,7 +248,7 @@ class User {
       const res = response.data;
       let codelist = [];
       for (var i = 0; i < res.length; i++) {
-        codelist.push({ 'label': res[i].name_zh + ' ' + '+' + res[i].phonecode, 'value': res[i].phonecode.toString() })
+        codelist.push({ 'label': res[i].name_zh + ' ' + '+' + res[i].phonecode, 'value': res[i].phonecode })
       }
       this.userData.codeList = codelist;
       return response;

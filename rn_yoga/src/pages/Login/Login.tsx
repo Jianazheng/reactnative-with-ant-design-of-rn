@@ -166,9 +166,9 @@ class Login extends React.Component<Props, State> {
                 ></BxButton>
               </View>
             </View>
-            <View style={[mainStyle.mat20, mainStyle.row, mainStyle.jcCenter, mainStyle.h100]}>
+            {/* <View style={[mainStyle.mat20, mainStyle.row, mainStyle.jcCenter, mainStyle.h100]}>
               <Text style={[mainStyle.czt, mainStyle.pa5_10, mainStyle.fs13]}>《用户注册协议》</Text>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>

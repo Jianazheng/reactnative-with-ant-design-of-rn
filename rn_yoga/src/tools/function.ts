@@ -1,4 +1,4 @@
-import { Text, Linking, Alert, Clipboard,Platform } from "react-native";
+import { Text, Linking, Alert, Clipboard, Platform } from "react-native";
 import { Toast, ActionSheet } from '@ant-design/react-native';
 import { mainStyle } from "../public/style/style";
 
@@ -103,7 +103,7 @@ export function consult() {
                   if (supported) {
                     Linking.openURL('weixin://');
                   } else {
-                    Toast.info('出错了，麻烦您手动进入微信')
+                    Toast.info('麻烦您手动进入微信')
                   }
                 });
               }
@@ -115,15 +115,15 @@ export function consult() {
     },
   );
 }
-export function isios(){
-    let isios = false;
-		switch (Platform.OS) {
-			case "ios":
-				isios = true;
-				break;
-			case "android":
-				isios = false;
-				break;
-    }
-    return isios;
+export function isios() {
+  let isios = false;
+  switch (Platform.OS) {
+    case "ios":
+      isios = true;
+      break;
+    case "android":
+      isios = false;
+      break;
+  }
+  return isios;
 }

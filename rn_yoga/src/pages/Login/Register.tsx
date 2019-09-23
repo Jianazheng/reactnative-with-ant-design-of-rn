@@ -25,7 +25,7 @@ interface State {
   rpassword: string,
   codeSec: number,
   clicking: boolean,
-  country_code: string
+  country_code: array
 }
 
 @inject('userStore')
@@ -48,7 +48,7 @@ class Register extends React.Component<Props, State> {
       password: '',
       imgcode: '',
       imgcode2: '',
-      country_code: '86',
+      country_code: ['86'],
       imgVerify: false,
       imgVerifyMsg: '请输入图片验证码',
       clicking: false,
@@ -113,7 +113,7 @@ class Register extends React.Component<Props, State> {
                   });
                 }}
               >
-                <PickerChildren>区号</PickerChildren>
+                <PickerChildren>国际区号</PickerChildren>
               </Picker>
               <InputItem
                 clear
@@ -206,9 +206,9 @@ class Register extends React.Component<Props, State> {
                 </View>
               </View>
             </View>
-            <View style={[mainStyle.mat20, mainStyle.row, mainStyle.jcCenter, mainStyle.h100]}>
+            {/* <View style={[mainStyle.mat20, mainStyle.row, mainStyle.jcCenter, mainStyle.h100]}>
               <Text style={[mainStyle.czt, mainStyle.pa5_10, mainStyle.fs13]}>《用户注册协议》</Text>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>
