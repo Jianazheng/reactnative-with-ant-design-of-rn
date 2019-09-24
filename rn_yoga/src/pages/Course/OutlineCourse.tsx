@@ -271,7 +271,7 @@ class OutlineCourse extends React.Component<Props> {
                             paddingTop: setSize(4),
                             paddingBottom: setSize(4)
                           }
-                          ]}>上课凭证在上培训课期间用于验证报道，仅
+                          ]}>上课凭证在上培训课期间用于验证报到，仅
                           在培训课有效期内有效，逾期无效</Text>
                         </View>
                         <View style={[mainStyle.row, mainStyle.aiEnd, mainStyle.jcBetween]}>

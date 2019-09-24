@@ -81,10 +81,10 @@ class TrainInfo extends React.Component<Props, State> {
   }
 
   handleScroll(e: any) {
-    let { tabTop } = this.state;
+    // let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 590 && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >=0
       })
     }
   }
@@ -298,7 +298,7 @@ class TrainInfo extends React.Component<Props, State> {
           </View>
 
           <BxTabView
-            height={height - setSize(160)}
+            height={height - setSize(200)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}

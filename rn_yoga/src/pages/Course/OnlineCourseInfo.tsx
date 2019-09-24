@@ -299,13 +299,14 @@ const styles = StyleSheet.create({
   isread: {
     height: setSize(34),
     lineHeight: setSize(31),
-    borderRadius: setSize(36),
+    borderRadius: setSize(17),
     paddingLeft: setSize(12),
     paddingRight: setSize(12),
     paddingTop: setSize(1),
     paddingBottom: setSize(1),
     borderWidth: setSize(1),
-    borderColor: mainStyle.c8d0.color
+    borderColor: mainStyle.c8d0.color,
+    overflow:'hidden'
   },
   summaryImg: {
     height: setSize(40),

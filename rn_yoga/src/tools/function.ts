@@ -93,20 +93,21 @@ export function consult() {
           .catch(err => Toast.info(`出错了：${err}`, 1.5));
       } else if (buttonIndex == 0) {
         Clipboard.setString('13998111600');
-        Alert.alert("提示", "已复制微信号，是否去微信添加好友",
+        Alert.alert("提示", "已复制微信号，请前往微信添加好友",
           [
-            { text: '不了' },
+            { text: '取消' },
             {
-              text: '是', onPress: () => {
-                Linking.canOpenURL('weixin://').then(supported => { // weixin://  alipay://
-                  console.log(supported);
-                  if (supported) {
-                    Linking.openURL('weixin://');
-                  } else {
-                    Toast.info('麻烦您手动进入微信')
-                  }
-                });
-              }
+              text: '确定'
+              // , onPress: () => {
+              //   Linking.canOpenURL('@weixin://').then(supported => { // weixin://  alipay://
+              //     console.log(supported);
+              //     if (supported) {
+              //       Linking.openURL('@weixin://');
+              //     } else {
+              //       Toast.info('麻烦您手动进入微信')
+              //     }
+              //   });
+              // }
             }
 
           ]

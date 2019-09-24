@@ -142,7 +142,7 @@ class RefundReason extends React.Component<Props, State> {
                   reasons.map((val, i) => (
                     <TouchableOpacity
                       key={i}
-                      style={[mainStyle.mab10]}
+                      style={[mainStyle.mab10,mainStyle.flex1]}
                       onPress={event => {
                         this.selectReason(i)
                       }}>

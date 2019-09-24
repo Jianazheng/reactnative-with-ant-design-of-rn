@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter } from 'react-native';
+import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter,Keyboard } from 'react-native';
 import { WhiteSpace, Switch, ActivityIndicator, Toast } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize, screenW } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -134,6 +134,8 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={consignee => {
                       this.setState({ consignee })
                     }}
+                    onBlur={()=>{Keyboard.dismiss();}}
+                    returnKeyType={"next"}
                   ></TextInput>
                 </View>
               </View>
@@ -151,6 +153,8 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={mobile => {
                       this.setState({ mobile })
                     }}
+                    onBlur={()=>{Keyboard.dismiss();}}   
+                    returnKeyType={"next"}                  
                   ></TextInput>
                 </View>
               </View>
@@ -161,7 +165,8 @@ class AddressOperate extends React.Component<Props, State> {
                 </View>
                 <View style={[mainStyle.flex3, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
                   <TouchableOpacity onPress={() => {
-                    this.showAddressPicker()
+                    this.showAddressPicker();
+                    Keyboard.dismiss();
                   }}>
                     <View>
                       {
@@ -191,6 +196,8 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={address => {
                       this.setState({ address })
                     }}
+                    onBlur={()=>{Keyboard.dismiss();}}
+                    returnKeyType={"done"}
                   ></TextInput>
                 </View>
               </View>
@@ -212,7 +219,7 @@ class AddressOperate extends React.Component<Props, State> {
             </View>
           </ScrollView>
           <BxAddressPicker ref="AddressPicker" onChange={region => { this.setState({ region }) }}></BxAddressPicker>
-          <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row]}>
+          <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row,{position:'fixed',bottom:0}]}>
             <BxButton
               disabled={false}
               colors={[mainStyle.cztc.color, mainStyle.cju.color]}

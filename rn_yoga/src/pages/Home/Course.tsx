@@ -159,7 +159,7 @@ class CourseItem extends PureComponent<CourseItemProps> {
                 <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.mab5]}>
                   {
                     data.dijia != '' && data.dijia != undefined && data.dijia != null
-                      ? <Text style={[mainStyle.fs12, mainStyle.bgcaa4, mainStyle.c8d0, styles.lowPrice, mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text>
+                      ? <View style={[mainStyle.bgcaa4,{borderRadius: setSize(4),overflow:'hidden'}]}><Text style={[mainStyle.fs12,  mainStyle.c8d0, styles.lowPrice, mainStyle.fontsilm]}>最低特价可低至：<Text style={[mainStyle.fs13]}>￥{data.dijia}</Text></Text></View> 
                       : null
                   }
                   {
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     padding: setSize(30)
   },
   lowPrice: {
-    borderRadius: setSize(4),
     paddingLeft: setSize(10),
     paddingRight: setSize(10),
     paddingTop: setSize(4),

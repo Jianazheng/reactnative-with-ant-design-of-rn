@@ -67,7 +67,8 @@ class BxTabView extends React.Component<Props, State> {
           onChangeTab={(e) => {
             this.handleChange(e)
           }}
-          // initialPage={currentIndex}
+          scrollWithoutAnimation={true}
+          initialPage={currentIndex}
           page={currentIndex}
           prerenderingSiblingsNumber={0}
           renderTabBar={() => <BxTabbars tabWidth={tabWidth} current={currentIndex} tabAlign={tabAlign} tabNames={tabs} navigateTo={navigateTo}></BxTabbars>}

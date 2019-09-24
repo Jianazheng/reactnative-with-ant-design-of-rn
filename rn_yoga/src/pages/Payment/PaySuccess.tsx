@@ -27,10 +27,17 @@ class PaySuccess extends React.Component<Props, State> {
       checkBox1: false
     };
   }
+  TORELOADTRAINORDERBOOK:object;
 
   componentDidMount() {
     let { paymentStore } = this.props
     paymentStore.getOrderBook()
+    this.TORELOADTRAINORDERBOOK=DeviceEventEmitter.addListener('TORELOADTRAINORDERBOOK',res=>{
+      paymentStore.getOrderBook()      
+    })
+  }
+  componentWillUnmount(){
+    this.TORELOADTRAINORDERBOOK.remove();
   }
 
   handleToOrder() {
@@ -138,6 +145,7 @@ class PaySuccess extends React.Component<Props, State> {
                                     <View key={index} style={[mainStyle.flex1, { width: screenW - setSize(90) - imgw }]}>
                                       <Checkbox
                                         disabled
+                                        checked={val.checked}
                                         style={{ color: mainStyle.czt.color }}>
                                         <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
                                       </Checkbox>

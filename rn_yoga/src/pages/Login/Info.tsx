@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Alert, StyleSheet, TouchableOpacity,Keyboard } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast, Picker, DatePicker, List } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -102,6 +102,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请输入姓名"
                 style={[mainStyle.fs14]}
+                onBlur={()=>{Keyboard.dismiss();}}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>姓名</Text>
               </InputItem>
@@ -143,6 +144,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请输入邮箱"
                 style={[mainStyle.fs14]}
+                onBlur={()=>{Keyboard.dismiss();}}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>邮箱</Text>
               </InputItem>
@@ -158,6 +160,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请输入居住地"
                 style={[mainStyle.fs14]}
+                onBlur={()=>{Keyboard.dismiss();}}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>居住地</Text>
               </InputItem>
@@ -180,7 +183,7 @@ class Register extends React.Component<Props, State> {
   }
 }
 const PickerChildren = (props: any) => (
-  <TouchableOpacity onPress={props.onPress}>
+  <TouchableOpacity onPress={()=>{props.onPress();Keyboard.dismiss();}}>
     <View
       style={[styles.pickersty, mainStyle.row]}
     >

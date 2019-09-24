@@ -32,6 +32,7 @@ class Payment {
       new Fetch('/pay/pay_app', 'POST', { order_type, order_id }, {})
         .then(res => {
           let { noncestr, partnerid, prepayid, timestamp, sign } = res.data
+          console.log(Wechat)
           Wechat.isWXAppInstalled()
             .then((isInstalled) => {
               if (isInstalled) {

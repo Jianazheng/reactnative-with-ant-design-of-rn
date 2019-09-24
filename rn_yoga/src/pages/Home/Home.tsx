@@ -129,8 +129,9 @@ class Home extends React.Component<Props, State> {
   handleScroll(e: any) {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
+      // console.log(e.nativeEvent);
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= setSize(440) && e.nativeEvent.contentSize.height > e.nativeEvent.layoutMeasurement.height
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-120)
       })
     }
   }
@@ -150,6 +151,7 @@ class Home extends React.Component<Props, State> {
           })
           DeviceEventEmitter.emit('TORELOADTRAINITEM', 'yes');
         })
+      DeviceEventEmitter.emit('TORELOADRECOMMEND','yes');
     })
   }
 
@@ -163,7 +165,8 @@ class Home extends React.Component<Props, State> {
           onScroll={(e) => {
             this.handleScroll(e);
           }}
-          stickyHeaderIndices={[3]}
+          scrollEventThrottle={1}
+          stickyHeaderIndices={[1]}
           refreshControl={(
             <RefreshControl
               tintColor={mainStyle.czt.color}
@@ -174,6 +177,7 @@ class Home extends React.Component<Props, State> {
           )}
         >
           <View onLayout={(e) => {
+            // console.log(e.nativeEvent.layout.height)
             this.setState({
               tabTop: e.nativeEvent.layout.height
             })
@@ -195,7 +199,7 @@ class Home extends React.Component<Props, State> {
           {
             homeStore.trainCate.length > 0
               ? <BxTabView
-                height={height - setSize(220)}
+                height={height-120}
                 canScroll={canScroll}
                 tabs={homeStore.trainCate}
                 currentPageIndex={tabIndex}
@@ -206,13 +210,13 @@ class Home extends React.Component<Props, State> {
                 }}
                 navigateTo={() => { navigation.push('ClassifyList') }}
               >
-                <View style={[mainStyle.flex1, mainStyle.pab20, { paddingBottom: setSize(80) }]}>
+                <View style={[mainStyle.flex1]}>
                   <Recommend navigation={navigation}></Recommend>
                 </View>
                 {
                   homeStore.trainCateShow.length > 0 ?
                     homeStore.trainCateShow.map((val, i) =>
-                      <View style={[mainStyle.flex1, mainStyle.bgcf2, { paddingBottom: setSize(80) }]} key={i}>
+                      <View style={[mainStyle.flex1, mainStyle.bgcf2]} key={i}>
                         <HomeCourse currentIndex={i} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
                       </View>
                     ) : null

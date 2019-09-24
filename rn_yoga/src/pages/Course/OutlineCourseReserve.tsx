@@ -48,6 +48,7 @@ class OutlineCourseReserve extends React.Component<Props> {
         trainStore.toEnsureService()
           .then(success => {
             DeviceEventEmitter.emit('TORELOADTRAIN', 'yes')
+            DeviceEventEmitter.emit('TORELOADTRAINORDERBOOK', 'yes')
             navigation.goBack()
           })
       })

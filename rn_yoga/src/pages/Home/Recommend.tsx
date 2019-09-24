@@ -5,6 +5,7 @@ import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
 import BxListView from '../../components/Pubilc/ListView';
 import { observer, inject } from 'mobx-react';
+import { DEFAULT_DENSITY } from '../../public/style/pixel';
 
 
 let { width, height } = Dimensions.get('window');
@@ -26,6 +27,7 @@ class Recommend extends React.Component<Props, State> {
     };
   }
   TORELOADRECOMMENDTRAIN: object;
+  TORELOADRECOMMEND:object;
   componentDidMount() {
     let { homeStore } = this.props;
     homeStore.getNewTrain();
@@ -34,9 +36,15 @@ class Recommend extends React.Component<Props, State> {
     this.TORELOADRECOMMENDTRAIN = DeviceEventEmitter.addListener('TORELOADRECOMMENDTRAIN', res => {
       homeStore.getRecommendTrain();
     })
+    this.TORELOADRECOMMEND=DeviceEventEmitter.addListener('TORELOADRECOMMEND',res=>{
+      homeStore.getNewTrain();
+      homeStore.getRecommendGoods();
+      homeStore.getRecommendTrain();     
+    })
   }
   componentWillUnmount() {
-    this.TORELOADRECOMMENDTRAIN.remove()
+    this.TORELOADRECOMMENDTRAIN.remove();
+    this.TORELOADRECOMMEND.remove();
   }
 
   goto(router: string, params: object) {
@@ -82,10 +90,12 @@ class Recommend extends React.Component<Props, State> {
         }
         <View style={[mainStyle.column]}>
           <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-            <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
+          {homeStore.recommendGoods.length > 0
+                  ?<BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
               this.goto('GoodsList', { cid: '', product_category_name: '全部' })
             }}>
             </BxCateTitle>
+            :null}
             <View style={[mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
               {
                 homeStore.recommendGoods.length > 0
@@ -99,10 +109,12 @@ class Recommend extends React.Component<Props, State> {
             </View>
           </View>
           <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-            <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
+          {homeStore.recommendTrain.length > 0
+                  ?<BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
               this.goto('OnlineCourseList', {})
             }}>
             </BxCateTitle>
+            :null}
             <View style={[mainStyle.jcBetween, mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
               {
 
