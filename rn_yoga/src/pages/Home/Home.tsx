@@ -131,7 +131,7 @@ class Home extends React.Component<Props, State> {
     if (e.nativeEvent) {
       // console.log(e.nativeEvent);
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-120)
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop - 120)
       })
     }
   }
@@ -151,7 +151,7 @@ class Home extends React.Component<Props, State> {
           })
           DeviceEventEmitter.emit('TORELOADTRAINITEM', 'yes');
         })
-      DeviceEventEmitter.emit('TORELOADRECOMMEND','yes');
+      DeviceEventEmitter.emit('TORELOADRECOMMEND', 'yes');
     })
   }
 
@@ -166,7 +166,7 @@ class Home extends React.Component<Props, State> {
             this.handleScroll(e);
           }}
           scrollEventThrottle={1}
-          stickyHeaderIndices={[1]}
+          // stickyHeaderIndices={[1]}
           refreshControl={(
             <RefreshControl
               tintColor={mainStyle.czt.color}
@@ -199,7 +199,7 @@ class Home extends React.Component<Props, State> {
           {
             homeStore.trainCate.length > 0
               ? <BxTabView
-                height={height-120}
+                height={height - 120}
                 canScroll={canScroll}
                 tabs={homeStore.trainCate}
                 currentPageIndex={tabIndex}

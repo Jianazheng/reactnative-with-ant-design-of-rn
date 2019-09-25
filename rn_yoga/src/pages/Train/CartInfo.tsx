@@ -91,11 +91,11 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
           <Text style={[mainStyle.fs18, mainStyle.czt, mainStyle.lh42]}>{cartItem.min_price || cartItem.mimi_price || 0}</Text>
         </View>
         <View style={[mainStyle.flex1]}>
+          <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>选择规格</Text>
           <ScrollView
             scrollEnabled
             nestedScrollEnabled
             style={[mainStyle.flex1, mainStyle.patb10]}>
-            <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>选择规格</Text>
             <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mab10]}>
               {
                 trainSelectItem.length > 0

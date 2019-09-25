@@ -158,7 +158,7 @@ class CourseListItem extends React.Component<CourseListItemProps>{
                   paddingBottom: setSize(1)
                 }
                 ]}>{data.lesson}课时</Text> : null}
-                <Text style={[mainStyle.fs13, mainStyle.c333]} numberOfLines={1}>{type == 'online' ? data.course_name : data.train_name}</Text>
+                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mar10]} numberOfLines={1}>{type == 'online' ? data.course_name : data.train_name}</Text>
               </View>
               {type == 'online' ? <Text style={[mainStyle.c999, mainStyle.fs12]}>有效期至{data.validay || ''}</Text> : null}
               {

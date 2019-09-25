@@ -27,7 +27,7 @@ class Recommend extends React.Component<Props, State> {
     };
   }
   TORELOADRECOMMENDTRAIN: object;
-  TORELOADRECOMMEND:object;
+  TORELOADRECOMMEND: object;
   componentDidMount() {
     let { homeStore } = this.props;
     homeStore.getNewTrain();
@@ -36,10 +36,10 @@ class Recommend extends React.Component<Props, State> {
     this.TORELOADRECOMMENDTRAIN = DeviceEventEmitter.addListener('TORELOADRECOMMENDTRAIN', res => {
       homeStore.getRecommendTrain();
     })
-    this.TORELOADRECOMMEND=DeviceEventEmitter.addListener('TORELOADRECOMMEND',res=>{
+    this.TORELOADRECOMMEND = DeviceEventEmitter.addListener('TORELOADRECOMMEND', res => {
       homeStore.getNewTrain();
       homeStore.getRecommendGoods();
-      homeStore.getRecommendTrain();     
+      homeStore.getRecommendTrain();
     })
   }
   componentWillUnmount() {
@@ -90,12 +90,12 @@ class Recommend extends React.Component<Props, State> {
         }
         <View style={[mainStyle.column]}>
           <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-          {homeStore.recommendGoods.length > 0
-                  ?<BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
-              this.goto('GoodsList', { cid: '', product_category_name: '全部' })
-            }}>
-            </BxCateTitle>
-            :null}
+            {homeStore.recommendGoods.length > 0
+              ? <BxCateTitle title={"最新商品"} navigateTitle={"更多"} onClick={() => {
+                this.goto('GoodsList', { cid: '', product_category_name: '全部' })
+              }}>
+              </BxCateTitle>
+              : null}
             <View style={[mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
               {
                 homeStore.recommendGoods.length > 0
@@ -109,12 +109,12 @@ class Recommend extends React.Component<Props, State> {
             </View>
           </View>
           <View style={[mainStyle.palr15, mainStyle.flex1, mainStyle.mab15, mainStyle.bgcfff]}>
-          {homeStore.recommendTrain.length > 0
-                  ?<BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
-              this.goto('OnlineCourseList', {})
-            }}>
-            </BxCateTitle>
-            :null}
+            {homeStore.recommendTrain.length > 0
+              ? <BxCateTitle title={"最新在线课程"} navigateTitle={"更多"} onClick={() => {
+                this.goto('OnlineCourseList', {})
+              }}>
+              </BxCateTitle>
+              : null}
             <View style={[mainStyle.jcBetween, mainStyle.wrap, mainStyle.row, mainStyle.flex1]}>
               {
 
@@ -185,7 +185,7 @@ class RecommendCourse extends PureComponent<CourseProps> {
       <TouchableOpacity style={[styles.reCourse, mainStyle.mab10]} onPress={() => { this.gotoInfo('CourseInfo', { id: data.id }) }}>
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
           <View style={[mainStyle.positonre, mainStyle.mab5]}>
-            <Text style={[styles.times, mainStyle.cfff, mainStyle.fs11]}>{data.lesson}课时</Text>
+            <View style={[styles.timesios]}><Text style={[styles.times, mainStyle.cfff, mainStyle.fs11]}>{data.lesson}课时</Text></View>
             <Image style={[styles.reCourseImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + data.image }}></Image>
           </View>
           <View style={[mainStyle.flex1]}>
@@ -226,17 +226,21 @@ const styles = StyleSheet.create({
     height: CourseImageWidth * 0.6,
     borderRadius: setSize(6),
   },
-  times: {
+  timesios: {
     position: 'absolute',
     bottom: setSize(10),
     right: setSize(10),
     backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 1,
+    borderRadius: setSize(26),
+    overflow: 'hidden'
+  },
+  times: {
     paddingLeft: setSize(20),
     paddingRight: setSize(20),
     paddingTop: setSize(6),
     paddingBottom: setSize(6),
-    zIndex: 1,
-    borderRadius: setSize(26)
+
   }
 })
 

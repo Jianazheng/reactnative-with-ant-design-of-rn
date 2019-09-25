@@ -79,12 +79,12 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                 uri:
                   goodsItem.image_url ? (goodsItem.image_url) : ''
               }}></Image>
-            <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mal15,mainStyle.mar15,
+            <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mal15, mainStyle.mar15,
             { height: imgw }
             ]}>
               <View style={[mainStyle.column]}>
                 <View style={[mainStyle.row, mainStyle.jcBetween]}>
-                  <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.lh42, mainStyle.mab5,mainStyle.mar10]}>{data.product_name}</Text>
+                  <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.lh42, mainStyle.mab5, mainStyle.mar10]}>{data.product_name}</Text>
                   {closeBtn}
                 </View>
                 <Text style={[mainStyle.c999, mainStyle.fs12]} numberOfLines={2}>{data.product_introduction}</Text>
@@ -98,11 +98,11 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
           </View>
         </View>
         <View style={[mainStyle.flex1]}>
+          <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>选择规格</Text>
           <ScrollView
             scrollEnabled
             nestedScrollEnabled
             style={[mainStyle.flex1, mainStyle.patb10]}>
-            <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>选择规格</Text>
             <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mab10]}>
               {
                 data.sku ? data.sku.map((val, i) => {
@@ -124,9 +124,10 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                   : null
               }
             </View>
-            <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>数量</Text>
-            <InputNumber value={goodsItem.count} max={goodsItem.product_stock} onChange={(v) => { this.changenum(v) }}></InputNumber>
+
           </ScrollView>
+          <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>数量</Text>
+          <InputNumber value={goodsItem.count} max={goodsItem.product_stock} onChange={(v) => { this.changenum(v) }}></InputNumber>
         </View>
       </View>
     )

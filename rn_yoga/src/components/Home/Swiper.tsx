@@ -99,6 +99,7 @@ class HomeSwiper extends React.Component<Props> {
                           poster={img.length > 1 ? 'http://' + img[1] : ''}
                           repeat={false}
                           resizeMode={'contain'}
+                          paused={true}
                           onProgress={({ currentTime, seekableDuration }) => {
                             this.setState({
                               currentTime, seekableDuration
