@@ -154,7 +154,11 @@ class Home extends React.Component<Props, State> {
       DeviceEventEmitter.emit('TORELOADRECOMMEND', 'yes');
     })
   }
-
+  childrenScroll(){
+    this.setState({
+      canScroll:false
+    })
+  }
   render() {
     let { canScroll, tabIndex, refreshing, statusBar } = this.state;
     let { navigation, homeStore, cartStore: { hascart } } = this.props;
@@ -166,7 +170,7 @@ class Home extends React.Component<Props, State> {
             this.handleScroll(e);
           }}
           scrollEventThrottle={1}
-          // stickyHeaderIndices={[1]}
+          stickyHeaderIndices={[1]}
           refreshControl={(
             <RefreshControl
               tintColor={mainStyle.czt.color}
@@ -208,6 +212,9 @@ class Home extends React.Component<Props, State> {
                     tabIndex: e
                   })
                 }}
+                childrenScroll={
+                  this.childrenScroll.bind(this)
+                }
                 navigateTo={() => { navigation.push('ClassifyList') }}
               >
                 <View style={[mainStyle.flex1]}>

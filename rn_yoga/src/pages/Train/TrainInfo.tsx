@@ -208,6 +208,7 @@ class TrainInfo extends React.Component<Props, State> {
           onScroll={(e) => {
             this.handleScroll(e);
           }}
+          scrollsToTop={true}
         >
           <HomeSwiper fullWidth img={trainInfo.image_url || []}></HomeSwiper>
           <View style={[mainStyle.pa15, mainStyle.column]}>

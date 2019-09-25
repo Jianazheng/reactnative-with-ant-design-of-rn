@@ -149,7 +149,10 @@ class RefundReason extends React.Component<Props, State> {
                       <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.positonre]}>
                         <Text style={[mainStyle.fs13, val.checked ? mainStyle.czt : mainStyle.c999]}>{val.reason}</Text>
                         <Checkbox
-                          disabled={true}
+                        onChange={event => {
+                          console.log(event)
+                          this.selectReason(i)
+                        }}
                           checked={val.checked}
                           style={[{ color: val.checked ? mainStyle.czt.color : mainStyle.c999.color }, styles.checkbox]}
                         >
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
   checkbox: {
     position: 'absolute',
     right: 0,
-    zIndex: 0
+    zIndex: 1
   }
 })
 

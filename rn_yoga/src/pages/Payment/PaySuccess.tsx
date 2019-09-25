@@ -143,12 +143,12 @@ class PaySuccess extends React.Component<Props, State> {
                                 {
                                   val.reserve.map((ser, index) =>
                                     <View key={index} style={[mainStyle.flex1, { width: screenW - setSize(90) - imgw }]}>
-                                      <Checkbox
+                                      {/* <Checkbox
                                         disabled
                                         checked={val.checked}
-                                        style={{ color: mainStyle.czt.color }}>
+                                        style={{ color: mainStyle.czt.color }}> */}
                                         <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
-                                      </Checkbox>
+                                      {/* </Checkbox> */}
                                     </View>
                                   )
                                 }

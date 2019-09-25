@@ -66,8 +66,8 @@ export default class BxAddressPicker extends React.Component<Props,State>{
   _sure(){
     let {current1,current2,current3} = this.state;
     let province = ADDRESS[current1].value
-    let city = ADDRESS[current1].children[current2].value
-    let district = ADDRESS[current1].children[current2].children[current3].value
+    let city = ADDRESS[current1].children[current2].length>0?ADDRESS[current1].children[current2].value:'';
+    let district = ADDRESS[current1].children[current2].length>0?ADDRESS[current1].children[current2].children[current3].value:'';
     let region = [province,city,district]
     if(this.props.onChange)this.props.onChange(region)
     this._close()

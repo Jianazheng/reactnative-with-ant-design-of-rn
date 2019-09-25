@@ -219,7 +219,7 @@ class AddressOperate extends React.Component<Props, State> {
             </View>
           </ScrollView>
           <BxAddressPicker ref="AddressPicker" onChange={region => { this.setState({ region }) }}></BxAddressPicker>
-          <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row,{position:'fixed',bottom:0}]}>
+          <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row]}>
             <BxButton
               disabled={false}
               colors={[mainStyle.cztc.color, mainStyle.cju.color]}
