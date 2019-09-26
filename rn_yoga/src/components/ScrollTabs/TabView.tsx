@@ -79,17 +79,17 @@ class BxTabView extends React.Component<Props, State> {
               return (
                 <View key={i} style={[mainStyle.flex1, { height: scrollHeight + paddingBottom }]}>
                   <ScrollView
-                  ref='childview'
+                    ref='childview'
                     style={[mainStyle.flex1, { height: scrollHeight + paddingBottom }]}
                     scrollEnabled={canScroll}
                     nestedScrollEnabled={true}
-                    onScroll={(e)=>{
-                      if(e.nativeEvent.contentOffset.y<=0 && this.props.childrenScroll){
+                    onScroll={(e) => {
+                      if (e.nativeEvent.contentOffset.y == 0 && this.props.childrenScroll) {
                         this.props.childrenScroll();
-                        this.refs['childview'].scrollTo({ y: 0, animate: true }) 
+                        this.refs['childview'].scrollTo({ y: 0, animate: false })
                       }
                     }}
-                    >
+                  >
                     {child}
                   </ScrollView>
                 </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter,Keyboard } from 'react-native';
+import { Text, View, ScrollView, Alert, Image, TouchableOpacity, TextInput, StyleSheet, DeviceEventEmitter, Keyboard } from 'react-native';
 import { WhiteSpace, Switch, ActivityIndicator, Toast } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize, screenW } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -134,7 +134,7 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={consignee => {
                       this.setState({ consignee })
                     }}
-                    onBlur={()=>{Keyboard.dismiss();}}
+                    onBlur={() => { Keyboard.dismiss(); }}
                     returnKeyType={"next"}
                   ></TextInput>
                 </View>
@@ -153,8 +153,8 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={mobile => {
                       this.setState({ mobile })
                     }}
-                    onBlur={()=>{Keyboard.dismiss();}}   
-                    returnKeyType={"next"}                  
+                    onBlur={() => { Keyboard.dismiss(); }}
+                    returnKeyType={"next"}
                   ></TextInput>
                 </View>
               </View>
@@ -172,7 +172,7 @@ class AddressOperate extends React.Component<Props, State> {
                       {
                         region.length == 0
                           ? <Text style={[mainStyle.fs13, mainStyle.c999, { marginLeft: setSize(4) }]}>点击选择地址</Text>
-                          : <Text style={[mainStyle.fs13, mainStyle.c333, { marginLeft: setSize(4) }]}>{region[0]} - {region[1]} - {region[2]}</Text>
+                          : <Text style={[mainStyle.fs13, mainStyle.c333, { marginLeft: setSize(4) }]}>{region[0]}  {region[1] ? '-' + region[1] : ''} {region[2] ? '-' + region[2] : ''}</Text>
                       }
                     </View>
                   </TouchableOpacity>
@@ -196,7 +196,7 @@ class AddressOperate extends React.Component<Props, State> {
                     onChangeText={address => {
                       this.setState({ address })
                     }}
-                    onBlur={()=>{Keyboard.dismiss();}}
+                    onBlur={() => { Keyboard.dismiss(); }}
                     returnKeyType={"done"}
                   ></TextInput>
                 </View>

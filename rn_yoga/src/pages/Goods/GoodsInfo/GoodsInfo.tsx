@@ -64,7 +64,7 @@ class GoodsInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-setSize(120))
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop - setSize(90))
       })
     }
   }
@@ -130,9 +130,9 @@ class GoodsInfo extends React.Component<Props, State> {
       showCartInfoDetails: false
     })
   }
-  childrenScroll(){
+  childrenScroll() {
     this.setState({
-      canScroll:false
+      canScroll: false
     })
   }
   render() {
@@ -174,44 +174,44 @@ class GoodsInfo extends React.Component<Props, State> {
             })
           }}
           >
-          <HomeSwiper
-            fullWidth
-            img={goodsInfo.image_url || []}
-          ></HomeSwiper>
-          <View style={[mainStyle.pa15, mainStyle.column]}>
-            <View style={[mainStyle.row, mainStyle.mab10]}>
-              <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
-                {goodsInfo.product_name}
-              </Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(40) }]}>{goodsInfo.product_introduction}</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.czt, mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>{goodsItem.price}</Text>
-              </Text>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>{goodsInfo.sales_volume}人购买</Text>
-            </View>
-            <View style={[mainStyle.column]}>
+            <HomeSwiper
+              fullWidth
+              img={goodsInfo.image_url || []}
+            ></HomeSwiper>
+            <View style={[mainStyle.pa15, mainStyle.column]}>
+              <View style={[mainStyle.row, mainStyle.mab10]}>
+                <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
+                  {goodsInfo.product_name}
+                </Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
+                <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(40) }]}>{goodsInfo.product_introduction}</Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.czt, mainStyle.fs13]}>
+                  ￥<Text style={[mainStyle.fs22]}>{goodsItem.price}</Text>
+                </Text>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>{goodsInfo.sales_volume}人购买</Text>
+              </View>
               <View style={[mainStyle.column]}>
-                <TouchableOpacity onPress={() => { this.handleCloseCartInfoDetails(true, false) }}>
-                  <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
-                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
-                      <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
-                      <Text style={[mainStyle.mal20, mainStyle.c333, mainStyle.fs15]}>{goodsItem.sku_name || '请选择类型'}</Text>
+                <View style={[mainStyle.column]}>
+                  <TouchableOpacity onPress={() => { this.handleCloseCartInfoDetails(true, false) }}>
+                    <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
+                      <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
+                        <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15]}>选&nbsp;&nbsp;&nbsp;择</Text>
+                        <Text style={[mainStyle.mal20, mainStyle.c333, mainStyle.fs15]}>{goodsItem.sku_name || '请选择类型'}</Text>
+                      </View>
+                      <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
                     </View>
-                    <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
           </View>
 
           <BxTabView
             currentPageIndex={0}
-            height={height - setSize(120)}
+            height={height - setSize(140)}
             tabWidth={width - setSize(160)}
             canScroll={canScroll}
             tabs={[{ title: '商品详情' }, { title: '参数规格' }]}
@@ -220,10 +220,10 @@ class GoodsInfo extends React.Component<Props, State> {
               this.childrenScroll.bind(this)
             }
           >
-            <View style={[mainStyle.mab40, mainStyle.flex1]}>
+            <View style={[mainStyle.pab140, mainStyle.flex1]}>
               <BxRichText text={goodsInfo.detail}></BxRichText>
             </View>
-            <View style={[mainStyle.mab40, mainStyle.flex1, mainStyle.pa15]}>
+            <View style={[mainStyle.pab140, mainStyle.flex1, mainStyle.pa15]}>
               <View style={[mainStyle.flex1, mainStyle.column, mainStyle.brl1e2, mainStyle.brt1e2]}>
                 {
                   goodsInfo.attr_rule

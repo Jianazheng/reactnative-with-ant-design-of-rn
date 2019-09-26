@@ -137,7 +137,7 @@ class Address extends React.Component<Props, State> {
                                 <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.mobile}</Text>
                               </View>
                               <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
-                                <Text style={[mainStyle.c666, mainStyle.fs13]}>{val.region.length > 0 ? (val.region[0] + ' - ' + val.region[1] + ' - ' + val.region[2]) : null}</Text>
+                                <Text style={[mainStyle.c666, mainStyle.fs13]}>{val.region.length > 0 ? (val.region[0] + (region[1] ? '-' + region[1] : '') + (region[2] ? '-' + region[2] : '')) : null}</Text>
                                 <Text style={[mainStyle.cztc, mainStyle.fs12]}>{val.is_default == 1 ? '默认地址' : ''}</Text>
                               </View>
                               <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
