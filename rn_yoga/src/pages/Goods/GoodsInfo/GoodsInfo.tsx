@@ -35,7 +35,7 @@ class GoodsInfo extends React.Component<Props, State> {
   constructor(props: Props, state: State) {
     super(props);
     this.state = {
-      tabTop: 667,
+      tabTop: height,
       canScroll: false,
       clicking: false,
       showCartInfoDetails: false
@@ -64,7 +64,7 @@ class GoodsInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 590
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-setSize(120))
       })
     }
   }
@@ -130,7 +130,11 @@ class GoodsInfo extends React.Component<Props, State> {
       showCartInfoDetails: false
     })
   }
-
+  childrenScroll(){
+    this.setState({
+      canScroll:false
+    })
+  }
   render() {
     let { canScroll, showCartInfoDetails } = this.state;
     let { goodsStore, navigation, cartStore: { hascart } } = this.props;
@@ -159,11 +163,17 @@ class GoodsInfo extends React.Component<Props, State> {
         ></NavTop>
         <ScrollView
           style={[mainStyle.flex1]}
-          stickyHeaderIndices={[2]}
+          stickyHeaderIndices={[1]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
         >
+          <View onLayout={(e) => {
+            this.setState({
+              tabTop: e.nativeEvent.layout.height
+            })
+          }}
+          >
           <HomeSwiper
             fullWidth
             img={goodsInfo.image_url || []}
@@ -197,13 +207,18 @@ class GoodsInfo extends React.Component<Props, State> {
               </View>
             </View>
           </View>
+          </View>
+
           <BxTabView
             currentPageIndex={0}
-            height={height - setSize(160)}
+            height={height - setSize(120)}
             tabWidth={width - setSize(160)}
             canScroll={canScroll}
             tabs={[{ title: '商品详情' }, { title: '参数规格' }]}
             tabAlign={'center'}
+            childrenScroll={
+              this.childrenScroll.bind(this)
+            }
           >
             <View style={[mainStyle.mab40, mainStyle.flex1]}>
               <BxRichText text={goodsInfo.detail}></BxRichText>

@@ -12,7 +12,8 @@ interface State {
   orderType: string,
   reasons: Array<object>,
   other: string,
-  showLoading: boolean
+  showLoading: boolean,
+  otherchecked:boolean
 }
 
 @inject('orderStore')
@@ -29,7 +30,8 @@ class RefundReason extends React.Component<Props, State> {
       orderType: '',
       reasons: [],
       other: '',
-      showLoading: true
+      showLoading: true,
+      otherchecked:false
     };
   }
 
@@ -58,10 +60,14 @@ class RefundReason extends React.Component<Props, State> {
       reasons: newReason,
     })
   }
-
+  selectotherReason(){
+    this.setState({
+      otherchecked:!this.state.otherchecked
+    })
+  }
   handleSubmit() {
     this.setState({ showLoading: true })
-    let { reasons, other } = this.state
+    let { reasons, other,otherchecked } = this.state
     let { orderStore, navigation } = this.props
     let reasonStr = ''
     reasons.map((val, i) => {
@@ -69,7 +75,7 @@ class RefundReason extends React.Component<Props, State> {
         reasonStr += val.reason + '，'
       }
     })
-    reasonStr += other
+    reasonStr += otherchecked?other?other:'其他':''
     if (reasonStr == '') {
       Toast.info('请输入退款原因', 1.4, undefined, false)
       this.setState({ showLoading: false })
@@ -104,7 +110,7 @@ class RefundReason extends React.Component<Props, State> {
   }
 
   render() {
-    let { reasons, showLoading } = this.state;
+    let { reasons, showLoading,otherchecked } = this.state;
     let { orderStore: { orderStatus }, navigation } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.column]}>
@@ -161,9 +167,26 @@ class RefundReason extends React.Component<Props, State> {
                     </TouchableOpacity>
                   ))
                 }
+                <TouchableOpacity
+                      style={[mainStyle.mab10,mainStyle.flex1]}
+                      onPress={event => {
+                        this.selectotherReason()
+                      }}>
+                      <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.positonre]}>
+                        <Text style={[mainStyle.fs13,otherchecked ? mainStyle.czt : mainStyle.c999]}>其他</Text>
+                        <Checkbox
+                        onChange={event => {
+                          this.selectotherReason()
+                        }}
+                          checked={otherchecked.checked}
+                          style={[{ color: otherchecked ? mainStyle.czt.color : mainStyle.c999.color }, styles.checkbox]}
+                        >
+                        </Checkbox>
+                      </View>
+                </TouchableOpacity>
               </View>
-              <View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
-                <Text style={[mainStyle.fs13, mainStyle.c333]}>其他</Text>
+              {otherchecked?<View style={[mainStyle.palr15, mainStyle.mab15, mainStyle.column]}>
+                {/* <Text style={[mainStyle.fs13, mainStyle.c333]}>其他</Text> */}
                 <View style={[
                   mainStyle.mat10,
                   {
@@ -190,7 +213,7 @@ class RefundReason extends React.Component<Props, State> {
                     }}
                   ></TextInput>
                 </View>
-              </View>
+              </View>:null}
             </View>
           </View>
         </ScrollView>

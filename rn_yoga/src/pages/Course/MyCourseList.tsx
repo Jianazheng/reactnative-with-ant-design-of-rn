@@ -68,7 +68,7 @@ class MyCourseList extends React.Component<Props> {
                 pab={setSize(30)}
                 pat={setSize(30)}
                 onLoadmore={() => {
-                  courseStore.getOnlineCourse()
+                  if (onlineCourse.data.length < onlineCourse.total)courseStore.getOnlineCourse()
                 }}
                 loading={onlineCourse.total == null || (onlineCourse.total > onlineCourse.data.length && onlineCourse.total >= 1)}
                 colNumber={1}
@@ -82,7 +82,7 @@ class MyCourseList extends React.Component<Props> {
                 pab={setSize(30)}
                 pat={setSize(30)}
                 onLoadmore={() => {
-                  trainStore.getTrainCourse()
+                  if (trainCourse.data.length < trainCourse.total)trainStore.getTrainCourse()
                 }}
                 loading={trainCourse.total == null || (trainCourse.total > trainCourse.data.length && trainCourse.total >= 1)}
                 colNumber={1}

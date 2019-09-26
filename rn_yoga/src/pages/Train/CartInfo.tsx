@@ -79,7 +79,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
                 </View>
                 <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.lh42, mainStyle.mab10]}>{trainInfo.train_name}</Text>
                 <View style={[mainStyle.row]}>
-                  <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf2, mainStyle.pa5_10, { borderRadius: setSize(6) }]}>{splitStr(trainInfo.train_start_time, ' ')}至{splitStr(trainInfo.train_end_time, ' ')}</Text>
+                  <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf2, mainStyle.pa5_10, { borderRadius: setSize(6),overflow:'hidden' }]}>{splitStr(trainInfo.train_start_time, ' ')}至{splitStr(trainInfo.train_end_time, ' ')}</Text>
                 </View>
               </View>
             </View>

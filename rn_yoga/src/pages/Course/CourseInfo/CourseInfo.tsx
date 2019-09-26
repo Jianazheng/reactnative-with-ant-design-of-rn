@@ -78,7 +78,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= 560
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-setSize(120))
       })
     }
   }
@@ -141,7 +141,11 @@ class CourseInfo extends React.Component<Props, State> {
       showPromotion: !showPromotion
     })
   }
-
+  childrenScroll(){
+    this.setState({
+      canScroll:false
+    })
+  }
   handleCollection(common_id: string | number, type: string, isCollect: string | number) {
     let { publicStore, courseStore } = this.props
     publicStore.setCollection(common_id, type, isCollect)
@@ -185,11 +189,17 @@ class CourseInfo extends React.Component<Props, State> {
         />
         <ScrollView
           style={[mainStyle.flex1]}
-          stickyHeaderIndices={[2]}
+          stickyHeaderIndices={[1]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
         >
+          <View onLayout={(e) => {
+            this.setState({
+              tabTop: e.nativeEvent.layout.height
+            })
+          }}
+          >
           <HomeSwiper fullWidth img={courseInfo.images || []}></HomeSwiper>
           <View style={[mainStyle.pa15, mainStyle.column]}>
             <View style={[mainStyle.column, mainStyle.mab10]}>
@@ -216,7 +226,7 @@ class CourseInfo extends React.Component<Props, State> {
               </View>
             </TouchableOpacity>
           </View>
-
+          </View>
           <BxTabView
             height={height - setSize(120)}
             tabWidth={width - setSize(160)}
@@ -224,14 +234,17 @@ class CourseInfo extends React.Component<Props, State> {
             canScroll={canScroll}
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
+            childrenScroll={
+              this.childrenScroll.bind(this)
+            }
           >
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <CourseTeacher teacher={courseInfo.teacher}></CourseTeacher>
             </View>
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <CourseArtInfo info={courseInfo.detail} height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <RelatedCourse course={courseInfo.relate_course} navigation={navigation} backid={courseInfo.id}></RelatedCourse>
             </View>
           </BxTabView>

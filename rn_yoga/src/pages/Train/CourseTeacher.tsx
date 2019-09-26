@@ -24,12 +24,19 @@ class CourseTeacher extends React.Component<CourseInfoItemProps>{
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10, mainStyle.mab10]}>
           <Text style={[mainStyle.fs15, mainStyle.c333]}>教师介绍</Text>
         </View>
-        <BxListView
+        {
+          trainTeather?
+            trainTeather.map((item, i) => {
+              return (<CourseTeacherItem key={i} data={item}></CourseTeacherItem>)
+            })
+          :null
+        }
+        {/* <BxListView
           nomore={true}
           colNumber={1}
           listData={trainTeather}
-          listItem={({ item, index }) => (<CourseTeacherItem data={item}></CourseTeacherItem>)}>
-        </BxListView>
+          listItem={({ item, index }) => ()}>
+        </BxListView> */}
       </View>
     )
   }

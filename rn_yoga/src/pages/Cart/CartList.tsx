@@ -178,7 +178,7 @@ class CartList extends React.Component<Props, State> {
             <RefreshControl
               tintColor={mainStyle.czt.color}
               colors={[mainStyle.czt.color, mainStyle.cztc.color]}
-              refreshing={this.state.showLoading}
+              refreshing={false}
               onRefresh={this._onRefresh.bind(this)}
             />
           )}>
@@ -366,13 +366,13 @@ class CartItem extends React.Component<CartItemProps>{
         </View>
         <TouchableOpacity onPress={() => {
           this.goto(type, { id: data.good_id })
-        }}>
+        }} style={[mainStyle.row, mainStyle.flex1]}>
           <Image
             style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
             mode="widthFix"
             source={{ uri: 'http://' + (typeof data.image_url == "object" && data.image_url != null ? data.image_url[0] : '') }}>
           </Image>
-        </TouchableOpacity>
+        
         {
           type == 'product'
             ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal10, mainStyle.flex1]}>
@@ -424,7 +424,7 @@ class CartItem extends React.Component<CartItemProps>{
               <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.lesson}课时</Text>
               <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
             </View> : null
-        }
+        }</TouchableOpacity>
       </View>
     )
   }
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   numberSelectInput: {
     width: setSize(70),
     height: setSize(50),
-    lineHeight: setSize(34),
+    lineHeight: setSize(32),
     textAlign: 'center',
     paddingTop: 0,
     paddingBottom: 0

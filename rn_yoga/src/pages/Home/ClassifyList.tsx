@@ -163,7 +163,7 @@ class RightListItem extends React.PureComponent<RightListItemProps>{
 
 const styles = StyleSheet.create({
   leftList: {
-    width: screenW * 0.28
+    width: screenW * 0.3
   },
   classItem: {
     height: setSize(120)

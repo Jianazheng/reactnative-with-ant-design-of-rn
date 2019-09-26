@@ -46,7 +46,7 @@ class TrainInfo extends React.Component<Props, State> {
     super(props);
     this.state = {
       clicking: false,
-      tabTop: 667,
+      tabTop: height,
       canScroll: false,
       showApplyNotice: false,
       showCartInfoDetails: false,
@@ -81,10 +81,10 @@ class TrainInfo extends React.Component<Props, State> {
   }
 
   handleScroll(e: any) {
-    // let { tabTop } = this.state;
+    let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >=0
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop - setSize(120))
       })
     }
   }
@@ -162,7 +162,11 @@ class TrainInfo extends React.Component<Props, State> {
     publicStore.setCollection(common_id, type, isCollect)
       .then(res => { if (res != null) trainStore.changeCollect() })
   }
-
+  childrenScroll(){
+    this.setState({
+      canScroll:false
+    })
+  }
   render() {
     let { canScroll, showLoading, showApplyNotice, showCartInfoDetails, showPromotion, cheight } = this.state
     let { trainStore, navigation, cartStore: { hascart } } = this.props
@@ -204,12 +208,18 @@ class TrainInfo extends React.Component<Props, State> {
         />
         <ScrollView
           style={[mainStyle.flex1]}
-          stickyHeaderIndices={[2]}
+          stickyHeaderIndices={[1]}
           onScroll={(e) => {
             this.handleScroll(e);
           }}
           scrollsToTop={true}
         >
+          <View onLayout={(e) => {
+            this.setState({
+              tabTop: e.nativeEvent.layout.height
+            })
+          }}
+          >
           <HomeSwiper fullWidth img={trainInfo.image_url || []}></HomeSwiper>
           <View style={[mainStyle.pa15, mainStyle.column]}>
             {
@@ -297,22 +307,25 @@ class TrainInfo extends React.Component<Props, State> {
               </TouchableOpacity>
             </View>
           </View>
-
+          </View>
           <BxTabView
-            height={height - setSize(200)}
+            height={height - setSize(120)}
             tabWidth={width - setSize(160)}
             currentPageIndex={0}
             canScroll={canScroll}
             tabs={[{ title: '讲师' }, { title: '详情' }, { title: '相关课程' }]}
             tabAlign={'center'}
+            childrenScroll={
+              this.childrenScroll.bind(this)
+            }
           >
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <CourseTeacher></CourseTeacher>
             </View>
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <CourseArtInfo height={height - setSize(120)}></CourseArtInfo>
             </View>
-            <View style={[mainStyle.pab220]}>
+            <View style={[mainStyle.pab140]}>
               <RelatedCourse navigation={navigation} backid={trainInfo.id}></RelatedCourse>
             </View>
           </BxTabView>

@@ -20,12 +20,19 @@ class RelatedCourse extends React.Component<CourseInfoItemProps>{
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10]}>
           <Text style={[mainStyle.fs15, mainStyle.c333]}>相关课程</Text>
         </View>
-        <BxListView
+        {
+          course?
+          course.map((item, i) => {
+              return (<CourseInfoItem2 key={i} navigation={navigation} data={item} backid={backid}></CourseInfoItem2>)
+            })
+          :null
+        }
+        {/* <BxListView
           nomore={true}
           colNumber={1}
           listData={course}
           listItem={({ item, index }) => (<CourseInfoItem2 navigation={navigation} data={item} backid={backid}></CourseInfoItem2>)}>
-        </BxListView>
+        </BxListView> */}
       </View>
     )
   }

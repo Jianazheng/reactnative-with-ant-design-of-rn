@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     padding: setSize(10)
   },
   selectTap: {
-    borderRadius: setSize(20),
+    borderRadius: setSize(19),
     overflow: 'hidden',
     padding: setSize(1)
   },

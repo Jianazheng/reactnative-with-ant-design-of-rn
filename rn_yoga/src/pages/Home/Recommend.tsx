@@ -157,7 +157,7 @@ class RecommendGoods extends PureComponent<GoodsProps> {
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
           <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5, mainStyle.bgcf2]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'http://' + data.image_url[0] : '' : '' }}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mab5, { height: setSize(70) }, mainStyle.lh36]} numberOfLines={2}>{data.product_name}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs12, mainStyle.mab5, { height: setSize(66) }]} numberOfLines={2}>{data.product_name}</Text>
             <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text>
           </View>
         </View>
