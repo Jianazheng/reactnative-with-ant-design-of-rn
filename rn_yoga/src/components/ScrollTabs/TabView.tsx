@@ -86,7 +86,7 @@ class BxTabView extends React.Component<Props, State> {
                     onScroll={(e) => {
                       if (e.nativeEvent.contentOffset.y == 0 && this.props.childrenScroll) {
                         this.props.childrenScroll();
-                        this.refs['childview'].scrollTo({ y: 0, animate: false })
+                        // this.refs['childview'].scrollTo({ y: 0, animate: false })
                       }
                     }}
                   >

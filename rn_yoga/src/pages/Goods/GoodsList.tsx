@@ -39,6 +39,7 @@ class GoodsList extends React.Component<Props, State> {
   componentDidMount() {
     let { navigation, goodsStore } = this.props;
     let { params } = navigation.state;
+    goodsStore.setSort(0)
     goodsStore.setCate(params.cid, params.product_category_name)
       .then(suc => {
         goodsStore.getGoodsClassify()
@@ -69,7 +70,7 @@ class GoodsList extends React.Component<Props, State> {
   }
 
   hideSearchBar() {
-    let { searchBarTranslate, searchBarOpacity } = this.state;
+    let { searchBarTranslate, searchBarOpacity,keyword } = this.state;
     Animated.timing(searchBarTranslate, {
       toValue: screenW,
       easing: Easing.ease,
@@ -80,6 +81,11 @@ class GoodsList extends React.Component<Props, State> {
       easing: Easing.ease,
       duration: 300
     }).start();
+    // if(keyword){
+    //   this.handleSearch('');
+    //   this.setState({ keyword: '' })
+    //   console.log(this.state.keyword)
+    // }
   }
 
   showCondition() {
@@ -115,6 +121,7 @@ class GoodsList extends React.Component<Props, State> {
           navType="normal"
           title="商城"
           onPress={() => {
+            if(keyword)this.handleSearch('');
             this.props.navigation.goBack();
           }}
           children={(
@@ -155,6 +162,7 @@ class GoodsList extends React.Component<Props, State> {
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
                   this.hideSearchBar();
+                  
                 }}>
                   <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>取消</Text>
                 </TouchableOpacity>
@@ -353,7 +361,7 @@ const styles = StyleSheet.create({
   },
   seacrhConditionItem: {
     height: setSize(60),
-    width: (screenW - setSize(60)) / 3,
+    width: (screenW - setSize(62)) / 3,
     marginTop: setSize(30),
     borderRadius: setSize(30)
   },

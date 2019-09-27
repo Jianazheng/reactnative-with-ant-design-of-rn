@@ -158,6 +158,9 @@ class Goods {
   }
 
   @action async setCate(id: string, product_category_name: string) {
+    this.goodsData.goodsCondition.map((val, i) => {
+      val.checked = id == val.id ? true : false;
+    })
     this.goodsData.cate = { id, product_category_name }
     return this.goodsData.cate
   }
@@ -169,7 +172,13 @@ class Goods {
     this.goodsData.cate = this.goodsData.goodsCondition[index];
     this.getGoodslist(true);
   }
-
+  @action async setSort(index:number) {
+    this.goodsData.goodsSort.map((val, i) => {
+      val.checked = index == i ? true : false;
+    })
+    this.goodsData.sort = this.goodsData.goodsSort[index];
+    return this.goodsData.sort
+  }
   @action async selectGoodsSort(index: number) {
     this.goodsData.goodsSort.map((val, i) => {
       val.checked = index == i ? true : false;

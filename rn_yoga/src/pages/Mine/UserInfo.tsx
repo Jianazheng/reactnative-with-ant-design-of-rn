@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity,Keyboard,Platform } from 'react-native';
 import { Modal, InputItem, Toast, WhiteSpace } from '@ant-design/react-native';
 import { mainStyle, screenH } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -7,12 +7,13 @@ import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import BxButton from '../../components/Pubilc/Button';
 // var ImagePicker = require('react-native-image-picker');
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 interface Props { }
 interface State {
   email: string,
   address: string,
-  clicking: boolean
+  clicking: boolean,
+  keyboardSpace:number
 }
 
 const defaultIcon = require('../../../images/defaultIcon.png')
@@ -34,14 +35,33 @@ class UserInfo extends React.Component<Props, State> {
     this.state = {
       email: userInfo.email || '',
       address: userInfo.address || '',
-      clicking: false
+      clicking: false,
+      keyboardSpace:0
     };
   }
 
   componentDidMount() {
-
+    // Platform.OS === 'ios' ?
+    // Keyboard.addListener('keyboardWillShow',this.updateKeyboardSpace.bind(this)) : Keyboard.addListener('keyboardDidShow',this.updateKeyboardSpace.bind(this));
+    // Platform.OS === 'ios' ?
+    // Keyboard.addListener('keyboardWillHide',this.resetKeyboardSpace.bind(this)) : Keyboard.addListener('keyboardDidHide',this.resetKeyboardSpace.bind(this));
   }
+  updateKeyboardSpace(frames){
+    if(!frames.endCoordinates){
+       return;
+    }
+    let keyboardSpace = frames.endCoordinates.height;//获取键盘高度
 
+    this.setState({
+        keyboardSpace: keyboardSpace
+    })
+    if(this.refs['info'])this.refs['info'].scrollToEnd({animated:true,duration:500})   
+  }
+  resetKeyboardSpace(){
+    this.setState({
+      keyboardSpace: 0
+  })
+  }
   handleEditUsername() {
     let { userStore } = this.props;
     Modal.prompt(
@@ -101,7 +121,7 @@ class UserInfo extends React.Component<Props, State> {
   }
   render() {
     let { userStore } = this.props;
-    let { email, address, clicking } = this.state;
+    let { email, address, clicking,keyboardSpace } = this.state;
     let userInfo = userStore.userInfo;
     return (
       <View style={[mainStyle.column, mainStyle.flex1, mainStyle.bgcf7]}>
@@ -112,7 +132,7 @@ class UserInfo extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <ScrollView style={[mainStyle.flex1, mainStyle.mat15]} keyboardShouldPersistTaps="handled">
+        <KeyboardAwareScrollView style={[mainStyle.flex1, mainStyle.mat15]} ref={'info'}>
           <TouchableOpacity onPress={() => this.changehead()}>
             <View style={[mainStyle.row, mainStyle.palr15, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.patb20, mainStyle.brb1f2, mainStyle.bgcfff]}>
               <Text style={[mainStyle.fs15, mainStyle.c666]}>头像</Text>
@@ -177,6 +197,7 @@ class UserInfo extends React.Component<Props, State> {
               }}
               placeholder="请输入邮箱"
               style={[mainStyle.fs14]}
+              returnKeyType={"done"}
             >
               <Text style={[mainStyle.c333, mainStyle.fs14]}>邮箱</Text>
             </InputItem>
@@ -192,10 +213,11 @@ class UserInfo extends React.Component<Props, State> {
               }}
               placeholder="请输入居住地"
               style={[mainStyle.fs14]}
+              returnKeyType={"done"}
             >
               <Text style={[mainStyle.c333, mainStyle.fs14]}>居住地</Text>
             </InputItem>
-            <WhiteSpace />
+            <WhiteSpace style={[{ height: keyboardSpace }]} />
           </View>
           <View style={[mainStyle.palr15]}>
             <View style={[mainStyle.mat20]}>
@@ -207,7 +229,7 @@ class UserInfo extends React.Component<Props, State> {
               ></BxButton>
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     )
   }

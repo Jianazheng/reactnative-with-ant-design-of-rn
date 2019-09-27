@@ -44,7 +44,7 @@ class Explore extends React.Component<Props, State> {
     goodsStore.getRecommendGoods();
     courseStore.getClassify();
     courseStore.getRecommendCourse();
-    trainStore.getClassify();
+    trainStore.getTrainPage();
     if (isios()) {
       let _this=this;
 			StatusBarIOS._nativeModule.getHeight((h) => {
@@ -52,7 +52,9 @@ class Explore extends React.Component<Props, State> {
 					statusBar: h.height
 				})
 			});
-		}
+    }
+    let trainPage = trainStore.trainData.trainPage
+    console.log(trainPage);    
   }
 
   goto(router: string) {
@@ -84,7 +86,7 @@ class Explore extends React.Component<Props, State> {
     let recommendGoods = goodsStore.recommendGoods
     let courseClassify = courseStore.classify
     let recommendCourses = courseStore.recommendCourse
-    let trainClassify = trainStore.trainData.classify
+    let trainPage = trainStore.trainData.trainPage
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7,{marginTop:statusBar}]}>
         <ScrollView
@@ -104,9 +106,12 @@ class Explore extends React.Component<Props, State> {
                 <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.fontbold]}>线下课程</Text>
               </View>
               <View style={[mainStyle.row, mainStyle.wrap, mainStyle.jcBetween]}>
-                {
+                {/* {
                   trainClassify.map((item, index) => <Classify navigation={navigation} data={item} index={index} itemType="train" type={'item'} key={index.toString()}></Classify>)
-                }
+                } */}
+              {
+                  trainPage.map((item, index) => <RecommendGoods navigation={navigation} data={item} key={index.toString()}></RecommendGoods>)
+              }
               </View>
             </View>
             <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
@@ -182,12 +187,12 @@ class RecommendGoods extends React.PureComponent<GoodsProps> {
   render() {
     let { data } = this.props;
     return (
-      <TouchableOpacity style={[styles.reGoods, mainStyle.mab10]} onPress={() => { this.gotoInfo('GoodsInfo', { id: data.id }) }}>
+      <TouchableOpacity style={[mainStyle.mab10]} onPress={() => { this.gotoInfo('TrainInfo', { id: data.id }) }}>
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
-          <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? data.image_url[0] : '' : '' }}></Image>
+          <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5,{width:setSize(335)}]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'https://'+data.image_url[0] : '' : '' }}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]} numberOfLines={1}>{data.product_name}</Text>
-            <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]} numberOfLines={1}>{data.train_name}</Text>
+            {/* <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text> */}
           </View>
         </View>
       </TouchableOpacity>
@@ -324,7 +329,7 @@ const styles = StyleSheet.create({
     marginRight: setSize(20)
   },
   reGoodsImage: {
-    width: GoodsImageWidth,
+    // width: GoodsImageWidth,
     height: GoodsImageWidth,
     borderRadius: setSize(6),
   },

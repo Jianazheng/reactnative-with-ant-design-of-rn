@@ -178,7 +178,7 @@ class RefundReason extends React.Component<Props, State> {
                         onChange={event => {
                           this.selectotherReason()
                         }}
-                          checked={otherchecked.checked}
+                          checked={otherchecked}
                           style={[{ color: otherchecked ? mainStyle.czt.color : mainStyle.c999.color }, styles.checkbox]}
                         >
                         </Checkbox>

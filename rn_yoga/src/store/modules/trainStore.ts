@@ -42,7 +42,8 @@ class Train {
       data: [],
       total: 0,
       current_page: 1
-    }
+    },
+    trainPage:[]
   }
 
   @computed get cartItem() {
@@ -89,6 +90,9 @@ class Train {
   @computed get trainSearch() {
     return this.trainData.trainSearch
   }
+  @computed get trainPage() {
+    return this.trainData.trainPage
+  }
   @action setKeyword(keyword: string, issearch: boolean) {
     this.trainData.keyword = keyword
     if (issearch == true) {
@@ -126,6 +130,16 @@ class Train {
         current_page: 1,
         total: 0
       }
+      return null
+    }
+  }
+  @action async getTrainPage() {
+    try {   
+      let response = await new Fetch('/train/train_page', 'GET', {}, {},'v2')
+      let resd = response.data
+      this.trainData.trainPage = resd
+      return response
+    } catch (error) {
       return null
     }
   }
@@ -215,14 +229,21 @@ class Train {
     this.trainData.selectItem = item;
   }
 
-  @action async getTrainCourse() {
+  @action async getTrainCourse(reload:boolean) {
     try {
+      if(reload){
+        this.trainData.trainCourse={
+          page:1,
+          data:[],
+          total:null
+        }
+      }
       let { trainCourse } = this.trainData
-      let params = { page: this.trainCourse.page }
+      let params = { page: this.trainCourse.page };
       let response = await new Fetch('/train/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
       trainCourse.total = resd.total
-      // if (trainCourse.data.length >= resd.total) return response
+      if (trainCourse.data.length >= resd.total) return response
       let newdata = params.page == 1 ? resd.data : trainCourse.data.concat(resd.data)
       trainCourse.data = newdata
       if (trainCourse.data.length < resd.total) {
@@ -289,7 +310,7 @@ class Train {
         server_id: serviceIdArr
       }
       let response = await new Fetch('/train/server/sure', 'POST', params, {});
-      Toast.info('预约成功', 1.4, undefined, false)
+      Toast.info('预定成功', 1.4, undefined, false)
       return response
     } catch (error) {
       return null

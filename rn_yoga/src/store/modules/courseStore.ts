@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, toJS } from 'mobx';
 import { Fetch } from './../../fetch/request';
 
 class Course {
@@ -89,15 +89,20 @@ class Course {
     return this.courseData.orderby
   }
 
-  @action setCondition(categroy_name: string, id: string) {
+  @action setCondition(categroy_name: string, id: string,orderby:string) {
+    let { orderbyArr } = this.courseData
     this.courseData.classifySelect = { categroy_name, id }
     this.courseData.category_id = id
+    this.courseData.orderby=orderby || { str: '默认排序', info: '' };
+    for (let i in orderbyArr) {
+      orderbyArr[i].checked = orderby!=undefined? (orderbyArr[i].info == orderby.info ? true : false):(orderbyArr[i].info == '' ? true : false)
+    }
   }
 
   //选择类型
   @action async selectGoodsCondition(index: number) {
-    let { classify } = this.courseData
-    this.setCondition(classify[index].categroy_name, classify[index].id)
+    let { classify,orderby,orderbyArr } = this.courseData
+    this.setCondition(classify[index].categroy_name, classify[index].id,orderby)
     for (let i in classify) {
       classify[i].checked = i == index ? true : false
     }
@@ -216,14 +221,21 @@ class Course {
     }
   }
 
-  @action async getOnlineCourse() {
+  @action async getOnlineCourse(reload:boolean) {
     try {
+      if(reload){
+        this.courseData.onlineCourse={
+          page:1,
+          data:[],
+          total:null
+        }
+      }
       let { onlineCourse } = this.courseData
       let params = { page: this.onlineCourse.page }
       let response = await new Fetch('/online/mycourse/list', 'GET', { size: 10, ...params }, {})
       let resd = response.data
       onlineCourse.total = resd.total
-      // if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
+      if (onlineCourse.data.length >= resd.total && resd.total != 0) return response
       let newdata = params.page <= 1 ? resd.data : onlineCourse.data.concat(resd.data)
       onlineCourse.data = newdata
       if (onlineCourse.data.length < resd.total) {

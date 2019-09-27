@@ -28,12 +28,12 @@ class MyCourseList extends React.Component<Props> {
     let { courseStore, trainStore, navigation } = this.props
     let { params } = navigation.state
     if (params.type == 'online') {
-      courseStore.getOnlineCourse()
+      courseStore.getOnlineCourse(true)
       this.TORELOADONLINECOURSELIST = DeviceEventEmitter.addListener('TORELOADONLINECOURSELIST', res => {
-        courseStore.getOnlineCourse()
+        courseStore.getOnlineCourse(true)
       })
     } else {
-      trainStore.getTrainCourse()
+      trainStore.getTrainCourse(true)
     }
   }
   componentWillUnmount() {
@@ -68,7 +68,7 @@ class MyCourseList extends React.Component<Props> {
                 pab={setSize(30)}
                 pat={setSize(30)}
                 onLoadmore={() => {
-                  if (onlineCourse.data.length < onlineCourse.total)courseStore.getOnlineCourse()
+                  courseStore.getOnlineCourse(false)
                 }}
                 loading={onlineCourse.total == null || (onlineCourse.total > onlineCourse.data.length && onlineCourse.total >= 1)}
                 colNumber={1}
@@ -82,7 +82,7 @@ class MyCourseList extends React.Component<Props> {
                 pab={setSize(30)}
                 pat={setSize(30)}
                 onLoadmore={() => {
-                  if (trainCourse.data.length < trainCourse.total)trainStore.getTrainCourse()
+                  trainStore.getTrainCourse(false)
                 }}
                 loading={trainCourse.total == null || (trainCourse.total > trainCourse.data.length && trainCourse.total >= 1)}
                 colNumber={1}

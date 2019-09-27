@@ -31,7 +31,7 @@ class AddressOperate extends React.Component<Props, State> {
       is_default: 0,
       region: [],
       id: '',
-      loading: true
+      loading: false
     };
   }
 
@@ -39,6 +39,9 @@ class AddressOperate extends React.Component<Props, State> {
     let { addressStore, navigation } = this.props
     let { params } = navigation.state
     if (params.type == 'edit') {
+      this.setState({
+        loading:true
+      })
       addressStore.getAddressInfo(params.id)
         .then(res => {
           this.setState({
@@ -68,11 +71,17 @@ class AddressOperate extends React.Component<Props, State> {
       Toast.info('请输入信息', 1.4, undefined, false)
       return false
     }
+    this.setState({
+      loading:true
+    })
     addressStore.addOrEditAddress(postData, params.type)
       .then(res => {
         // if (res.errorCode != 2001) {
         //   return false
         // }
+        this.setState({
+          loading:false
+        })
         postData.region = region
         if (params.type == 'add') {
           postData.id = res.data.id;
@@ -80,6 +89,8 @@ class AddressOperate extends React.Component<Props, State> {
           DeviceEventEmitter.emit('TORELOADCARTDATA', 'yes')
         }
         navigation.goBack()
+      }).catch(err => {
+        this.setState({ loading: false })
       })
   }
 
@@ -107,16 +118,12 @@ class AddressOperate extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        {
-          params.type == 'edit'
-            ? <ActivityIndicator
+        <ActivityIndicator
               toast
               size="large"
               text="加载中..."
               animating={loading}
             ></ActivityIndicator>
-            : null
-        }
         <View style={[mainStyle.flex1, mainStyle.mat15]}>
           <ScrollView style={[mainStyle.flex1]}>
             <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
@@ -135,7 +142,7 @@ class AddressOperate extends React.Component<Props, State> {
                       this.setState({ consignee })
                     }}
                     onBlur={() => { Keyboard.dismiss(); }}
-                    returnKeyType={"next"}
+                    returnKeyType={"done"}
                   ></TextInput>
                 </View>
               </View>
@@ -154,7 +161,7 @@ class AddressOperate extends React.Component<Props, State> {
                       this.setState({ mobile })
                     }}
                     onBlur={() => { Keyboard.dismiss(); }}
-                    returnKeyType={"next"}
+                    returnKeyType={"done"}
                   ></TextInput>
                 </View>
               </View>
@@ -197,7 +204,6 @@ class AddressOperate extends React.Component<Props, State> {
                       this.setState({ address })
                     }}
                     onBlur={() => { Keyboard.dismiss(); }}
-                    returnKeyType={"done"}
                   ></TextInput>
                 </View>
               </View>
@@ -221,7 +227,7 @@ class AddressOperate extends React.Component<Props, State> {
           <BxAddressPicker ref="AddressPicker" onChange={region => { this.setState({ region }) }}></BxAddressPicker>
           <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row]}>
             <BxButton
-              disabled={false}
+              disabled={loading}
               colors={[mainStyle.cztc.color, mainStyle.cju.color]}
               btnstyle={[{ borderRadius: setSize(60), width: screenW - setSize(60) }]}
               title={params.type == 'edit' ? '保存修改' : '提交'}

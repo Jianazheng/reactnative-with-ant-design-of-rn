@@ -40,7 +40,7 @@ class OnlineCourseList extends React.Component<Props, State> {
     let { params } = navigation.state;
     console.log(params);
     if (params.cid == undefined) {
-      courseStore.setCondition('全部', '')
+      courseStore.setCondition('全部', '',{ str: '默认排序', info: '' });
     }
     courseStore.getClassify()
       .then(res => {
@@ -117,6 +117,7 @@ class OnlineCourseList extends React.Component<Props, State> {
           navType="normal"
           title="在线课程"
           onPress={() => {
+            if(keyword)this.handleSearch('');
             this.props.navigation.goBack();
           }}
           children={(
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   },
   seacrhConditionItem: {
     height: setSize(60),
-    width: (screenW - setSize(60)) / 3,
+    width: (screenW - setSize(62)) / 3,
     marginTop: setSize(30),
     borderRadius: setSize(30)
   },
