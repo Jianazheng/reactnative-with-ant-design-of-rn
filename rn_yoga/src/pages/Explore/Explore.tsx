@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions, RefreshControl,StatusBarIOS } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Dimensions, RefreshControl, StatusBarIOS } from 'react-native';
 import { mainStyle, screenW, setSize } from '../../public/style/style';
 import { IconOutline } from "@ant-design/icons-react-native";
 import BxCateTitle from '../../components/Pubilc/CateTitle';
 import { observer, inject } from 'mobx-react';
 import trainStore from './../../store/modules/trainStore';
-import {isios} from '../../tools/function'
+import { isios } from '../../tools/function'
 
 let { width, height } = Dimensions.get('window');
 const contentPadding = setSize(30);
@@ -34,7 +34,7 @@ class Explore extends React.Component<Props, State> {
     this.state = {
       news: [{}, {}, {}, {}],
       refreshing: false,
-      statusBar:0
+      statusBar: 0
     };
   }
 
@@ -46,15 +46,15 @@ class Explore extends React.Component<Props, State> {
     courseStore.getRecommendCourse();
     trainStore.getTrainPage();
     if (isios()) {
-      let _this=this;
-			StatusBarIOS._nativeModule.getHeight((h) => {
-			  this.setState({
-					statusBar: h.height
-				})
-			});
+      let _this = this;
+      StatusBarIOS._nativeModule.getHeight((h) => {
+        this.setState({
+          statusBar: h.height
+        })
+      });
     }
     let trainPage = trainStore.trainData.trainPage
-    console.log(trainPage);    
+    console.log(trainPage);
   }
 
   goto(router: string) {
@@ -69,7 +69,7 @@ class Explore extends React.Component<Props, State> {
       goodsStore.getGoodsClassify();
       goodsStore.getRecommendGoods();
       courseStore.getClassify();
-      trainStore.getClassify();
+      trainStore.getTrainPage();
       courseStore.getRecommendCourse()
         .then(res => {
           this.setState({
@@ -81,14 +81,14 @@ class Explore extends React.Component<Props, State> {
 
   render() {
     let { navigation, goodsStore, courseStore, trainStore } = this.props
-    let { refreshing,statusBar } = this.state
+    let { refreshing, statusBar } = this.state
     let goodsClassify = goodsStore.goodsClassify
     let recommendGoods = goodsStore.recommendGoods
     let courseClassify = courseStore.classify
     let recommendCourses = courseStore.recommendCourse
     let trainPage = trainStore.trainData.trainPage
     return (
-      <View style={[mainStyle.flex1, mainStyle.bgcf7,{marginTop:statusBar}]}>
+      <View style={[mainStyle.flex1, mainStyle.bgcf7, { marginTop: statusBar }]}>
         <ScrollView
           style={[mainStyle.flex1]}
           refreshControl={(
@@ -109,9 +109,9 @@ class Explore extends React.Component<Props, State> {
                 {/* {
                   trainClassify.map((item, index) => <Classify navigation={navigation} data={item} index={index} itemType="train" type={'item'} key={index.toString()}></Classify>)
                 } */}
-              {
+                {
                   trainPage.map((item, index) => <RecommendGoods navigation={navigation} data={item} key={index.toString()}></RecommendGoods>)
-              }
+                }
               </View>
             </View>
             <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
@@ -189,7 +189,7 @@ class RecommendGoods extends React.PureComponent<GoodsProps> {
     return (
       <TouchableOpacity style={[mainStyle.mab10]} onPress={() => { this.gotoInfo('TrainInfo', { id: data.id }) }}>
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
-          <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5,{width:setSize(335)}]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'https://'+data.image_url[0] : '' : '' }}></Image>
+          <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5, { width: setSize(335) }]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'https://' + data.image_url[0] : '' : '' }}></Image>
           <View style={[mainStyle.flex1]}>
             <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]} numberOfLines={1}>{data.train_name}</Text>
             {/* <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text> */}

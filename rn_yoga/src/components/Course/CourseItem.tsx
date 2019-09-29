@@ -148,8 +148,8 @@ class CourseListItem extends React.Component<CourseListItemProps>{
               source={{ uri: 'http://' + data.img }}>
             </Image>
             <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1, mainStyle.mal15, { height: imgw * 0.7 }]}>
-              <View style={[mainStyle.row, mainStyle.mat5, mainStyle.mab5, { overflow: 'hidden' }]}>
-                {type == 'online' ? <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf7, mainStyle.mar10,
+              <View style={[mainStyle.row, mainStyle.mat5, mainStyle.mab5, { overflow: 'hidden' }, mainStyle.mar10]}>
+                {type == 'online' ? <View><Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.bgcf7, mainStyle.mar10,
                 {
                   borderRadius: setSize(12),
                   paddingLeft: setSize(14),
@@ -157,8 +157,8 @@ class CourseListItem extends React.Component<CourseListItemProps>{
                   paddingTop: setSize(1),
                   paddingBottom: setSize(1)
                 }
-                ]}>{data.lesson}课时</Text> : null}
-                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mar10]}>{type == 'online' ? data.course_name : data.train_name}</Text>
+                ]}>{data.lesson}课时</Text></View> : null}
+                <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.flex1]}>{type == 'online' ? data.course_name : data.train_name}</Text>
               </View>
               {type == 'online' ? <Text style={[mainStyle.c999, mainStyle.fs12]}>有效期至{data.validay || ''}</Text> : null}
               {

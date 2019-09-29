@@ -154,9 +154,9 @@ class Home extends React.Component<Props, State> {
       DeviceEventEmitter.emit('TORELOADRECOMMEND', 'yes');
     })
   }
-  childrenScroll(){
+  childrenScroll() {
     this.setState({
-      canScroll:false
+      canScroll: false
     })
   }
   render() {
@@ -217,13 +217,13 @@ class Home extends React.Component<Props, State> {
                 }
                 navigateTo={() => { navigation.push('ClassifyList') }}
               >
-                <View style={[mainStyle.flex1]}>
+                <View style={[mainStyle.flex1, mainStyle.pab140]}>
                   <Recommend navigation={navigation}></Recommend>
                 </View>
                 {
                   homeStore.trainCateShow.length > 0 ?
                     homeStore.trainCateShow.map((val, i) =>
-                      <View style={[mainStyle.flex1, mainStyle.bgcf2]} key={i}>
+                      <View style={[mainStyle.flex1, mainStyle.bgcf2, mainStyle.pab140]} key={i}>
                         <HomeCourse currentIndex={i} tabIndex={tabIndex} data={val.child} navigation={navigation}></HomeCourse>
                       </View>
                     ) : null
