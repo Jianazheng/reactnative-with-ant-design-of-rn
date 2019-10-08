@@ -71,7 +71,7 @@ class GoodsInfo extends React.Component<Props, State> {
 
   handleCloseCartInfoDetails(isok: boolean, fastbuy: boolean) {
     let { showCartInfoDetails, clicking } = this.state;
-    let { cartStore, cartStore: { selectData }, navigation } = this.props;
+    let { cartStore, cartStore: { selectData }, navigation, goodsStore: { goodsItem } } = this.props;
     if (!showCartInfoDetails) {
       this.setState({
         showCartInfoDetails: isok
@@ -82,6 +82,7 @@ class GoodsInfo extends React.Component<Props, State> {
           clicking: true
         }, () => {
           if (fastbuy) {//立即购买
+            selectData.count = goodsItem.count;
             if (selectData.product_stock > 0) {
               cartStore.fastBuy(selectData)
                 .then(res => {

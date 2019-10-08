@@ -64,7 +64,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
       <View
         style={[mainStyle.flex1, mainStyle.bgcfff]}
       >
-        <View style={[mainStyle.column]}>
+        <View style={[mainStyle.mab10, mainStyle.column]}>
           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
             <Image
               style={[mainStyle.imgCover,
