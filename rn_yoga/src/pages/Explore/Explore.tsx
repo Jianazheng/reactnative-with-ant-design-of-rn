@@ -191,7 +191,7 @@ class RecommendGoods extends React.PureComponent<GoodsProps> {
         <View style={[mainStyle.column, mainStyle.jcBetween]}>
           <Image style={[styles.reGoodsImage, mainStyle.imgCover, mainStyle.mab5, { width: setSize(335) }]} mode="widthFix" source={{ uri: data.image_url ? data.image_url.length > 0 ? 'https://' + data.image_url[0] : '' : '' }}></Image>
           <View style={[mainStyle.flex1]}>
-            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5]} numberOfLines={1}>{data.train_name}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs13, mainStyle.mab5, { width: setSize(335) }]} numberOfLines={1}>{data.train_name}</Text>
             {/* <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{data.list_price}</Text> */}
           </View>
         </View>

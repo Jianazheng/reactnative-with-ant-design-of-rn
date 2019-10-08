@@ -3,7 +3,7 @@ import {
     View,
     Modal,
     ToastAndroid,
-    ActivityIndicator, CameraRoll,
+    ActivityIndicator, CameraRoll,AlertIOS
 } from 'react-native';
 import { mainStyle, setSize, screenW, screenH } from '../../public/style/style';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -42,9 +42,25 @@ export default class PreviewImage extends Component {
         if (isios()) {
             let promise = CameraRoll.saveToCameraRoll(url);
             promise.then(function (result) {
-                Toast.info("图片已保存至相册")
+                AlertIOS.prompt(
+                    "提示",
+                    "图片已保存至相册",
+                    null,
+                    null,
+                    "default"
+                  );
+                console.log(result)
+                // Toast.info("图片已保存至相册")
             }).catch(function (error) {
-                Toast.info('保存失败');
+                AlertIOS.prompt(
+                    "提示",
+                    "保存失败",
+                    null,
+                    null,
+                    "default"
+                  );
+                console.log(error)
+                // Toast.info('保存失败');
             });
         } else {
             const RNFS = require('react-native-fs'); //文件处理

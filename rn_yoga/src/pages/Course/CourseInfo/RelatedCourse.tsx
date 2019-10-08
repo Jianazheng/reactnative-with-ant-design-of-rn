@@ -16,7 +16,7 @@ class RelatedCourse extends React.Component<CourseInfoItemProps>{
   render() {
     let { course, navigation, backid } = this.props;
     return (
-      <View style={[mainStyle.pa15]}>
+      <View style={[mainStyle.pa30, mainStyle.patb10]}>
         <View style={[mainStyle.row, mainStyle.jcCenter, mainStyle.aiCenter, mainStyle.h100, mainStyle.mat10]}>
           <Text style={[mainStyle.fs15, mainStyle.c333]}>相关课程</Text>
         </View>

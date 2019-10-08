@@ -55,7 +55,13 @@ class User {
     return this.userData.codeList
   }
   @action removeToken() {
-    this.userData.token = ''
+    this.userData.token = '';
+    this.userData.userInfo={
+      avatar: '',
+      username: '',
+      mobile: '',
+      level_name: ''
+    };
   }
 
   @action RegisterAndPassword(params: object) {

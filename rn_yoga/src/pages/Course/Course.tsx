@@ -129,7 +129,7 @@ class Course extends React.Component<Props> {
                       borderWidth: setSize(1),
                       paddingLeft: setSize(12),
                       paddingRight: setSize(12),
-                      borderRadius: setSize(18),
+                      borderRadius: setSize(14),
                     }
                     ]}
                     >{userInfo.level_name != '' ? userInfo.level_name : '登录后查看'}</Text>
