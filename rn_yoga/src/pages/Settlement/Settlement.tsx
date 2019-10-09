@@ -9,7 +9,7 @@ import NavTop from '../../router/navTop';
 import { observer, inject } from 'mobx-react';
 import { DeviceEventEmitter } from 'react-native';
 import InputNumber from '../../components/Pubilc/InputNumber';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 interface Props { }
 interface State {
   showLoading: boolean
@@ -141,7 +141,7 @@ class Settlement extends React.Component<Props, State> {
           size="large"
           text="正在提交..."
         />
-        <ScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
+        <KeyboardAwareScrollView style={[mainStyle.flex1, mainStyle.bgcf7]}>
           <View style={[mainStyle.column, mainStyle.flex1, mainStyle.pa15]}>
             {
               params.type == 1 || params.type == undefined || settlementInfo.isProduct == 1
@@ -244,7 +244,7 @@ class Settlement extends React.Component<Props, State> {
             </View>
             <PayStatus data={settlementInfo}></PayStatus>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <PayBar
           data={settlementInfo}
