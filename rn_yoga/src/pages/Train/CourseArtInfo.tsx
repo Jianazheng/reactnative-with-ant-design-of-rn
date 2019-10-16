@@ -43,7 +43,7 @@ class CourseArtInfo extends React.Component<CourseInfoItemProps>{
                     <View style={[mainStyle.column, mainStyle.pal10]}>
                       <Text style={[mainStyle.fs13, mainStyle.c666]}>{item.question}</Text>
                       <View style={[mainStyle.mat15, mainStyle.mar15]}>
-                        <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(32) }]}>{item.answer}</Text>
+                        <Text style={[mainStyle.c999, mainStyle.fs13, { lineHeight: setSize(30) }]}>{item.answer}</Text>
                       </View>
                     </View>
                   </View>

@@ -153,6 +153,7 @@ class AddressOperate extends React.Component<Props, State> {
                 </View>
                 <View style={[mainStyle.flex3, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
                   <TextInput
+                    type="phone"
                     value={mobile}
                     placeholderTextColor={mainStyle.c999.color}
                     style={[styles.input]}
@@ -190,7 +191,7 @@ class AddressOperate extends React.Component<Props, State> {
                 <View style={[mainStyle.flex1, mainStyle.row, mainStyle.h100, mainStyle.aiCenter]}>
                   <Text style={[mainStyle.c333, mainStyle.fs14]}>详细地址</Text>
                 </View>
-                <View style={[mainStyle.flex3, mainStyle.row, mainStyle.aiStart, mainStyle.h200, mainStyle.mat10]}>
+                <View style={[mainStyle.flex3, mainStyle.row, mainStyle.aiStart, mainStyle.mat10]}>
                   <TextInput
                     value={address}
                     placeholderTextColor={mainStyle.c999.color}

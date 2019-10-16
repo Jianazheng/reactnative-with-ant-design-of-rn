@@ -70,14 +70,14 @@ class Search extends React.Component<Props, State> {
               <TouchableOpacity
                 style={[mainStyle.mal10]}
                 onPress={() => {
-                  this.setState({search: true })
+                  this.setState({ search: true })
                   this.handleSearch(keyword)
                 }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>搜索</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
                 trainStore.setKeyword('', false);
-                this.setState({ keyword: '', search: false });
+                // this.setState({ keyword: '', search: false });
                 navigation.goBack();
               }}>
                 <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>取消</Text>

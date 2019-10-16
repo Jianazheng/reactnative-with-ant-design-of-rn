@@ -51,6 +51,7 @@ class HomeSearchBar extends React.Component<Props> {
             onFocus={(event) => {
               if (this.props.onFocus) this.props.onFocus(event);
             }}
+            returnKeyType={"search"}
           ></TextInput>
         </View>
         <View>

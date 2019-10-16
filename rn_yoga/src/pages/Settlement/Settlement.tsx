@@ -157,7 +157,7 @@ class Settlement extends React.Component<Props, State> {
                     }}>
                       <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
                         <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15]}>
-                          <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5]}>{addressSelect.region.join('')}{addressSelect.address}</Text>
+                          <Text style={[mainStyle.fs14, mainStyle.c333, mainStyle.mab5, { lineHeight: setSize(30) }]} numberOfLines={3}>{addressSelect.region.join('')}{addressSelect.address}</Text>
                           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
                             <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.mobile}</Text>
                             <Text style={[mainStyle.fs13, mainStyle.c333]}>{addressSelect.consignee}</Text>
@@ -303,7 +303,7 @@ class PayBar extends React.Component<PayBarProps>{
           <Text style={[mainStyle.fs12, mainStyle.lh42, mainStyle.c333]}>
             合计：
             <Text style={[mainStyle.czt]}>￥</Text>
-            <Text style={[mainStyle.czt, mainStyle.fs18]}>{type == 1 && type != 'pay' ? data.pStatusArray[0].original_price * data.pStatusArray[0].count : data.orderPrice}</Text>
+            <Text style={[mainStyle.czt, mainStyle.fs18]}>{type == 1 && type != 'pay' ? (data.pStatusArray[0].original_price * data.pStatusArray[0].count).toFixed(2) : data.orderPrice}</Text>
           </Text>
         </View>
         <View style={[mainStyle.row, mainStyle.aiCenter]}>

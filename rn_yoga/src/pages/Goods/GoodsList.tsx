@@ -70,7 +70,7 @@ class GoodsList extends React.Component<Props, State> {
   }
 
   hideSearchBar() {
-    let { searchBarTranslate, searchBarOpacity,keyword } = this.state;
+    let { searchBarTranslate, searchBarOpacity, keyword } = this.state;
     Animated.timing(searchBarTranslate, {
       toValue: screenW,
       easing: Easing.ease,
@@ -121,7 +121,7 @@ class GoodsList extends React.Component<Props, State> {
           navType="normal"
           title="商城"
           onPress={() => {
-            if(keyword)this.handleSearch('');
+            if (keyword) this.handleSearch('');
             this.props.navigation.goBack();
           }}
           children={(
@@ -162,7 +162,7 @@ class GoodsList extends React.Component<Props, State> {
                 </TouchableOpacity>
                 <TouchableOpacity style={[mainStyle.mal10]} onPress={() => {
                   this.hideSearchBar();
-                  
+
                 }}>
                   <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs13]}>取消</Text>
                 </TouchableOpacity>
@@ -328,7 +328,7 @@ class GoodsItem extends React.Component<GoodsItemProps, GoodsItemState> {
             <View style={[mainStyle.row, mainStyle.mat5]}>
               <Text style={[mainStyle.fs12, mainStyle.czt, mainStyle.lh44]}>￥</Text>
               <Text style={[mainStyle.fs16, mainStyle.czt, mainStyle.lh42]}>{data.list_price}</Text>
-              <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal10, mainStyle.lh42]}>{data.sales_volume}人购买</Text>
+              <Text style={[mainStyle.fs12, mainStyle.c999, mainStyle.mal10, mainStyle.lh42, mainStyle.textright, mainStyle.flex1]}>已售：{data.sales_volume}</Text>
             </View>
           </View>
         </View>

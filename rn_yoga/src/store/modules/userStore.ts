@@ -28,7 +28,8 @@ class User {
       page: 1
     },
     imageData: [],
-    codeList: []
+    codeList: [],
+    cartNum: 0
   }
 
   @computed get token() {
@@ -54,9 +55,12 @@ class User {
   @computed get codeList() {
     return this.userData.codeList
   }
+  @computed get cartNum() {
+    return this.userData.cartNum
+  }
   @action removeToken() {
     this.userData.token = '';
-    this.userData.userInfo={
+    this.userData.userInfo = {
       avatar: '',
       username: '',
       mobile: '',
@@ -136,7 +140,15 @@ class User {
       return null
     }
   }
-
+  @action async GetCartNum() {
+    try {
+      let response = await new Fetch('/user/car_number', 'GET', {}, {});
+      this.userData.cartNum = response.data.num;
+      return response;
+    } catch (error) {
+      return null
+    }
+  }
   @action async EditUserName(params: object) {
     try {
       let response = await new Fetch('/user/edit_name', 'POST', params, {});

@@ -43,7 +43,7 @@ class Train {
       total: 0,
       current_page: 1
     },
-    trainPage:[]
+    trainPage: []
   }
 
   @computed get cartItem() {
@@ -103,6 +103,15 @@ class Train {
     try {
       let { trainSearch, keyword } = this.trainData
       let params = { page: this.trainSearch.current_page, search: keyword }
+      if (keyword == '') {
+        trainSearch = {
+          data: [],
+          current_page: 1,
+          total: 0
+        }
+        this.trainData.trainSearch = trainSearch
+        return false;
+      }
       if (reload) {
         //重置列表
         trainSearch = {
@@ -134,8 +143,8 @@ class Train {
     }
   }
   @action async getTrainPage() {
-    try {   
-      let response = await new Fetch('/train/train_page', 'GET', {}, {},'v2')
+    try {
+      let response = await new Fetch('/train/train_page', 'GET', {}, {}, 'v2')
       let resd = response.data
       this.trainData.trainPage = resd
       return response
@@ -229,13 +238,13 @@ class Train {
     this.trainData.selectItem = item;
   }
 
-  @action async getTrainCourse(reload:boolean) {
+  @action async getTrainCourse(reload: boolean) {
     try {
-      if(reload){
-        this.trainData.trainCourse={
-          page:1,
-          data:[],
-          total:null
+      if (reload) {
+        this.trainData.trainCourse = {
+          page: 1,
+          data: [],
+          total: null
         }
       }
       let { trainCourse } = this.trainData

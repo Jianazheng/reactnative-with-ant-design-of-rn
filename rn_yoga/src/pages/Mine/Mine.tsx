@@ -40,9 +40,11 @@ class Mine extends React.Component<Props> {
     console.log(navigation);
     userStore.GetUserInfo()
     orderStore.getOrderNumber()
+    userStore.GetCartNum();
     this.TORELOADMINE = DeviceEventEmitter.addListener('TORELOADMINE', res => {
       userStore.GetUserInfo()
       orderStore.getOrderNumber()
+      userStore.GetCartNum();
     })
   }
   componentWillUnmount() {
@@ -71,6 +73,7 @@ class Mine extends React.Component<Props> {
     }, () => {
       let { userStore, orderStore } = this.props
       userStore.GetUserInfo()
+      userStore.GetCartNum();
       orderStore.getOrderNumber()
         .then(res => {
           this.setState({
@@ -81,7 +84,7 @@ class Mine extends React.Component<Props> {
   }
 
   render() {
-    let { userStore: { userInfo }, orderStore: { orderNumber } } = this.props
+    let { userStore: { userInfo, cartNum }, orderStore: { orderNumber } } = this.props
     return (
       <View style={[mainStyle.flex1, mainStyle.bgcf7]}>
         <ScrollView
@@ -168,7 +171,7 @@ class Mine extends React.Component<Props> {
                     }}
                   >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                      {orderNumber.notPay ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.notPay}</Text> : null}
+                      {orderNumber.notPay ? <Text style={[styles.point, styles.tag, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.notPay}</Text> : null}
                       <Image source={require('../../../images/pxo.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>未支付</Text>
                     </View>
@@ -180,7 +183,7 @@ class Mine extends React.Component<Props> {
                     }}
                   >
                     <View style={[mainStyle.column, mainStyle.aiCenter, mainStyle.jcCenter]}>
-                      {orderNumber.pay ? <Text style={[styles.point, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.pay}</Text> : null}
+                      {orderNumber.pay ? <Text style={[styles.point, styles.tag, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff]}>{orderNumber.pay}</Text> : null}
                       <Image source={require('../../../images/kco.png')} style={[styles.orderImg]}></Image>
                       <Text style={[mainStyle.fs13, mainStyle.c333]}>已支付</Text>
                     </View>
@@ -262,10 +265,11 @@ class Mine extends React.Component<Props> {
                     }}
                   >
                     <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.h100, mainStyle.palr15,]}>
-                      <View style={[mainStyle.row, mainStyle.aiCenter]}>
+                      <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
                         <Image style={[mainStyle.userimg]} source={require('../../../images/cart.png')}></Image>
                         <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>我的购物车</Text>
                       </View>
+                      <Text style={[styles.tag, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff, { marginTop: setSize(4) }]}>{cartNum}</Text>
                       <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>
@@ -363,6 +367,16 @@ const styles = StyleSheet.create({
     borderWidth: setSize(1),
     borderColor: mainStyle.cfff.color,
     zIndex: 1,
+
+  },
+  tag: {
+    height: setSize(34),
+    minWidth: setSize(54),
+    textAlign: 'center',
+    lineHeight: setSize(34),
+    borderRadius: setSize(17),
+    borderWidth: setSize(1),
+    borderColor: mainStyle.cfff.color,
     overflow: 'hidden'
   }
 })

@@ -89,20 +89,20 @@ class Course {
     return this.courseData.orderby
   }
 
-  @action setCondition(categroy_name: string, id: string,orderby:string) {
+  @action setCondition(categroy_name: string, id: string, orderby: string) {
     let { orderbyArr } = this.courseData
     this.courseData.classifySelect = { categroy_name, id }
     this.courseData.category_id = id
-    this.courseData.orderby=orderby || { str: '默认排序', info: '' };
+    this.courseData.orderby = orderby || { str: '默认排序', info: '' };
     for (let i in orderbyArr) {
-      orderbyArr[i].checked = orderby!=undefined? (orderbyArr[i].info == orderby.info ? true : false):(orderbyArr[i].info == '' ? true : false)
+      orderbyArr[i].checked = orderby != undefined ? (orderbyArr[i].info == orderby.info ? true : false) : (orderbyArr[i].info == '' ? true : false)
     }
   }
 
   //选择类型
   @action async selectGoodsCondition(index: number) {
-    let { classify,orderby,orderbyArr } = this.courseData
-    this.setCondition(classify[index].categroy_name, classify[index].id,orderby)
+    let { classify, orderby, orderbyArr } = this.courseData
+    this.setCondition(classify[index].categroy_name, classify[index].id, orderby)
     for (let i in classify) {
       classify[i].checked = i == index ? true : false
     }
@@ -221,13 +221,13 @@ class Course {
     }
   }
 
-  @action async getOnlineCourse(reload:boolean) {
+  @action async getOnlineCourse(reload: boolean) {
     try {
-      if(reload){
-        this.courseData.onlineCourse={
-          page:1,
-          data:[],
-          total:null
+      if (reload) {
+        this.courseData.onlineCourse = {
+          page: 1,
+          data: [],
+          total: null
         }
       }
       let { onlineCourse } = this.courseData
@@ -256,6 +256,10 @@ class Course {
       this.courseData.onlineCourseInfo = onlineCourseInfo
       return response
     } catch (error) {
+      this.courseData.onlineCourseInfo = {
+        chapter: [],
+        teacher: []
+      };
       return null
     }
   }

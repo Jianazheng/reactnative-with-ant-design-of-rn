@@ -376,7 +376,7 @@ class CartItem extends React.Component<CartItemProps>{
           {
             type == 'product'
               ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal10, mainStyle.flex1]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs12]} numberOfLines={2}>{data.name}</Text>
                 <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
                 <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
                   <View style={[mainStyle.flex1]}>
@@ -412,7 +412,7 @@ class CartItem extends React.Component<CartItemProps>{
           {
             type == 'train'
               ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs12]} numberOfLines={2}>{data.name}</Text>
                 <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
                 <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
               </View> : null
@@ -420,7 +420,7 @@ class CartItem extends React.Component<CartItemProps>{
           {
             type == 'course'
               ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c333, mainStyle.fs12]} numberOfLines={2}>{data.name}</Text>
                 <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.lesson}课时</Text>
                 <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
               </View> : null

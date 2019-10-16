@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet, Keyboard } from 'react-native';
+import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet, Keyboard, ScrollView } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -77,7 +77,7 @@ class WxBind extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
+        <ScrollView style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]} keyboardShouldPersistTaps="handled">
           <View style={[mainStyle.mab30, { marginTop: setSize(120) }]}>
             <Picker
               value={country_code}
@@ -146,7 +146,7 @@ class WxBind extends React.Component<Props, State> {
                 }}></BxButton>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     )
   }

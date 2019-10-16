@@ -192,7 +192,7 @@ class GoodsInfo extends React.Component<Props, State> {
                 <Text style={[mainStyle.czt, mainStyle.fs13]}>
                   ￥<Text style={[mainStyle.fs22]}>{goodsItem.price}</Text>
                 </Text>
-                <Text style={[mainStyle.c999, mainStyle.fs13]}>{goodsInfo.sales_volume}人购买</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>已售：{goodsInfo.sales_volume}</Text>
               </View>
               <View style={[mainStyle.column]}>
                 <View style={[mainStyle.column]}>
