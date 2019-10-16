@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   isread: {
     height: setSize(34),
     lineHeight: setSize(31),
-    borderRadius: setSize(36),
+    borderRadius: setSize(16),
     paddingLeft: setSize(12),
     paddingRight: setSize(12),
     paddingTop: setSize(1),

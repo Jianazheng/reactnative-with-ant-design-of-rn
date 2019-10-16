@@ -7,6 +7,8 @@ import { observer, inject } from 'mobx-react';
 import { JSXElement, validate } from '@babel/types';
 import InputNumber from '../../../components/Pubilc/InputNumber';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 let { width, height } = Dimensions.get('window');
 
 let imgw = setSize(180);
@@ -61,7 +63,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
     let { oncheck } = this.state;
     let goodsItem = goodsStore.goodsItem;
     return (
-      <View
+      <KeyboardAwareScrollView
         style={[mainStyle.flex1, mainStyle.bgcfff]}
       >
         <View style={[mainStyle.mab10, mainStyle.column]}>
@@ -129,7 +131,7 @@ class CartInfo extends React.Component<CartInfoProps, CartInfoState>{
           <Text style={[mainStyle.mab10, mainStyle.fs13, mainStyle.c333]}>数量</Text>
           <InputNumber value={goodsItem.count} max={goodsItem.product_stock} onChange={(v) => { this.changenum(v) }}></InputNumber>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     )
   }
 }
