@@ -62,7 +62,7 @@ class BxTabView extends React.Component<Props, State> {
     return (
       <View style={[mainStyle.flex1]}>
         <ScrollableTabView
-          style={[{ height: scrollHeight + paddingBottom }]}
+          style={[{ height: scrollHeight }]}
           locked={false}
           onChangeTab={(e) => {
             this.handleChange(e)

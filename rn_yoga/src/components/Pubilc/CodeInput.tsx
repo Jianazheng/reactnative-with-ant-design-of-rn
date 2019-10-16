@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, View, Alert } from 'react-native';
+import { Text, StyleSheet, View, Alert, Keyboard } from 'react-native';
 import { InputItem, Toast } from '@ant-design/react-native';
 import { mainStyle, setSize, screenW } from '../../public/style/style';
 import { Fetch } from './../../fetch/request';
@@ -107,6 +107,7 @@ export default class BxCodeInput extends PureComponent<Props, State>{
           onExtraClick={() => { this.handleCodeClick() }}
           placeholder="请输入验证码"
           style={[mainStyle.fs14]}
+          onBlur={() => { Keyboard.dismiss(); }}
         >
           <Text style={[mainStyle.c333, mainStyle.fs14]}>验证码</Text>
         </InputItem>

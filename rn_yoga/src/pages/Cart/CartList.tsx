@@ -289,7 +289,7 @@ class CartArray extends React.Component<CartArrayProps>{
         source={{ uri: 'http://' + (typeof val.image_url == "object" && val.image_url != null ? val.image_url[0] : '') }}>
       </Image>
       <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-        <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]}>{val.name}</Text>
+        <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.mab5]} numberOfLines={2}>{val.name}</Text>
         <Text style={[mainStyle.czt, mainStyle.fs11, mainStyle.lh42]}>￥<Text style={[mainStyle.fs13]}>{val.price}</Text></Text>
       </View>
     </View>
@@ -372,59 +372,59 @@ class CartItem extends React.Component<CartItemProps>{
             mode="widthFix"
             source={{ uri: 'http://' + (typeof data.image_url == "object" && data.image_url != null ? data.image_url[0] : '') }}>
           </Image>
-        
-        {
-          type == 'product'
-            ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal10, mainStyle.flex1]}>
-              <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
-              <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
-              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
-                <View style={[mainStyle.flex1]}>
-                  <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
+
+          {
+            type == 'product'
+              ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal10, mainStyle.flex1]}>
+                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
+                <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
+                  <View style={[mainStyle.flex1]}>
+                    <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
+                  </View>
+                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.numberSelect]}>
+                    <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter]}
+                      onPress={() => {
+                        cartStore.reduceCartItem(type, index)
+                      }}
+                    >
+                      <Text style={[mainStyle.icon, mainStyle.c333, mainStyle.fs20, styles.numberSelectBtn]}>&#xe649;</Text>
+                    </TouchableOpacity>
+                    <TextInput
+                      maxLength={4}
+                      value={data.count}
+                      onChangeText={(e) => {
+                        cartStore.editCartItem(type, index, e)
+                      }}
+                      style={[mainStyle.bgcf2, mainStyle.c666, styles.numberSelectInput]}
+                    ></TextInput>
+                    <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter]}
+                      onPress={() => {
+                        cartStore.addCartItem(type, index)
+                      }}
+                    >
+                      <Text style={[mainStyle.icon, mainStyle.c333, mainStyle.fs20, styles.numberSelectBtn]}>&#xe648;</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, styles.numberSelect]}>
-                  <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter]}
-                    onPress={() => {
-                      cartStore.reduceCartItem(type, index)
-                    }}
-                  >
-                    <Text style={[mainStyle.icon, mainStyle.c333, mainStyle.fs20, styles.numberSelectBtn]}>&#xe649;</Text>
-                  </TouchableOpacity>
-                  <TextInput
-                    maxLength={4}
-                    value={data.count}
-                    onChangeText={(e) => {
-                      cartStore.editCartItem(type, index, e)
-                    }}
-                    style={[mainStyle.bgcf2, mainStyle.c666, styles.numberSelectInput]}
-                  ></TextInput>
-                  <TouchableOpacity style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter]}
-                    onPress={() => {
-                      cartStore.addCartItem(type, index)
-                    }}
-                  >
-                    <Text style={[mainStyle.icon, mainStyle.c333, mainStyle.fs20, styles.numberSelectBtn]}>&#xe648;</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View> : null
-        }
-        {
-          type == 'train'
-            ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-              <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
-              <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
-              <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
-            </View> : null
-        }
-        {
-          type == 'course'
-            ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
-              <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
-              <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.lesson}课时</Text>
-              <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
-            </View> : null
-        }</TouchableOpacity>
+              </View> : null
+          }
+          {
+            type == 'train'
+              ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
+                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.sku_name}</Text>
+                <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
+              </View> : null
+          }
+          {
+            type == 'course'
+              ? <View style={[mainStyle.column, mainStyle.aiStart, mainStyle.mal15, mainStyle.flex1]}>
+                <Text style={[mainStyle.c333, mainStyle.fs12]}>{data.name}</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs10, mainStyle.bgcf7, mainStyle.pa5_10, mainStyle.mab5, mainStyle.mat5]}>{data.lesson}课时</Text>
+                <Text style={[mainStyle.czt, mainStyle.fs10, mainStyle.lh42]}>￥<Text style={[mainStyle.fs14]}>{data.price}</Text></Text>
+              </View> : null
+          }</TouchableOpacity>
       </View>
     )
   }

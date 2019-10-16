@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, TouchableOpacity, StyleSheet,Keyboard } from 'react-native';
+import { Text, View, ScrollView, Alert, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, screenH, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -127,6 +127,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请输入手机号"
                 style={[mainStyle.fs14]}
+                onBlur={() => { Keyboard.dismiss(); }}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>手机号</Text>
               </InputItem>
@@ -164,7 +165,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请输入密码"
                 style={[mainStyle.fs14]}
-                onBlur={()=>{Keyboard.dismiss();}}
+                onBlur={() => { Keyboard.dismiss(); }}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>密码</Text>
               </InputItem>
@@ -179,7 +180,7 @@ class Register extends React.Component<Props, State> {
                 }}
                 placeholder="请再次输入密码"
                 style={[mainStyle.fs14]}
-                onBlur={()=>{Keyboard.dismiss();}}
+                onBlur={() => { Keyboard.dismiss(); }}
               >
                 <Text style={[mainStyle.c333, mainStyle.fs14]}>确认密码</Text>
               </InputItem>
@@ -218,7 +219,7 @@ class Register extends React.Component<Props, State> {
   }
 }
 const PickerChildren = (props: any) => (
-  <TouchableOpacity onPress={()=>{props.onPress();Keyboard.dismiss();}}>
+  <TouchableOpacity onPress={() => { props.onPress(); Keyboard.dismiss(); }}>
     <View
       style={[styles.pickersty, mainStyle.row]}
     >

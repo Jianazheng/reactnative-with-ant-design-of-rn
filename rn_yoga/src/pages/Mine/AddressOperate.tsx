@@ -40,7 +40,7 @@ class AddressOperate extends React.Component<Props, State> {
     let { params } = navigation.state
     if (params.type == 'edit') {
       this.setState({
-        loading:true
+        loading: true
       })
       addressStore.getAddressInfo(params.id)
         .then(res => {
@@ -72,7 +72,7 @@ class AddressOperate extends React.Component<Props, State> {
       return false
     }
     this.setState({
-      loading:true
+      loading: true
     })
     addressStore.addOrEditAddress(postData, params.type)
       .then(res => {
@@ -80,7 +80,7 @@ class AddressOperate extends React.Component<Props, State> {
         //   return false
         // }
         this.setState({
-          loading:false
+          loading: false
         })
         postData.region = region
         if (params.type == 'add') {
@@ -119,11 +119,11 @@ class AddressOperate extends React.Component<Props, State> {
           }}
         ></NavTop>
         <ActivityIndicator
-              toast
-              size="large"
-              text="加载中..."
-              animating={loading}
-            ></ActivityIndicator>
+          toast
+          size="large"
+          text="加载中..."
+          animating={loading}
+        ></ActivityIndicator>
         <View style={[mainStyle.flex1, mainStyle.mat15]}>
           <ScrollView style={[mainStyle.flex1]}>
             <View style={[mainStyle.flex1, mainStyle.palr15, mainStyle.column, mainStyle.bgcfff]}>
@@ -192,12 +192,10 @@ class AddressOperate extends React.Component<Props, State> {
                 </View>
                 <View style={[mainStyle.flex3, mainStyle.row, mainStyle.aiStart, mainStyle.h200, mainStyle.mat10]}>
                   <TextInput
-                    multiline
                     value={address}
                     placeholderTextColor={mainStyle.c999.color}
                     style={[
                       styles.input,
-                      { maxHeight: setSize(240), marginTop: setSize(4), marginLeft: setSize(4) }
                     ]}
                     placeholder={"请输入详细地址"}
                     onChangeText={address => {

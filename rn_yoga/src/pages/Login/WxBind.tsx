@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, Alert, Image, DeviceEventEmitter, StyleSheet, Keyboard } from 'react-native';
 import { WingBlank, WhiteSpace, InputItem, Toast, Picker } from '@ant-design/react-native';
 import { mainStyle, setSize } from '../../public/style/style';
 import { headerTitle, headerRight } from '../../router/navigationBar';
@@ -17,7 +17,7 @@ interface State {
   code: string,
   password: string,
   codeSec: number,
-  country_code: string
+  country_code: array
 }
 
 @inject('userStore')
@@ -39,7 +39,7 @@ class WxBind extends React.Component<Props, State> {
       password: '',
       clicking: false,
       sending: false,
-      country_code: ''
+      country_code: ['86']
     };
   }
   componentDidMount() {
@@ -103,6 +103,7 @@ class WxBind extends React.Component<Props, State> {
               }}
               style={[mainStyle.fs14]}
               placeholder="请输入手机号"
+              onBlur={() => { Keyboard.dismiss(); }}
             >
               <Text style={[mainStyle.c333, mainStyle.fs14]}>手机号</Text>
             </InputItem>
@@ -128,6 +129,7 @@ class WxBind extends React.Component<Props, State> {
             <BxCodeInput
               mobile={mobile}
               sendType="bind"
+              countrycode={country_code}
               codeView={(e) => {
                 this.setState({
                   code: e

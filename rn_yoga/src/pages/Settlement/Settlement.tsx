@@ -235,7 +235,7 @@ class Settlement extends React.Component<Props, State> {
                       }
                       <View style={[mainStyle.flex1, mainStyle.row, mainStyle.jcBetween, mainStyle.mat10]}>
                         <Text style={[mainStyle.c333, mainStyle.fs12]}>总金额</Text>
-                        <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.type == 1 && params.type != 'pay' ? val.original_price * val.count : val.totalPrice}</Text>
+                        <Text style={[mainStyle.czt, mainStyle.fs14]}>￥{val.type == 1 && params.type != 'pay' ? (val.original_price * val.count).toFixed(2) : val.totalPrice}</Text>
                       </View>
                     </View>
                   </View>
