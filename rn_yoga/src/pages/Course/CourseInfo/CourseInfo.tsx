@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity, Animated, DeviceEventEmitter } from 'react-native';
 import HomeSwiper from '../../../components/Home/Swiper';
 import { mainStyle, setSize, screenH, screenW } from '../../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -78,7 +78,7 @@ class CourseInfo extends React.Component<Props, State> {
     let { tabTop } = this.state;
     if (e.nativeEvent) {
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-setSize(120))
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop - setSize(120))
       })
     }
   }
@@ -115,6 +115,7 @@ class CourseInfo extends React.Component<Props, State> {
                   this.setState({
                     clicking: false
                   })
+                  DeviceEventEmitter.emit('TORELOADCARTNUM', 'yes');
                 })
             })
         }
@@ -141,9 +142,9 @@ class CourseInfo extends React.Component<Props, State> {
       showPromotion: !showPromotion
     })
   }
-  childrenScroll(){
+  childrenScroll() {
     this.setState({
-      canScroll:false
+      canScroll: false
     })
   }
   handleCollection(common_id: string | number, type: string, isCollect: string | number) {
@@ -200,32 +201,32 @@ class CourseInfo extends React.Component<Props, State> {
             })
           }}
           >
-          <HomeSwiper fullWidth img={courseInfo.images || []}></HomeSwiper>
-          <View style={[mainStyle.pa15, mainStyle.column]}>
-            <View style={[mainStyle.column, mainStyle.mab10]}>
-              <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}> {courseInfo.course_name}</Text>
-              <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> {courseInfo.course_introduction}</Text>
-              <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> 购买后{courseInfo.validay || 1}天内有效</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.czt, mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>{courseInfo.course_price}</Text>
-              </Text>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>{courseInfo.reply}人报名</Text>
-            </View>
-            <TouchableOpacity onPress={() => {
-              if (frontInfo.length == 0) return
-              this.handleCloseApplyNotice(true)
-            }}>
-              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
-                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
-                  <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>前置条件</Text>
-                  {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
-                </View>
-                {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+            <HomeSwiper fullWidth img={courseInfo.images || []}></HomeSwiper>
+            <View style={[mainStyle.pa15, mainStyle.column]}>
+              <View style={[mainStyle.column, mainStyle.mab10]}>
+                <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}> {courseInfo.course_name}</Text>
+                <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> {courseInfo.course_introduction}</Text>
+                <Text style={[mainStyle.c666, mainStyle.fs13, mainStyle.lh44, mainStyle.mat10]}> 购买后{courseInfo.validay || 1}天内有效</Text>
               </View>
-            </TouchableOpacity>
-          </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.czt, mainStyle.fs13]}>
+                  ￥<Text style={[mainStyle.fs22]}>{courseInfo.course_price}</Text>
+                </Text>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>{courseInfo.reply}人报名</Text>
+              </View>
+              <TouchableOpacity onPress={() => {
+                if (frontInfo.length == 0) return
+                this.handleCloseApplyNotice(true)
+              }}>
+                <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
+                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
+                    <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>前置条件</Text>
+                    {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
+                  </View>
+                  {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
           <BxTabView
             height={height - setSize(120)}

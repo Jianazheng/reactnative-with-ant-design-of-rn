@@ -77,7 +77,7 @@ class WxBind extends React.Component<Props, State> {
             this.props.navigation.goBack();
           }}
         ></NavTop>
-        <ScrollView style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]} keyboardShouldPersistTaps="handled">
+        <View style={[mainStyle.column, mainStyle.jcBetween, mainStyle.flex1]}>
           <View style={[mainStyle.mab30, { marginTop: setSize(120) }]}>
             <Picker
               value={country_code}
@@ -146,13 +146,13 @@ class WxBind extends React.Component<Props, State> {
                 }}></BxButton>
             </View>
           </View>
-        </ScrollView>
+        </View>
       </View>
     )
   }
 }
 const PickerChildren = (props: any) => (
-  <TouchableOpacity onPress={props.onPress}>
+  <TouchableOpacity onPress={() => { props.onPress(); Keyboard.dismiss(); }}>
     <View
       style={[styles.pickersty, mainStyle.row]}
     >

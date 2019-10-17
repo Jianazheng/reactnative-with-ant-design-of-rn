@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, StyleSheet, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import HomeSwiper from '../../../components/Home/Swiper';
 import { mainStyle, setSize, screenH, screenW } from '../../../public/style/style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -111,6 +111,7 @@ class GoodsInfo extends React.Component<Props, State> {
                     this.setState({
                       clicking: false
                     })
+                    DeviceEventEmitter.emit('TORELOADCARTNUM', 'yes');
                   })
               })
           }

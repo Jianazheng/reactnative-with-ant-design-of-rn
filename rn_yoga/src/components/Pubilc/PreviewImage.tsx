@@ -3,7 +3,7 @@ import {
     View,
     Modal,
     ToastAndroid,
-    ActivityIndicator, CameraRoll,AlertIOS
+    ActivityIndicator, CameraRoll, AlertIOS
 } from 'react-native';
 import { mainStyle, setSize, screenW, screenH } from '../../public/style/style';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -48,7 +48,7 @@ export default class PreviewImage extends Component {
                     null,
                     null,
                     "default"
-                  );
+                );
                 console.log(result)
                 // Toast.info("图片已保存至相册")
             }).catch(function (error) {
@@ -58,7 +58,7 @@ export default class PreviewImage extends Component {
                     null,
                     null,
                     "default"
-                  );
+                );
                 console.log(error)
                 // Toast.info('保存失败');
             });
@@ -104,12 +104,12 @@ export default class PreviewImage extends Component {
                 >
                     <ImageViewer
                         imageUrls={ImageObjArray} // 照片路径
-                        enableImageZoom={false} // 是否开启手势缩放
+                        enableImageZoom={true} // 是否开启手势缩放
                         saveToLocalByLongPress={true} //是否开启长按保存
                         index={curentImage} // 初始显示第几张
                         // failImageSource={} // 加载失败图片
                         loadingRender={this.renderLoad}
-                        enableSwipeDown={false}
+                        enableSwipeDown={true}
                         menuContext={{ "saveToLocal": "保存图片", "cancel": "取消" }}
                         onChange={(index) => { }} // 图片切换时触发
                         onClick={() => { this._Close() }}

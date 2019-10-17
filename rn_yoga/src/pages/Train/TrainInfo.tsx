@@ -129,6 +129,7 @@ class TrainInfo extends React.Component<Props, State> {
                     this.setState({
                       clicking: false
                     })
+                    DeviceEventEmitter.emit('TORELOADCARTNUM', 'yes');
                   })
               })
           }
@@ -162,9 +163,9 @@ class TrainInfo extends React.Component<Props, State> {
     publicStore.setCollection(common_id, type, isCollect)
       .then(res => { if (res != null) trainStore.changeCollect() })
   }
-  childrenScroll(){
+  childrenScroll() {
     this.setState({
-      canScroll:false
+      canScroll: false
     })
   }
   render() {
@@ -220,93 +221,93 @@ class TrainInfo extends React.Component<Props, State> {
             })
           }}
           >
-          <HomeSwiper fullWidth img={trainInfo.image_url || []}></HomeSwiper>
-          <View style={[mainStyle.pa15, mainStyle.column]}>
-            {
-              trainInfo.is_apply == 1 ?
-                <View style={[mainStyle.row, mainStyle.mab10]}>
-                  <Taps>已报名</Taps>
-                  <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
-                    <Text style={[styles.span]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-                    {trainInfo.train_name}
-                  </Text>
-                </View>
-                :
-                <View style={[mainStyle.row, mainStyle.mab10]}>
-                  <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
-                    {trainInfo.train_name}
-                  </Text>
-                </View>
-            }
-            <View style={[mainStyle.row, mainStyle.mab10]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.train_introduction}</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>活动时间: {splitStr(trainInfo.train_start_time, ' ')}至{splitStr(trainInfo.train_end_time, ' ')}</Text>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>开始报名时间: {splitStr(trainInfo.reg_start_time, ' ')}</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.c999, mainStyle.fs13]}>截止报名时间: {splitStr(trainInfo.reg_end_time, ' ')}</Text>
-            </View>
-            <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
-              <Text style={[mainStyle.czt, mainStyle.fs13]}>
-                ￥<Text style={[mainStyle.fs22]}>{cartItem.price}</Text>
-              </Text>
-            </View>
+            <HomeSwiper fullWidth img={trainInfo.image_url || []}></HomeSwiper>
+            <View style={[mainStyle.pa15, mainStyle.column]}>
+              {
+                trainInfo.is_apply == 1 ?
+                  <View style={[mainStyle.row, mainStyle.mab10]}>
+                    <Taps>已报名</Taps>
+                    <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
+                      <Text style={[styles.span]}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+                      {trainInfo.train_name}
+                    </Text>
+                  </View>
+                  :
+                  <View style={[mainStyle.row, mainStyle.mab10]}>
+                    <Text style={[mainStyle.c333, mainStyle.fs16, mainStyle.lh44]}>
+                      {trainInfo.train_name}
+                    </Text>
+                  </View>
+              }
+              <View style={[mainStyle.row, mainStyle.mab10]}>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.train_introduction}</Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10]}>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>活动时间: {splitStr(trainInfo.train_start_time, ' ')}至{splitStr(trainInfo.train_end_time, ' ')}</Text>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>{trainInfo.apply_num}人报名</Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>开始报名时间: {splitStr(trainInfo.reg_start_time, ' ')}</Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.mab10, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.c999, mainStyle.fs13]}>截止报名时间: {splitStr(trainInfo.reg_end_time, ' ')}</Text>
+              </View>
+              <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.czt, mainStyle.fs13]}>
+                  ￥<Text style={[mainStyle.fs22]}>{cartItem.price}</Text>
+                </Text>
+              </View>
 
-            {
-              promotionInfo.length > 0 ?
-                <Animated.View style={[mainStyle.column, mainStyle.mab10, mainStyle.mat10, mainStyle.positonre, !showPromotion ? { height: setSize(200), overflow: 'hidden' } : { paddingBottom: setSize(60) }]}>
-                  <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.mab10]}>特惠活动</Text>
-                  {
-                    promotionInfo.map((val, i) => (
-                      <Text key={i} style={[mainStyle.c666, mainStyle.fs14, mainStyle.lh42]}>
-                        {val}
-                      </Text>
-                    ))
-                  }
-                  <TouchableOpacity
-                    style={[mainStyle.flex1, mainStyle.h60, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, mainStyle.palr15, mainStyle.bgcfff,
-                    showPromotion ? mainStyle.brb1f2 : null,
-                    { position: 'absolute', bottom: 0, width: screenW - setSize(60), opacity: 0.8 }]}
-                    onPress={() => {
-                      this.handleShowPromotion()
-                    }}
-                  >
+              {
+                promotionInfo.length > 0 ?
+                  <Animated.View style={[mainStyle.column, mainStyle.mab10, mainStyle.mat10, mainStyle.positonre, !showPromotion ? { height: setSize(200), overflow: 'hidden' } : { paddingBottom: setSize(60) }]}>
+                    <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.mab10]}>特惠活动</Text>
                     {
-                      showPromotion ? <Text style={[mainStyle.icon, mainStyle.c333]}>&#xe8ed;</Text> : <Text style={[mainStyle.icon, mainStyle.c333]}>&#xe8ec;</Text>
+                      promotionInfo.map((val, i) => (
+                        <Text key={i} style={[mainStyle.c666, mainStyle.fs14, mainStyle.lh42]}>
+                          {val}
+                        </Text>
+                      ))
                     }
-                  </TouchableOpacity>
-                </Animated.View>
-                : null
-            }
-            <View style={[mainStyle.column, mainStyle.mat10]}>
-              <TouchableOpacity onPress={() => { this.handleCloseCartInfoDetails(true, false) }}>
-                <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
-                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
-                    <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>选&nbsp;&nbsp;&nbsp;择</Text>
-                    <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>{cartItem.type_name || '请选择类型'}</Text>
+                    <TouchableOpacity
+                      style={[mainStyle.flex1, mainStyle.h60, mainStyle.row, mainStyle.aiCenter, mainStyle.jcCenter, mainStyle.palr15, mainStyle.bgcfff,
+                      showPromotion ? mainStyle.brb1f2 : null,
+                      { position: 'absolute', bottom: 0, width: screenW - setSize(60), opacity: 0.8 }]}
+                      onPress={() => {
+                        this.handleShowPromotion()
+                      }}
+                    >
+                      {
+                        showPromotion ? <Text style={[mainStyle.icon, mainStyle.c333]}>&#xe8ed;</Text> : <Text style={[mainStyle.icon, mainStyle.c333]}>&#xe8ec;</Text>
+                      }
+                    </TouchableOpacity>
+                  </Animated.View>
+                  : null
+              }
+              <View style={[mainStyle.column, mainStyle.mat10]}>
+                <TouchableOpacity onPress={() => { this.handleCloseCartInfoDetails(true, false) }}>
+                  <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
+                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
+                      <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>选&nbsp;&nbsp;&nbsp;择</Text>
+                      <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>{cartItem.type_name || '请选择类型'}</Text>
+                    </View>
+                    <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
                   </View>
-                  <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {
-                if (frontInfo.length == 0) return
-                this.handleCloseApplyNotice(true)
-              }}>
-                <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
-                  <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
-                    <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
-                    {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                  if (frontInfo.length == 0) return
+                  this.handleCloseApplyNotice(true)
+                }}>
+                  <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.h100]}>
+                    <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.flex1]}>
+                      <Text style={[mainStyle.c999, mainStyle.fs15, mainStyle.mar15, mainStyle.flex1]}>报名条件</Text>
+                      {frontInfo.length == 0 ? <Text style={[mainStyle.c333, mainStyle.fs15, mainStyle.flex3]}>无</Text> : null}
+                    </View>
+                    {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
                   </View>
-                  {frontInfo.length != 0 && frontInfo ? <Text style={[mainStyle.c666, mainStyle.icon, mainStyle.fs24]}>&#xe64d;</Text> : null}
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
           </View>
           <BxTabView
             height={height - setSize(120)}

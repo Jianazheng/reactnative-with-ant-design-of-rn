@@ -34,7 +34,7 @@ class Mine extends React.Component<Props> {
     };
   }
   TORELOADMINE: object;
-
+  TORELOADCARTNUM: object;
   componentDidMount() {
     let { userStore, orderStore, navigation } = this.props
     console.log(navigation);
@@ -45,10 +45,15 @@ class Mine extends React.Component<Props> {
       userStore.GetUserInfo()
       orderStore.getOrderNumber()
       userStore.GetCartNum();
+
+    })
+    this.TORELOADCARTNUM = DeviceEventEmitter.addListener('TORELOADCARTNUM', res => {
+      userStore.GetCartNum();
     })
   }
   componentWillUnmount() {
-    this.TORELOADMINE.remove()
+    this.TORELOADMINE.remove();
+    this.TORELOADCARTNUM.remove();
   }
   goto(routeName: string, params: any) {
     let { userStore, navigation } = this.props;
