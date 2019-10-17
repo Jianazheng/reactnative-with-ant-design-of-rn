@@ -75,7 +75,8 @@ class Login extends React.Component<Props, State> {
         } else {
           await userStore.setToken(response.data.token)
           await RNStorage.save({ key: 'token', data: response.data.token })
-          await userStore.GetUserInfo()
+          // await userStore.GetUserInfo();
+          DeviceEventEmitter.emit('TORELOADMINE', 'yes');
           navigation.goBack()
         }
       }
