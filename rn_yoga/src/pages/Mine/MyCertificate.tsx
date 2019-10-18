@@ -25,7 +25,7 @@ class MyCertificate extends React.Component<Props, State> {
   }
   componentDidMount() {
     let { userStore } = this.props
-    userStore.GetCertList()
+    userStore.GetCertList(true);
   }
   render() {
     let { userStore } = this.props
@@ -56,7 +56,7 @@ class MyCertificate extends React.Component<Props, State> {
         <View style={[mainStyle.flex1]}>
           <BxListView
             onLoadmore={() => {
-              userStore.GetCertList()
+              userStore.GetCertList(false)
             }}
             loading={certList.total == null || (certList.total > certList.data.length && certList.total >= 1)}
             listData={certList.data}

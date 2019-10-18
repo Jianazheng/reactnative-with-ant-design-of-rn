@@ -80,6 +80,7 @@ class CartList extends React.Component<Props, State> {
           cartStore.delectCartItem()
             .then(res => {
               this.getCartList();
+              DeviceEventEmitter.emit('TORELOADCARTNUM', 'yes');
             })
         }
       },
@@ -99,6 +100,7 @@ class CartList extends React.Component<Props, State> {
           cartStore.delectCartMain(typenum)
             .then(res => {
               this.getCartList();
+              DeviceEventEmitter.emit('TORELOADCARTNUM', 'yes');
             })
         }
       },

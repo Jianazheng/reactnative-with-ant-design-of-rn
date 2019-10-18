@@ -274,7 +274,7 @@ class Mine extends React.Component<Props> {
                         <Image style={[mainStyle.userimg]} source={require('../../../images/cart.png')}></Image>
                         <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>我的购物车</Text>
                       </View>
-                      <Text style={[styles.tag, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff, { marginTop: setSize(4) }]}>{cartNum}</Text>
+                      {cartNum > 0 ? <Text style={[styles.tag, mainStyle.bgczt, mainStyle.fs11, mainStyle.cfff, { marginTop: setSize(4) }]}>{cartNum}</Text> : null}
                       <Text style={[mainStyle.icon, mainStyle.c666, mainStyle.fs26]}>&#xe64d;</Text>
                     </View>
                   </TouchableOpacity>

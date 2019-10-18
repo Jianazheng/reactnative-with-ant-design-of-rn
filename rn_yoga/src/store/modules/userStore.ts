@@ -199,16 +199,20 @@ class User {
     }
   }
 
-  @action async GetCertList() {
+  @action async GetCertList(reload: boolean) {
     try {
       let { certList, imageData } = this.userData
-      let params = { page: this.certList.page }
-      let response = await new Fetch('/user/cert_list', 'GET', { size: 10, ...params }, {});
-      let resd = response.data
-      if (certList.page == 1) {
-        certList.data = [];
+      if (reload) {
+        certList = {
+          data: [],
+          total: null,
+          page: 1
+        };
         imageData = [];
       }
+      let params = { page: certList.page }
+      let response = await new Fetch('/user/cert_list', 'GET', { size: 10, ...params }, {});
+      let resd = response.data
       certList.total = resd.total
       if (certList.data.length >= resd.total) return response
       let newdata = certList.data.concat(resd.data)
