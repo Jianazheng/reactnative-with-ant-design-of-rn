@@ -151,7 +151,7 @@ class OutlineCourse extends React.Component<Props> {
           onPress={() => {
             let { params } = navigation.state;
             if (params.form == 'reserve') {
-              this.props.navigation.navigate('Course', {});
+              this.props.navigation.navigate('Course', {});
             } else {
               this.props.navigation.goBack();
             }
