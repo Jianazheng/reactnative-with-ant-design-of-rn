@@ -60,7 +60,7 @@ class WxBind extends React.Component<Props, State> {
       await userStore.setToken(res.data.token)
       await RNStorage.save({ key: 'token', data: res.data.token })
       DeviceEventEmitter.emit('TORELOAD', 'yes')//刷新需要刷新的接口
-      if (res.data.is_complete == 1) {
+      if (res.data.is_complete == 0) {
         navigation.replace('Info', { form: 'Home' })
       } else {
         navigation.popToTop();
