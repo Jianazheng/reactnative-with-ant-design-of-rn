@@ -149,7 +149,12 @@ class OutlineCourse extends React.Component<Props> {
           navType="normal"
           title="我的线下课程"
           onPress={() => {
-            this.props.navigation.goBack();
+            let { params } = navigation.state;
+            if (params.form == 'reserve') {
+              this.props.navigation.navigate('Course', {});
+            } else {
+              this.props.navigation.goBack();
+            }
           }}
         ></NavTop>
         <ActivityIndicator

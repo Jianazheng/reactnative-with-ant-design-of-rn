@@ -131,7 +131,7 @@ class Home extends React.Component<Props, State> {
     if (e.nativeEvent) {
       // console.log(e.nativeEvent);
       this.setState({
-        canScroll: e.nativeEvent.contentOffset.y >= (tabTop)
+        canScroll: e.nativeEvent.contentOffset.y >= (tabTop-120)
       })
     }
   }
@@ -203,7 +203,7 @@ class Home extends React.Component<Props, State> {
           {
             homeStore.trainCate.length > 0
               ? <BxTabView
-                height={height}
+                height={height-120}
                 canScroll={canScroll}
                 tabs={homeStore.trainCate}
                 currentPageIndex={tabIndex}

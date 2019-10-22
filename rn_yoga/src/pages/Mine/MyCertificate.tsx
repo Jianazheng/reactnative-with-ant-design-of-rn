@@ -77,7 +77,7 @@ class MyCertificate extends React.Component<Props, State> {
                     width: screenW * 0.4 * 0.7,
                   }]} source={{ uri: 'http://' + item.cert_img }}></Image>
                   <View style={[mainStyle.flex1, mainStyle.mal15, mainStyle.patb10, mainStyle.column, mainStyle.jcBetween, { height: screenW * 0.4 }]}>
-                    <Text style={[mainStyle.c333, mainStyle.fs13]}>{item.train_name}({item.sku_name})</Text>
+                    <Text style={[mainStyle.c333, mainStyle.fs13]}>{item.train_name}</Text>
                     <View style={[mainStyle.column]}>
                       <Text style={[mainStyle.c333, mainStyle.fs13]}>获取时间</Text>
                       <Text style={[mainStyle.c666, mainStyle.fs12, mainStyle.mat10]}>{item.cert_time}</Text>

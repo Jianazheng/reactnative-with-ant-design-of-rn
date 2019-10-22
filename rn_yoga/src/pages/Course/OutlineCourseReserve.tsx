@@ -50,8 +50,8 @@ class OutlineCourseReserve extends React.Component<Props> {
             DeviceEventEmitter.emit('TORELOADTRAIN', 'yes')
             DeviceEventEmitter.emit('TORELOADTRAINORDERBOOK', 'yes')
             // navigation.goBack()
-            let { params } = navigation.state
-            this.goto('OutlineCourse', { id: params.id })
+            // let { params } = navigation.state
+            // this.goto('OutlineCourse', { id: params.id })
           })
       })
   }
@@ -66,7 +66,7 @@ class OutlineCourseReserve extends React.Component<Props> {
           title="预定服务"
           onPress={() => {
             let { params } = navigation.state
-            this.goto('OutlineCourse', { id: params.id })
+            this.goto('OutlineCourse', { id: params.id, form: 'reserve' })
             // this.props.navigation.goBack();
           }}
         ></NavTop>
