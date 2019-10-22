@@ -57,8 +57,8 @@ class WxBind extends React.Component<Props, State> {
     let mobiles = mobile.replace(/ /g, '');
     let res = await userStore.bindPhone({ mobile: mobiles, code, access_token: { ...params.wxdata } })
     if (res != null) {
-      await userStore.setToken(res.data)
-      await RNStorage.save({ key: 'token', data: res.data })
+      await userStore.setToken(res.data.token)
+      await RNStorage.save({ key: 'token', data: res.data.token })
       DeviceEventEmitter.emit('TORELOAD', 'yes')//刷新需要刷新的接口
       if (res.data.is_complete == 1) {
         navigation.replace('Info', { form: 'Home' })
