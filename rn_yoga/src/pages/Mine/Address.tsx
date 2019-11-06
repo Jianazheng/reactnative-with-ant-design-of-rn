@@ -48,43 +48,28 @@ class Address extends React.Component<Props, State> {
   }
 
   right(val) {
-    let { addressStore, navigation } = this.props
-    let { params } = navigation.state
-
-    if (params.type == 'select') {
-      return [
-        {
-          text: '编辑',
-          onPress: () => {
-            let postData = { ...val }
-            this.goto('AddressOperate', { id: postData.id, type: 'edit' })
-          },
-          style: { backgroundColor: mainStyle.cztc.color, color: 'white' },
+    let { addressStore } = this.props
+    return [
+      {
+        text: '设置默认',
+        onPress: () => {
+          let postData = { ...val }
+          postData.is_default = 1
+          addressStore.addOrEditAddress(postData, 'edit')
         },
-      ];
-    } else {
-      return [
-        {
-          text: '设置默认',
-          onPress: () => {
-            let postData = { ...val }
-            postData.is_default = 1
-            addressStore.addOrEditAddress(postData, 'edit')
-          },
-          style: { backgroundColor: mainStyle.cztc.color, color: 'white' },
+        style: { backgroundColor: mainStyle.cztc.color, color: 'white' },
+      },
+      {
+        text: '删除',
+        onPress: () => {
+          this.setState({ loading: true })
+          addressStore.delectAddress(val.id)
+            .then(res => { this.setState({ loading: false }) })
+            .catch(err => { this.setState({ loading: false }) })
         },
-        {
-          text: '删除',
-          onPress: () => {
-            this.setState({ loading: true })
-            addressStore.delectAddress(val.id)
-              .then(res => { this.setState({ loading: false }) })
-              .catch(err => { this.setState({ loading: false }) })
-          },
-          style: { backgroundColor: mainStyle.c999.color, color: 'white' },
-        },
-      ];
-    }
+        style: { backgroundColor: mainStyle.c999.color, color: 'white' },
+      },
+    ];
   }
 
   handleClick(item) {
@@ -138,43 +123,15 @@ class Address extends React.Component<Props, State> {
                   {
                     addressArr.map((val, i) => {
                       //选择地址时不出现删除按钮
-                      // if (params.type == 'select') {
-                      //   return (
-                      //     <TouchableOpacity
-                      //       key={i}
-                      //       style={[mainStyle.bgcfff, mainStyle.mab15, { borderRadius: setSize(6) }]}
-                      //       onPress={() => {
-                      //         this.handleClick(val)
-                      //       }}>
-                      //       <View style={[mainStyle.flex1, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15]}>
-                      //         <View style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
-                      //           <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.consignee}</Text>
-                      //           <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.mobile}</Text>
-                      //         </View>
-                      //         <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
-                      //           <Text style={[mainStyle.c666, mainStyle.fs13]}>{val.region.length > 0 ? (val.region[0] + (val.region[1] ? '-' + val.region[1] : '') + (val.region[2] ? '-' + val.region[2] : '')) : null}</Text>
-                      //           <Text style={[mainStyle.cztc, mainStyle.fs12]}>{val.is_default == 1 ? '默认地址' : ''}</Text>
-                      //         </View>
-                      //         <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
-                      //           <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh36]} numberOfLines={2}>
-                      //             {val.address}
-                      //           </Text>
-                      //         </View>
-                      //       </View>
-                      //     </TouchableOpacity>
-                      //   )
-                      // } else {
-                      return (
-                        <SwipeAction
-                          key={i}
-                          autoClose
-                          style={[mainStyle.bgcfff, mainStyle.mab15, { borderRadius: setSize(6) }]}
-                          right={this.right(val)}
-                        >
-                          <TouchableOpacity onPress={() => {
-                            this.handleClick(val)
-                          }}>
-                            <View style={[mainStyle.flex1, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15]}>
+                      if (params.type == 'select') {
+                        return (
+                          <View
+                            key={i}
+                            style={[mainStyle.bgcfff, mainStyle.mab15, mainStyle.row, mainStyle.aiCenter, mainStyle.pa15, { borderRadius: setSize(6) }]}>
+                            <TouchableOpacity style={[mainStyle.flex1, mainStyle.column, mainStyle.jcBetween]}
+                              onPress={() => {
+                                this.handleClick(val)
+                              }}>
                               <View style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
                                 <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.consignee}</Text>
                                 <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.mobile}</Text>
@@ -184,15 +141,46 @@ class Address extends React.Component<Props, State> {
                                 <Text style={[mainStyle.cztc, mainStyle.fs12]}>{val.is_default == 1 ? '默认地址' : ''}</Text>
                               </View>
                               <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
-                                <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh36]} numberOfLines={2}>
+                                <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh30]} numberOfLines={2}>
                                   {val.address}
                                 </Text>
                               </View>
-                            </View>
-                          </TouchableOpacity>
-                        </SwipeAction>
-                      )
-                      // }
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[mainStyle.pal15, mainStyle.brl1f2]} onPress={() => {
+                              this.goto('AddressOperate', { id: val.id, type: 'edit' })
+                            }}><Text>编辑</Text></TouchableOpacity>
+                          </View>
+                        )
+                      } else {
+                        return (
+                          <SwipeAction
+                            key={i}
+                            autoClose
+                            style={[mainStyle.bgcfff, mainStyle.mab15, { borderRadius: setSize(6) }]}
+                            right={this.right(val)}
+                          >
+                            <TouchableOpacity onPress={() => {
+                              this.handleClick(val)
+                            }}>
+                              <View style={[mainStyle.flex1, mainStyle.column, mainStyle.jcBetween, mainStyle.pa15]}>
+                                <View style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween]}>
+                                  <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.consignee}</Text>
+                                  <Text style={[mainStyle.c333, mainStyle.fs14]}>{val.mobile}</Text>
+                                </View>
+                                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
+                                  <Text style={[mainStyle.c666, mainStyle.fs13]}>{val.region.length > 0 ? (val.region[0] + (val.region[1] ? '-' + val.region[1] : '') + (val.region[2] ? '-' + val.region[2] : '')) : null}</Text>
+                                  <Text style={[mainStyle.cztc, mainStyle.fs12]}>{val.is_default == 1 ? '默认地址' : ''}</Text>
+                                </View>
+                                <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat10]}>
+                                  <Text style={[mainStyle.fs12, mainStyle.c666, mainStyle.lh30]} numberOfLines={2}>
+                                    {val.address}
+                                  </Text>
+                                </View>
+                              </View>
+                            </TouchableOpacity>
+                          </SwipeAction>
+                        )
+                      }
                     })
                   }
                 </View>

@@ -101,6 +101,7 @@ const mainStyle = StyleSheet.create({
     fs26: { fontSize: setSize(52) },
     fs28: { fontSize: setSize(56) },
     fs30: { fontSize: setSize(60) },
+    lh30: { lineHeight: setSize(30), },
     lh36: { lineHeight: setSize(36), },
     lh42: { lineHeight: setSize(42), },
     lh44: { lineHeight: setSize(44), },

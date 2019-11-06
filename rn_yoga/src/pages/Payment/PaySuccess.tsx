@@ -27,16 +27,16 @@ class PaySuccess extends React.Component<Props, State> {
       checkBox1: false
     };
   }
-  TORELOADTRAINORDERBOOK:object;
+  TORELOADTRAINORDERBOOK: object;
 
   componentDidMount() {
     let { paymentStore } = this.props
     paymentStore.getOrderBook()
-    this.TORELOADTRAINORDERBOOK=DeviceEventEmitter.addListener('TORELOADTRAINORDERBOOK',res=>{
-      paymentStore.getOrderBook()      
+    this.TORELOADTRAINORDERBOOK = DeviceEventEmitter.addListener('TORELOADTRAINORDERBOOK', res => {
+      paymentStore.getOrderBook()
     })
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.TORELOADTRAINORDERBOOK.remove();
   }
 
@@ -130,7 +130,7 @@ class PaySuccess extends React.Component<Props, State> {
                   <View style={[mainStyle.column]}>
                     {
                       orderBook.map((val, i) =>
-                        <View key={i} style={[]}>
+                        <View key={i} style={[{ borderBottomColor: "#f7f7f7", borderBottomWidth: setSize(30) }]}>
                           <View style={[mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.mat15]}>
                             <Image
                               style={[{ width: imgw, height: imgw, borderRadius: setSize(6) }, mainStyle.bgcf2]}
@@ -147,7 +147,7 @@ class PaySuccess extends React.Component<Props, State> {
                                         disabled
                                         checked={val.checked}
                                         style={{ color: mainStyle.czt.color }}> */}
-                                        <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
+                                      <Text style={[mainStyle.fs13, mainStyle.c333, mainStyle.mal10]}>{ser.server_name}</Text>
                                       {/* </Checkbox> */}
                                     </View>
                                   )
