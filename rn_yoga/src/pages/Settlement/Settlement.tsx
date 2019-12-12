@@ -168,7 +168,7 @@ class Settlement extends React.Component<Props, State> {
                     </TouchableOpacity>
                     :
                     <TouchableOpacity onPress={() => {
-                      navigation.navigate('Address', { type: 'add' })
+                      navigation.navigate('Address', { type: 'select' })
                     }}>
                       <View style={[mainStyle.row, mainStyle.pa15, mainStyle.aiCenter, mainStyle.jcBetween]}>
                         <View style={[mainStyle.column, mainStyle.flex1, mainStyle.mar15, mainStyle.mat5]}>

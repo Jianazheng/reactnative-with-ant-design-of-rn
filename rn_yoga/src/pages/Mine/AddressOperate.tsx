@@ -104,7 +104,23 @@ class AddressOperate extends React.Component<Props, State> {
       is_default: is_default == 1 ? 0 : 1
     })
   }
-
+  handledelete() {
+    let { addressStore, navigation } = this.props
+    let { params } = navigation.state
+    let { addressSelect } = addressStore
+    if (params.type == 'edit') {
+      this.setState({ loading: true })
+      addressStore.delectAddress(params.id)
+        .then(res => {
+          this.setState({ loading: false })
+          if (params.id == addressSelect.id) {
+            addressStore.setAddress({})
+          }
+          navigation.goBack();
+        })
+        .catch(err => { this.setState({ loading: false }) })
+    }
+  }
   render() {
     let { addressStore, navigation } = this.props
     let { params } = navigation.state
@@ -117,6 +133,17 @@ class AddressOperate extends React.Component<Props, State> {
           onPress={() => {
             this.props.navigation.goBack();
           }}
+          children={(
+            <View style={[mainStyle.column, mainStyle.aiEnd, mainStyle.flex1, mainStyle.mar15]}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.handleSubmit()
+                }}
+              >
+                <Text style={[mainStyle.c333, mainStyle.fs13]}>{params.type == 'edit' ? '保存修改' : '提交'}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         ></NavTop>
         <ActivityIndicator
           toast
@@ -167,31 +194,30 @@ class AddressOperate extends React.Component<Props, State> {
                 </View>
               </View>
               <WhiteSpace />
-              <View style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.brb1f2]}>
+              <TouchableOpacity onPress={() => {
+                this.showAddressPicker();
+                Keyboard.dismiss();
+              }}
+                style={[mainStyle.h100, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.brb1f2]}>
                 <View style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter]}>
                   <Text style={[mainStyle.c333, mainStyle.fs14]}>选择地区</Text>
                 </View>
                 <View style={[mainStyle.flex3, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
-                  <TouchableOpacity onPress={() => {
-                    this.showAddressPicker();
-                    Keyboard.dismiss();
-                  }}>
-                    <View>
-                      {
-                        region.length == 0
-                          ? <Text style={[mainStyle.fs13, mainStyle.c999, { marginLeft: setSize(4) }]}>点击选择地址</Text>
-                          : <Text style={[mainStyle.fs13, mainStyle.c333, { marginLeft: setSize(4) }]}>{region[0]}  {region[1] ? '-' + region[1] : ''} {region[2] ? '-' + region[2] : ''}</Text>
-                      }
-                    </View>
-                  </TouchableOpacity>
+                  <View style={[mainStyle.flex1, mainStyle.h100, mainStyle.row, mainStyle.aiCenter]}>
+                    {
+                      region.length == 0
+                        ? <Text style={[mainStyle.fs13, mainStyle.c999, { marginLeft: setSize(4) }]}>点击选择地址</Text>
+                        : <Text style={[mainStyle.fs13, mainStyle.c333, { marginLeft: setSize(4) }]}>{region[0]}  {region[1] ? '-' + region[1] : ''} {region[2] ? '-' + region[2] : ''}</Text>
+                    }
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
               <WhiteSpace />
               <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.brb1f2]}>
                 <View style={[mainStyle.flex1, mainStyle.row, mainStyle.h100, mainStyle.aiCenter]}>
                   <Text style={[mainStyle.c333, mainStyle.fs14]}>详细地址</Text>
                 </View>
-                <View style={[mainStyle.flex3, mainStyle.row, mainStyle.aiStart, mainStyle.mat10]}>
+                <View style={[mainStyle.flex3, mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter]}>
                   <TextInput
                     value={address}
                     placeholderTextColor={mainStyle.c999.color}
@@ -222,9 +248,14 @@ class AddressOperate extends React.Component<Props, State> {
                 </View>
               </View>
             </View>
+            {params.type == 'edit' ? <TouchableOpacity onPress={() => { this.handledelete() }} style={[mainStyle.palr15, mainStyle.h100, mainStyle.row, mainStyle.aiCenter, mainStyle.jcBetween, mainStyle.bgcfff, mainStyle.mat15]}>
+              <View style={[mainStyle.flex1, mainStyle.row, mainStyle.aiCenter]}>
+                <Text style={[mainStyle.czt, mainStyle.fs14]}>删除地址</Text>
+              </View>
+            </TouchableOpacity> : null}
           </ScrollView>
           <BxAddressPicker ref="AddressPicker" onChange={region => { this.setState({ region }) }}></BxAddressPicker>
-          <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row]}>
+          {/* <View style={[mainStyle.h120, mainStyle.palr15, mainStyle.bgcfff, mainStyle.aiCenter, mainStyle.row]}>
             <BxButton
               disabled={loading}
               colors={[mainStyle.cztc.color, mainStyle.cju.color]}
@@ -234,7 +265,7 @@ class AddressOperate extends React.Component<Props, State> {
                 this.handleSubmit()
               }}
             ></BxButton>
-          </View>
+          </View> */}
         </View>
       </View>
     )
@@ -245,7 +276,8 @@ const styles = StyleSheet.create({
   input: {
     padding: 0,
     color: mainStyle.c333.color,
-    width: '100%'
+    flex: 1,
+    height: setSize(100)
   }
 })
 
