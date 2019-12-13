@@ -58,7 +58,7 @@ class MyCertificate extends React.Component<Props, State> {
             onLoadmore={() => {
               userStore.GetCertList(false)
             }}
-            loading={certList.total == null || (certList.total > certList.data.length && certList.total >= 1)}
+            loading={(certList.total > certList.data.length && certList.total >= 1)}
             listData={certList.data}
             colNumber={1}
             pab={setSize(20)}
