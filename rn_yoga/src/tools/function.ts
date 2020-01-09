@@ -1,7 +1,7 @@
 import { Text, Linking, Alert, Clipboard, Platform } from "react-native";
 import { Toast, ActionSheet } from '@ant-design/react-native';
 import { mainStyle } from "../public/style/style";
-
+import { Fetch } from '../fetch/request';
 export function getTime(str) {
   str = Number(str) * 1000;
   let nt = new Date(str);
@@ -65,7 +65,12 @@ export function splitStr(str: string, sp: string) {
   }
   return newstr
 }
-export function consult() {
+export async function consult() {
+  let data = {};
+  let response = await new Fetch('/user/customer_service', 'GET', {}, {});
+  console.log(response);
+  data = response.data;
+  console.log(data);
   const BUTTONS = [
     '微信咨询',
     '电话咨询',
@@ -80,7 +85,7 @@ export function consult() {
     },
     (buttonIndex: any) => {
       if (buttonIndex == 1) {
-        const url = `tel:13998111600`;
+        const url = `tel:${data.server_mobile[0]}`;
         Linking.canOpenURL(url)
           .then(supported => {
             if (!supported) {
@@ -92,7 +97,7 @@ export function consult() {
           })
           .catch(err => Toast.info(`出错了：${err}`, 1.5));
       } else if (buttonIndex == 0) {
-        Clipboard.setString('13998111600');
+        Clipboard.setString(data.wechat[0]);
         Alert.alert("提示", "已复制微信号，请前往微信添加好友",
           [
             { text: '取消' },
