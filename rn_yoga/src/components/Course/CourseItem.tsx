@@ -52,7 +52,7 @@ class CourseInfoItem extends PureComponent<CourseInfoItemProps>{
         <View style={[mainStyle.row, mainStyle.jcBetween, mainStyle.aiCenter, mainStyle.flex1]}>
           <Image style={[styles.CourseInfoImage, mainStyle.imgCover, mainStyle.bgcf2]} mode="widthFix" source={{ uri: 'http://' + (data.image_url ? data.image_url.length > 0 ? data.image_url[0] : '' : '') }}></Image>
           <View style={[mainStyle.flex1, mainStyle.mal15]}>
-            <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.mab10]}>{data.title || data.train_name}</Text>
+            <Text style={[mainStyle.c333, mainStyle.fs14, mainStyle.mab10]} numberOfLines={1}>{data.title || data.train_name}</Text>
             <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mab10]}>{splitStr(data.reg_start_time, ' ')}至{splitStr(data.reg_end_time, ' ')}</Text>
             <View style={[mainStyle.row, mainStyle.aiCenter]}>
               <Text style={[mainStyle.c999, mainStyle.fs12, mainStyle.mat10]}>{data.apply_num}人报名</Text>
